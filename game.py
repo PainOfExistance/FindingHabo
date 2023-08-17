@@ -10,6 +10,8 @@ class Game:
         # Initialize Pygame
         pygame.init()
 
+        self.rotation_angle = 0
+        self.prev_rotation = 0
         # Set up display
         self.screen_width, self.screen_height = 800, 600
         self.screen = pygame.display.set_mode(
@@ -67,6 +69,7 @@ class Game:
             if self.player_rect.left > 10:
                 self.player_rect.move_ip(
                     int(-self.movement_speed * self.delta_time), 0)
+                self.rotation_angle=360-self.prev_rotation
             else:
                 self.bg_rect.move_ip(
                     int(self.movement_speed * self.delta_time), 0)
@@ -75,6 +78,7 @@ class Game:
             if self.player_rect.right < self.screen_width-10:
                 self.player_rect.move_ip(
                     int(self.movement_speed * self.delta_time), 0)
+                self.rotation_angle=360-self.prev_rotation
             else:
                 self.bg_rect.move_ip(
                     int(-self.movement_speed * self.delta_time), 0)
@@ -83,6 +87,7 @@ class Game:
             if self.player_rect.top > 10:
                 self.player_rect.move_ip(
                     0, int(-self.movement_speed * self.delta_time))
+                self.rotation_angle=360-self.prev_rotation
             else:
                 self.bg_rect.move_ip(
                     0, int(self.movement_speed * self.delta_time))
@@ -91,9 +96,16 @@ class Game:
             if self.player_rect.bottom < self.screen_height-10:
                 self.player_rect.move_ip(
                     0, int(self.movement_speed * self.delta_time))
+                self.rotation_angle=360-self.prev_rotation
             else:
                 self.bg_rect.move_ip(
                     0, int(-self.movement_speed * self.delta_time))
+
+        if self.rotation_angle!=self.prev_rotation:       
+            self.player = pygame.transform.rotate(self.player, self.rotation_angle)
+            self.prev_rotation=self.rotation_angle
+
+        
 
     def draw(self):
         self.screen.fill((230, 60, 20))
