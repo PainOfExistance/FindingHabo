@@ -67,6 +67,7 @@ class Game:
         self.last_frame_time = current_time
 
         movement = int(self.movement_speed * self.delta_time)
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a] and not self.check_collision(self.player_rect, (-movement, 0)):
