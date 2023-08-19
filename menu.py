@@ -5,7 +5,7 @@ class Menu:
     def __init__(self, screen):
         self.screen = screen
         self.visible = False
-        self.menu_items = ["Start", "Options", "Exit"]
+        self.menu_items = ["Continue", "Save", "Options", "Exit"]
         self.selected_item = 0
         self.m_key_held = False
         self.selection_held = False
@@ -40,8 +40,10 @@ class Menu:
 
     def select_option(self):
         selected_option = self.menu_items[self.selected_item]
-        if selected_option == "Start":
-            # Start game logic
+        if selected_option == "Continue":
+            self.visible = False
+        elif selected_option == "Save":
+            # Open options menu
             pass
         elif selected_option == "Options":
             # Open options menu

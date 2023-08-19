@@ -7,17 +7,6 @@ class AssetLoader:
         self.screen_width=screen_width
         self.screen_height=screen_height
 
-    def load_collision_map(self):
-        # Create and return the collision map using NumPy
-        bg_rect = pygame.Rect(0, 0, 1920, 1080)  # Replace with your background dimensions
-        collision_map = np.zeros((bg_rect.height, bg_rect.width), dtype=int)
-        collision_map[0, :] = 1
-        collision_map[-1, :] = 1
-        collision_map[:, 0] = 1
-        collision_map[:, -1] = 1
-        collision_map[200:300, 200:300] = 1
-        return collision_map
-
     def load_images(self, path, size, center):
         # Load and return images as needed
         img = pygame.image.load(path)
