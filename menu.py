@@ -54,9 +54,9 @@ class Menu:
 
     def render(self):
         if self.visible:
-            menu_font = pygame.font.Font(None, 36)
+            menu_font = pygame.font.Font("inter.ttf", 36)
             for index, item in enumerate(self.menu_items):
                 color = (0, 0, 0) if index == self.selected_item else (180, 180, 180)
                 text = menu_font.render(item, True, color)
-                text_rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + index * 40))
+                text_rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5 + index * 40))
                 self.screen.blit(text, text_rect)

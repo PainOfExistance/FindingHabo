@@ -10,8 +10,8 @@ class Player:
         self.player, self.player_rect=asets.load_player(path, (asets.screen_width // 2, asets.screen_height // 2))
         self.depleted_rect = pygame.Rect(10, 10, self.stats.health, 15)
         self.border_rect = pygame.Rect(10, 10, self.stats.max_health, 15)
-        font = pygame.font.Font(None, 20)  # You can adjust the font and size
-        self.text = font.render("Health", True, (255, 255, 255))  # Adjust color
+        font = pygame.font.Font(None, 20)
+        self.text = font.render("Health", True, (255, 255, 255))
         self.text_rect = self.text.get_rect(left=(self.stats.max_health/2)-9, top=11)
 
     def update_health(self, health):

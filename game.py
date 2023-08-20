@@ -4,45 +4,51 @@ import numpy as np
 from asset_loader import AssetLoader
 from player import Player
 from menu import Menu
+from player_menu import PlayerMenu
 
 class Game:
     def __init__(self):
-        # Initialize Pygame
         pygame.init()
 
-        # Set up display
         self.screen_width, self.screen_height = 800, 600
         self.screen = pygame.display.set_mode(
             (self.screen_width, self.screen_height))
         pygame.display.set_caption("Finding Habo")
 
-        # Load player image
         asets = AssetLoader(self.screen_width, self.screen_height)
         self.menu = Menu(self.screen)
 
-        self.player=Player("desk1.png", self.screen_width, self.screen_height)
+        self.player = Player("desk1.png", self.screen_width, self.screen_height)
         self.background, self.bg_rect = asets.load_background("bg.png")
         # self.image, self.image_rect = asets.load_images("desk3.png", (100, 100), (250, 250))
+        self.player_menu = PlayerMenu(self.screen, self.player)
 
-        # Create a collision map using NumPy
         self.collision_map = asets.load_collision("bg.png")
 
-        # Set up clock for controlling frame rate
         self.clock = pygame.time.Clock()
         self.target_fps = 60
 
-        # Initialize variables for time-based movement
         self.last_frame_time = pygame.time.get_ticks()
         self.movement_speed = 200
         self.rotation_angle = 0
 
+        self.sound_effect = pygame.mixer.Sound("It's Time.mp3")
+        self.sound_effect.play()
+        self.sound_effect.set_volume(0.2)
+        self.sound_effect.play(loops=-1)
+
     def run(self):
         while True:
-            if not self.menu.visible:
-                self.update()
+            self.update()
             self.handle_events()
             self.draw()
-            self.menu.handle_input()
+
+            if not self.player_menu.visible:
+                self.menu.handle_input()
+
+            if not self.menu.visible:
+                self.player_menu.handle_input()
+
             self.clock.tick(self.target_fps)
 
     def handle_events(self):
@@ -64,11 +70,11 @@ class Game:
         relative_player_bottom = int(self.player.player_rect.bottom - self.bg_rect.top)
         movement = int(self.movement_speed * self.delta_time)
 
-        print(f"rl: {relative_player_left},   rr: {relative_player_right},   rt: {relative_player_top},   rb: {relative_player_bottom}")
+        #print(f"rl: {relative_player_left},   rr: {relative_player_right},   rt: {relative_player_top},   rb: {relative_player_bottom}")
         #print(self.detect_slope((relative_player_left, relative_player_bottom)))
         
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_a] and np.count_nonzero(self.collision_map[relative_player_top:relative_player_bottom, relative_player_left-movement] == 1) <= 1:
+        if keys[pygame.K_a] and np.count_nonzero(self.collision_map[relative_player_top:relative_player_bottom, relative_player_left-movement] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
             if self.player.player_rect.left > 10:
                 self.player.player_rect.move_ip(
                     int(-self.movement_speed * self.delta_time), 0)
@@ -80,7 +86,7 @@ class Game:
                 self.bg_rect.move_ip(
                     int(self.movement_speed * self.delta_time), 0)
 
-        if keys[pygame.K_d] and np.count_nonzero(self.collision_map[relative_player_top:relative_player_bottom, relative_player_right+movement] == 1) <= 1:
+        if keys[pygame.K_d] and np.count_nonzero(self.collision_map[relative_player_top:relative_player_bottom, relative_player_right+movement] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
             if self.player.player_rect.right < self.screen_width-10:
                 self.player.player_rect.move_ip(
                     int(self.movement_speed * self.delta_time), 0)
@@ -92,7 +98,7 @@ class Game:
                 self.bg_rect.move_ip(
                     int(-self.movement_speed * self.delta_time), 0)
 
-        if keys[pygame.K_w] and np.count_nonzero(self.collision_map[relative_player_top-movement, relative_player_left:relative_player_right] == 1) <= 1:
+        if keys[pygame.K_w] and np.count_nonzero(self.collision_map[relative_player_top-movement, relative_player_left:relative_player_right] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
             if self.player.player_rect.top > 10:
                 self.player.player_rect.move_ip(
                     0, int(-self.movement_speed * self.delta_time))
@@ -105,7 +111,7 @@ class Game:
                 self.bg_rect.move_ip(
                     0, int(self.movement_speed * self.delta_time))
 
-        if keys[pygame.K_s] and np.count_nonzero(self.collision_map[relative_player_bottom+movement, relative_player_left:relative_player_right] == 1) <= 1:
+        if keys[pygame.K_s] and np.count_nonzero(self.collision_map[relative_player_bottom+movement, relative_player_left:relative_player_right] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
             if self.player.player_rect.bottom < self.screen_height-10:
                 self.player.player_rect.move_ip(
                     0, int(self.movement_speed * self.delta_time))
@@ -136,5 +142,6 @@ class Game:
         self.screen.blit(self.background, self.bg_rect.topleft)
         self.player.draw(self.screen)
         self.menu.render()
+        self.player_menu.render()
         # self.screen.blit(self.image, self.image_rect.topleft)
         pygame.display.flip()
