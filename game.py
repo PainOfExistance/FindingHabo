@@ -96,7 +96,7 @@ class Game:
             if self.player.player_rect.top > 10:
                 self.player.player_rect.move_ip(
                     0, int(-self.movement_speed * self.delta_time))
-                self.player.update_sanity(10)
+                self.player.update_health(10)
                 if self.rotation_angle != 0:
                     self.rotation_angle = 0 - self.rotation_angle
                     self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)
@@ -109,7 +109,7 @@ class Game:
             if self.player.player_rect.bottom < self.screen_height-10:
                 self.player.player_rect.move_ip(
                     0, int(self.movement_speed * self.delta_time))
-                self.player.update_sanity(-10)
+                self.player.update_health(-10)
                 if self.rotation_angle != 180:
                     self.rotation_angle = 180 - self.rotation_angle
                     self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)
