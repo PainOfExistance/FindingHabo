@@ -6,16 +6,16 @@ from player_menu import PlayerMenu
 from asset_loader import AssetLoader
 from game import Game
 
-is_menu_visible=True
-
 class MainMenu:
     def __init__(self, screen):
         self.screen = screen
-        self.menu_items = ["Start", "Options", "Exit"]
+        self.menu_items = ["Start", "Load", "Options", "Exit"]
         self.selected_item = 0
         self.selection_held = False
         self.screen_width=screen.get_width()
         self.screen_height=screen.get_height()
+        self.is_menu_visible=True
+        self.font = pygame.font.Font("inter.ttf", 36)
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
@@ -39,13 +39,17 @@ class MainMenu:
         selected_option = self.menu_items[self.selected_item]
         if selected_option == "Start":
             print("Starting the game...")
+            self.loading()
             assets=AssetLoader(self.screen_width, self.screen_height)
             menu = Menu(self.screen)
             player = Player("desk1.png", self.screen_width, self.screen_height, assets)
             player_menu = PlayerMenu(self.screen, player)
             game = Game(self.screen, self.screen_width, self.screen_height, menu, player_menu, player, assets)
+            self.is_menu_visible = False
             game.run()
-            is_menu_visible=False
+        elif selected_option == "Load":
+            print("Opening load menu...")
+            # Add your options menu logic here
         elif selected_option == "Options":
             print("Opening options menu...")
             # Add your options menu logic here
@@ -54,18 +58,26 @@ class MainMenu:
             sys.exit()
 
     def render(self):
-        font = pygame.font.Font("inter.ttf", 36)
         for index, item in enumerate(self.menu_items):
             color = (0, 0, 0) if index == self.selected_item else (180, 180, 180)
-            text = font.render(item, True, color)
+            text = self.font.render(item, True, color)
             text_rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5 + index * 40))
             self.screen.blit(text, text_rect)
+        pygame.display.flip()
 
-"""
-    assets=AssetLoader(screen_width, screen_height)
-    menu = Menu(screen)
-    player = Player("desk1.png", screen_width, screen_height, assets)
-    player_menu = PlayerMenu(screen, player)
-    game = Game(screen, screen_width, screen_height, menu, player_menu, player, assets)
-    game.run()
-"""
+    def loading(self):
+        text = self.font.render("Loading...", True, (180, 180, 180))
+        text_rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5))
+        self.screen.blit(text, text_rect)
+        pygame.display.flip()
+
+    def run(self):
+        while self.is_menu_visible:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.is_menu_visible = False
+
+            self.screen.fill((255, 255, 255))
+            self.handle_input()
+            self.render()
+

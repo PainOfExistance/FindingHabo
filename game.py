@@ -1,7 +1,6 @@
 import pygame
 import sys
 import numpy as np
-from asset_loader import AssetLoader
 
 class Game:
     def __init__(self, screen, screen_width, screen_height, menu, player_menu, player, assets):
@@ -136,4 +135,4 @@ class Game:
         self.menu.render()
         self.player_menu.render()
         # self.screen.blit(self.image, self.image_rect.topleft)
-        #pygame.display.flip()
+        pygame.display.flip()
