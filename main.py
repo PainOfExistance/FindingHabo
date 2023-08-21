@@ -1,10 +1,23 @@
-from game import Game
 import numpy as np
-import cv2
+import pygame
+from main_menu import MainMenu
+from main_menu import is_menu_visible
+
+pygame.init()
+screen_width, screen_height = 800, 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Finding Habo")
+menu=MainMenu(screen)
 
 if __name__ == "__main__":
-    game = Game()
-    game.run()
+    print(is_menu_visible)
+    while is_menu_visible:
+        screen.fill((255, 255, 255))
+    
+        #menu.handle_input()
+        #menu.render()
+    
+        pygame.display.flip()
 
 
 """import pygame
@@ -114,4 +127,11 @@ while True:
 
     # Limit frame rate
     clock.tick(target_fps)
+"""
+
+"""
+health-health lol
+knowlage-to learn abilities, increases/decreases over time and is effected by effects
+sanity-ability to learn new shit if its hight enough
+power-to use abilities, increases/decreases over time and is effected by effects
 """

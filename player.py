@@ -1,18 +1,17 @@
 import pygame
 import numpy as np
-from asset_loader import AssetLoader
 from stats import Stats
 
 class Player:
-    def __init__(self, path, screen_width, screen_height):
-        asets=AssetLoader(screen_width, screen_height)
+    def __init__(self, path, screen_width, screen_height, assets):
+        self.asets=assets
         self.stats=Stats()
-        self.player, self.player_rect=asets.load_player(path, (asets.screen_width // 2, asets.screen_height // 2))
-        self.depleted_rect = pygame.Rect(10, 10, self.stats.health, 15)
-        self.border_rect = pygame.Rect(10, 10, self.stats.max_health, 15)
-        font = pygame.font.Font(None, 20)
+        self.player, self.player_rect=self.asets.load_player(path, (screen_width // 2, screen_height // 2))
+        self.depleted_rect = pygame.Rect(screen_width // 2 - self.stats.max_health // 2, screen_height - 20, self.stats.health, 18)
+        self.border_rect = pygame.Rect(screen_width // 2 - self.stats.max_health // 2, screen_height - 20, self.stats.max_health, 18)
+        font = pygame.font.Font("inter.ttf", 13)
         self.text = font.render("Health", True, (255, 255, 255))
-        self.text_rect = self.text.get_rect(left=(self.stats.max_health/2)-9, top=11)
+        self.text_rect = self.text.get_rect(center=(screen_width // 2, screen_height - 12))
 
     def update_health(self, health):
         self.stats.update_health(health)

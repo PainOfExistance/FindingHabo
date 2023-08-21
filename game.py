@@ -2,28 +2,20 @@ import pygame
 import sys
 import numpy as np
 from asset_loader import AssetLoader
-from player import Player
-from menu import Menu
-from player_menu import PlayerMenu
 
 class Game:
-    def __init__(self):
-        pygame.init()
+    def __init__(self, screen, screen_width, screen_height, menu, player_menu, player, assets):
+        self.screen = screen
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        self.asets = assets
+        self.menu = menu
 
-        self.screen_width, self.screen_height = 800, 600
-        self.screen = pygame.display.set_mode(
-            (self.screen_width, self.screen_height))
-        pygame.display.set_caption("Finding Habo")
+        self.player = player
+        self.player_menu = player_menu
 
-        asets = AssetLoader(self.screen_width, self.screen_height)
-        self.menu = Menu(self.screen)
-
-        self.player = Player("desk1.png", self.screen_width, self.screen_height)
-        self.background, self.bg_rect = asets.load_background("bg.png")
-        # self.image, self.image_rect = asets.load_images("desk3.png", (100, 100), (250, 250))
-        self.player_menu = PlayerMenu(self.screen, self.player)
-
-        self.collision_map = asets.load_collision("bg.png")
+        self.background, self.bg_rect = self.asets.load_background("bg.png")
+        self.collision_map = self.asets.load_collision("bg.png")
 
         self.clock = pygame.time.Clock()
         self.target_fps = 60
@@ -144,4 +136,4 @@ class Game:
         self.menu.render()
         self.player_menu.render()
         # self.screen.blit(self.image, self.image_rect.topleft)
-        pygame.display.flip()
+        #pygame.display.flip()
