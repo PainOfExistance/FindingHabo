@@ -15,6 +15,8 @@ class Game:
         self.player_menu = player_menu
 
         self.player.inventory.add_item(self.items[0]["name"], self.items[0])
+        self.player.inventory.add_item(self.items[1]["name"], self.items[1])
+        self.player.inventory.add_item(self.items[2]["name"], self.items[2])
 
         self.background, self.bg_rect = self.asets.load_background("bg.png")
         self.collision_map = self.asets.load_collision("bg.png")
