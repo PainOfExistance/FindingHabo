@@ -19,6 +19,9 @@ class Player:
         self.stats.update_health(health)
         self.depleted_rect.width = self.stats.health
     
+    def use_item(self, item):
+        pass
+    
     def draw(self, screen):
         screen.blit(self.player, self.player_rect)
         pygame.draw.rect(screen, (0, 0, 0), self.border_rect, border_radius=10)

@@ -63,7 +63,11 @@ class PlayerMenu:
                 self.sub_items = False
                 self.selection_held = True
 
-        elif not keys[pygame.K_UP] and not keys[pygame.K_DOWN]:
+            elif keys[pygame.K_RETURN] and self.sub_items:
+                self.use_item()
+                self.selection_held = True
+
+        elif not keys[pygame.K_UP] and not keys[pygame.K_DOWN] and not keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT] and not keys[pygame.K_RETURN]:
             self.selection_held = False
 
     def render_inventory(self):
@@ -83,6 +87,9 @@ class PlayerMenu:
             self.screen.blit(item_render, item_rect)
             text_y += item_spacing
 
+    def use_item(self):
+        self.player.use_item()
+        
     def render(self):
         if self.visible:
             pygame.draw.rect(self.screen, (227, 231, 211), self.bg, border_radius=10)
