@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 from stats import Stats
+from inventory  import Inventory
 
 class Player:
     def __init__(self, path, screen_width, screen_height, assets):
@@ -12,6 +13,7 @@ class Player:
         font = pygame.font.Font("inter.ttf", 13)
         self.text = font.render("Health", True, (255, 255, 255))
         self.text_rect = self.text.get_rect(center=(screen_width // 2, screen_height - 12))
+        self.inventory=Inventory()
 
     def update_health(self, health):
         self.stats.update_health(health)

@@ -1,0 +1,43 @@
+{
+    "items": [
+        {
+            "id": "item1",
+            "name": "Health Potion",
+            "description": "Restores health.",
+            "price": 20,
+            "image": "health_potion.png",
+            "effect": {
+                "name": "Healing",
+                "duration": 0,
+                "stat": "health",
+                "value": 50
+            }
+        },
+        {
+            "id": "item2",
+            "name": "Sanity Potion",
+            "description": "Increases sanity temporarily.",
+            "price": 30,
+            "image": "speed_potion.png",
+            "effect": {
+                "name": "Sanity Boost",
+                "duration": 0,
+                "stat": "sanity",
+                "value": 40
+            }
+        },
+        {
+            "id": "item3",
+            "name": "Power Elixir",
+            "description": "Temporarily boosts power.",
+            "price": 25,
+            "image": "power_elixir.png",
+            "effect": {
+                "name": "Strength Boost",
+                "duration": 20,
+                "stat": "power",
+                "value": 60
+            }
+        }
+    ]
+}

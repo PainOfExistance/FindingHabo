@@ -41,8 +41,8 @@ class MainMenu:
             print("Starting the game...")
             self.loading()
             assets=AssetLoader(self.screen_width, self.screen_height)
-            menu = Menu(self.screen)
             player = Player("desk1.png", self.screen_width, self.screen_height, assets)
+            menu = Menu(self.screen)
             player_menu = PlayerMenu(self.screen, player)
             game = Game(self.screen, self.screen_width, self.screen_height, menu, player_menu, player, assets)
             self.is_menu_visible = False

@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 import cv2
+import json
 
 class AssetLoader:
     def __init__(self, screen_width, screen_height):
@@ -43,5 +44,11 @@ class AssetLoader:
         print(binary_image)
         #np.savetxt('map.txt', binary_image, fmt='%d')
         return binary_image
+    
+    def load_items(self):
+        item_list=np.array({})
+        with open("items.json", "r") as items:
+            item_list = json.load(items)["items"]
+        return item_list
     
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

@@ -10,8 +10,11 @@ class Game:
         self.asets = assets
         self.menu = menu
 
+        self.items = assets.load_items()
         self.player = player
         self.player_menu = player_menu
+
+        self.player.inventory.add_item(self.items[0]["name"], self.items[0])
 
         self.background, self.bg_rect = self.asets.load_background("bg.png")
         self.collision_map = self.asets.load_collision("bg.png")
@@ -73,6 +76,7 @@ class Game:
                     self.rotation_angle = 90 - self.rotation_angle
                     self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)
                     self.rotation_angle = 90
+                    self.player.inventory.add_item(self.items[0]["name"], self.items[0])
             else:
                 self.bg_rect.move_ip(
                     int(self.movement_speed * self.delta_time), 0)
