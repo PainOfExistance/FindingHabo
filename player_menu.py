@@ -16,7 +16,6 @@ class PlayerMenu:
         self.bg = pygame.Rect(10, 10, 200, self.screen.get_height()-15)
         self.stats = [
             f"Health: {self.player.stats.health}",
-            f"Sanity: {self.player.stats.sanity}",
             f"Power: {self.player.stats.power}",
             f"Knowledge: {self.player.stats.knowlage}"
             ]
@@ -33,7 +32,6 @@ class PlayerMenu:
                 self.tab_held = True
                 self.stats = [
                     f"Health: {self.player.stats.health}",
-                    f"Sanity: {self.player.stats.sanity}",
                     f"Power: {self.player.stats.power}",
                     f"Knowledge: {self.player.stats.knowlage}"
                     ]
@@ -102,7 +100,7 @@ class PlayerMenu:
                 text = menu_font.render(item, True, color)
                 text_rect = text.get_rect(topleft=(20, 20 + index * 40))
                 self.screen.blit(text, text_rect)
-                text_y = self.screen.get_height() - 100
+                text_y = self.screen.get_height() - 70
 
                 for stat in self.stats:
                     stat_render = stats_font.render(stat, True, (44, 53, 57))
