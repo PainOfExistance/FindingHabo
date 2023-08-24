@@ -54,6 +54,12 @@
                 "duration": 0,
                 "stat": "",
                 "value": 0
+            },
+            "stats": {
+                "damage": 10,
+                "hand": "one",
+                "speed": 1,
+                "dropable": "yes"
             }
         }
     ]

@@ -60,7 +60,7 @@ class PlayerMenu:
             if keys[pygame.K_UP] and not self.selection_held:
                 if not self.sub_items:
                     self.selected_item = (self.selected_item - 1) % len(self.menu_items)
-                elif len(self.player.inventory.items)>=0:
+                elif len(self.player.inventory.items)>0:
                     self.selected_sub_item = (self.selected_sub_item - 1) % len(
                         self.player.inventory.items
                     )
@@ -69,13 +69,13 @@ class PlayerMenu:
             elif keys[pygame.K_DOWN] and not self.selection_held:
                 if not self.sub_items:
                     self.selected_item = (self.selected_item + 1) % len(self.menu_items)
-                elif len(self.player.inventory.items)>=0:
+                elif len(self.player.inventory.items)>0:
                     self.selected_sub_item = (self.selected_sub_item + 1) % len(
                         self.player.inventory.items
                     )
                 self.selection_held = True
 
-            elif keys[pygame.K_RIGHT] and not self.sub_items:
+            elif (keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]) and not self.sub_items:
                 self.sub_items = True
                 self.selection_held = True
 
@@ -83,8 +83,9 @@ class PlayerMenu:
                 self.sub_items = False
                 self.selection_held = True
 
-            elif keys[pygame.K_RETURN] and self.sub_items and len(self.player.inventory.items) >= 0:
-                self.player.use_item(self.selected_sub_item)
+            elif keys[pygame.K_RETURN] and self.sub_items and len(self.player.inventory.items) > 0:
+                if self.selected_item==0:
+                    self.player.use_item(self.selected_sub_item)
                 self.selection_held = True
 
         elif (
