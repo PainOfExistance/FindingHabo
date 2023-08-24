@@ -15,14 +15,14 @@
         },
         {
             "id": "item2",
-            "name": "Sanity Potion",
-            "description": "Increases sanity temporarily.",
+            "name": "Knowledge Potion",
+            "description": "Increases knowledge temporarily.",
             "price": 30,
-            "image": "speed_potion.png",
+            "image": "knowledge_potion.png",
             "effect": {
-                "name": "Sanity Boost",
+                "name": "Knowledge Boost",
                 "duration": 0,
-                "stat": "sanity",
+                "stat": "knowledge",
                 "value": 40
             }
         },
