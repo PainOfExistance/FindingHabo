@@ -44,7 +44,7 @@
         },
         {
             "id": "btgSword",
-            "name": "Sword",
+            "name": "Steel Sword",
             "type": "btitem",
             "description": "Steel sword.",
             "price": 40,
@@ -60,7 +60,7 @@
                 "hand": "one",
                 "speed": 1,
                 "dropable": "yes",
-                "equiped": "no",
+                "equiped": false,
                 "slot": "hand"
             }
         },
@@ -82,7 +82,7 @@
                 "hand": "",
                 "speed": 1,
                 "dropable": "yes",
-                "equiped": "no",
+                "equiped": false,
                 "slot": "chest"
             }
         },
@@ -104,7 +104,7 @@
                 "hand": "",
                 "speed": 0.9,
                 "dropable": "yes",
-                "equiped": "no",
+                "equiped": false,
                 "slot": "chest"
             }
         }

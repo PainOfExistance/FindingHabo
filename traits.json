@@ -1,0 +1,50 @@
+{
+    "traits": [
+        {
+            "name": "Health Boost",
+            "stat": "health",
+            "levels": [
+                { "level": 2, "effect": 10, "taken": false },
+                { "level": 5, "effect": 15, "taken": false },
+                { "level": 10, "effect": 20, "taken": false },
+                { "level": 20, "effect": 25, "taken": false },
+                { "level": 30, "effect": 30, "taken": false },
+                { "level": 50, "effect": 35, "taken": false }
+            ]
+        },
+        {
+            "name": "Power Surge",
+            "stat": "power",
+            "levels": [
+                { "level": 2, "effect": 10, "taken": false },
+                { "level": 5, "effect": 15, "taken": false },
+                { "level": 10, "effect": 20, "taken": false },
+                { "level": 20, "effect": 25, "taken": false },
+                { "level": 30, "effect": 30, "taken": false },
+                { "level": 50, "effect": 35, "taken": false }
+            ]
+        },
+        {
+            "name": "Knowledge Boost",
+            "stat": "knowledge",
+            "levels": [
+                { "level": 2, "effect": 10, "taken": false },
+                { "level": 5, "effect": 15, "taken": false },
+                { "level": 10, "effect": 20, "taken": false },
+                { "level": 20, "effect": 25, "taken": false },
+                { "level": 30, "effect": 30, "taken": false },
+                { "level": 50, "effect": 35, "taken": false }
+            ]
+        },
+        {
+            "name": "Weapon Mastery",
+            "stat": "weapon_damage",
+            "levels": [
+                { "level": 2, "effect": 10, "taken": false },
+                { "level": 5, "effect": 15, "taken": false },
+                { "level": 10, "effect": 20, "taken": false },
+                { "level": 20, "effect": 25, "taken": false }
+            ]
+        }
+    ]
+}

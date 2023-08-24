@@ -20,7 +20,7 @@ class Game:
         self.player.inventory.add_item(self.items[3])
         self.player.inventory.add_item(self.items[4])
         self.player.inventory.add_item(self.items[5])
-
+        
         self.background, self.bg_rect = self.asets.load_background("bg.png")
         self.collision_map = self.asets.load_collision("bg.png")
 
@@ -77,11 +77,12 @@ class Game:
             if self.player.player_rect.left > 10:
                 self.player.player_rect.move_ip(
                     int(-self.movement_speed * self.delta_time), 0)
+                self.player.level.gain_experience(100)
+                self.player.add_trait("Health Boost")
                 if self.rotation_angle != 90:
                     self.rotation_angle = 90 - self.rotation_angle
                     self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)
                     self.rotation_angle = 90
-                    self.player.inventory.add_item(self.items[0]["name"], self.items[0])
             else:
                 self.bg_rect.move_ip(
                     int(self.movement_speed * self.delta_time), 0)
@@ -102,7 +103,7 @@ class Game:
             if self.player.player_rect.top > 10:
                 self.player.player_rect.move_ip(
                     0, int(-self.movement_speed * self.delta_time))
-                self.player.update_health(10)
+                #self.player.update_health(10)
                 if self.rotation_angle != 0:
                     self.rotation_angle = 0 - self.rotation_angle
                     self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)
@@ -115,7 +116,7 @@ class Game:
             if self.player.player_rect.bottom < self.screen_height-10:
                 self.player.player_rect.move_ip(
                     0, int(self.movement_speed * self.delta_time))
-                self.player.update_health(-10)
+                #self.player.update_health(-10)
                 if self.rotation_angle != 180:
                     self.rotation_angle = 180 - self.rotation_angle
                     self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)

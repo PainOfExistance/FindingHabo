@@ -2,18 +2,22 @@ import pygame
 import numpy as np
 from stats import Stats
 from inventory  import Inventory
+from leveling_system  import LevelingSystem
 
 class Player:
     def __init__(self, path, screen_width, screen_height, assets):
         self.asets=assets
         self.stats=Stats()
+        self.inventory=Inventory()
+        self.level=LevelingSystem(assets)
+        
         self.player, self.player_rect=self.asets.load_player(path, (screen_width // 2, screen_height // 2))
         self.depleted_rect = pygame.Rect(screen_width // 2 - self.stats.max_health // 2, screen_height - 20, self.stats.health, 18)
         self.border_rect = pygame.Rect(screen_width // 2 - self.stats.max_health // 2, screen_height - 20, self.stats.max_health, 18)
         font = pygame.font.Font("inter.ttf", 13)
         self.text = font.render("Health", True, (255, 255, 255))
         self.text_rect = self.text.get_rect(center=(screen_width // 2, screen_height - 12))
-        self.inventory=Inventory()
+        
         self.equipped_items = {
             "hand": None,
             "back": None,
@@ -27,6 +31,9 @@ class Player:
     def update_health(self, health):
         self.stats.update_health(health)
         self.depleted_rect.width = self.stats.health
+    
+    def add_trait(self, name):
+        self.level.traits.add_trait(name, self.level.level)
     
     def use_item(self, index):
         keys = list(self.inventory.items.keys())
@@ -51,7 +58,7 @@ class Player:
         slot=self.inventory.items[item]["stats"]["slot"]
         if slot in self.equipped_items:
             self.equipped_items[slot] = item
-            self.inventory.items[item]["stats"]["equiped"]="yes"
+            self.inventory.items[item]["stats"]["equiped"]=True
             print(f"Equipped {item} in {slot}")
         else:
             print(f"Cannot equip {item} in {slot}")
@@ -62,7 +69,7 @@ class Player:
             if slot in self.equipped_items and self.equipped_items[slot] is not None:
                 unequipped_item = self.equipped_items[slot]
                 self.equipped_items[slot] = None
-                self.inventory.items[item]["stats"]["equiped"]="no"
+                self.inventory.items[item]["stats"]["equiped"]=False
                 print(f"Unequipped {unequipped_item} from {slot}")
             else:
                 print(f"No item equipped in {slot}")

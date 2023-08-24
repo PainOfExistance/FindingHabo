@@ -6,7 +6,7 @@ class PlayerMenu:
     def __init__(self, screen, player):
         self.screen = screen
         self.visible = False
-        self.menu_items = ["Items", "Traits", "Effects", "Data"]
+        self.menu_items = ["Items", "Traits", "Effects", "Quests"]
         self.selected_item = 0
         self.selected_sub_item = 0
         self.sub_items = False
@@ -114,11 +114,11 @@ class PlayerMenu:
             )
             if index == self.selected_sub_item:
                 item_text = f"> {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']}"
-                if "stats" in self.player.inventory.items[item_name] and self.player.inventory.items[item_name]['stats']["equiped"] == "yes":
+                if "stats" in self.player.inventory.items[item_name] and self.player.inventory.items[item_name]['stats']["equiped"] == True:
                     item_text = f"> {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']} ◄"
             else:
                 item_text = f"    {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']}"
-                if "stats" in self.player.inventory.items[item_name] and self.player.inventory.items[item_name]['stats']["equiped"] == "yes":
+                if "stats" in self.player.inventory.items[item_name] and self.player.inventory.items[item_name]['stats']["equiped"] == True:
                     item_text = f"    {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']} ◄"
 
             item_render = inventory_font.render(item_text, True, color)
@@ -167,13 +167,18 @@ class PlayerMenu:
                 text = menu_font.render(item, True, color)
                 text_rect = text.get_rect(topleft=(20, 20 + index * 40))
                 self.screen.blit(text, text_rect)
-                text_y = self.screen.get_height() - 70
+                text_y = self.screen.get_height() - 90
 
                 for stat in self.stats:
                     stat_render = stats_font.render(stat, True, (44, 53, 57))
                     stat_rect = stat_render.get_rect(bottomleft=(20, text_y))
                     self.screen.blit(stat_render, stat_rect)
                     text_y += stat_rect.height + 5
+                    
+                level = stats_font.render(f"Level: {str(self.player.level.level)}", True, (44, 53, 57))
+                level_rect = level.get_rect(bottomleft=(20, text_y))
+                self.screen.blit(level, level_rect)
+                
 
             if self.selected_item == 0:
                 self.render_inventory()

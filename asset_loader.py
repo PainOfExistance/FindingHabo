@@ -51,4 +51,11 @@ class AssetLoader:
             item_list = json.load(items)["items"]
         return item_list
     
+    def load_traits(self):
+        traits=np.array({})
+        with open("traits.json", "r") as traits_file:
+            traits_data = json.load(traits_file)
+            traits = {trait["name"]: trait for trait in traits_data["traits"]}
+        return traits
+    
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic
