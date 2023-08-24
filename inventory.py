@@ -8,7 +8,8 @@ class Inventory:
         self.items = {}
         self.quantity = {}
     
-    def add_item(self, name, item):
+    def add_item(self, item):
+        name = item["name"]
         if name in self.items:
             self.quantity[name] += 1
         else:

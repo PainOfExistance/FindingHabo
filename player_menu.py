@@ -114,8 +114,12 @@ class PlayerMenu:
             )
             if index == self.selected_sub_item:
                 item_text = f"> {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']}"
+                if "stats" in self.player.inventory.items[item_name] and self.player.inventory.items[item_name]['stats']["equiped"] == "yes":
+                    item_text = f"> {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']} ◄"
             else:
                 item_text = f"    {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']}"
+                if "stats" in self.player.inventory.items[item_name] and self.player.inventory.items[item_name]['stats']["equiped"] == "yes":
+                    item_text = f"    {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']} ◄"
 
             item_render = inventory_font.render(item_text, True, color)
             item_rect = item_render.get_rect(topleft=(220, 20 + index * 40))

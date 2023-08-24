@@ -44,7 +44,7 @@
         },
         {
             "id": "btgSword",
-            "name": "Short Sword",
+            "name": "Sword",
             "type": "btitem",
             "description": "Steel sword.",
             "price": 40,
@@ -59,7 +59,53 @@
                 "damage": 10,
                 "hand": "one",
                 "speed": 1,
-                "dropable": "yes"
+                "dropable": "yes",
+                "equiped": "no",
+                "slot": "hand"
+            }
+        },
+        {
+            "id": "btgSteelArmor",
+            "name": "Steel Armor",
+            "type": "btitem",
+            "description": "Steel armor.",
+            "price": 80,
+            "image": "starmor.png",
+            "effect": {
+                "name": "",
+                "duration": 0,
+                "stat": "",
+                "value": 0
+            },
+            "stats": {
+                "damage": 20,
+                "hand": "",
+                "speed": 1,
+                "dropable": "yes",
+                "equiped": "no",
+                "slot": "chest"
+            }
+        },
+        {
+            "id": "btgDivineArmor",
+            "name": "Divine Armor",
+            "type": "btitem",
+            "description": "Divine armor.",
+            "price": 150,
+            "image": "divarmor.png",
+            "effect": {
+                "name": "",
+                "duration": 0,
+                "stat": "",
+                "value": 0
+            },
+            "stats": {
+                "damage": 60,
+                "hand": "",
+                "speed": 0.9,
+                "dropable": "yes",
+                "equiped": "no",
+                "slot": "chest"
             }
         }
     ]
