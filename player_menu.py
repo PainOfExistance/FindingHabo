@@ -83,7 +83,7 @@ class PlayerMenu:
                 self.sub_items = False
                 self.selection_held = True
 
-            elif keys[pygame.K_RETURN] and self.sub_items:
+            elif keys[pygame.K_RETURN] and self.sub_items and len(self.player.inventory.items):
                 self.player.use_item(self.selected_sub_item)
                 self.selection_held = True
 
@@ -120,6 +120,12 @@ class PlayerMenu:
             item_rect = item_render.get_rect(topleft=(220, 20 + index * 40))
             self.screen.blit(item_render, item_rect)
             text_y += item_spacing
+
+            if (
+                self.selected_sub_item > len(self.player.inventory.items) - 1
+                or self.selected_sub_item < 0
+            ):
+                self.selected_sub_item -= 1
 
     def render(self):
         if self.visible:
