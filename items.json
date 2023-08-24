@@ -1,8 +1,9 @@
 {
     "items": [
         {
-            "id": "item1",
+            "id": "itmHealing",
             "name": "Health Potion",
+            "type": "item",
             "description": "Restores health.",
             "price": 20,
             "image": "health_potion.png",
@@ -14,8 +15,9 @@
             }
         },
         {
-            "id": "item2",
+            "id": "itmKnowledge",
             "name": "Knowledge Potion",
+            "type": "item",
             "description": "Increases knowledge temporarily.",
             "price": 30,
             "image": "knowledge_potion.png",
@@ -27,8 +29,9 @@
             }
         },
         {
-            "id": "item3",
+            "id": "itmPower",
             "name": "Power Elixir",
+            "type": "item",
             "description": "Temporarily boosts power.",
             "price": 25,
             "image": "power_elixir.png",
@@ -37,6 +40,20 @@
                 "duration": 20,
                 "stat": "power",
                 "value": 60
+            }
+        },
+        {
+            "id": "btgSword",
+            "name": "Short Sword",
+            "type": "btitem",
+            "description": "Steel sword.",
+            "price": 40,
+            "image": "sword.png",
+            "effect": {
+                "name": "",
+                "duration": 0,
+                "stat": "",
+                "value": 0
             }
         }
     ]

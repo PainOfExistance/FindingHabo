@@ -1,12 +1,12 @@
 import pygame
 import sys
-
+import re
 
 class PlayerMenu:
     def __init__(self, screen, player):
         self.screen = screen
         self.visible = False
-        self.menu_items = ["Weapons", "Items", "Effects", "Data"]
+        self.menu_items = ["Items", "Traits", "Effects", "Data"]
         self.selected_item = 0
         self.selected_sub_item = 0
         self.sub_items = False
@@ -60,7 +60,7 @@ class PlayerMenu:
             if keys[pygame.K_UP] and not self.selection_held:
                 if not self.sub_items:
                     self.selected_item = (self.selected_item - 1) % len(self.menu_items)
-                else:
+                elif len(self.player.inventory.items)>=0:
                     self.selected_sub_item = (self.selected_sub_item - 1) % len(
                         self.player.inventory.items
                     )
@@ -69,7 +69,7 @@ class PlayerMenu:
             elif keys[pygame.K_DOWN] and not self.selection_held:
                 if not self.sub_items:
                     self.selected_item = (self.selected_item + 1) % len(self.menu_items)
-                else:
+                elif len(self.player.inventory.items)>=0:
                     self.selected_sub_item = (self.selected_sub_item + 1) % len(
                         self.player.inventory.items
                     )
@@ -83,7 +83,7 @@ class PlayerMenu:
                 self.sub_items = False
                 self.selection_held = True
 
-            elif keys[pygame.K_RETURN] and self.sub_items and len(self.player.inventory.items):
+            elif keys[pygame.K_RETURN] and self.sub_items and len(self.player.inventory.items) >= 0:
                 self.player.use_item(self.selected_sub_item)
                 self.selection_held = True
 
@@ -170,5 +170,5 @@ class PlayerMenu:
                     self.screen.blit(stat_render, stat_rect)
                     text_y += stat_rect.height + 5
 
-            if self.selected_item == 1:
+            if self.selected_item == 0:
                 self.render_inventory()
