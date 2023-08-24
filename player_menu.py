@@ -84,7 +84,7 @@ class PlayerMenu:
                 self.selection_held = True
 
             elif keys[pygame.K_RETURN] and self.sub_items:
-                self.player.use_item()
+                self.player.use_item(self.selected_sub_item)
                 self.selection_held = True
 
         elif (

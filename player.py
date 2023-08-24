@@ -19,8 +19,11 @@ class Player:
         self.stats.update_health(health)
         self.depleted_rect.width = self.stats.health
     
-    def use_item(self, item):
-        pass
+    def use_item(self, index):
+        keys = list(self.inventory.items.keys())  
+        item= self.inventory.items[keys[index]]
+        self.inventory.remove_item(keys[index])
+        self.update_health(item["effect"]["value"])
     
     def draw(self, screen):
         screen.blit(self.player, self.player_rect)

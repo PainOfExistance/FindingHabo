@@ -15,8 +15,8 @@ class Inventory:
             self.quantity[name] = 1
             self.items[name] = item
 
-    def remove_item(self, name, item):
-        if name in self.items and self.items[name] > 1:
+    def remove_item(self, name):
+        if name in self.items and self.quantity[name] > 1:
             self.quantity[name] -= 1
         elif name in self.items:
             del self.items[name]
