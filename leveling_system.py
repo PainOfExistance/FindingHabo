@@ -30,7 +30,7 @@ class LevelingSystem:
         trait_font = pygame.font.Font("inter.ttf", 24)
         item_spacing = 40
         text_y = 20
-
+        i=0
         for index, (trait_name, trait_data) in enumerate(
             self.traits.traits.items()
         ):
@@ -46,8 +46,26 @@ class LevelingSystem:
                 item_text = f"> {trait_name} dexcription: {trait_data['description']} levels: {trait_data['levels']}"
             else:
                 item_text = f"    {trait_name} dexcription: {trait_data['description']} levels: {trait_data['levels']}"
+            
+            for x in trait_data:
+                #print(trait_data[x])
 
-            item_render = trait_font.render(item_text, True, color)
-            item_rect = item_render.get_rect(topleft=(220, 20 + index * 40))
-            screen.blit(item_render, item_rect)
-            text_y += item_spacing
+                coords=(screen.get_width()+screen.get_width()//4) / 2
+                
+                if x=="name" or x=="description":
+                    item_render = trait_font.render(f"{trait_data[x]}", True, color)
+                    item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
+                    screen.blit(item_render, item_rect)
+                    text_y += item_spacing
+                    i += item_spacing
+                elif x=="levels":
+                    txt=f""
+                    for z in range(len(trait_data[x])):
+                        txt+=f"|{trait_data[x][z]['level']} {trait_data[x][z]['effect']} {trait_data[x][z]['taken']}| "
+                        
+                    item_render = trait_font.render(txt, True, color)
+                    item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
+                    screen.blit(item_render, item_rect)
+                    text_y += item_spacing
+                    i += item_spacing
+                        
