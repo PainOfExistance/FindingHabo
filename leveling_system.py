@@ -29,13 +29,13 @@ class LevelingSystem:
     def draw(self, screen, selected_sub_item, sub_items):
         trait_font = pygame.font.Font("inter.ttf", 24)
         item_spacing = 40
-        i=0
-        coords=(screen.get_width()+screen.get_width()//4) / 2
-        
-        scroll_position = (selected_sub_item // 2) * 2
-        visible_items = list(self.traits.traits.items())[scroll_position : scroll_position + 2]
+        i = 0
+        coords = (screen.get_width() + screen.get_width() // 4) / 2
+
+        scroll_position = (selected_sub_item // 3) * 3
+        visible_traits = list(self.traits.traits.items())[scroll_position : scroll_position + 3]
         for index, (trait_name, trait_data) in enumerate(
-            visible_items
+            visible_traits
         ):
             color = (
                 (157, 157, 210)
@@ -44,39 +44,47 @@ class LevelingSystem:
                 if sub_items
                 else (120, 120, 120)
             )
-            print(f"   index: {index}")
-            print(f"selected: {selected_sub_item}")
+
+            trait_text = f"{trait_name}"
+            item_render = trait_font.render(trait_text, True, color)
+            item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
+            screen.blit(item_render, item_rect)
             
             if index == selected_sub_item - scroll_position:
-                item_text = f"> {trait_name} dexcription: {trait_data['description']} levels: {trait_data['levels']}"
-            else:
-                item_text = f"    {trait_name} dexcription: {trait_data['description']} levels: {trait_data['levels']}"
-            
-            for x in trait_data:
-                #print(trait_data[x])
+                i += item_spacing
+                line_render = trait_font.render(trait_data['description'], True, color)
+                line_rect = line_render.get_rect(center=(coords, 20 + index * 40 + i))
+                screen.blit(line_render, line_rect)
+            i += item_spacing
 
-                
-                if x=="name" or x=="description":
-                    item_render = trait_font.render(f"{trait_data[x]}", True, color)
-                    item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
-                    screen.blit(item_render, item_rect)
-                    i += item_spacing
-                elif x=="levels":
-                    txt=f""
-                    pwr=f""
-                    lvl=f""
-                    for z in range(len(trait_data[x])):
-                        txt+=f"|{trait_data[x][z]['level']}" 
-                        tmp=f"●|" if trait_data[x][z]['taken'] else f"○|"
-                        txt+=f"{tmp}"
-                        lvl+=f"|{trait_data[x][z]['effect']}|"
-                        
-                    item_render = trait_font.render(txt, True, color)
-                    item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
-                    screen.blit(item_render, item_rect)
-                    i += item_spacing
+
+            level_text = f""
+            clr = (157, 157, 210)
+            
+            
+            for level_info in trait_data["levels"]:
+                if not level_info["taken"]:
                     
-                    item_render = trait_font.render(lvl, True, color)
-                    item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
-                    screen.blit(item_render, item_rect)
-                    i += item_spacing
+                    if level_info["level"] <= self.level:
+                        clr=(90, 180, 90)
+                    else:
+                        clr=(240, 90, 90)
+                            
+                    level_text = f"Next unlock at: {level_info['level']}  Gain: {level_info['effect']}"
+                    break
+                
+                clr=(120, 120, 180)
+                level_text = f"Next unlock at: MAX  Value amount: MAX"
+                
+            taken_text = "Taken:"
+            for level_info in trait_data["levels"]:
+                taken_text += f" {'○' if not level_info['taken'] else '●':<2}"
+                
+            level_render = trait_font.render(level_text, True, clr)
+            taken_render = trait_font.render(taken_text, True, color)
+
+            level_rect = level_render.get_rect(center=(coords, 20 + index * 40 + i + item_spacing))
+            taken_rect = taken_render.get_rect(center=(coords, 20 + index * 40 + i))
+            screen.blit(taken_render, taken_rect)
+            screen.blit(level_render, level_rect)
+            i += 3 * item_spacing

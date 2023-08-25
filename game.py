@@ -32,10 +32,10 @@ class Game:
         self.movement_speed = 200
         self.rotation_angle = 0
 
-        self.sound_effect = pygame.mixer.Sound("It's Time.mp3")
-        self.sound_effect.play()
-        self.sound_effect.set_volume(0.2)
-        self.sound_effect.play(loops=-1)
+        #self.sound_effect = pygame.mixer.Sound("Angelia.mp3")
+        #self.sound_effect.play()
+        #self.sound_effect.set_volume(0.2)
+        #self.sound_effect.play(loops=-1)
 
     def run(self):
         while True:
