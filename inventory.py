@@ -27,12 +27,9 @@ class Inventory:
         inventory_font = pygame.font.Font("inter.ttf", 24)
         item_spacing = 40
         text_y = 20
-        max_visible_items = 4  # Change this to the desired number of visible items at a time
 
-        scroll_position = selected_sub_item  # Use selected_sub_item as the scroll position
-        visible_items = list(self.quantity.items())[scroll_position : scroll_position + max_visible_items]
-        if selected_sub_item > len(visible_items):
-            pass
+        scroll_position = (selected_sub_item // 10) * 10
+        visible_items = list(self.quantity.items())[scroll_position : scroll_position + 10]
 
         for index, (item_name, item_quantity) in enumerate(visible_items):
             color = (
