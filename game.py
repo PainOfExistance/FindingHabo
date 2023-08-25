@@ -23,7 +23,8 @@ class Game:
         
         self.background, self.bg_rect = self.asets.load_background("bg.png")
         self.collision_map = self.asets.load_collision("bg.png")
-
+        self.map_height=self.collision_map.shape[0]
+        self.map_width=self.collision_map.shape[1]
         self.clock = pygame.time.Clock()
         self.target_fps = 60
 
@@ -87,7 +88,7 @@ class Game:
                 self.bg_rect.move_ip(
                     int(self.movement_speed * self.delta_time), 0)
 
-        if keys[pygame.K_d] and np.count_nonzero(self.collision_map[relative_player_top:relative_player_bottom, relative_player_right+movement] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
+        if keys[pygame.K_d] and np.count_nonzero(self.collision_map[relative_player_top:relative_player_bottom, min(relative_player_right+movement, self.map_width-1)] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
             if self.player.player_rect.right < self.screen_width-10:
                 self.player.player_rect.move_ip(
                     int(self.movement_speed * self.delta_time), 0)
@@ -112,7 +113,7 @@ class Game:
                 self.bg_rect.move_ip(
                     0, int(self.movement_speed * self.delta_time))
 
-        if keys[pygame.K_s] and np.count_nonzero(self.collision_map[relative_player_bottom+movement, relative_player_left:relative_player_right] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
+        if keys[pygame.K_s] and np.count_nonzero(self.collision_map[min(relative_player_bottom + movement, self.map_height-1), relative_player_left:relative_player_right] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
             if self.player.player_rect.bottom < self.screen_height-10:
                 self.player.player_rect.move_ip(
                     0, int(self.movement_speed * self.delta_time))
