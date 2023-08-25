@@ -27,28 +27,33 @@ class Inventory:
         inventory_font = pygame.font.Font("inter.ttf", 24)
         item_spacing = 40
         text_y = 20
+        max_visible_items = 4  # Change this to the desired number of visible items at a time
 
-        for index, (item_name, item_quantity) in enumerate(
-            self.quantity.items()
-        ):
+        scroll_position = selected_sub_item  # Use selected_sub_item as the scroll position
+        visible_items = list(self.quantity.items())[scroll_position : scroll_position + max_visible_items]
+        if selected_sub_item > len(visible_items):
+            pass
+
+        for index, (item_name, item_quantity) in enumerate(visible_items):
             color = (
                 (157, 157, 210)
-                if index == selected_sub_item
+                if index == selected_sub_item - scroll_position
                 else (237, 106, 94)
                 if sub_items
                 else (120, 120, 120)
             )
-            if index == selected_sub_item:
+            if index == selected_sub_item - scroll_position:
                 item_text = f"> {item_name}: {item_quantity} desc: {self.items[item_name]['description']}"
-                if "stats" in self.items[item_name] and self.items[item_name]['stats']["equiped"] == True:
+                if "stats" in self.items[item_name] and self.items[item_name]['stats']["equiped"]:
                     item_text = f"> {item_name}: {item_quantity} desc: {self.items[item_name]['description']} ◄"
             else:
                 item_text = f"    {item_name}: {item_quantity} desc: {self.items[item_name]['description']}"
-                if "stats" in self.items[item_name] and self.items[item_name]['stats']["equiped"] == True:
+                if "stats" in self.items[item_name] and self.items[item_name]['stats']["equiped"]:
                     item_text = f"    {item_name}: {item_quantity} desc: {self.items[item_name]['description']} ◄"
 
             item_render = inventory_font.render(item_text, True, color)
             item_rect = item_render.get_rect(topleft=(220, 20 + index * 40))
             screen.blit(item_render, item_rect)
             text_y += item_spacing
+
         
