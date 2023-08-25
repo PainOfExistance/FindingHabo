@@ -25,3 +25,29 @@ class LevelingSystem:
         experience_increment = 50
         increment_multiplier = 1.1 
         return int(base_experience + (experience_increment * (increment_multiplier ** (current_level - 2))))
+    
+    def draw(self, screen, selected_sub_item, sub_items):
+        trait_font = pygame.font.Font("inter.ttf", 24)
+        item_spacing = 40
+        text_y = 20
+
+        for index, (trait_name, trait_data) in enumerate(
+            self.traits.traits.items()
+        ):
+            color = (
+                (157, 157, 210)
+                if index == selected_sub_item
+                else (237, 106, 94)
+                if sub_items
+                else (120, 120, 120)
+            )
+            
+            if index == selected_sub_item:
+                item_text = f"> {trait_name} dexcription: {trait_data['description']} levels: {trait_data['levels']}"
+            else:
+                item_text = f"    {trait_name} dexcription: {trait_data['description']} levels: {trait_data['levels']}"
+
+            item_render = trait_font.render(item_text, True, color)
+            item_rect = item_render.get_rect(topleft=(220, 20 + index * 40))
+            screen.blit(item_render, item_rect)
+            text_y += item_spacing

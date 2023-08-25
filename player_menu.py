@@ -60,19 +60,25 @@ class PlayerMenu:
             if keys[pygame.K_UP] and not self.selection_held:
                 if not self.sub_items:
                     self.selected_item = (self.selected_item - 1) % len(self.menu_items)
-                elif len(self.player.inventory.items)>0:
+                elif len(self.player.inventory.items)>0 and self.selected_item==0:
                     self.selected_sub_item = (self.selected_sub_item - 1) % len(
                         self.player.inventory.items
                     )
+                elif self.selected_item==1:
+                    self.selected_sub_item = (self.selected_sub_item - 1) % len(
+                    self.player.level.traits.traits)
                 self.selection_held = True
 
             elif keys[pygame.K_DOWN] and not self.selection_held:
                 if not self.sub_items:
                     self.selected_item = (self.selected_item + 1) % len(self.menu_items)
-                elif len(self.player.inventory.items)>0:
+                elif len(self.player.inventory.items)>0 and self.selected_item==0:
                     self.selected_sub_item = (self.selected_sub_item + 1) % len(
                         self.player.inventory.items
                     )
+                elif self.selected_item==1:
+                        self.selected_sub_item = (self.selected_sub_item + 1) % len(
+                        self.player.level.traits.traits)
                 self.selection_held = True
 
             elif (keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]) and not self.sub_items:
@@ -96,41 +102,6 @@ class PlayerMenu:
             and not keys[pygame.K_RETURN]
         ):
             self.selection_held = False
-
-    def render_inventory(self):
-        inventory_font = pygame.font.Font("inter.ttf", 24)
-        item_spacing = 40
-        text_y = 20
-
-        for index, (item_name, item_quantity) in enumerate(
-            self.player.inventory.quantity.items()
-        ):
-            color = (
-                (157, 157, 210)
-                if index == self.selected_sub_item
-                else (237, 106, 94)
-                if self.sub_items
-                else (120, 120, 120)
-            )
-            if index == self.selected_sub_item:
-                item_text = f"> {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']}"
-                if "stats" in self.player.inventory.items[item_name] and self.player.inventory.items[item_name]['stats']["equiped"] == True:
-                    item_text = f"> {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']} ◄"
-            else:
-                item_text = f"    {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']}"
-                if "stats" in self.player.inventory.items[item_name] and self.player.inventory.items[item_name]['stats']["equiped"] == True:
-                    item_text = f"    {item_name}: {item_quantity} desc: {self.player.inventory.items[item_name]['description']} ◄"
-
-            item_render = inventory_font.render(item_text, True, color)
-            item_rect = item_render.get_rect(topleft=(220, 20 + index * 40))
-            self.screen.blit(item_render, item_rect)
-            text_y += item_spacing
-
-            if (
-                self.selected_sub_item > len(self.player.inventory.items) - 1
-                or self.selected_sub_item < 0
-            ):
-                self.selected_sub_item -= 1
 
     def render(self):
         if self.visible:
@@ -181,4 +152,11 @@ class PlayerMenu:
                 
 
             if self.selected_item == 0:
-                self.render_inventory()
+                self.player.inventory.draw(self.screen, self.selected_sub_item, self.sub_items)
+                if (
+                self.selected_sub_item > len(self.player.inventory.items) - 1
+                or self.selected_sub_item < 0
+            ):
+                    self.selected_sub_item -= 1
+            elif self.selected_item == 1:
+                self.player.level.draw(self.screen, self.selected_sub_item, self.sub_items)

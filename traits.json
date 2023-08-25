@@ -3,6 +3,7 @@
         {
             "name": "Health Boost",
             "stat": "health",
+            "description": "Increases your max health.",
             "levels": [
                 { "level": 2, "effect": 10, "taken": false },
                 { "level": 5, "effect": 15, "taken": false },
@@ -15,6 +16,7 @@
         {
             "name": "Power Surge",
             "stat": "power",
+            "description":"Increases your max power.",
             "levels": [
                 { "level": 2, "effect": 10, "taken": false },
                 { "level": 5, "effect": 15, "taken": false },
@@ -27,6 +29,7 @@
         {
             "name": "Knowledge Boost",
             "stat": "knowledge",
+            "description":"Increases your max knowledge.",
             "levels": [
                 { "level": 2, "effect": 10, "taken": false },
                 { "level": 5, "effect": 15, "taken": false },
@@ -39,6 +42,7 @@
         {
             "name": "Weapon Mastery",
             "stat": "weapon_damage",
+            "description":"Increases your weapon damage.",
             "levels": [
                 { "level": 2, "effect": 10, "taken": false },
                 { "level": 5, "effect": 15, "taken": false },
