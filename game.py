@@ -14,12 +14,12 @@ class Game:
         self.player = player
         self.player_menu = player_menu
 
-        self.player.inventory.add_item(self.items[0])
-        self.player.inventory.add_item(self.items[1])
-        self.player.inventory.add_item(self.items[2])
-        self.player.inventory.add_item(self.items[3])
-        self.player.inventory.add_item(self.items[4])
-        self.player.inventory.add_item(self.items[5])
+        self.player.inventory.add_item(self.items["Health Potion"])
+        self.player.inventory.add_item(self.items["Knowledge Potion"])
+        self.player.inventory.add_item(self.items["Power Elixir"])
+        self.player.inventory.add_item(self.items["Steel Sword"])
+        self.player.inventory.add_item(self.items["Steel Armor"])
+        self.player.inventory.add_item(self.items["Divine Armor"])
         
         self.background, self.bg_rect = self.asets.load_background("bg.png")
         self.collision_map = self.asets.load_collision("bg.png")

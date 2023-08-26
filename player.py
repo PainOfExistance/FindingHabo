@@ -6,12 +6,12 @@ from leveling_system  import LevelingSystem
 
 class Player:
     def __init__(self, path, screen_width, screen_height, assets):
-        self.asets=assets
         self.stats=Stats()
         self.inventory=Inventory()
         self.level=LevelingSystem(assets)
+        self.effects = assets.load_effects()
         
-        self.player, self.player_rect=self.asets.load_player(path, (screen_width // 2, screen_height // 2))
+        self.player, self.player_rect=assets.load_player(path, (screen_width // 2, screen_height // 2))
         self.depleted_rect = pygame.Rect(screen_width // 2 - self.stats.max_health // 2, screen_height - 20, self.stats.health, 18)
         self.border_rect = pygame.Rect(screen_width // 2 - self.stats.max_health // 2, screen_height - 20, self.stats.max_health, 18)
         font = pygame.font.Font("inter.ttf", 13)

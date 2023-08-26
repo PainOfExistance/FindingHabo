@@ -48,7 +48,8 @@ class AssetLoader:
     def load_items(self):
         item_list=np.array({})
         with open("items.json", "r") as items:
-            item_list = json.load(items)["items"]
+            item_list = json.load(items)
+            item_list = {item["name"]: item for item in item_list["items"]}
         return item_list
     
     def load_traits(self):
@@ -57,5 +58,12 @@ class AssetLoader:
             traits_data = json.load(traits_file)
             traits = {trait["name"]: trait for trait in traits_data["traits"]}
         return traits
+    
+    def load_effects(self):
+        effects=np.array({})
+        with open("effects.json", "r") as effect_file:
+            effects = json.load(effect_file)
+            effects = {effect["name"]: effect for effect in effect_file["effects"]}
+        return effects
     
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

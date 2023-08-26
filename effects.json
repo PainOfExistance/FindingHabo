@@ -1,0 +1,28 @@
+{
+    "effects": [
+        {
+            "name": "Health Boost",
+            "stat": "health",
+            "description": "Increase of max health.",
+            "amount": 0
+        },
+        {
+            "name": "Power Surge",
+            "stat": "power",
+            "description": "Increase of max power.",
+            "amount": 0
+        },
+        {
+            "name": "Knowledge Boost",
+            "stat": "knowledge",
+            "description": "Increase of max knowledge.",
+            "amount": 0
+        },
+        {
+            "name": "Weapon Enhancement",
+            "stat": "weapon_damage",
+            "description": "Increase of weapon damage.",
+            "amount": 0
+        }
+    ]
+}
