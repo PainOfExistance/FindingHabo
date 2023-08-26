@@ -16,7 +16,8 @@ class LevelingSystem:
 
     def level_up(self):
         self.level += 1
-        self.traits.unused_trait_points =+ 2
+        self.traits.unused_trait_points += 2
+        print(self.traits.unused_trait_points)
         self.experience -= self.required_experience
         self.required_experience = self.calculate_next_required_experience(self.level)
         
@@ -26,13 +27,14 @@ class LevelingSystem:
         increment_multiplier = 1.1 
         return int(base_experience + (experience_increment * (increment_multiplier ** (current_level - 2))))
     
-    def draw(self, screen, selected_sub_item, sub_items):
+    def draw(self, screen, selected_sub_item, sub_items, trait_selection):
         trait_font = pygame.font.Font("inter.ttf", 24)
         item_spacing = 40
         i = 0
         coords = (screen.get_width() + screen.get_width() // 4) / 2
 
         scroll_position = (selected_sub_item // 3) * 3
+        selected = (trait_selection // 3) * 3
         visible_traits = list(self.traits.traits.items())[scroll_position : scroll_position + 3]
         for index, (trait_name, trait_data) in enumerate(
             visible_traits
@@ -61,7 +63,7 @@ class LevelingSystem:
             level_text = f""
             clr = (157, 157, 210)
             
-            
+                
             for level_info in trait_data["levels"]:
                 if not level_info["taken"]:
                     
@@ -69,11 +71,14 @@ class LevelingSystem:
                         clr=(90, 180, 90)
                     else:
                         clr=(240, 90, 90)
-                            
-                    level_text = f"Next unlock at: {level_info['level']}  Gain: {level_info['effect']}"
+                        
+                    if trait_selection-selected == index and trait_selection != -1:
+                        level_text = f"Unlock this level?"
+                    else:     
+                        level_text = f"Next unlock at: {level_info['level']}  Gain: {level_info['effect']}"
                     break
                 
-                clr=(120, 120, 180)
+                clr=(120, 120, 200)
                 level_text = f"Next unlock at: MAX  Value amount: MAX"
                 
             taken_text = "Taken:"

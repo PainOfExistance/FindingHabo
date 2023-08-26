@@ -5,12 +5,12 @@
             "stat": "health",
             "description": "Increases your max health.",
             "levels": [
-                { "level": 2, "effect": 10, "taken": true },
-                { "level": 5, "effect": 15, "taken": true },
-                { "level": 10, "effect": 20, "taken": true },
-                { "level": 20, "effect": 25, "taken": true },
-                { "level": 30, "effect": 30, "taken": true },
-                { "level": 50, "effect": 35, "taken": true }
+                { "level": 2, "effect": 10, "taken": false },
+                { "level": 5, "effect": 15, "taken": false },
+                { "level": 10, "effect": 20, "taken": false },
+                { "level": 20, "effect": 25, "taken": false },
+                { "level": 30, "effect": 30, "taken": false },
+                { "level": 50, "effect": 35, "taken": false }
             ]
         },
         {

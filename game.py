@@ -79,7 +79,7 @@ class Game:
                 self.player.player_rect.move_ip(
                     int(-self.movement_speed * self.delta_time), 0)
                 self.player.level.gain_experience(100)
-                self.player.add_trait("Health Boost")
+                #self.player.add_trait("Health Boost")
                 if self.rotation_angle != 90:
                     self.rotation_angle = 90 - self.rotation_angle
                     self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)

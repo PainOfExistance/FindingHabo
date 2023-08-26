@@ -11,6 +11,12 @@ class Traits:
         for level in self.traits[name]["levels"]:
             if not level["taken"] and self.unused_trait_points > 0 and level["level"] <= lvl:
                 level["taken"] = True
+                self.unused_trait_points -= 1
                 break
-        self.unused_trait_points -= 1
+    
+    def check_trait_conditions(self, name, lvl):
+        for level in self.traits[name]["levels"]:
+            if not level["taken"] and self.unused_trait_points > 0 and level["level"] <= lvl:
+                return True
+        return False            
         

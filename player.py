@@ -32,8 +32,11 @@ class Player:
         self.stats.update_health(health)
         self.depleted_rect.width = self.stats.health
     
-    def add_trait(self, name):
-        self.level.traits.add_trait(name, self.level.level)
+    def add_trait(self, index):
+        self.level.traits.add_trait(list(self.level.traits.traits.keys())[index], self.level.level)
+        
+    def check_trait_conditions(self, index):
+        return self.level.traits.check_trait_conditions(list(self.level.traits.traits.keys())[index], self.level.level)
     
     def use_item(self, index):
         keys = list(self.inventory.items.keys())
