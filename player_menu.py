@@ -61,7 +61,11 @@ class PlayerMenu:
             self.tab_held = False
 
         if self.visible and not self.selection_held:
-            if keys[pygame.K_UP] and not self.selection_held and self.trait_selection == -1:
+            if (
+                keys[pygame.K_UP]
+                and not self.selection_held
+                and self.trait_selection == -1
+            ):
                 if not self.sub_items:
                     self.selected_item = (self.selected_item - 1) % len(self.menu_items)
                 elif len(self.player.inventory.items) > 0 and self.selected_item == 0:
@@ -73,12 +77,16 @@ class PlayerMenu:
                         self.player.level.traits.traits
                     )
                 elif self.selected_item == 2:
-                        self.selected_sub_item = (self.selected_sub_item - 1) % len(
+                    self.selected_sub_item = (self.selected_sub_item - 1) % len(
                         self.player.effects.effects
                     )
                 self.selection_held = True
 
-            elif keys[pygame.K_DOWN] and not self.selection_held and self.trait_selection == -1:
+            elif (
+                keys[pygame.K_DOWN]
+                and not self.selection_held
+                and self.trait_selection == -1
+            ):
                 if not self.sub_items:
                     self.selected_item = (self.selected_item + 1) % len(self.menu_items)
                 elif len(self.player.inventory.items) > 0 and self.selected_item == 0:
@@ -90,12 +98,16 @@ class PlayerMenu:
                         self.player.level.traits.traits
                     )
                 elif self.selected_item == 2:
-                        self.selected_sub_item = (self.selected_sub_item + 1) % len(
+                    self.selected_sub_item = (self.selected_sub_item + 1) % len(
                         self.player.effects.effects
                     )
                 self.selection_held = True
 
-            elif (keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]) and not self.sub_items and self.trait_selection == -1:
+            elif (
+                (keys[pygame.K_RIGHT] or keys[pygame.K_RETURN])
+                and not self.sub_items
+                and self.trait_selection == -1
+            ):
                 self.sub_items = True
                 self.selection_held = True
 
@@ -112,12 +124,20 @@ class PlayerMenu:
                 if self.selected_item == 0:
                     self.player.use_item(self.selected_sub_item)
                 elif self.selected_item == 1:
-                    if self.trait_selection != -1 and self.player.level.traits.unused_trait_points>0 and self.player.check_trait_conditions(self.selected_sub_item):
+                    if (
+                        self.trait_selection != -1
+                        and self.player.level.traits.unused_trait_points > 0
+                        and self.player.check_trait_conditions(self.selected_sub_item)
+                    ):
                         self.player.add_trait(self.selected_sub_item)
                         self.trait_selection = -1
-                    elif self.player.level.traits.unused_trait_points>0 and self.player.check_trait_conditions(self.selected_sub_item) and self.trait_selection == -1:
+                    elif (
+                        self.player.level.traits.unused_trait_points > 0
+                        and self.player.check_trait_conditions(self.selected_sub_item)
+                        and self.trait_selection == -1
+                    ):
                         self.trait_selection = self.selected_sub_item
-                
+
                 self.selection_held = True
 
         elif (
@@ -188,12 +208,14 @@ class PlayerMenu:
                 self.screen.blit(level, level_rect)
 
             if self.selected_item == 0:
-                self.player.inventory.draw(self.screen, self.selected_sub_item, self.sub_items)
-                if (self.selected_sub_item > len(self.player.inventory.items) - 1):
+                self.player.inventory.draw(
+                    self.screen, self.selected_sub_item, self.sub_items
+                )
+                if self.selected_sub_item > len(self.player.inventory.items) - 1:
                     self.selected_sub_item -= 1
                 elif self.selected_sub_item < 0:
                     self.selected_sub_item = 0
-                    
+
             elif self.selected_item == 1:
                 self.player.level.draw(
                     self.screen,
@@ -201,10 +223,12 @@ class PlayerMenu:
                     self.sub_items,
                     self.trait_selection,
                 )
-                
+
             elif self.selected_item == 2:
-                self.player.effects.draw(self.screen, self.selected_sub_item, self.sub_items)
-                if (self.selected_sub_item > len(self.player.inventory.items) - 1):
+                self.player.effects.draw(
+                    self.screen, self.selected_sub_item, self.sub_items
+                )
+                if self.selected_sub_item > len(self.player.inventory.items) - 1:
                     self.selected_sub_item -= 1
                 elif self.selected_sub_item < 0:
                     self.selected_sub_item = 0

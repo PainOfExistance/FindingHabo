@@ -2,8 +2,11 @@ import pygame
 import sys
 import numpy as np
 
+
 class Game:
-    def __init__(self, screen, screen_width, screen_height, menu, player_menu, player, assets):
+    def __init__(
+        self, screen, screen_width, screen_height, menu, player_menu, player, assets
+    ):
         self.screen = screen
         self.screen_width = screen_width
         self.screen_height = screen_height
@@ -20,11 +23,11 @@ class Game:
         self.player.inventory.add_item(self.items["Steel Sword"])
         self.player.inventory.add_item(self.items["Steel Armor"])
         self.player.inventory.add_item(self.items["Divine Armor"])
-        
+
         self.background, self.bg_rect = self.asets.load_background("game_data/bg.png")
         self.collision_map = self.asets.load_collision("game_data/bg.png")
-        self.map_height=self.collision_map.shape[0]
-        self.map_width=self.collision_map.shape[1]
+        self.map_height = self.collision_map.shape[0]
+        self.map_width = self.collision_map.shape[1]
         self.clock = pygame.time.Clock()
         self.target_fps = 60
 
@@ -32,10 +35,10 @@ class Game:
         self.movement_speed = 200
         self.rotation_angle = 0
 
-        #self.sound_effect = pygame.mixer.Sound("Angelia.mp3")
-        #self.sound_effect.play()
-        #self.sound_effect.set_volume(0.2)
-        #self.sound_effect.play(loops=-1)
+        # self.sound_effect = pygame.mixer.Sound("Angelia.mp3")
+        # self.sound_effect.play()
+        # self.sound_effect.set_volume(0.2)
+        # self.sound_effect.play(loops=-1)
 
     def run(self):
         while True:
@@ -60,84 +63,140 @@ class Game:
     def update(self):
         # Calculate delta time (time since last frame)
         current_time = pygame.time.get_ticks()
-        self.delta_time = (current_time - self.last_frame_time) / \
-            1000.0  # Convert to seconds
+        self.delta_time = (
+            current_time - self.last_frame_time
+        ) / 1000.0  # Convert to seconds
         self.last_frame_time = current_time
-        
+
         relative_player_left = int(self.player.player_rect.left - self.bg_rect.left)
         relative_player_right = int(self.player.player_rect.right - self.bg_rect.left)
         relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
         relative_player_bottom = int(self.player.player_rect.bottom - self.bg_rect.top)
         movement = int(self.movement_speed * self.delta_time)
 
-        #print(f"rl: {relative_player_left},   rr: {relative_player_right},   rt: {relative_player_top},   rb: {relative_player_bottom}")
-        #print(self.detect_slope((relative_player_left, relative_player_bottom)))
-        
+        # print(f"rl: {relative_player_left},   rr: {relative_player_right},   rt: {relative_player_top},   rb: {relative_player_bottom}")
+        # print(self.detect_slope((relative_player_left, relative_player_bottom)))
+
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_a] and np.count_nonzero(self.collision_map[relative_player_top:relative_player_bottom, relative_player_left-movement] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
+        if (
+            keys[pygame.K_a]
+            and np.count_nonzero(
+                self.collision_map[
+                    relative_player_top:relative_player_bottom,
+                    relative_player_left - movement,
+                ]
+                == 1
+            )
+            <= 1
+            and not self.menu.visible
+            and not self.player_menu.visible
+        ):
             if self.player.player_rect.left > 10:
                 self.player.player_rect.move_ip(
-                    int(-self.movement_speed * self.delta_time), 0)
+                    int(-self.movement_speed * self.delta_time), 0
+                )
                 self.player.level.gain_experience(100)
-                #self.player.add_trait("Health Boost")
+                # self.player.add_trait("Health Boost")
                 if self.rotation_angle != 90:
                     self.rotation_angle = 90 - self.rotation_angle
-                    self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)
+                    self.player.player = pygame.transform.rotate(
+                        self.player.player, self.rotation_angle
+                    )
                     self.rotation_angle = 90
             else:
-                self.bg_rect.move_ip(
-                    int(self.movement_speed * self.delta_time), 0)
+                self.bg_rect.move_ip(int(self.movement_speed * self.delta_time), 0)
 
-        if keys[pygame.K_d] and np.count_nonzero(self.collision_map[relative_player_top:relative_player_bottom, min(relative_player_right+movement, self.map_width-1)] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
-            if self.player.player_rect.right < self.screen_width-10:
+        if (
+            keys[pygame.K_d]
+            and np.count_nonzero(
+                self.collision_map[
+                    relative_player_top:relative_player_bottom,
+                    min(relative_player_right + movement, self.map_width - 1),
+                ]
+                == 1
+            )
+            <= 1
+            and not self.menu.visible
+            and not self.player_menu.visible
+        ):
+            if self.player.player_rect.right < self.screen_width - 10:
                 self.player.player_rect.move_ip(
-                    int(self.movement_speed * self.delta_time), 0)
+                    int(self.movement_speed * self.delta_time), 0
+                )
                 if self.rotation_angle != 270:
                     self.rotation_angle = 270 - self.rotation_angle
-                    self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)
+                    self.player.player = pygame.transform.rotate(
+                        self.player.player, self.rotation_angle
+                    )
                     self.rotation_angle = 270
             else:
-                self.bg_rect.move_ip(
-                    int(-self.movement_speed * self.delta_time), 0)
+                self.bg_rect.move_ip(int(-self.movement_speed * self.delta_time), 0)
 
-        if keys[pygame.K_w] and np.count_nonzero(self.collision_map[relative_player_top-movement, relative_player_left:relative_player_right] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
+        if (
+            keys[pygame.K_w]
+            and np.count_nonzero(
+                self.collision_map[
+                    relative_player_top - movement,
+                    relative_player_left:relative_player_right,
+                ]
+                == 1
+            )
+            <= 1
+            and not self.menu.visible
+            and not self.player_menu.visible
+        ):
             if self.player.player_rect.top > 10:
                 self.player.player_rect.move_ip(
-                    0, int(-self.movement_speed * self.delta_time))
-                #self.player.update_health(10)
+                    0, int(-self.movement_speed * self.delta_time)
+                )
+                # self.player.update_health(10)
                 if self.rotation_angle != 0:
                     self.rotation_angle = 0 - self.rotation_angle
-                    self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)
+                    self.player.player = pygame.transform.rotate(
+                        self.player.player, self.rotation_angle
+                    )
                     self.rotation_angle = 0
             else:
-                self.bg_rect.move_ip(
-                    0, int(self.movement_speed * self.delta_time))
+                self.bg_rect.move_ip(0, int(self.movement_speed * self.delta_time))
 
-        if keys[pygame.K_s] and np.count_nonzero(self.collision_map[min(relative_player_bottom + movement, self.map_height-1), relative_player_left:relative_player_right] == 1) <= 1 and not self.menu.visible and not self.player_menu.visible:
-            if self.player.player_rect.bottom < self.screen_height-10:
+        if (
+            keys[pygame.K_s]
+            and np.count_nonzero(
+                self.collision_map[
+                    min(relative_player_bottom + movement, self.map_height - 1),
+                    relative_player_left:relative_player_right,
+                ]
+                == 1
+            )
+            <= 1
+            and not self.menu.visible
+            and not self.player_menu.visible
+        ):
+            if self.player.player_rect.bottom < self.screen_height - 10:
                 self.player.player_rect.move_ip(
-                    0, int(self.movement_speed * self.delta_time))
-                #self.player.update_health(-10)
+                    0, int(self.movement_speed * self.delta_time)
+                )
+                # self.player.update_health(-10)
                 if self.rotation_angle != 180:
                     self.rotation_angle = 180 - self.rotation_angle
-                    self.player.player = pygame.transform.rotate(self.player.player, self.rotation_angle)
+                    self.player.player = pygame.transform.rotate(
+                        self.player.player, self.rotation_angle
+                    )
                     self.rotation_angle = 180
             else:
-                self.bg_rect.move_ip(
-                    0, int(-self.movement_speed * self.delta_time))
+                self.bg_rect.move_ip(0, int(-self.movement_speed * self.delta_time))
 
-    #def detect_slope(self, position):
+    # def detect_slope(self, position):
     #    x, y = position
     #    subarray_size = 5  # Size of the subarray (odd number for a centered subarray)
     #    half_size = subarray_size // 2
     #    nearby_points = self.collision_map[y - half_size:y + half_size + 1, x - half_size:x + half_size + 1]
-#
+    #
     #    gradient_y, gradient_x = np.gradient(nearby_points)
     #    angle_rad = np.arctan2(gradient_y[half_size, half_size], gradient_x[half_size, half_size])
     #    angle_deg = np.degrees(angle_rad)
-#
+    #
     #    return angle_deg
-
 
     def draw(self):
         self.screen.fill((230, 60, 20))
