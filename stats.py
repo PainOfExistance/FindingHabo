@@ -10,13 +10,21 @@ class Stats:
 
         self.max_knowlage=100
         self.knowlage=100
+        
+        self.weapon_damage=0
 
+    def update_max_health(self, value):
+        self.max_health+=value
+        
     def update_health(self, value):
         self.health+=value
         if self.health > self.max_health:
             self.health = self.max_health
         elif self.health < 0:
             self.health = 0
+            
+    def update_max_power(self, value):
+        self.power+=value
 
     def update_power(self, value):
         self.power+=value
@@ -24,6 +32,9 @@ class Stats:
             self.power = self.max_power
         elif self.power < 0:
             self.power = 0
+            
+    def update_max_knowlage(self, value):
+        self.knowlage+=value
 
     def update_knowlage(self, value):
         self.knowlage+=value
@@ -31,3 +42,6 @@ class Stats:
             self.knowlage = self.max_knowlage
         elif self.knowlage < 0:
             self.knowlage = 0
+            
+    def update_damage(self, value):
+        self.weapon_damage+=value

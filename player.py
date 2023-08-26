@@ -46,16 +46,39 @@ class Player:
     def update_health(self, health):
         self.stats.update_health(health)
         self.depleted_rect.width = self.stats.health
+        
+    def update_max_health(self, health):
+        self.stats.update_max_health(health)
+        self.border_rect.width = self.stats.max_health
 
     def add_trait(self, index):
-        self.level.traits.add_trait(
+        amount, stat=self.level.traits.add_trait(
             list(self.level.traits.traits.keys())[index], self.level.level
         )
-
+        
+        if amount != None:
+            self.effects.effects[stat]["amount"] += amount
+        
     def check_trait_conditions(self, index):
         return self.level.traits.check_trait_conditions(
             list(self.level.traits.traits.keys())[index], self.level.level
         )
+        
+    def update_stats(self, stat, amount):
+        if stat=="max_health":
+            self.update_max_health(amount)
+        elif stat=="health":
+            self.update_health(amount)
+        elif stat=="max_power":
+            self.stats.update_max_power(amount)
+        elif stat=="power":
+            self.stats.update_power(amount)
+        elif stat=="max_knowledge":
+            self.stats.update_max_knowlage(amount)
+        elif stat=="knowledge":
+            self.stats.update_knowlage(amount)
+        elif stat=="weapon_damage":
+            self.stats.update_damage(amount)
 
     def use_item(self, index):
         keys = list(self.inventory.items.keys())
@@ -77,7 +100,7 @@ class Player:
                 self.equip_item(keys[index])
         else:
             self.inventory.remove_item(keys[index])
-            self.update_health(item["effect"]["value"])
+            self.update_stats(item["effect"]["stat"], item["effect"]["value"])
 
     def draw(self, screen):
         screen.blit(self.player, self.player_rect)

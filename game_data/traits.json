@@ -2,7 +2,7 @@
     "traits": [
         {
             "name": "Health Boost",
-            "stat": "health",
+            "stat": "max_health",
             "description": "Increases your max health.",
             "levels": [
                 { "level": 2, "effect": 10, "taken": false },
@@ -15,7 +15,7 @@
         },
         {
             "name": "Power Surge",
-            "stat": "power",
+            "stat": "max_power",
             "description":"Increases your max power.",
             "levels": [
                 { "level": 2, "effect": 10, "taken": false },
@@ -28,7 +28,7 @@
         },
         {
             "name": "Knowledge Boost",
-            "stat": "knowledge",
+            "stat": "max_knowledge",
             "description":"Increases your max knowledge.",
             "levels": [
                 { "level": 2, "effect": 10, "taken": false },

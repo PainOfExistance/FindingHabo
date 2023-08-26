@@ -25,10 +25,12 @@ class Effects:
                     if sub_items
                     else (120, 120, 120)
                 )
+                
                 effect_text = f"{effect_name}"
                 item_render = effects_font.render(effect_text, True, color)
                 item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
                 screen.blit(item_render, item_rect)
+                
                 if index == selected_sub_item - scroll_position:
                     i += item_spacing
                     line_render = effects_font.render(
@@ -39,6 +41,7 @@ class Effects:
                     )
                     screen.blit(line_render, line_rect)
                 i += item_spacing
+                
                 amount_text = f"Effect amount: {effect_data['amount']}"
                 amount_render = effects_font.render(amount_text, True, color)
                 amount_rect = amount_render.get_rect(

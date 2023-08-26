@@ -2,7 +2,7 @@
     "effects": [
         {
             "name": "Health Boost",
-            "stat": "health",
+            "stat": "max_health",
             "description": "Increase of max health.",
             "amount": 0
         },

@@ -63,7 +63,7 @@ class AssetLoader:
         effects=np.array({})
         with open("game_data/effects.json", "r") as effect_file:
             effects_data = json.load(effect_file)
-            effects = {effect["name"]: effect for effect in effects_data["effects"]}
+            effects = {effect["stat"]: effect for effect in effects_data["effects"]}
         return effects
     
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic
