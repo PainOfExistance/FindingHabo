@@ -15,7 +15,7 @@ class MainMenu:
         self.screen_width=screen.get_width()
         self.screen_height=screen.get_height()
         self.is_menu_visible=True
-        self.font = pygame.font.Font("inter.ttf", 36)
+        self.font = pygame.font.Font("game_data/inter.ttf", 36)
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
@@ -41,7 +41,7 @@ class MainMenu:
             print("Starting the game...")
             self.loading()
             assets=AssetLoader(self.screen_width, self.screen_height)
-            player = Player("desk1.png", self.screen_width, self.screen_height, assets)
+            player = Player("game_data/desk1.png", self.screen_width, self.screen_height, assets)
             menu = Menu(self.screen)
             player_menu = PlayerMenu(self.screen, player)
             game = Game(self.screen, self.screen_width, self.screen_height, menu, player_menu, player, assets)

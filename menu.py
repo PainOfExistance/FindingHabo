@@ -54,7 +54,7 @@ class Menu:
 
     def render(self):
         if self.visible:
-            menu_font = pygame.font.Font("inter.ttf", 36)
+            menu_font = pygame.font.Font("game_data/inter.ttf", 36)
             for index, item in enumerate(self.menu_items):
                 color = (0, 0, 0) if index == self.selected_item else (180, 180, 180)
                 text = menu_font.render(item, True, color)

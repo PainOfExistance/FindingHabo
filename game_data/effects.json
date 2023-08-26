@@ -19,7 +19,7 @@
             "amount": 0
         },
         {
-            "name": "Weapon Enhancement",
+            "name": "Weapon Damage Boost",
             "stat": "weapon_damage",
             "description": "Increase of weapon damage.",
             "amount": 0

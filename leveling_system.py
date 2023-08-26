@@ -17,7 +17,6 @@ class LevelingSystem:
     def level_up(self):
         self.level += 1
         self.traits.unused_trait_points += 2
-        print(self.traits.unused_trait_points)
         self.experience -= self.required_experience
         self.required_experience = self.calculate_next_required_experience(self.level)
         
@@ -28,7 +27,7 @@ class LevelingSystem:
         return int(base_experience + (experience_increment * (increment_multiplier ** (current_level - 2))))
     
     def draw(self, screen, selected_sub_item, sub_items, trait_selection):
-        trait_font = pygame.font.Font("inter.ttf", 24)
+        trait_font = pygame.font.Font("game_data/inter.ttf", 24)
         item_spacing = 40
         i = 0
         coords = (screen.get_width() + screen.get_width() // 4) / 2

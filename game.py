@@ -21,8 +21,8 @@ class Game:
         self.player.inventory.add_item(self.items["Steel Armor"])
         self.player.inventory.add_item(self.items["Divine Armor"])
         
-        self.background, self.bg_rect = self.asets.load_background("bg.png")
-        self.collision_map = self.asets.load_collision("bg.png")
+        self.background, self.bg_rect = self.asets.load_background("game_data/bg.png")
+        self.collision_map = self.asets.load_collision("game_data/bg.png")
         self.map_height=self.collision_map.shape[0]
         self.map_width=self.collision_map.shape[1]
         self.clock = pygame.time.Clock()

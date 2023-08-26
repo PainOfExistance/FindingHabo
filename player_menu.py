@@ -72,6 +72,10 @@ class PlayerMenu:
                     self.selected_sub_item = (self.selected_sub_item - 1) % len(
                         self.player.level.traits.traits
                     )
+                elif self.selected_item == 2:
+                        self.selected_sub_item = (self.selected_sub_item - 1) % len(
+                        self.player.effects.effects
+                    )
                 self.selection_held = True
 
             elif keys[pygame.K_DOWN] and not self.selection_held and self.trait_selection == -1:
@@ -84,6 +88,10 @@ class PlayerMenu:
                 elif self.selected_item == 1:
                     self.selected_sub_item = (self.selected_sub_item + 1) % len(
                         self.player.level.traits.traits
+                    )
+                elif self.selected_item == 2:
+                        self.selected_sub_item = (self.selected_sub_item + 1) % len(
+                        self.player.effects.effects
                     )
                 self.selection_held = True
 
@@ -141,8 +149,8 @@ class PlayerMenu:
                 4,
             )
 
-            menu_font = pygame.font.Font("inter.ttf", 30)
-            stats_font = pygame.font.Font("inter.ttf", 18)
+            menu_font = pygame.font.Font("game_data/inter.ttf", 30)
+            stats_font = pygame.font.Font("game_data/inter.ttf", 18)
 
             for index, item in enumerate(self.menu_items):
                 color = (
@@ -180,14 +188,12 @@ class PlayerMenu:
                 self.screen.blit(level, level_rect)
 
             if self.selected_item == 0:
-                self.player.inventory.draw(
-                    self.screen, self.selected_sub_item, self.sub_items
-                )
-                if (
-                    self.selected_sub_item > len(self.player.inventory.items) - 1
-                    or self.selected_sub_item < 0
-                ):
+                self.player.inventory.draw(self.screen, self.selected_sub_item, self.sub_items)
+                if (self.selected_sub_item > len(self.player.inventory.items) - 1):
                     self.selected_sub_item -= 1
+                elif self.selected_sub_item < 0:
+                    self.selected_sub_item = 0
+                    
             elif self.selected_item == 1:
                 self.player.level.draw(
                     self.screen,
@@ -195,3 +201,10 @@ class PlayerMenu:
                     self.sub_items,
                     self.trait_selection,
                 )
+                
+            elif self.selected_item == 2:
+                self.player.effects.draw(self.screen, self.selected_sub_item, self.sub_items)
+                if (self.selected_sub_item > len(self.player.inventory.items) - 1):
+                    self.selected_sub_item -= 1
+                elif self.selected_sub_item < 0:
+                    self.selected_sub_item = 0

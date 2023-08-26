@@ -3,18 +3,19 @@ import numpy as np
 from stats import Stats
 from inventory  import Inventory
 from leveling_system  import LevelingSystem
+from effects  import Effects
 
 class Player:
     def __init__(self, path, screen_width, screen_height, assets):
         self.stats=Stats()
         self.inventory=Inventory()
         self.level=LevelingSystem(assets)
-        self.effects = assets.load_effects()
+        self.effects=Effects(assets)
         
         self.player, self.player_rect=assets.load_player(path, (screen_width // 2, screen_height // 2))
         self.depleted_rect = pygame.Rect(screen_width // 2 - self.stats.max_health // 2, screen_height - 20, self.stats.health, 18)
         self.border_rect = pygame.Rect(screen_width // 2 - self.stats.max_health // 2, screen_height - 20, self.stats.max_health, 18)
-        font = pygame.font.Font("inter.ttf", 13)
+        font = pygame.font.Font("game_data/inter.ttf", 13)
         self.text = font.render("Health", True, (255, 255, 255))
         self.text_rect = self.text.get_rect(center=(screen_width // 2, screen_height - 12))
         
@@ -26,7 +27,6 @@ class Player:
             "gloves": None,
             "legs": None
         }
-        self.effects = []
 
     def update_health(self, health):
         self.stats.update_health(health)
