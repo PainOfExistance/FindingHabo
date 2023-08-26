@@ -26,7 +26,7 @@ class Effects:
                     else (120, 120, 120)
                 )
                 
-                effect_text = f"{effect_name}"
+                effect_text = f"{effect_data['name']}"
                 item_render = effects_font.render(effect_text, True, color)
                 item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
                 screen.blit(item_render, item_rect)

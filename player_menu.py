@@ -131,6 +131,11 @@ class PlayerMenu:
                     ):
                         self.player.add_trait(self.selected_sub_item)
                         self.trait_selection = -1
+                        self.stats = [
+                            f"Health: {self.player.stats.health}",
+                            f"Power: {self.player.stats.power}",
+                            f"Knowledge: {self.player.stats.knowlage}",
+                            ]
                     elif (
                         self.player.level.traits.unused_trait_points > 0
                         and self.player.check_trait_conditions(self.selected_sub_item)

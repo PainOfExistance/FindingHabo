@@ -58,6 +58,7 @@ class Player:
         
         if amount != None:
             self.effects.effects[stat]["amount"] += amount
+            self.update_stats(stat, amount)
         
     def check_trait_conditions(self, index):
         return self.level.traits.check_trait_conditions(
@@ -77,8 +78,6 @@ class Player:
             self.stats.update_max_knowlage(amount)
         elif stat=="knowledge":
             self.stats.update_knowlage(amount)
-        elif stat=="weapon_damage":
-            self.stats.update_damage(amount)
 
     def use_item(self, index):
         keys = list(self.inventory.items.keys())

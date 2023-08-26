@@ -42,6 +42,3 @@ class Stats:
             self.knowlage = self.max_knowlage
         elif self.knowlage < 0:
             self.knowlage = 0
-            
-    def update_damage(self, value):
-        self.weapon_damage+=value

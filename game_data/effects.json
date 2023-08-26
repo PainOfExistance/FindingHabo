@@ -8,13 +8,13 @@
         },
         {
             "name": "Power Surge",
-            "stat": "power",
+            "stat": "max_power",
             "description": "Increase of max power.",
             "amount": 0
         },
         {
             "name": "Knowledge Boost",
-            "stat": "knowledge",
+            "stat": "max_knowledge",
             "description": "Increase of max knowledge.",
             "amount": 0
         },
