@@ -205,15 +205,18 @@ class Game:
     #    angle_deg = np.degrees(angle_rad)
     #
     #    return angle_deg
-
-    def draw(self):
-        self.screen.fill((230, 60, 20))
-        self.screen.blit(self.background, self.bg_rect.topleft)
+    
+    def draw_objects(self):
         for x in self.world_objects:
             relative__left = int(self.bg_rect.left + self.world_objects[x].left)
             relative__top = int(self.bg_rect.top + self.world_objects[x].top)
             if relative__left > - 80 and relative__left < self.screen_width + 80 and relative__top > - 80 and relative__top < self.screen_height + 80:
                 self.screen.blit(x, (relative__left, relative__top))
+
+    def draw(self):
+        self.screen.fill((230, 60, 20))
+        self.screen.blit(self.background, self.bg_rect.topleft)
+        self.draw_objects()
         self.player.draw(self.screen)
         self.menu.render()
         self.player_menu.render()

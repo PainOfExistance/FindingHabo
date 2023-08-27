@@ -8,7 +8,7 @@
             "items": [
                 {
                     "type": "Minor Health Potion",
-                    "position": [100, 1000]
+                    "position": [1000, 100]
                 },
                 {
                     "type": "Steel Sword",
