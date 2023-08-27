@@ -27,8 +27,8 @@ class AssetLoader:
     def load_background(self, path):
         # Load bg image
         bg = pygame.image.load(path)
-        self.bg_rect = bg.get_rect()
-        return bg, self.bg_rect
+        bg_rect = bg.get_rect()
+        return bg, bg_rect
     
     def load_collision(self, path):
         #collision_map = np.zeros((self.bg_rect.height, self.bg_rect.width), dtype=int)

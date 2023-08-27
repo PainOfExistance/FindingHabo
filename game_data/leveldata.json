@@ -1,0 +1,46 @@
+{
+    "worlds": [
+        {
+            "name": "Dream world",
+            "collision_set": "bg.png",
+            "background": "bg.png",
+            "spawn_point": [50, 50],
+            "items": [
+                {
+                    "type": "Health Potion",
+                    "position": [30, 40]
+                },
+                {
+                    "type": "Steel Sword",
+                    "position": [60, 70]
+                }
+            ],
+            "containers": [
+                {
+                    "type": "chest",
+                    "position": [20, 25],
+                    "items": [
+                        {
+                            "type": "gold",
+                            "quantity": 50
+                        },
+                        {
+                            "type": "food",
+                            "quantity": 3
+                        }
+                    ]
+                }
+            ],
+            "enemies": [
+                {
+                    "type": "goblin",
+                    "position": [70, 80]
+                },
+                {
+                    "type": "wolf",
+                    "position": [90, 90]
+                }
+            ]
+        }
+    ]
+}

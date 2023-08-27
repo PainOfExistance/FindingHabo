@@ -2,16 +2,16 @@
     "items": [
         {
             "id": "itmHealing",
-            "name": "Health Potion",
+            "name": "Minor Health Potion",
             "type": "item",
             "description": "Restores health.",
             "price": 20,
-            "image": "health_potion.png",
+            "image": "health_potion_minor.jpg",
             "effect": {
                 "name": "Healing",
                 "duration": 0,
                 "stat": "health",
-                "value": 50
+                "value": 25
             }
         },
         {
