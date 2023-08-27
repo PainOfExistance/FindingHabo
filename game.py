@@ -16,6 +16,7 @@ class Game:
         self.items = assets.load_items()
         self.player = player
         self.player_menu = player_menu
+        self.prompt_font = pygame.font.Font("game_data/inter.ttf", 16)
 
         self.player.inventory.add_item(self.items["Minor Health Potion"])
         self.player.inventory.add_item(self.items["Knowledge Potion"])
@@ -23,19 +24,25 @@ class Game:
         self.player.inventory.add_item(self.items["Steel Sword"])
         self.player.inventory.add_item(self.items["Steel Armor"])
         self.player.inventory.add_item(self.items["Divine Armor"])
-        self.worlds=assets.load_worlds()
+        self.worlds = assets.load_worlds()
 
-        self.background, self.bg_rect = self.asets.load_background(self.worlds[self.player.current_world]["collision_set"])
-        self.collision_map = self.asets.load_collision(self.worlds[self.player.current_world]["background"])
+        self.background, self.bg_rect = self.asets.load_background(
+            self.worlds[self.player.current_world]["collision_set"]
+        )
+        self.collision_map = self.asets.load_collision(
+            self.worlds[self.player.current_world]["background"]
+        )
         self.map_height = self.collision_map.shape[0]
         self.map_width = self.collision_map.shape[1]
-        self.world_objects={}
-        
+        self.world_objects = {}
+
         for data in self.worlds[self.player.current_world]["items"]:
-            item=self.items[data["type"]]
-            img, img_rect=self.asets.load_images(item["image"], (64,64), tuple(data["position"]))
-            self.world_objects[img]=img_rect
-                    
+            item = self.items[data["type"]]
+            img, img_rect = self.asets.load_images(
+                item["image"], (64, 64), tuple(data["position"])
+            )
+            self.world_objects[img] = img_rect
+
         self.clock = pygame.time.Clock()
         self.target_fps = 60
 
@@ -81,7 +88,6 @@ class Game:
         relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
         relative_player_bottom = int(self.player.player_rect.bottom - self.bg_rect.top)
         movement = int(self.movement_speed * self.delta_time)
-
         # print(f"rl: {relative_player_left},   rr: {relative_player_right},   rt: {relative_player_top},   rb: {relative_player_bottom}")
         # print(self.detect_slope((relative_player_left, relative_player_bottom)))
 
@@ -205,13 +211,35 @@ class Game:
     #    angle_deg = np.degrees(angle_rad)
     #
     #    return angle_deg
-    
+
     def draw_objects(self):
         for x in self.world_objects:
             relative__left = int(self.bg_rect.left + self.world_objects[x].left)
             relative__top = int(self.bg_rect.top + self.world_objects[x].top)
-            if relative__left > - 80 and relative__left < self.screen_width + 80 and relative__top > - 80 and relative__top < self.screen_height + 80:
+
+            if (
+                relative__left > -80
+                and relative__left < self.screen_width + 80
+                and relative__top > -80
+                and relative__top < self.screen_height + 80
+            ):
                 self.screen.blit(x, (relative__left, relative__top))
+                otehr_obj_rect = pygame.Rect(
+                    relative__left,
+                    relative__top,
+                    self.world_objects[x].width,
+                    self.world_objects[x].height,
+                )
+
+                if otehr_obj_rect.colliderect(self.player.player_rect):
+                    self.text = self.prompt_font.render(f"E) Pick up", True, (0, 0, 0))
+                    self.text_rect = self.text.get_rect(
+                        center=(
+                            relative__left + self.world_objects[x].width // 2,
+                            relative__top + self.world_objects[x].height + 10,
+                        )
+                    )
+                    self.screen.blit(self.text, self.text_rect)
 
     def draw(self):
         self.screen.fill((230, 60, 20))
