@@ -1,13 +1,13 @@
 {
     "worlds": [
         {
-            "name": "Dream world",
-            "collision_set": "bg.png",
-            "background": "bg.png",
+            "name": "Dream World",
+            "collision_set": "game_data/bg.png",
+            "background": "game_data/bg.png",
             "spawn_point": [50, 50],
             "items": [
                 {
-                    "type": "Health Potion",
+                    "type": "Minor Health Potion",
                     "position": [30, 40]
                 },
                 {

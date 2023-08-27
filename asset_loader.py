@@ -66,4 +66,11 @@ class AssetLoader:
             effects = {effect["stat"]: effect for effect in effects_data["effects"]}
         return effects
     
+    def load_worlds(self):
+        worlds=np.array({})
+        with open("game_data/leveldata.json", "r") as world_file:
+            world_data = json.load(world_file)
+            worlds = {world["name"]: world for world in world_data["worlds"]}
+        return worlds
+    
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

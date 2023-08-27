@@ -12,6 +12,7 @@ class Player:
         self.inventory = Inventory()
         self.level = LevelingSystem(assets)
         self.effects = Effects(assets)
+        self.current_world=f"Dream World"
 
         self.player, self.player_rect = assets.load_player(
             path, (screen_width // 2, screen_height // 2)

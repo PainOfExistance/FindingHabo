@@ -6,7 +6,7 @@
             "type": "item",
             "description": "Restores health.",
             "price": 20,
-            "image": "health_potion_minor.jpg",
+            "image": "game_data/health_potion_minor.jpg",
             "effect": {
                 "name": "Healing",
                 "duration": 0,
@@ -34,7 +34,7 @@
             "type": "item",
             "description": "Temporarily boosts power.",
             "price": 25,
-            "image": "power_elixir.png",
+            "image": "game_data/power_elixir.png",
             "effect": {
                 "name": "Strength Boost",
                 "duration": 20,
@@ -48,7 +48,7 @@
             "type": "btitem",
             "description": "Steel sword.",
             "price": 40,
-            "image": "sword.png",
+            "image": "game_data/steel_sword.jpg",
             "effect": {
                 "name": "",
                 "duration": 0,
@@ -70,7 +70,7 @@
             "type": "btitem",
             "description": "Steel armor.",
             "price": 80,
-            "image": "starmor.png",
+            "image": "game_data/steel_armor.png",
             "effect": {
                 "name": "",
                 "duration": 0,
@@ -92,7 +92,7 @@
             "type": "btitem",
             "description": "Divine armor.",
             "price": 150,
-            "image": "divarmor.png",
+            "image": "game_data/divine_armor.png",
             "effect": {
                 "name": "",
                 "duration": 0,

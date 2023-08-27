@@ -17,17 +17,27 @@ class Game:
         self.player = player
         self.player_menu = player_menu
 
-        self.player.inventory.add_item(self.items["Health Potion"])
+        self.player.inventory.add_item(self.items["Minor Health Potion"])
         self.player.inventory.add_item(self.items["Knowledge Potion"])
         self.player.inventory.add_item(self.items["Power Elixir"])
         self.player.inventory.add_item(self.items["Steel Sword"])
         self.player.inventory.add_item(self.items["Steel Armor"])
         self.player.inventory.add_item(self.items["Divine Armor"])
+        self.worlds=assets.load_worlds()
 
-        self.background, self.bg_rect = self.asets.load_background("game_data/bg.png")
-        self.collision_map = self.asets.load_collision("game_data/bg.png")
+        self.background, self.bg_rect = self.asets.load_background(self.worlds[self.player.current_world]["collision_set"])
+        self.collision_map = self.asets.load_collision(self.worlds[self.player.current_world]["background"])
         self.map_height = self.collision_map.shape[0]
         self.map_width = self.collision_map.shape[1]
+        self.world_objects={}
+        
+        for data in self.worlds[self.player.current_world]["items"]:
+            item=self.items[data["type"]]
+            img, img_rect=self.asets.load_images(item["image"], (64,64), tuple(data["position"]))
+            self.world_objects[img]=img_rect
+            print(img)
+            
+                    
         self.clock = pygame.time.Clock()
         self.target_fps = 60
 
@@ -204,5 +214,6 @@ class Game:
         self.player.draw(self.screen)
         self.menu.render()
         self.player_menu.render()
-        # self.screen.blit(self.image, self.image_rect.topleft)
+        for x in self.world_objects:
+            self.screen.blit(x, self.world_objects[x].topleft)
         pygame.display.flip()
