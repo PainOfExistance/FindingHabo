@@ -35,8 +35,6 @@ class Game:
             item=self.items[data["type"]]
             img, img_rect=self.asets.load_images(item["image"], (64,64), tuple(data["position"]))
             self.world_objects[img]=img_rect
-            print(img)
-            
                     
         self.clock = pygame.time.Clock()
         self.target_fps = 60
@@ -211,9 +209,12 @@ class Game:
     def draw(self):
         self.screen.fill((230, 60, 20))
         self.screen.blit(self.background, self.bg_rect.topleft)
+        for x in self.world_objects:
+            relative__left = int(self.bg_rect.left + self.world_objects[x].left)
+            relative__top = int(self.bg_rect.top + self.world_objects[x].top)
+            if relative__left > - 80 and relative__left < self.screen_width + 80 and relative__top > - 80 and relative__top < self.screen_height + 80:
+                self.screen.blit(x, (relative__left, relative__top))
         self.player.draw(self.screen)
         self.menu.render()
         self.player_menu.render()
-        for x in self.world_objects:
-            self.screen.blit(x, self.world_objects[x].topleft)
         pygame.display.flip()

@@ -13,7 +13,7 @@ class Player:
         self.level = LevelingSystem(assets)
         self.effects = Effects(assets)
         self.current_world=f"Dream World"
-
+        self.screen_width = screen_width
         self.player, self.player_rect = assets.load_player(
             path, (screen_width // 2, screen_height // 2)
         )
@@ -51,12 +51,13 @@ class Player:
     def update_max_health(self, health):
         self.stats.update_max_health(health)
         self.border_rect.width = self.stats.max_health
+        self.border_rect.left = self.screen_width // 2 - self.stats.max_health // 2
+        self.depleted_rect.left = self.screen_width // 2 - self.stats.max_health // 2
 
     def add_trait(self, index):
         amount, stat=self.level.traits.add_trait(
             list(self.level.traits.traits.keys())[index], self.level.level
         )
-        
         if amount != None:
             self.effects.effects[stat]["amount"] += amount
             self.update_stats(stat, amount)
