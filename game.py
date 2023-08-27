@@ -12,6 +12,7 @@ class Game:
         self.screen_height = screen_height
         self.asets = assets
         self.menu = menu
+        self.item_hovered = None
 
         self.items = assets.load_items()
         self.player = player
@@ -41,7 +42,7 @@ class Game:
             img, img_rect = self.asets.load_images(
                 item["image"], (64, 64), tuple(data["position"])
             )
-            self.world_objects[img] = img_rect
+            self.world_objects[item["name"]] = {"image": img, "rect": img_rect}
 
         self.clock = pygame.time.Clock()
         self.target_fps = 60
@@ -88,6 +89,7 @@ class Game:
         relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
         relative_player_bottom = int(self.player.player_rect.bottom - self.bg_rect.top)
         movement = int(self.movement_speed * self.delta_time)
+        
         # print(f"rl: {relative_player_left},   rr: {relative_player_right},   rt: {relative_player_top},   rb: {relative_player_bottom}")
         # print(self.detect_slope((relative_player_left, relative_player_bottom)))
 
@@ -199,6 +201,17 @@ class Game:
                     self.rotation_angle = 180
             else:
                 self.bg_rect.move_ip(0, int(-self.movement_speed * self.delta_time))
+            
+        if (
+            keys[pygame.K_e]
+            and not self.menu.visible
+            and not self.player_menu.visible
+        ):
+            if self.item_hovered != None:
+                if self.item_hovered in self.world_objects:
+                    self.player.inventory.add_item(self.items[self.item_hovered])
+                    del self.world_objects[self.item_hovered]
+                    self.item_hovered == None
 
     # def detect_slope(self, position):
     #    x, y = position
@@ -214,8 +227,8 @@ class Game:
 
     def draw_objects(self):
         for x in self.world_objects:
-            relative__left = int(self.bg_rect.left + self.world_objects[x].left)
-            relative__top = int(self.bg_rect.top + self.world_objects[x].top)
+            relative__left = int(self.bg_rect.left + self.world_objects[x]["rect"].left)
+            relative__top = int(self.bg_rect.top + self.world_objects[x]["rect"].top)
 
             if (
                 relative__left > -80
@@ -223,23 +236,27 @@ class Game:
                 and relative__top > -80
                 and relative__top < self.screen_height + 80
             ):
-                self.screen.blit(x, (relative__left, relative__top))
+                
+                self.screen.blit(self.world_objects[x]["image"], (relative__left, relative__top))
                 otehr_obj_rect = pygame.Rect(
                     relative__left,
                     relative__top,
-                    self.world_objects[x].width,
-                    self.world_objects[x].height,
+                    self.world_objects[x]["rect"].width,
+                    self.world_objects[x]["rect"].height,
                 )
 
                 if otehr_obj_rect.colliderect(self.player.player_rect):
+                    self.item_hovered = x
                     self.text = self.prompt_font.render(f"E) Pick up", True, (0, 0, 0))
                     self.text_rect = self.text.get_rect(
                         center=(
-                            relative__left + self.world_objects[x].width // 2,
-                            relative__top + self.world_objects[x].height + 10,
+                            relative__left + self.world_objects[x]["rect"].width // 2,
+                            relative__top + self.world_objects[x]["rect"].height + 10,
                         )
                     )
                     self.screen.blit(self.text, self.text_rect)
+                else:
+                    self.item_hovered = None
 
     def draw(self):
         self.screen.fill((230, 60, 20))
