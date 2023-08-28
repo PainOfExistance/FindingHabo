@@ -5,14 +5,15 @@
             "collision_set": "game_data/bg.png",
             "background": "game_data/bg.png",
             "spawn_point": [50, 50],
+            "respawn_timer": 60,
             "items": [
                 {
                     "type": "Minor Health Potion",
-                    "position": [1000, 100]
+                    "position": [100, 100]
                 },
                 {
                     "type": "Steel Sword",
-                    "position": [60, 70]
+                    "position": [300, 100]
                 }
             ],
             "containers": [

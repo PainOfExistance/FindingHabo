@@ -189,7 +189,7 @@ class PlayerMenu:
                 text = menu_font.render(item, True, color)
                 text_rect = text.get_rect(topleft=(20, 20 + index * 40))
                 self.screen.blit(text, text_rect)
-                text_y = self.screen.get_height() - 120
+                text_y = self.screen.get_height() - 140
 
                 for stat in self.stats:
                     stat_render = stats_font.render(stat, True, (44, 53, 57))
@@ -206,6 +206,15 @@ class PlayerMenu:
 
                 level = stats_font.render(
                     f"Unused points: {str(self.player.level.traits.unused_trait_points)}",
+                    True,
+                    (44, 53, 57),
+                )
+                level_rect = level.get_rect(bottomleft=(20, text_y))
+                self.screen.blit(level, level_rect)
+                text_y += level_rect.height + 5
+                
+                level = stats_font.render(
+                    f"Gold: {str(self.player.gold)}",
                     True,
                     (44, 53, 57),
                 )

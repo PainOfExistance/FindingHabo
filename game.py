@@ -13,6 +13,7 @@ class Game:
         self.asets = assets
         self.menu = menu
         self.item_hovered = None
+        self.selection_held = False
 
         self.items = assets.load_items()
         self.player = player
@@ -206,12 +207,17 @@ class Game:
             keys[pygame.K_e]
             and not self.menu.visible
             and not self.player_menu.visible
+            and not self.selection_held
         ):
+            print(self.item_hovered)
             if self.item_hovered != None:
+                self.selection_held=True
                 if self.item_hovered in self.world_objects:
                     self.player.inventory.add_item(self.items[self.item_hovered])
                     del self.world_objects[self.item_hovered]
-                    self.item_hovered == None
+                    self.item_hovered = None
+        elif not keys[pygame.K_e]:
+            self.selection_held=False
 
     # def detect_slope(self, position):
     #    x, y = position
@@ -238,15 +244,16 @@ class Game:
             ):
                 
                 self.screen.blit(self.world_objects[x]["image"], (relative__left, relative__top))
-                otehr_obj_rect = pygame.Rect(
+                other_obj_rect = pygame.Rect(
                     relative__left,
                     relative__top,
                     self.world_objects[x]["rect"].width,
                     self.world_objects[x]["rect"].height,
                 )
 
-                if otehr_obj_rect.colliderect(self.player.player_rect):
+                if other_obj_rect.colliderect(self.player.player_rect):
                     self.item_hovered = x
+                    print(self.item_hovered)
                     self.text = self.prompt_font.render(f"E) Pick up", True, (0, 0, 0))
                     self.text_rect = self.text.get_rect(
                         center=(
@@ -255,8 +262,6 @@ class Game:
                         )
                     )
                     self.screen.blit(self.text, self.text_rect)
-                else:
-                    self.item_hovered = None
 
     def draw(self):
         self.screen.fill((230, 60, 20))
