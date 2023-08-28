@@ -43,7 +43,14 @@ class Game:
             img, img_rect = self.asets.load_images(
                 item["image"], (64, 64), tuple(data["position"])
             )
-            self.world_objects[item["name"]] = {"image": img, "rect": img_rect}
+            self.world_objects[item["name"]] = {"image": img, "rect": img_rect, "type": "item"}
+            
+        
+        for data in self.worlds[self.player.current_world]["containers"]:
+            img, img_rect = self.asets.load_images(
+                data["image"], (64, 64), tuple(data["position"])
+            )
+            self.world_objects[data["type"]] = {"image": img, "rect": img_rect, "type": "container", "name": data["name"]}
 
         self.clock = pygame.time.Clock()
         self.target_fps = 60
@@ -251,7 +258,7 @@ class Game:
                     self.world_objects[x]["rect"].height,
                 )
 
-                if other_obj_rect.colliderect(self.player.player_rect):
+                if other_obj_rect.colliderect(self.player.player_rect) and self.world_objects[x]["type"] == "item":
                     self.item_hovered = x
                     print(self.item_hovered)
                     self.text = self.prompt_font.render(f"E) Pick up", True, (0, 0, 0))

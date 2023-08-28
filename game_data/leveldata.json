@@ -9,17 +9,19 @@
             "items": [
                 {
                     "type": "Minor Health Potion",
-                    "position": [100, 100]
+                    "position": [200, 100]
                 },
                 {
                     "type": "Steel Sword",
-                    "position": [300, 100]
+                    "position": [400, 100]
                 }
             ],
             "containers": [
                 {
-                    "type": "chest",
-                    "position": [20, 25],
+                    "name": "Chest",
+                    "type": "chest01",
+                    "image": "game_data/chest.jpg",
+                    "position": [50, 200],
                     "items": [
                         {
                             "type": "gold",
