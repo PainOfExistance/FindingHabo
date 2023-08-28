@@ -14,7 +14,10 @@ class Game:
         self.menu = menu
         self.item_hovered = None
         self.selection_held = False
-
+        self.container_hovered = None
+        self.container_open = False
+        self.selected_inventory_item = 0
+        
         self.items = assets.load_items()
         self.player = player
         self.player_menu = player_menu
@@ -43,14 +46,22 @@ class Game:
             img, img_rect = self.asets.load_images(
                 item["image"], (64, 64), tuple(data["position"])
             )
-            self.world_objects[item["name"]] = {"image": img, "rect": img_rect, "type": "item"}
-            
-        
+            self.world_objects[item["name"]] = {
+                "image": img,
+                "rect": img_rect,
+                "type": "item",
+            }
+
         for data in self.worlds[self.player.current_world]["containers"]:
             img, img_rect = self.asets.load_images(
                 data["image"], (64, 64), tuple(data["position"])
             )
-            self.world_objects[data["type"]] = {"image": img, "rect": img_rect, "type": "container", "name": data["name"]}
+            self.world_objects[data["type"]] = {
+                "image": img,
+                "rect": img_rect,
+                "type": "container",
+                "name": data,
+            }
 
         self.clock = pygame.time.Clock()
         self.target_fps = 60
@@ -58,6 +69,16 @@ class Game:
         self.last_frame_time = pygame.time.get_ticks()
         self.movement_speed = 200
         self.rotation_angle = 0
+
+        self.bg_menu = pygame.Rect(
+            0,
+            0,
+            self.screen.get_width(),
+            self.screen.get_height(),
+        )
+        self.bg_surface_menu = pygame.Surface(
+            (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
+        )
 
         # self.sound_effect = pygame.mixer.Sound("Angelia.mp3")
         # self.sound_effect.play()
@@ -97,7 +118,7 @@ class Game:
         relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
         relative_player_bottom = int(self.player.player_rect.bottom - self.bg_rect.top)
         movement = int(self.movement_speed * self.delta_time)
-        
+
         # print(f"rl: {relative_player_left},   rr: {relative_player_right},   rt: {relative_player_top},   rb: {relative_player_bottom}")
         # print(self.detect_slope((relative_player_left, relative_player_bottom)))
 
@@ -114,6 +135,7 @@ class Game:
             <= 1
             and not self.menu.visible
             and not self.player_menu.visible
+            and not self.container_open
         ):
             if self.player.player_rect.left > 10:
                 self.player.player_rect.move_ip(
@@ -142,6 +164,7 @@ class Game:
             <= 1
             and not self.menu.visible
             and not self.player_menu.visible
+            and not self.container_open
         ):
             if self.player.player_rect.right < self.screen_width - 10:
                 self.player.player_rect.move_ip(
@@ -168,6 +191,7 @@ class Game:
             <= 1
             and not self.menu.visible
             and not self.player_menu.visible
+            and not self.container_open
         ):
             if self.player.player_rect.top > 10:
                 self.player.player_rect.move_ip(
@@ -195,6 +219,7 @@ class Game:
             <= 1
             and not self.menu.visible
             and not self.player_menu.visible
+            and not self.container_open
         ):
             if self.player.player_rect.bottom < self.screen_height - 10:
                 self.player.player_rect.move_ip(
@@ -209,22 +234,25 @@ class Game:
                     self.rotation_angle = 180
             else:
                 self.bg_rect.move_ip(0, int(-self.movement_speed * self.delta_time))
-            
+
         if (
             keys[pygame.K_e]
             and not self.menu.visible
             and not self.player_menu.visible
             and not self.selection_held
         ):
-            print(self.item_hovered)
             if self.item_hovered != None:
-                self.selection_held=True
+                self.selection_held = True
                 if self.item_hovered in self.world_objects:
                     self.player.inventory.add_item(self.items[self.item_hovered])
                     del self.world_objects[self.item_hovered]
                     self.item_hovered = None
+            elif self.container_hovered != None and not self.container_open:
+                self.selection_held = True
+                if self.container_hovered in self.world_objects:
+                    self.container_open = True
         elif not keys[pygame.K_e]:
-            self.selection_held=False
+            self.selection_held = False
 
     # def detect_slope(self, position):
     #    x, y = position
@@ -237,6 +265,57 @@ class Game:
     #    angle_deg = np.degrees(angle_rad)
     #
     #    return angle_deg
+    
+    def draw_container(self):
+        if self.container_open:
+            pygame.draw.rect(
+                self.bg_surface_menu, (200, 210, 200, 180), self.bg_surface_menu.get_rect()
+            )
+            self.screen.blit(self.bg_surface_menu, self.bg_menu)
+
+            pygame.draw.line(
+                self.screen,
+                (22, 22, 22),
+                (self.screen.get_width() // 2, 0),
+                (self.screen.get_width() // 2, self.screen.get_height()),
+                4,
+            )
+
+            menu_font = pygame.font.Font("game_data/inter.ttf", 30)
+
+            scroll_position = (self.selected_inventory_item // 10) * 10
+            visible_items = list(self.world_objects[self.container_hovered]["name"]["items"])[scroll_position : scroll_position + 10]
+            i=0
+            
+            item_render = menu_font.render(self.world_objects[self.container_hovered]["name"]["name"], True, (44, 53, 57))
+            item_rect = item_render.get_rect(topleft=(self.screen.get_width() // 2 + self.screen.get_width() // 5, 20 + i * 50))
+            self.screen.blit(item_render, item_rect)
+            i+=1
+            
+            pygame.draw.line(
+                self.screen,
+                (22, 22, 22),
+                (0, 20 + i * 50),
+                (self.screen.get_width(), 20 + i * 50),
+                4,
+            )
+            
+            i+=1
+            for index in visible_items:
+                color = (
+                    (157, 157, 210)
+                    if index == self.selected_inventory_item - scroll_position
+                    else (237, 106, 94)
+                )
+                
+                if index == self.selected_inventory_item - scroll_position:
+                    item_text = f"> {index['type']}: {index['quantity']}"
+                else:
+                    item_text = f"    {index['type']}: {index['quantity']}"
+                item_render = menu_font.render(item_text, True, color)
+                item_rect = item_render.get_rect(topleft=(self.screen.get_width() // 2 + 20, 20 + i * 40))
+                self.screen.blit(item_render, item_rect)
+                i+=1
 
     def draw_objects(self):
         for x in self.world_objects:
@@ -249,8 +328,20 @@ class Game:
                 and relative__top > -80
                 and relative__top < self.screen_height + 80
             ):
-                
-                self.screen.blit(self.world_objects[x]["image"], (relative__left, relative__top))
+                self.screen.blit(
+                    self.world_objects[x]["image"], (relative__left, relative__top)
+                )
+
+                if self.world_objects[x]["type"] == "container":
+                    self.collision_map[
+                        self.world_objects[x]["rect"].top
+                        + 10 : self.world_objects[x]["rect"].bottom
+                        - 9,
+                        self.world_objects[x]["rect"].left
+                        + 10 : self.world_objects[x]["rect"].right
+                        - 9,
+                    ] = 1
+
                 other_obj_rect = pygame.Rect(
                     relative__left,
                     relative__top,
@@ -258,9 +349,11 @@ class Game:
                     self.world_objects[x]["rect"].height,
                 )
 
-                if other_obj_rect.colliderect(self.player.player_rect) and self.world_objects[x]["type"] == "item":
+                if (
+                    other_obj_rect.colliderect(self.player.player_rect)
+                    and self.world_objects[x]["type"] == "item"
+                ):
                     self.item_hovered = x
-                    print(self.item_hovered)
                     self.text = self.prompt_font.render(f"E) Pick up", True, (0, 0, 0))
                     self.text_rect = self.text.get_rect(
                         center=(
@@ -269,6 +362,22 @@ class Game:
                         )
                     )
                     self.screen.blit(self.text, self.text_rect)
+                elif not other_obj_rect.colliderect(self.player.player_rect) and self.world_objects[x]["type"] == "item":
+                    self.item_hovered = None
+
+                if other_obj_rect.colliderect(self.player.player_rect) and self.world_objects[x]["type"] == "container":
+                    self.container_hovered = x
+                    self.text = self.prompt_font.render(f"E) Access", True, (0, 0, 0))
+                    self.text_rect = self.text.get_rect(
+                        center=(
+                            relative__left + self.world_objects[x]["rect"].width // 2,
+                            relative__top + self.world_objects[x]["rect"].height + 10,
+                        )
+                    )
+                    self.screen.blit(self.text, self.text_rect)
+                elif not other_obj_rect.colliderect(self.player.player_rect) and self.world_objects[x]["type"] == "container":
+                    self.container_hovered = None
+                    
 
     def draw(self):
         self.screen.fill((230, 60, 20))
@@ -277,4 +386,5 @@ class Game:
         self.player.draw(self.screen)
         self.menu.render()
         self.player_menu.render()
+        self.draw_container()
         pygame.display.flip()

@@ -13,6 +13,7 @@ class Player:
         self.level = LevelingSystem(assets)
         self.effects = Effects(assets)
         
+        self.name = "Player"
         self.gold=0
         self.current_world=f"Dream World"
         self.screen_width = screen_width
