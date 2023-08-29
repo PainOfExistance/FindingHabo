@@ -17,6 +17,7 @@ class Game:
         self.container_hovered = None
         self.container_open = False
         self.selected_inventory_item = 0
+        self.tab_pressed = False
 
         self.items = assets.load_items()
         self.player = player
@@ -91,10 +92,10 @@ class Game:
             self.handle_events()
             self.draw()
 
-            if not self.player_menu.visible and not self.container_open and not self.selection_held:
+            if not self.player_menu.visible and not self.tab_pressed and not self.container_open:
                 self.menu.handle_input()
 
-            if not self.menu.visible and not self.container_open and not self.selection_held:
+            if not self.menu.visible and not self.tab_pressed and not self.container_open:
                 self.player_menu.handle_input()
 
             self.clock.tick(self.target_fps)
@@ -259,12 +260,16 @@ class Game:
             and self.container_open
             and not self.menu.visible
             and not self.player_menu.visible
-            and not self.selection_held
+            and not self.tab_pressed
         ):
-            self.selection_held = True
-        elif not keys[pygame.K_TAB] and self.container_open and self.selection_held:
-            self.selection_held = False
+            self.tab_pressed = True
             self.container_open = False
+        elif (
+            not keys[pygame.K_TAB]
+            and not self.container_open
+            and self.tab_pressed
+        ):
+            self.tab_pressed = False
 
         if (
             keys[pygame.K_UP]
@@ -292,6 +297,7 @@ class Game:
 
         elif not keys[pygame.K_UP] and not keys[pygame.K_DOWN] and self.container_open:
             self.selection_held = False
+
         
     # def detect_slope(self, position):
     #    x, y = position
@@ -329,6 +335,19 @@ class Game:
                 self.world_objects[self.container_hovered]["name"]["items"]
             )[scroll_position : scroll_position + 10]
             i = 0
+            
+            item_render = menu_font.render(
+                self.player.name,
+                True,
+                (44, 53, 57),
+            )
+            item_rect = item_render.get_rect(
+                topleft=(
+                    self.screen.get_width() // 2 - self.screen.get_width() // 3,
+                    20 + i * 50,
+                )
+            )
+            self.screen.blit(item_render, item_rect)
 
             item_render = menu_font.render(
                 self.world_objects[self.container_hovered]["name"]["name"],
@@ -370,6 +389,26 @@ class Game:
                 )
                 self.screen.blit(item_render, item_rect)
                 i += 1
+            
+
+
+            scroll_position = (self.selected_inventory_item // 10) * 10
+            visible_items = list(self.player.inventory.quantity.items())[scroll_position : scroll_position + 10]
+
+            for index, (item_name, item_quantity) in enumerate(visible_items):
+                color = (
+                    (157, 157, 210)
+                    if index == self.selected_inventory_item - scroll_position
+                    else (237, 106, 94)
+                )
+                if index == self.selected_inventory_item - scroll_position:
+                    item_text = f"> {item_name}: {item_quantity}"
+                else:
+                    item_text = f"    {item_name}: {item_quantity}"
+
+                item_render = menu_font.render(item_text, True, color)
+                item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
+                self.screen.blit(item_render, item_rect)
 
     def draw_objects(self):
         for x in self.world_objects:
@@ -419,6 +458,7 @@ class Game:
                 elif (
                     not other_obj_rect.colliderect(self.player.player_rect)
                     and self.world_objects[x]["type"] == "item"
+                    and x==self.item_hovered
                 ):
                     self.item_hovered = None
 
@@ -438,6 +478,7 @@ class Game:
                 elif (
                     not other_obj_rect.colliderect(self.player.player_rect)
                     and self.world_objects[x]["type"] == "container"
+                    and x == self.container_hovered
                 ):
                     self.container_hovered = None
 

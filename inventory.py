@@ -23,7 +23,7 @@ class Inventory:
             del self.items[name]
             del self.quantity[name]
             
-    def draw(self, screen, selected_sub_item, sub_items):
+    def draw(self, screen, selected_sub_item, sub_items, left=220, ofset=0):
         inventory_font = pygame.font.Font("game_data/inter.ttf", 24)
         scroll_position = (selected_sub_item // 10) * 10
         visible_items = list(self.quantity.items())[scroll_position : scroll_position + 10]
@@ -46,6 +46,6 @@ class Inventory:
                     item_text = f"    {item_name}: {item_quantity} desc: {self.items[item_name]['description']} ◄"
 
             item_render = inventory_font.render(item_text, True, color)
-            item_rect = item_render.get_rect(topleft=(220, 20 + index * 40))
+            item_rect = item_render.get_rect(topleft=(left, ofset + 20 + index * 40))
             screen.blit(item_render, item_rect)
         
