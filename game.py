@@ -16,8 +16,10 @@ class Game:
         self.selection_held = False
         self.container_hovered = None
         self.container_open = False
-        self.selected_inventory_item = 0
         self.tab_pressed = False
+        self.container_menu_selected = True
+        self.selected_inventory_item = 0
+        self.prev_index = 0
 
         self.items = assets.load_items()
         self.player = player
@@ -270,6 +272,8 @@ class Game:
             and self.tab_pressed
         ):
             self.tab_pressed = False
+            self.prev_index = 0
+            self.selected_inventory_item = 0
 
         if (
             keys[pygame.K_UP]
@@ -278,9 +282,13 @@ class Game:
             and not self.menu.visible
             and not self.player_menu.visible
         ):
-            self.selected_inventory_item = (self.selected_inventory_item - 1) % len(
-                self.world_objects[self.container_hovered]["name"]["items"]
-            )
+            if self.container_menu_selected:
+                self.selected_inventory_item = (self.selected_inventory_item - 1) % len(
+                self.world_objects[self.container_hovered]["name"]["items"])
+            else:
+                self.selected_inventory_item = (self.selected_inventory_item - 1) % len(
+                    self.player.inventory.items
+                )
             self.selection_held = True
 
         elif (
@@ -290,12 +298,59 @@ class Game:
             and not self.menu.visible
             and not self.player_menu.visible
         ):
-            self.selected_inventory_item = (self.selected_inventory_item + 1) % len(
-                self.world_objects[self.container_hovered]["name"]["items"]
-            )
+            if self.container_menu_selected:
+                self.selected_inventory_item = (self.selected_inventory_item + 1) % len(
+                self.world_objects[self.container_hovered]["name"]["items"])
+            else:
+                self.selected_inventory_item = (self.selected_inventory_item + 1) % len(
+                    self.player.inventory.items
+                )
             self.selection_held = True
+            
+            
+        if (
+            keys[pygame.K_LEFT]
+            and not self.selection_held
+            and self.container_open
+            and not self.menu.visible
+            and not self.player_menu.visible
+            and self.container_menu_selected
+        ):
+            self.container_menu_selected = False
+            self.selection_held = True
+            self.selected_inventory_item, self.prev_index = self.prev_index, self.selected_inventory_item
 
-        elif not keys[pygame.K_UP] and not keys[pygame.K_DOWN] and self.container_open:
+        elif (
+            keys[pygame.K_RIGHT]
+            and not self.selection_held
+            and self.container_open
+            and not self.menu.visible
+            and not self.player_menu.visible
+            and not self.container_menu_selected
+        ):
+            self.container_menu_selected = True
+            self.selection_held = True
+            self.selected_inventory_item, self.prev_index = self.prev_index, self.selected_inventory_item
+
+        elif not keys[pygame.K_UP] and not keys[pygame.K_DOWN] and not keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT] and self.container_open:
+            self.selection_held = False
+        
+        if (
+            keys[pygame.K_RETURN]
+            and not self.menu.visible
+            and not self.player_menu.visible
+            and not self.selection_held
+            and self.container_open
+        ):
+            self.tab_pressed = True
+            self.selection_held = True
+            if self.container_menu_selected:
+                print(self.world_objects[self.container_hovered]["name"]["items"][self.selected_inventory_item])
+            else:
+                print(list(self.player.inventory.items.items())[self.selected_inventory_item])
+                
+        elif not keys[pygame.K_RETURN] and self.container_open and self.tab_pressed and not self.selection_held:
+            self.tab_pressed = False
             self.selection_held = False
 
         
@@ -371,26 +426,26 @@ class Game:
                 4,
             )
 
-            i += 1
             for index, (data) in enumerate(visible_items):
                 color = (
                     (157, 157, 210)
                     if index == self.selected_inventory_item - scroll_position
                     else (237, 106, 94)
                 )
+                
+                if not self.container_menu_selected:
+                    color=(44, 53, 57)
 
-                if index == self.selected_inventory_item - scroll_position:
+                if index == self.selected_inventory_item - scroll_position and self.container_menu_selected:
                     item_text = f"> {data['type']}: {data['quantity']}"
                 else:
                     item_text = f"    {data['type']}: {data['quantity']}"
                 item_render = menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(
-                    topleft=(self.screen.get_width() // 2 + 20, 20 + i * 40)
+                    topleft=(self.screen.get_width() // 2 + 20, 20 + (index+2) * 40)
                 )
                 self.screen.blit(item_render, item_rect)
-                i += 1
-            
-
+                
 
             scroll_position = (self.selected_inventory_item // 10) * 10
             visible_items = list(self.player.inventory.quantity.items())[scroll_position : scroll_position + 10]
@@ -401,7 +456,11 @@ class Game:
                     if index == self.selected_inventory_item - scroll_position
                     else (237, 106, 94)
                 )
-                if index == self.selected_inventory_item - scroll_position:
+                
+                if self.container_menu_selected:
+                    color=(44, 53, 57)
+                
+                if index == self.selected_inventory_item - scroll_position and not self.container_menu_selected:
                     item_text = f"> {item_name}: {item_quantity}"
                 else:
                     item_text = f"    {item_name}: {item_quantity}"
