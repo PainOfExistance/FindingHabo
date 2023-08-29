@@ -17,7 +17,7 @@ class Game:
         self.container_hovered = None
         self.container_open = False
         self.selected_inventory_item = 0
-        
+
         self.items = assets.load_items()
         self.player = player
         self.player_menu = player_menu
@@ -91,10 +91,10 @@ class Game:
             self.handle_events()
             self.draw()
 
-            if not self.player_menu.visible:
+            if not self.player_menu.visible and not self.container_open and not self.selection_held:
                 self.menu.handle_input()
 
-            if not self.menu.visible:
+            if not self.menu.visible and not self.container_open and not self.selection_held:
                 self.player_menu.handle_input()
 
             self.clock.tick(self.target_fps)
@@ -251,9 +251,48 @@ class Game:
                 self.selection_held = True
                 if self.container_hovered in self.world_objects:
                     self.container_open = True
-        elif not keys[pygame.K_e]:
+        elif not keys[pygame.K_e] and not self.container_open:
             self.selection_held = False
 
+        if (
+            keys[pygame.K_TAB]
+            and self.container_open
+            and not self.menu.visible
+            and not self.player_menu.visible
+            and not self.selection_held
+        ):
+            self.selection_held = True
+        elif not keys[pygame.K_TAB] and self.container_open and self.selection_held:
+            self.selection_held = False
+            self.container_open = False
+
+        if (
+            keys[pygame.K_UP]
+            and not self.selection_held
+            and self.container_open
+            and not self.menu.visible
+            and not self.player_menu.visible
+        ):
+            self.selected_inventory_item = (self.selected_inventory_item - 1) % len(
+                self.world_objects[self.container_hovered]["name"]["items"]
+            )
+            self.selection_held = True
+
+        elif (
+            keys[pygame.K_DOWN]
+            and not self.selection_held
+            and self.container_open
+            and not self.menu.visible
+            and not self.player_menu.visible
+        ):
+            self.selected_inventory_item = (self.selected_inventory_item + 1) % len(
+                self.world_objects[self.container_hovered]["name"]["items"]
+            )
+            self.selection_held = True
+
+        elif not keys[pygame.K_UP] and not keys[pygame.K_DOWN] and self.container_open:
+            self.selection_held = False
+        
     # def detect_slope(self, position):
     #    x, y = position
     #    subarray_size = 5  # Size of the subarray (odd number for a centered subarray)
@@ -265,11 +304,13 @@ class Game:
     #    angle_deg = np.degrees(angle_rad)
     #
     #    return angle_deg
-    
+
     def draw_container(self):
         if self.container_open:
             pygame.draw.rect(
-                self.bg_surface_menu, (200, 210, 200, 180), self.bg_surface_menu.get_rect()
+                self.bg_surface_menu,
+                (200, 210, 200, 180),
+                self.bg_surface_menu.get_rect(),
             )
             self.screen.blit(self.bg_surface_menu, self.bg_menu)
 
@@ -284,14 +325,25 @@ class Game:
             menu_font = pygame.font.Font("game_data/inter.ttf", 30)
 
             scroll_position = (self.selected_inventory_item // 10) * 10
-            visible_items = list(self.world_objects[self.container_hovered]["name"]["items"])[scroll_position : scroll_position + 10]
-            i=0
-            
-            item_render = menu_font.render(self.world_objects[self.container_hovered]["name"]["name"], True, (44, 53, 57))
-            item_rect = item_render.get_rect(topleft=(self.screen.get_width() // 2 + self.screen.get_width() // 5, 20 + i * 50))
+            visible_items = list(
+                self.world_objects[self.container_hovered]["name"]["items"]
+            )[scroll_position : scroll_position + 10]
+            i = 0
+
+            item_render = menu_font.render(
+                self.world_objects[self.container_hovered]["name"]["name"],
+                True,
+                (44, 53, 57),
+            )
+            item_rect = item_render.get_rect(
+                topleft=(
+                    self.screen.get_width() // 2 + self.screen.get_width() // 5,
+                    20 + i * 50,
+                )
+            )
             self.screen.blit(item_render, item_rect)
-            i+=1
-            
+            i += 1
+
             pygame.draw.line(
                 self.screen,
                 (22, 22, 22),
@@ -299,23 +351,25 @@ class Game:
                 (self.screen.get_width(), 20 + i * 50),
                 4,
             )
-            
-            i+=1
-            for index in visible_items:
+
+            i += 1
+            for index, (data) in enumerate(visible_items):
                 color = (
                     (157, 157, 210)
                     if index == self.selected_inventory_item - scroll_position
                     else (237, 106, 94)
                 )
-                
+
                 if index == self.selected_inventory_item - scroll_position:
-                    item_text = f"> {index['type']}: {index['quantity']}"
+                    item_text = f"> {data['type']}: {data['quantity']}"
                 else:
-                    item_text = f"    {index['type']}: {index['quantity']}"
+                    item_text = f"    {data['type']}: {data['quantity']}"
                 item_render = menu_font.render(item_text, True, color)
-                item_rect = item_render.get_rect(topleft=(self.screen.get_width() // 2 + 20, 20 + i * 40))
+                item_rect = item_render.get_rect(
+                    topleft=(self.screen.get_width() // 2 + 20, 20 + i * 40)
+                )
                 self.screen.blit(item_render, item_rect)
-                i+=1
+                i += 1
 
     def draw_objects(self):
         for x in self.world_objects:
@@ -362,10 +416,16 @@ class Game:
                         )
                     )
                     self.screen.blit(self.text, self.text_rect)
-                elif not other_obj_rect.colliderect(self.player.player_rect) and self.world_objects[x]["type"] == "item":
+                elif (
+                    not other_obj_rect.colliderect(self.player.player_rect)
+                    and self.world_objects[x]["type"] == "item"
+                ):
                     self.item_hovered = None
 
-                if other_obj_rect.colliderect(self.player.player_rect) and self.world_objects[x]["type"] == "container":
+                if (
+                    other_obj_rect.colliderect(self.player.player_rect)
+                    and self.world_objects[x]["type"] == "container"
+                ):
                     self.container_hovered = x
                     self.text = self.prompt_font.render(f"E) Access", True, (0, 0, 0))
                     self.text_rect = self.text.get_rect(
@@ -375,9 +435,11 @@ class Game:
                         )
                     )
                     self.screen.blit(self.text, self.text_rect)
-                elif not other_obj_rect.colliderect(self.player.player_rect) and self.world_objects[x]["type"] == "container":
+                elif (
+                    not other_obj_rect.colliderect(self.player.player_rect)
+                    and self.world_objects[x]["type"] == "container"
+                ):
                     self.container_hovered = None
-                    
 
     def draw(self):
         self.screen.fill((230, 60, 20))

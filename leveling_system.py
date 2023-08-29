@@ -36,10 +36,10 @@ class LevelingSystem:
         i = 0
         coords = (screen.get_width() + screen.get_width() // 4) / 2
 
-        scroll_position = (selected_sub_item // 3) * 3
-        selected = (trait_selection // 3) * 3
+        scroll_position = (selected_sub_item // 4) * 4
+        selected = (trait_selection // 4) * 4
         visible_traits = list(self.traits.traits.items())[
-            scroll_position : scroll_position + 3
+            scroll_position : scroll_position + 4
         ]
         for index, (trait_name, trait_data) in enumerate(visible_traits):
             color = (
@@ -94,4 +94,4 @@ class LevelingSystem:
             taken_rect = taken_render.get_rect(center=(coords, 20 + index * 40 + i))
             screen.blit(taken_render, taken_rect)
             screen.blit(level_render, level_rect)
-            i += 3 * item_spacing
+            i += 2.5 * item_spacing

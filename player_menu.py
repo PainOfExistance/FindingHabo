@@ -242,7 +242,3 @@ class PlayerMenu:
                 self.player.effects.draw(
                     self.screen, self.selected_sub_item, self.sub_items
                 )
-                if self.selected_sub_item > len(self.player.inventory.items) - 1:
-                    self.selected_sub_item -= 1
-                elif self.selected_sub_item < 0:
-                    self.selected_sub_item = 0
