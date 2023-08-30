@@ -24,11 +24,11 @@
                     "position": [50, 200],
                     "items": [
                         {
-                            "type": "gold",
+                            "type": "Gold",
                             "quantity": 50
                         },
                         {
-                            "type": "food",
+                            "type": "Minor Health Potion",
                             "quantity": 3
                         }
                     ]
