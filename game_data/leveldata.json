@@ -4,6 +4,7 @@
             "name": "Dream World",
             "collision_set": "game_data/bg.png",
             "background": "game_data/bg.png",
+            "music": "game_data/dream_world_music.json",
             "spawn_point": [50, 50],
             "respawn_timer": 60,
             "items": [

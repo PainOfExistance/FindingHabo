@@ -1,7 +1,7 @@
 import pygame
 import sys
 import numpy as np
-
+from music_player import MusicPlayer
 
 class Game:
     def __init__(
@@ -34,6 +34,7 @@ class Game:
         self.player.inventory.add_item(self.items["Steel Armor"])
         self.player.inventory.add_item(self.items["Divine Armor"])
         self.worlds = assets.load_worlds()
+        self.music_player = MusicPlayer(assets.load_music_list(self.worlds[self.player.current_world]["music"]))
 
         self.background, self.bg_rect = self.asets.load_background(
             self.worlds[self.player.current_world]["collision_set"]
@@ -95,7 +96,8 @@ class Game:
             self.update()
             self.handle_events()
             self.draw()
-
+            self.music_player.update()
+            
             if (
                 not self.player_menu.visible
                 and not self.tab_pressed
