@@ -34,7 +34,7 @@
             "type": "item",
             "description": "Temporarily boosts power.",
             "price": 25,
-            "image": "game_data/power_elixir.png",
+            "image": "game_data/power_potion_grand.jpg",
             "effect": {
                 "name": "Strength Boost",
                 "duration": 20,

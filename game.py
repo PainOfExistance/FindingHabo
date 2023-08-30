@@ -274,6 +274,7 @@ class Game:
         ):
             self.tab_pressed = True
             self.container_open = False
+            
         elif not keys[pygame.K_TAB] and not self.container_open and self.tab_pressed:
             self.tab_pressed = False
             self.prev_index = 0
@@ -465,6 +466,20 @@ class Game:
 
             if self.selected_inventory_item < 0:
                 self.selected_inventory_item = 0
+                
+        if keys[pygame.K_r] and self.player_menu.selected_item == 0 and not self.selection_held and self.player_menu.visible:
+            self.selection_held = True
+            key = list(self.player.inventory.quantity.keys())[self.player_menu.selected_sub_item]
+            self.player.inventory.remove_item(key)
+            img, img_rect = self.asets.load_images(self.items[key]["image"], (64, 64), (self.player.player_rect.centery, self.player.player_rect.centerx))
+            self.world_objects[key] = {
+                "image": img,
+                "rect": img_rect,
+                "type": "item",
+            }
+            
+        elif not keys[pygame.K_r] and self.selection_held:
+            self.selection_held = False
 
     # def detect_slope(self, position):
     #    x, y = position
