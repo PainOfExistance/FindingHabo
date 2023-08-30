@@ -43,29 +43,30 @@ class Game:
         )
         self.map_height = self.collision_map.shape[0]
         self.map_width = self.collision_map.shape[1]
-        self.world_objects = {}
+        self.world_objects = list()
 
         for data in self.worlds[self.player.current_world]["items"]:
             item = self.items[data["type"]]
             img, img_rect = self.asets.load_images(
                 item["image"], (64, 64), tuple(data["position"])
             )
-            self.world_objects[item["name"]] = {
+            self.world_objects.append({
+                "name": item["name"],
                 "image": img,
                 "rect": img_rect,
                 "type": "item",
-            }
+            })
 
         for data in self.worlds[self.player.current_world]["containers"]:
             img, img_rect = self.asets.load_images(
                 data["image"], (64, 64), tuple(data["position"])
             )
-            self.world_objects[data["type"]] = {
+            self.world_objects.append({
                 "image": img,
                 "rect": img_rect,
                 "type": "container",
                 "name": data,
-            }
+            })
 
         self.clock = pygame.time.Clock()
         self.target_fps = 60
@@ -255,13 +256,13 @@ class Game:
         ):
             if self.item_hovered != None:
                 self.selection_held = True
-                if self.item_hovered in self.world_objects:
-                    self.player.inventory.add_item(self.items[self.item_hovered])
+                if self.item_hovered < len(self.world_objects) and self.item_hovered >= 0:
+                    self.player.inventory.add_item(self.items[self.world_objects[self.item_hovered]["name"]])
                     del self.world_objects[self.item_hovered]
                     self.item_hovered = None
             elif self.container_hovered != None and not self.container_open:
                 self.selection_held = True
-                if self.container_hovered in self.world_objects:
+                if self.container_hovered < len(self.world_objects) and self.container_hovered >= 0:
                     self.container_open = True
         elif not keys[pygame.K_e] and not self.container_open:
             self.selection_held = False
@@ -471,13 +472,15 @@ class Game:
         if keys[pygame.K_r] and self.player_menu.selected_item == 0 and not self.r_pressed and not self.selection_held and self.player_menu.visible:
             self.r_pressed = True
             key = list(self.player.inventory.quantity.keys())[self.player_menu.selected_sub_item]
+            self.player.unequip_item(key)
             self.player.inventory.remove_item(key)
-            img, img_rect = self.asets.load_images(self.items[key]["image"], (64, 64), (self.player.player_rect.centery, self.player.player_rect.centerx))
-            self.world_objects[key] = {
+            img, img_rect = self.asets.load_images(self.items[key]["image"], (64, 64), (self.player.player_rect.centerx, self.player.player_rect.centery))
+            self.world_objects.append({
+                "name": key,
                 "image": img,
                 "rect": img_rect,
                 "type": "item",
-            }
+            })
             
         elif not keys[pygame.K_r] and self.r_pressed:
             self.r_pressed = False
@@ -605,9 +608,9 @@ class Game:
                 self.screen.blit(item_render, item_rect)
 
     def draw_objects(self):
-        for x in self.world_objects:
-            relative__left = int(self.bg_rect.left + self.world_objects[x]["rect"].left)
-            relative__top = int(self.bg_rect.top + self.world_objects[x]["rect"].top)
+        for index, x in enumerate(self.world_objects):
+            relative__left = int(self.bg_rect.left + x["rect"].left)
+            relative__top = int(self.bg_rect.top + x["rect"].top)
 
             if (
                 relative__left > -80
@@ -616,63 +619,63 @@ class Game:
                 and relative__top < self.screen_height + 80
             ):
                 self.screen.blit(
-                    self.world_objects[x]["image"], (relative__left, relative__top)
+                    x["image"], (relative__left, relative__top)
                 )
 
-                if self.world_objects[x]["type"] == "container":
+                if x["type"] == "container":
                     self.collision_map[
-                        self.world_objects[x]["rect"].top
-                        + 10 : self.world_objects[x]["rect"].bottom
+                        x["rect"].top
+                        + 10 : x["rect"].bottom
                         - 9,
-                        self.world_objects[x]["rect"].left
-                        + 10 : self.world_objects[x]["rect"].right
+                        x["rect"].left
+                        + 10 : x["rect"].right
                         - 9,
                     ] = 1
 
                 other_obj_rect = pygame.Rect(
                     relative__left,
                     relative__top,
-                    self.world_objects[x]["rect"].width,
-                    self.world_objects[x]["rect"].height,
+                    x["rect"].width,
+                    x["rect"].height,
                 )
 
                 if (
                     other_obj_rect.colliderect(self.player.player_rect)
-                    and self.world_objects[x]["type"] == "item"
+                    and x["type"] == "item"
                 ):
-                    self.item_hovered = x
+                    self.item_hovered = index
                     self.text = self.prompt_font.render(f"E) Pick up", True, (0, 0, 0))
                     self.text_rect = self.text.get_rect(
                         center=(
-                            relative__left + self.world_objects[x]["rect"].width // 2,
-                            relative__top + self.world_objects[x]["rect"].height + 10,
+                            relative__left + x["rect"].width // 2,
+                            relative__top + x["rect"].height + 10,
                         )
                     )
                     self.screen.blit(self.text, self.text_rect)
                 elif (
                     not other_obj_rect.colliderect(self.player.player_rect)
-                    and self.world_objects[x]["type"] == "item"
-                    and x == self.item_hovered
+                    and x["type"] == "item"
+                    and index == self.item_hovered
                 ):
                     self.item_hovered = None
 
                 if (
                     other_obj_rect.colliderect(self.player.player_rect)
-                    and self.world_objects[x]["type"] == "container"
+                    and x["type"] == "container"
                 ):
-                    self.container_hovered = x
+                    self.container_hovered = index
                     self.text = self.prompt_font.render(f"E) Access", True, (0, 0, 0))
                     self.text_rect = self.text.get_rect(
                         center=(
-                            relative__left + self.world_objects[x]["rect"].width // 2,
-                            relative__top + self.world_objects[x]["rect"].height + 10,
+                            relative__left + x["rect"].width // 2,
+                            relative__top + x["rect"].height + 10,
                         )
                     )
                     self.screen.blit(self.text, self.text_rect)
                 elif (
                     not other_obj_rect.colliderect(self.player.player_rect)
-                    and self.world_objects[x]["type"] == "container"
-                    and x == self.container_hovered
+                    and x["type"] == "container"
+                    and index == self.container_hovered
                 ):
                     self.container_hovered = None
 

@@ -19,7 +19,6 @@
             "containers": [
                 {
                     "name": "Chest",
-                    "type": "chest01",
                     "image": "game_data/chest.jpg",
                     "position": [50, 200],
                     "items": [
