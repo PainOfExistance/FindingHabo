@@ -17,6 +17,7 @@ class Game:
         self.container_hovered = None
         self.container_open = False
         self.tab_pressed = False
+        self.r_pressed = False
         self.container_menu_selected = True
         self.selected_inventory_item = 0
         self.prev_index = 0
@@ -467,8 +468,8 @@ class Game:
             if self.selected_inventory_item < 0:
                 self.selected_inventory_item = 0
                 
-        if keys[pygame.K_r] and self.player_menu.selected_item == 0 and not self.selection_held and self.player_menu.visible:
-            self.selection_held = True
+        if keys[pygame.K_r] and self.player_menu.selected_item == 0 and not self.r_pressed and not self.selection_held and self.player_menu.visible:
+            self.r_pressed = True
             key = list(self.player.inventory.quantity.keys())[self.player_menu.selected_sub_item]
             self.player.inventory.remove_item(key)
             img, img_rect = self.asets.load_images(self.items[key]["image"], (64, 64), (self.player.player_rect.centery, self.player.player_rect.centerx))
@@ -478,8 +479,8 @@ class Game:
                 "type": "item",
             }
             
-        elif not keys[pygame.K_r] and self.selection_held:
-            self.selection_held = False
+        elif not keys[pygame.K_r] and self.r_pressed:
+            self.r_pressed = False
 
     # def detect_slope(self, position):
     #    x, y = position
