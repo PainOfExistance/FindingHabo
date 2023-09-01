@@ -4,7 +4,11 @@
             "name": "Dream World",
             "collision_set": "game_data/bg.png",
             "background": "game_data/bg.png",
-            "music": "game_data/dream_world_music.json",
+            "music": [
+                "game_data/DOVAHKIIN.mp3",
+                "game_data/Angelia.mp3",
+                "game_data/It's Time.mp3"
+            ],
             "spawn_point": [50, 50],
             "respawn_timer": 60,
             "items": [

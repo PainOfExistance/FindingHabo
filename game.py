@@ -34,7 +34,7 @@ class Game:
         self.player.inventory.add_item(self.items["Steel Armor"])
         self.player.inventory.add_item(self.items["Divine Armor"])
         self.worlds = assets.load_worlds()
-        self.music_player = MusicPlayer(assets.load_music_list(self.worlds[self.player.current_world]["music"]))
+        self.music_player = MusicPlayer(self.worlds[self.player.current_world]["music"])
 
         self.background, self.bg_rect = self.asets.load_background(
             self.worlds[self.player.current_world]["collision_set"]

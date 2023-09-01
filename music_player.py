@@ -18,7 +18,6 @@ class MusicPlayer:
 
     def play_random_track(self):
         random.shuffle(self.music_tracks)
-        print(self.music_tracks)
         pygame.mixer.music.load(self.music_tracks[self.current_track_index])
         pygame.mixer.music.play()
 

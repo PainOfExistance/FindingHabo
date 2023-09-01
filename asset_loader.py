@@ -73,10 +73,4 @@ class AssetLoader:
             worlds = {world["name"]: world for world in world_data["worlds"]}
         return worlds
     
-    def load_music_list(self, path):
-        music=list()
-        with open(path, "r") as music_file:
-            music = json.load(music_file)
-        return music
-    
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic
