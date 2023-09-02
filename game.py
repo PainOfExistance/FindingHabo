@@ -787,19 +787,19 @@ class Game:
                 ):
                     self.container_hovered = None
 
-                if (
-                    other_obj_rect.colliderect(self.weapon_rect)
-                    and x["type"] == "npc"
-                ):
+                if other_obj_rect.colliderect(self.weapon_rect) and x["type"] == "npc":
                     if self.attacking:
                         x["name"]["health"] = (
-                        x["name"]["health"] - self.player.stats.weapon_damage)
+                            x["name"]["health"] - self.player.stats.weapon_damage
+                        )
                         if x["name"]["health"] <= 0:
                             self.player.level.gain_experience(x["name"]["xp"])
                             del self.world_objects[index]
-                            
-                    if x["name"]["health"]>0:
-                        self.text = self.prompt_font.render(str(x["name"]["health"]), True, (200, 0, 0))
+
+                    if x["name"]["health"] > 0:
+                        self.text = self.prompt_font.render(
+                            str(x["name"]["health"]), True, (200, 0, 0)
+                        )
                         self.text_rect = self.text.get_rect(
                             center=(
                                 relative__left + x["rect"].width // 2,
