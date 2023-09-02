@@ -15,8 +15,6 @@ class Stats:
         self.weapon_damage = 5
         self.defense = 5
         
-        self.prev_weapon_damage = self.weapon_damage
-
     def update_max_health(self, value):
         self.max_health+=value
         
@@ -28,7 +26,8 @@ class Stats:
             self.health = 0
             
     def update_max_power(self, value):
-        self.power+=value
+        self.max_power+=value
+        self.weapon_damage = self.weapon_damage + math.ceil(math.log(self.max_power))
 
     def update_power(self, value):
         self.power+=value
@@ -37,11 +36,9 @@ class Stats:
         elif self.power < 0:
             self.power = 0
         
-        self.prev_weapon_damage = self.weapon_damage
-        self.weapon_damage = self.prev_weapon_damage + math.sqrt(self.power)
             
     def update_max_knowlage(self, value):
-        self.knowlage+=value
+        self.max_knowlage+=value
 
     def update_knowlage(self, value):
         self.knowlage+=value
@@ -51,5 +48,4 @@ class Stats:
             self.knowlage = 0
     
     def update_weapon_damage(self, value):
-        self.prev_weapon_damage = self.weapon_damage
         self.weapon_damage+=value

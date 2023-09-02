@@ -17,6 +17,7 @@ class Player:
         self.gold = 0
         self.current_world=f"Dream World"
         self.screen_width = screen_width
+        self.range=5
         self.player, self.player_rect = assets.load_player(
             path, (screen_width // 2, screen_height // 2)
         )
@@ -83,6 +84,8 @@ class Player:
             self.stats.update_max_knowlage(amount)
         elif stat=="knowledge":
             self.stats.update_knowlage(amount)
+        elif stat=="weapon_damage":
+            self.stats.update_weapon_damage(amount)
 
     def use_item(self, index):
         keys = list(self.inventory.items.keys())
@@ -120,6 +123,9 @@ class Player:
             print(f"Equipped {item} in {slot}")
         else:
             print(f"Cannot equip {item} in {slot}")
+        if slot == "hand":
+            self.range = self.inventory.items[item]["stats"]["range"]
+            self.stats.weapon_damage = self.stats.weapon_damage + self.inventory.items[item]["stats"]["damage"]
 
     def unequip_item(self, item):
         if item != None:
@@ -131,3 +137,6 @@ class Player:
                 print(f"Unequipped {unequipped_item} from {slot}")
             else:
                 print(f"No item equipped in {slot}")
+            if slot == "hand":
+                self.range = 5
+                self.stats.weapon_damage = self.stats.weapon_damage - self.inventory.items[item]["stats"]["damage"]

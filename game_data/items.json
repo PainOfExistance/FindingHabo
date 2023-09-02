@@ -59,7 +59,7 @@
                 "damage": 10,
                 "hand": "one",
                 "speed": 0.75,
-                "range": 5,
+                "range": 10,
                 "dropable": "yes",
                 "equiped": false,
                 "slot": "hand"

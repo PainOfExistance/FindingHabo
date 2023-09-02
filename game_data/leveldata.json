@@ -44,14 +44,16 @@
                     "position": [300, 300],
                     "health": 50,
                     "image": "game_data/goblin.png",
-                    "type": "enemy"
+                    "type": "enemy",
+                    "xp": 200
                 },
                 {
                     "name": "wolf",
                     "position": [200, 200],
-                    "health": 10,
+                    "health": 100,
                     "image": "game_data/wolf.png",
-                    "type": "enemy"
+                    "type": "enemy",
+                    "xp": 50
                 }
             ]
         }
