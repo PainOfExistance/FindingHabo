@@ -3,6 +3,7 @@ import sys
 import numpy as np
 from music_player import MusicPlayer
 
+
 class Game:
     def __init__(
         self, screen, screen_width, screen_height, menu, player_menu, player, assets
@@ -21,6 +22,8 @@ class Game:
         self.container_menu_selected = True
         self.selected_inventory_item = 0
         self.prev_index = 0
+        self.time_diff = 0
+        self.attacking = False
 
         self.items = assets.load_items()
         self.player = player
@@ -51,23 +54,40 @@ class Game:
             img, img_rect = self.asets.load_images(
                 item["image"], (64, 64), tuple(data["position"])
             )
-            self.world_objects.append({
-                "name": item["name"],
-                "image": img,
-                "rect": img_rect,
-                "type": "item",
-            })
+            self.world_objects.append(
+                {
+                    "name": item["name"],
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "item",
+                }
+            )
 
         for data in self.worlds[self.player.current_world]["containers"]:
             img, img_rect = self.asets.load_images(
                 data["image"], (64, 64), tuple(data["position"])
             )
-            self.world_objects.append({
-                "image": img,
-                "rect": img_rect,
-                "type": "container",
-                "name": data,
-            })
+            self.world_objects.append(
+                {
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "container",
+                    "name": data,
+                }
+            )
+        
+        for data in self.worlds[self.player.current_world]["npcs"]:
+            img, img_rect = self.asets.load_images(
+                data["image"], (64, 64), tuple(data["position"])
+            )
+            self.world_objects.append(
+                {
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "npc",
+                    "name": data,
+                }
+            )
 
         self.clock = pygame.time.Clock()
         self.target_fps = 60
@@ -97,7 +117,7 @@ class Game:
             self.handle_events()
             self.draw()
             self.music_player.update()
-            
+
             if (
                 not self.player_menu.visible
                 and not self.tab_pressed
@@ -127,7 +147,10 @@ class Game:
             current_time - self.last_frame_time
         ) / 1000.0  # Convert to seconds
         self.last_frame_time = current_time
+        self.time_diff += self.delta_time
 
+        if self.time_diff >= 20:
+            self.time_diff = 1
         relative_player_left = int(self.player.player_rect.left - self.bg_rect.left)
         relative_player_right = int(self.player.player_rect.right - self.bg_rect.left)
         relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
@@ -258,13 +281,21 @@ class Game:
         ):
             if self.item_hovered != None:
                 self.selection_held = True
-                if self.item_hovered < len(self.world_objects) and self.item_hovered >= 0:
-                    self.player.inventory.add_item(self.items[self.world_objects[self.item_hovered]["name"]])
+                if (
+                    self.item_hovered < len(self.world_objects)
+                    and self.item_hovered >= 0
+                ):
+                    self.player.inventory.add_item(
+                        self.items[self.world_objects[self.item_hovered]["name"]]
+                    )
                     del self.world_objects[self.item_hovered]
                     self.item_hovered = None
             elif self.container_hovered != None and not self.container_open:
                 self.selection_held = True
-                if self.container_hovered < len(self.world_objects) and self.container_hovered >= 0:
+                if (
+                    self.container_hovered < len(self.world_objects)
+                    and self.container_hovered >= 0
+                ):
                     self.container_open = True
         elif not keys[pygame.K_e] and not self.container_open:
             self.selection_held = False
@@ -278,7 +309,7 @@ class Game:
         ):
             self.tab_pressed = True
             self.container_open = False
-            
+
         elif not keys[pygame.K_TAB] and not self.container_open and self.tab_pressed:
             self.tab_pressed = False
             self.prev_index = 0
@@ -470,22 +501,62 @@ class Game:
 
             if self.selected_inventory_item < 0:
                 self.selected_inventory_item = 0
-                
-        if keys[pygame.K_r] and self.player_menu.selected_item == 0 and not self.r_pressed and not self.selection_held and self.player_menu.visible:
+
+        if (
+            keys[pygame.K_r]
+            and self.player_menu.selected_item == 0
+            and not self.r_pressed
+            and not self.selection_held
+            and self.player_menu.visible
+        ):
             self.r_pressed = True
-            key = list(self.player.inventory.quantity.keys())[self.player_menu.selected_sub_item]
+            key = list(self.player.inventory.quantity.keys())[
+                self.player_menu.selected_sub_item
+            ]
             self.player.unequip_item(key)
             self.player.inventory.remove_item(key)
-            img, img_rect = self.asets.load_images(self.items[key]["image"], (64, 64), (self.player.player_rect.centerx, self.player.player_rect.centery))
-            self.world_objects.append({
-                "name": key,
-                "image": img,
-                "rect": img_rect,
-                "type": "item",
-            })
-            
+            img, img_rect = self.asets.load_images(
+                self.items[key]["image"],
+                (64, 64),
+                (self.player.player_rect.centerx, self.player.player_rect.centery),
+            )
+            self.world_objects.append(
+                {
+                    "name": key,
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "item",
+                }
+            )
+
         elif not keys[pygame.K_r] and self.r_pressed:
             self.r_pressed = False
+
+        mouse_buttons = pygame.mouse.get_pressed()
+        if (
+            (mouse_buttons[0] or keys[pygame.K_SPACE])
+            and not self.menu.visible
+            and not self.player_menu.visible
+            and not self.attacking
+        ):
+            timedif = 0
+            if self.player.equipped_items["hand"] != None:
+                weapon = self.player.inventory.items[self.player.equipped_items["hand"]]
+                timedif = weapon["stats"]["speed"]
+            else:
+                timedif = 0.3
+
+            if self.time_diff >= timedif and not self.attacking:
+                self.attacking = True
+                print("attacked with a weapon")
+                self.time_diff = 0
+
+        elif not mouse_buttons[0] or not keys[pygame.K_SPACE] or self.attacking:
+            self.attacking = False
+
+    def attack(self):
+        if self.rotation_angle == 0:
+            pass
 
     # def detect_slope(self, position):
     #    x, y = position
@@ -498,6 +569,7 @@ class Game:
     #    angle_deg = np.degrees(angle_rad)
     #
     #    return angle_deg
+        
 
     def draw_container(self):
         if self.container_open:
@@ -620,18 +692,12 @@ class Game:
                 and relative__top > -80
                 and relative__top < self.screen_height + 80
             ):
-                self.screen.blit(
-                    x["image"], (relative__left, relative__top)
-                )
+                self.screen.blit(x["image"], (relative__left, relative__top))
 
                 if x["type"] == "container":
                     self.collision_map[
-                        x["rect"].top
-                        + 10 : x["rect"].bottom
-                        - 9,
-                        x["rect"].left
-                        + 10 : x["rect"].right
-                        - 9,
+                        x["rect"].top + 10 : x["rect"].bottom - 9,
+                        x["rect"].left + 10 : x["rect"].right - 9,
                     ] = 1
 
                 other_obj_rect = pygame.Rect(

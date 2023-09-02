@@ -58,7 +58,8 @@
             "stats": {
                 "damage": 10,
                 "hand": "one",
-                "speed": 1,
+                "speed": 0.75,
+                "range": 5,
                 "dropable": "yes",
                 "equiped": false,
                 "slot": "hand"
