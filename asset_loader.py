@@ -73,4 +73,11 @@ class AssetLoader:
             worlds = {world["name"]: world for world in world_data["worlds"]}
         return worlds
     
+    def load_ai_package(self):
+        ai_package=np.array({})
+        with open("game_data/ai.json", "r") as ai_file:
+            ai_data = json.load(ai_file)
+            ai_package = {ai["name"]: ai for ai in ai_data["npcs"]}
+        return ai_package
+    
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

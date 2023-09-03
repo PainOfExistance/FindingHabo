@@ -2,7 +2,7 @@ import pygame
 import sys
 import numpy as np
 from music_player import MusicPlayer
-
+from ai import Ai
 
 class Game:
     def __init__(
@@ -25,7 +25,7 @@ class Game:
         self.time_diff = 0
         self.attacking = False
         self.attack_button_held = False
-
+        self.delta_time = 0
         self.items = assets.load_items()
         self.player = player
         self.player_menu = player_menu
@@ -89,6 +89,12 @@ class Game:
                     "name": data,
                 }
             )
+            
+        temp={}
+        for x in self.world_objects:
+            if x["type"] == "npc":
+                temp[x["name"]["name"]] = x["name"]
+        self.ai = Ai(temp, assets)
 
         self.clock = pygame.time.Clock()
         self.target_fps = 60
@@ -112,11 +118,6 @@ class Game:
         self.bg_surface_menu = pygame.Surface(
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
-
-        # self.sound_effect = pygame.mixer.Sound("Angelia.mp3")
-        # self.sound_effect.play()
-        # self.sound_effect.set_volume(0.2)
-        # self.sound_effect.play(loops=-1)
 
     def run(self):
         while True:
@@ -163,9 +164,6 @@ class Game:
         relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
         relative_player_bottom = int(self.player.player_rect.bottom - self.bg_rect.top)
         movement = int(self.movement_speed * self.delta_time)
-
-        # print(f"rl: {relative_player_left},   rr: {relative_player_right},   rt: {relative_player_top},   rb: {relative_player_bottom}")
-        # print(self.detect_slope((relative_player_left, relative_player_bottom)))
 
         keys = pygame.key.get_pressed()
         if (
@@ -600,19 +598,6 @@ class Game:
                     self.player.range,
                     self.player.player_rect.height // 3,
                 )
-            
-
-    # def detect_slope(self, position):
-    #    x, y = position
-    #    subarray_size = 5  # Size of the subarray (odd number for a centered subarray)
-    #    half_size = subarray_size // 2
-    #    nearby_points = self.collision_map[y - half_size:y + half_size + 1, x - half_size:x + half_size + 1]
-    #
-    #    gradient_y, gradient_x = np.gradient(nearby_points)
-    #    angle_rad = np.arctan2(gradient_y[half_size, half_size], gradient_x[half_size, half_size])
-    #    angle_deg = np.degrees(angle_rad)
-    #
-    #    return angle_deg
 
     def draw_container(self):
         if self.container_open:
@@ -726,8 +711,13 @@ class Game:
 
     def draw_objects(self):
         for index, x in enumerate(self.world_objects):
-            relative__left = int(self.bg_rect.left + x["rect"].left)
-            relative__top = int(self.bg_rect.top + x["rect"].top)
+            if "status" in x["name"] and x["name"]["status"]=="alive":
+                dx, dy = self.ai.update(x["name"]["name"], self.delta_time)
+                relative__left = int(self.bg_rect.left + dx)
+                relative__top = int(self.bg_rect.top + dy)
+            else:
+                relative__left = int(self.bg_rect.left + x["rect"].left)
+                relative__top = int(self.bg_rect.top + x["rect"].top)
 
             if (
                 relative__left > -80
@@ -824,5 +814,4 @@ class Game:
         self.player_menu.render()
         self.draw_container()
         pygame.draw.rect(self.screen, (0, 0, 0), self.weapon_rect)
-
         pygame.display.flip()

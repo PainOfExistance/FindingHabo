@@ -1,0 +1,20 @@
+{
+    "npcs": [
+        {
+            "name": "Wolf",
+            "detection_range": 200,
+            "movement_behavior": {
+                "type": "patrol",
+                "movement_speed": 200
+            }
+        },
+        {
+            "name": "Goblin",
+            "detection_range": 300,
+            "movement_behavior": {
+                "type": "stand",
+                "movement_speed": 200
+            }
+        }
+    ]
+}

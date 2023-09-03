@@ -40,7 +40,7 @@
             ],
             "npcs": [
                 {
-                    "name": "goblin",
+                    "name": "Goblin",
                     "position": [300, 300],
                     "health": 50,
                     "image": "game_data/goblin.png",
@@ -49,7 +49,7 @@
                     "status": "alive"
                 },
                 {
-                    "name": "wolf",
+                    "name": "Wolf",
                     "position": [200, 200],
                     "health": 100,
                     "image": "game_data/wolf.png",
