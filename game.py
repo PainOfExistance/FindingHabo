@@ -193,13 +193,6 @@ class Game:
                         self.player.player, self.rotation_angle
                     )
                     self.rotation_angle = 90
-
-                self.weapon_rect = pygame.Rect(
-                    self.player.player_rect.left - self.player.range,
-                    self.player.player_rect.top + self.player.player_rect.width // 3,
-                    self.player.range,
-                    self.player.player_rect.height // 3,
-                )
             else:
                 self.bg_rect.move_ip(int(self.movement_speed * self.delta_time), 0)
 
@@ -227,13 +220,6 @@ class Game:
                         self.player.player, self.rotation_angle
                     )
                     self.rotation_angle = 270
-
-                self.weapon_rect = pygame.Rect(
-                    self.player.player_rect.right,
-                    self.player.player_rect.top + self.player.player_rect.width // 3,
-                    self.player.range,
-                    self.player.player_rect.height // 3,
-                )
             else:
                 self.bg_rect.move_ip(int(-self.movement_speed * self.delta_time), 0)
 
@@ -263,12 +249,6 @@ class Game:
                     )
                     self.rotation_angle = 0
 
-                self.weapon_rect = pygame.Rect(
-                    self.player.player_rect.left + self.player.player_rect.width // 3,
-                    self.player.player_rect.top - self.player.range,
-                    self.player.player_rect.width // 3,
-                    self.player.range,
-                )
             else:
                 self.bg_rect.move_ip(0, int(self.movement_speed * self.delta_time))
 
@@ -297,13 +277,6 @@ class Game:
                         self.player.player, self.rotation_angle
                     )
                     self.rotation_angle = 180
-
-                self.weapon_rect = pygame.Rect(
-                    self.player.player_rect.left + self.player.player_rect.width // 3,
-                    self.player.player_rect.bottom,
-                    self.player.player_rect.width // 3,
-                    self.player.range,
-                )
             else:
                 self.bg_rect.move_ip(0, int(-self.movement_speed * self.delta_time))
 
@@ -598,6 +571,36 @@ class Game:
             and self.attack_button_held
         ):
             self.attack_button_held = False
+        
+        if self.rotation_angle == 90:
+            self.weapon_rect = pygame.Rect(
+                    self.player.player_rect.left - self.player.range,
+                    self.player.player_rect.top + self.player.player_rect.width // 3,
+                    self.player.range,
+                    self.player.player_rect.height // 3,
+                )
+        elif self.rotation_angle == 0:
+            self.weapon_rect = pygame.Rect(
+                    self.player.player_rect.left + self.player.player_rect.width // 3,
+                    self.player.player_rect.top - self.player.range,
+                    self.player.player_rect.width // 3,
+                    self.player.range,
+                )
+        elif self.rotation_angle == 180:
+            self.weapon_rect = pygame.Rect(
+                    self.player.player_rect.left + self.player.player_rect.width // 3,
+                    self.player.player_rect.bottom,
+                    self.player.player_rect.width // 3,
+                    self.player.range,
+                )
+        elif self.rotation_angle == 270:
+            self.weapon_rect = pygame.Rect(
+                    self.player.player_rect.right,
+                    self.player.player_rect.top + self.player.player_rect.width // 3,
+                    self.player.range,
+                    self.player.player_rect.height // 3,
+                )
+            
 
     # def detect_slope(self, position):
     #    x, y = position
@@ -732,7 +735,10 @@ class Game:
                 and relative__top > -80
                 and relative__top < self.screen_height + 80
             ):
-                self.screen.blit(x["image"], (relative__left, relative__top))
+                if "status" in x["name"] and x["name"]["status"]=="alive":
+                    self.screen.blit(x["image"], (relative__left, relative__top))
+                elif "status" not in x["name"]:
+                    self.screen.blit(x["image"], (relative__left, relative__top))
 
                 if x["type"] == "container":
                     self.collision_map[
@@ -794,7 +800,8 @@ class Game:
                         )
                         if x["name"]["health"] <= 0:
                             self.player.level.gain_experience(x["name"]["xp"])
-                            del self.world_objects[index]
+                            x["name"]["status"] = "dead"
+                            #del self.world_objects[index]
 
                     if x["name"]["health"] > 0:
                         self.text = self.prompt_font.render(

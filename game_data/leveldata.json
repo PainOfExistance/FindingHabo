@@ -45,7 +45,8 @@
                     "health": 50,
                     "image": "game_data/goblin.png",
                     "type": "enemy",
-                    "xp": 200
+                    "xp": 200,
+                    "status": "alive"
                 },
                 {
                     "name": "wolf",
@@ -53,7 +54,8 @@
                     "health": 100,
                     "image": "game_data/wolf.png",
                     "type": "enemy",
-                    "xp": 50
+                    "xp": 50,
+                    "status": "alive"
                 }
             ]
         }
