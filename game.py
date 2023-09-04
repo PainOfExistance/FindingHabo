@@ -715,6 +715,13 @@ class Game:
                 dx, dy = self.ai.update(x["name"]["name"], self.delta_time)
                 relative__left = int(self.bg_rect.left + dx)
                 relative__top = int(self.bg_rect.top + dy)
+                #if np.count_nonzero(self.collision_map[
+                #    relative__top:relative__top + x["rect"].bottom,
+                #    relative__left:relative__left + x["rect"].right] == 1) < 1:
+                #    dx, dy = self.ai.update(x["name"]["name"], self.delta_time)
+                #    relative__left = int(self.bg_rect.left + dx)
+                #    relative__top = int(self.bg_rect.top + dy)
+                    
             else:
                 relative__left = int(self.bg_rect.left + x["rect"].left)
                 relative__top = int(self.bg_rect.top + x["rect"].top)

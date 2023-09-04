@@ -11,7 +11,6 @@ class Ai:
         self.npcs = npcs
 
     def update(self, name, dt):
-        print(name)
         self.dt = dt
         if self.ai_package[name]["movement_behavior"]["type"] == "patrol":
             # Implement random movement within a patrol area
@@ -28,16 +27,24 @@ class Ai:
 
         # Generate a random movement direction
         dx, dy= 0, 0
-        if random.uniform(-1, 1)>0:
-            dx = random.uniform(-10, 10)
-        else:
-            dy = random.uniform(-10, 10)
+        rng=random.randint(0, 3)
+        if rng == 0:
+            dx = -1
+        elif rng == 1:
+            dx = 1
+        elif rng == 2:
+            dy = -1
+        elif rng == 3:
+            dy = 1
 
         # Update NPC's position based on the direction and speed
-        x += dx * patrol_speed * self.dt
-        y += dy * patrol_speed * self.dt
+        x += 1 * patrol_speed * self.dt
+        y += 1 * patrol_speed * self.dt
 
         # Update the NPC's position within the patrol area
         # You can add logic to ensure the NPC stays within bounds
         
         return x, y
+    
+    def attack(self, name, dt):
+        pass
