@@ -712,7 +712,7 @@ class Game:
     def draw_objects(self):
         for index, x in enumerate(self.world_objects):
             if "status" in x["name"] and x["name"]["status"]=="alive":
-                dx, dy = self.ai.update(x["name"]["name"], self.delta_time)
+                dx, dy = self.ai.update(x["name"]["name"], self.delta_time, np.count_nonzero(self.collision_map[x["rect"].top: x["rect"].bottom, x["rect"].left:x["rect"].right] == 1) > 1)
                 relative__left = int(self.bg_rect.left + dx)
                 relative__top = int(self.bg_rect.top + dy)
                 #if np.count_nonzero(self.collision_map[

@@ -10,13 +10,16 @@ class Ai:
     def update_npcs(self, npcs):
         self.npcs = npcs
 
-    def update(self, name, dt):
+    def update(self, name, dt, collision):
         self.dt = dt
-        if self.ai_package[name]["movement_behavior"]["type"] == "patrol":
+        print(collision)
+        if self.ai_package[name]["movement_behavior"]["type"] == "patrol" and not collision:
             # Implement random movement within a patrol area
             return self.random_patrol(name)
-        elif self.ai_package[name]["movement_behavior"]["type"] == "stand":
+        if self.ai_package[name]["movement_behavior"]["type"] == "stand" and not collision:
             return self.npcs[name]["position"]
+        elif self.ai_package[name]["movement_behavior"]["type"] == "patrol" and collision:
+            return 200, 300 
 
     def random_patrol(self, name):
         # Simulate random movement within a patrol area
@@ -38,8 +41,8 @@ class Ai:
             dy = 1
 
         # Update NPC's position based on the direction and speed
-        x += 1 * patrol_speed * self.dt
-        y += 1 * patrol_speed * self.dt
+        x += dx * patrol_speed * self.dt
+        y += dy * patrol_speed * self.dt
 
         # Update the NPC's position within the patrol area
         # You can add logic to ensure the NPC stays within bounds
