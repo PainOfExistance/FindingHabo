@@ -5,7 +5,8 @@
             "detection_range": 200,
             "movement_behavior": {
                 "type": "patrol",
-                "movement_speed": 200
+                "movement_speed": 180,
+                "dirrection": false
             }
         },
         {
@@ -13,7 +14,8 @@
             "detection_range": 300,
             "movement_behavior": {
                 "type": "stand",
-                "movement_speed": 200
+                "movement_speed": 180,
+                "dirrection": false
             }
         }
     ]

@@ -4,6 +4,7 @@ import numpy as np
 from music_player import MusicPlayer
 from ai import Ai
 
+
 class Game:
     def __init__(
         self, screen, screen_width, screen_height, menu, player_menu, player, assets
@@ -30,6 +31,10 @@ class Game:
         self.player = player
         self.player_menu = player_menu
         self.prompt_font = pygame.font.Font("game_data/inter.ttf", 16)
+        self.relative_player_top = 0
+        self.relative_player_left = 0
+        self.relative_player_right = 0
+        self.relative_player_bottom = 0
 
         self.player.inventory.add_item(self.items["Minor Health Potion"])
         self.player.inventory.add_item(self.items["Knowledge Potion"])
@@ -89,8 +94,8 @@ class Game:
                     "name": data,
                 }
             )
-            
-        temp={}
+
+        temp = {}
         for x in self.world_objects:
             if x["type"] == "npc":
                 temp[x["name"]["name"]] = x["name"]
@@ -159,10 +164,16 @@ class Game:
 
         if self.time_diff >= 20:
             self.time_diff = 5
-        relative_player_left = int(self.player.player_rect.left - self.bg_rect.left)
-        relative_player_right = int(self.player.player_rect.right - self.bg_rect.left)
-        relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
-        relative_player_bottom = int(self.player.player_rect.bottom - self.bg_rect.top)
+        self.relative_player_left = int(
+            self.player.player_rect.left - self.bg_rect.left
+        )
+        self.relative_player_right = int(
+            self.player.player_rect.right - self.bg_rect.left
+        )
+        self.relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
+        self.relative_player_bottom = int(
+            self.player.player_rect.bottom - self.bg_rect.top
+        )
         movement = int(self.movement_speed * self.delta_time)
 
         keys = pygame.key.get_pressed()
@@ -170,8 +181,8 @@ class Game:
             keys[pygame.K_a]
             and np.count_nonzero(
                 self.collision_map[
-                    relative_player_top:relative_player_bottom,
-                    relative_player_left - movement,
+                    self.relative_player_top : self.relative_player_bottom,
+                    self.relative_player_left - movement,
                 ]
                 == 1
             )
@@ -198,8 +209,8 @@ class Game:
             keys[pygame.K_d]
             and np.count_nonzero(
                 self.collision_map[
-                    relative_player_top:relative_player_bottom,
-                    min(relative_player_right + movement, self.map_width - 1),
+                    self.relative_player_top : self.relative_player_bottom,
+                    min(self.relative_player_right + movement, self.map_width - 1),
                 ]
                 == 1
             )
@@ -225,8 +236,8 @@ class Game:
             keys[pygame.K_w]
             and np.count_nonzero(
                 self.collision_map[
-                    relative_player_top - movement,
-                    relative_player_left:relative_player_right,
+                    self.relative_player_top - movement,
+                    self.relative_player_left : self.relative_player_right,
                 ]
                 == 1
             )
@@ -254,8 +265,8 @@ class Game:
             keys[pygame.K_s]
             and np.count_nonzero(
                 self.collision_map[
-                    min(relative_player_bottom + movement, self.map_height - 1),
-                    relative_player_left:relative_player_right,
+                    min(self.relative_player_bottom + movement, self.map_height - 1),
+                    self.relative_player_left : self.relative_player_right,
                 ]
                 == 1
             )
@@ -569,35 +580,35 @@ class Game:
             and self.attack_button_held
         ):
             self.attack_button_held = False
-        
+
         if self.rotation_angle == 90:
             self.weapon_rect = pygame.Rect(
-                    self.player.player_rect.left - self.player.range,
-                    self.player.player_rect.top + self.player.player_rect.width // 3,
-                    self.player.range,
-                    self.player.player_rect.height // 3,
-                )
+                self.player.player_rect.left - self.player.range,
+                self.player.player_rect.top + self.player.player_rect.width // 3,
+                self.player.range,
+                self.player.player_rect.height // 3,
+            )
         elif self.rotation_angle == 0:
             self.weapon_rect = pygame.Rect(
-                    self.player.player_rect.left + self.player.player_rect.width // 3,
-                    self.player.player_rect.top - self.player.range,
-                    self.player.player_rect.width // 3,
-                    self.player.range,
-                )
+                self.player.player_rect.left + self.player.player_rect.width // 3,
+                self.player.player_rect.top - self.player.range,
+                self.player.player_rect.width // 3,
+                self.player.range,
+            )
         elif self.rotation_angle == 180:
             self.weapon_rect = pygame.Rect(
-                    self.player.player_rect.left + self.player.player_rect.width // 3,
-                    self.player.player_rect.bottom,
-                    self.player.player_rect.width // 3,
-                    self.player.range,
-                )
+                self.player.player_rect.left + self.player.player_rect.width // 3,
+                self.player.player_rect.bottom,
+                self.player.player_rect.width // 3,
+                self.player.range,
+            )
         elif self.rotation_angle == 270:
             self.weapon_rect = pygame.Rect(
-                    self.player.player_rect.right,
-                    self.player.player_rect.top + self.player.player_rect.width // 3,
-                    self.player.range,
-                    self.player.player_rect.height // 3,
-                )
+                self.player.player_rect.right,
+                self.player.player_rect.top + self.player.player_rect.width // 3,
+                self.player.range,
+                self.player.player_rect.height // 3,
+            )
 
     def draw_container(self):
         if self.container_open:
@@ -711,17 +722,34 @@ class Game:
 
     def draw_objects(self):
         for index, x in enumerate(self.world_objects):
-            if "status" in x["name"] and x["name"]["status"]=="alive":
-                dx, dy = self.ai.update(x["name"]["name"], self.delta_time, np.count_nonzero(self.collision_map[x["rect"].top: x["rect"].bottom, x["rect"].left:x["rect"].right] == 1) > 1)
-                relative__left = int(self.bg_rect.left + dx)
-                relative__top = int(self.bg_rect.top + dy)
-                #if np.count_nonzero(self.collision_map[
-                #    relative__top:relative__top + x["rect"].bottom,
-                #    relative__left:relative__left + x["rect"].right] == 1) < 1:
-                #    dx, dy = self.ai.update(x["name"]["name"], self.delta_time)
-                #    relative__left = int(self.bg_rect.left + dx)
-                #    relative__top = int(self.bg_rect.top + dy)
-                    
+            if "status" in x["name"] and x["name"]["status"] == "alive":
+                # dx, dy = self.ai.update(x["name"]["name"], self.delta_time)
+                relative__left = int(self.bg_rect.left + x["rect"].left)
+                relative__top = int(self.bg_rect.top + x["rect"].top)
+                #dx, dy = self.ai.attack(
+                #    x["name"]["name"],
+                #    self.delta_time,
+                #    (
+                #        (x["rect"].x),
+                #        (x["rect"].y ),
+                #    ),
+                #    (
+                #        (self.relative_player_left + self.relative_player_right) // 2,
+                #        (self.relative_player_top + self.relative_player_bottom) // 2,
+                #    ),
+                #)
+                #if dx != None and dy != None:
+                #    x["rect"].x = dx-self.delta_time
+                #    x["rect"].y = dy-self.delta_time
+                #    relative__left = int(self.bg_rect.left + x["rect"].left)
+                #    relative__top = int(self.bg_rect.top + x["rect"].top)
+                #elif dx == x["rect"].x and dy == x["rect"].y:
+                #    relative__left = int(self.bg_rect.left + x["rect"].left)
+                #    relative__top = int(self.bg_rect.top + x["rect"].top)
+                # dx, dy = self.ai.update(x["name"]["name"], self.delta_time, self.collision_map, relative__left, relative__top, x["rect"])
+                # relative__left = int(self.bg_rect.left + dx)
+                # relative__top = int(self.bg_rect.top + dy)
+
             else:
                 relative__left = int(self.bg_rect.left + x["rect"].left)
                 relative__top = int(self.bg_rect.top + x["rect"].top)
@@ -732,7 +760,7 @@ class Game:
                 and relative__top > -80
                 and relative__top < self.screen_height + 80
             ):
-                if "status" in x["name"] and x["name"]["status"]=="alive":
+                if "status" in x["name"] and x["name"]["status"] == "alive":
                     self.screen.blit(x["image"], (relative__left, relative__top))
                 elif "status" not in x["name"]:
                     self.screen.blit(x["image"], (relative__left, relative__top))
@@ -798,7 +826,7 @@ class Game:
                         if x["name"]["health"] <= 0:
                             self.player.level.gain_experience(x["name"]["xp"])
                             x["name"]["status"] = "dead"
-                            #del self.world_objects[index]
+                            # del self.world_objects[index]
 
                     if x["name"]["health"] > 0:
                         self.text = self.prompt_font.render(
