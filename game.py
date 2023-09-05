@@ -722,33 +722,33 @@ class Game:
 
     def draw_objects(self):
         for index, x in enumerate(self.world_objects):
-            if "status" in x["name"] and x["name"]["status"] == "alive":
+            if "status" in x["name"] and x["name"]["status"] == "alive" and x["name"]["type"] == "enemy":
                 # dx, dy = self.ai.update(x["name"]["name"], self.delta_time)
                 relative__left = int(self.bg_rect.left + x["rect"].left)
                 relative__top = int(self.bg_rect.top + x["rect"].top)
-                #dx, dy = self.ai.attack(
-                #    x["name"]["name"],
-                #    self.delta_time,
-                #    (
-                #        (x["rect"].x),
-                #        (x["rect"].y ),
-                #    ),
-                #    (
-                #        (self.relative_player_left + self.relative_player_right) // 2,
-                #        (self.relative_player_top + self.relative_player_bottom) // 2,
-                #    ),
-                #)
-                #if dx != None and dy != None:
-                #    x["rect"].x = dx-self.delta_time
-                #    x["rect"].y = dy-self.delta_time
-                #    relative__left = int(self.bg_rect.left + x["rect"].left)
-                #    relative__top = int(self.bg_rect.top + x["rect"].top)
-                #elif dx == x["rect"].x and dy == x["rect"].y:
-                #    relative__left = int(self.bg_rect.left + x["rect"].left)
-                #    relative__top = int(self.bg_rect.top + x["rect"].top)
-                # dx, dy = self.ai.update(x["name"]["name"], self.delta_time, self.collision_map, relative__left, relative__top, x["rect"])
-                # relative__left = int(self.bg_rect.left + dx)
-                # relative__top = int(self.bg_rect.top + dy)
+                dx, dy = self.ai.attack(
+                    x["name"]["name"],
+                    self.delta_time,
+                    (
+                        (x["rect"].x),
+                        (x["rect"].y ),
+                    ),
+                    (
+                        (self.relative_player_left + self.relative_player_right) // 2,
+                        (self.relative_player_top + self.relative_player_bottom) // 2,
+                    ),
+                )
+                if dx != None and dy != None:
+                    x["rect"].x = dx-self.delta_time
+                    x["rect"].y = dy-self.delta_time
+                    relative__left = int(self.bg_rect.left + x["rect"].left)
+                    relative__top = int(self.bg_rect.top + x["rect"].top)
+                elif dx == x["rect"].x and dy == x["rect"].y:
+                    relative__left = int(self.bg_rect.left + x["rect"].left)
+                    relative__top = int(self.bg_rect.top + x["rect"].top)
+                #dx, dy = self.ai.update(x["name"]["name"], self.delta_time, self.collision_map, relative__left, relative__top, x["rect"])
+                #relative__left = int(self.bg_rect.left + dx)
+                #relative__top = int(self.bg_rect.top + dy)
 
             else:
                 relative__left = int(self.bg_rect.left + x["rect"].left)
