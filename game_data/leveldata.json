@@ -61,7 +61,7 @@
                 },
                 {
                     "name": "Merchant",
-                    "position": [500, 500],
+                    "position": [1000, 500],
                     "health": 150,
                     "image": "game_data/merchant.png",
                     "type": "ally",

@@ -12,27 +12,32 @@ class Player:
         self.inventory = Inventory()
         self.level = LevelingSystem(assets)
         self.effects = Effects(assets)
-        
+        self.screen_width = screen_width
+        self.screen_height = screen_height
         self.name = f"Player"
         self.gold = 0
         self.current_world=f"Dream World"
         self.screen_width = screen_width
         self.range=5
+        
         self.player, self.player_rect = assets.load_player(
-            path, (screen_width // 2, screen_height // 2)
+            path, (600, 500)
         )
+        
         self.depleted_rect = pygame.Rect(
             screen_width // 2 - self.stats.max_health // 2,
-            screen_height - 20,
+            screen_height - 19,
             self.stats.health,
             18,
         )
+        
         self.border_rect = pygame.Rect(
-            screen_width // 2 - self.stats.max_health // 2,
+            (screen_width // 2 - self.stats.max_health // 2)-2,
             screen_height - 20,
-            self.stats.max_health,
-            18,
+            self.stats.max_health+4,
+            20,
         )
+        
         font = pygame.font.Font("game_data/inter.ttf", 13)
         self.text = font.render("Health", True, (255, 255, 255))
         self.text_rect = self.text.get_rect(
@@ -51,12 +56,13 @@ class Player:
     def update_health(self, health):
         self.stats.update_health(health)
         self.depleted_rect.width = self.stats.health
+        self.depleted_rect.center=(self.screen_width // 2, self.screen_height - 10)
         
     def update_max_health(self, health):
         self.stats.update_max_health(health)
-        self.border_rect.width = self.stats.max_health
-        self.border_rect.left = self.screen_width // 2 - self.stats.max_health // 2
-        self.depleted_rect.left = self.screen_width // 2 - self.stats.max_health // 2
+        self.border_rect.width = self.stats.max_health+4
+        self.border_rect.left = (self.screen_width // 2 - self.stats.max_health // 2)-2
+        self.update_health(self.stats.max_health)
 
     def add_trait(self, index):
         amount, stat=self.level.traits.add_trait(
