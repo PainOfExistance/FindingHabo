@@ -820,9 +820,14 @@ class Game:
 
                 if other_obj_rect.colliderect(self.weapon_rect) and x["type"] == "npc":
                     if self.attacking:
+                        
+                        if x["name"]["type"] != "enemy":
+                            self.world_objects[index]["name"]["type"] = "enemy"
+                            
                         x["name"]["health"] = (
                             x["name"]["health"] - self.player.stats.weapon_damage
                         )
+                        
                         if x["name"]["health"] <= 0:
                             self.player.level.gain_experience(x["name"]["xp"])
                             x["name"]["status"] = "dead"

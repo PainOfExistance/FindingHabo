@@ -106,14 +106,14 @@ class Ai:
         if distance < self.ai_package[name]["detection_range"]:
             dx, dy = 0, 0
             if player_possition[0] > npc[0]:
-                dx = npc[0] + min(distance * dt, speed * dt)
+                dx = npc[0] + speed * dt
             else:
-                dx = npc[0] - min(distance * dt, speed * dt)
+                dx = npc[0] - speed * dt
 
             if player_possition[1] > npc[1]:
-                dy = npc[1] + min(distance * dt, speed * dt)
+                dy = npc[1] + speed * dt
             else:
-                dy = npc[1] - min(distance * dt, speed * dt)
+                dy = npc[1] - speed * dt
 
             return dx, dy
 

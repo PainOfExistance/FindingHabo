@@ -56,6 +56,15 @@
                     "type": "enemy",
                     "xp": 50,
                     "status": "alive"
+                },
+                {
+                    "name": "Merchant",
+                    "position": [500, 500],
+                    "health": 150,
+                    "image": "game_data/wolf.png",
+                    "type": "ally",
+                    "xp": 50,
+                    "status": "alive"
                 }
             ]
         }

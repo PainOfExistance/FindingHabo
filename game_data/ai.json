@@ -17,6 +17,15 @@
                 "movement_speed": 150,
                 "dirrection": false
             }
+        },
+        {
+            "name": "Merchant",
+            "detection_range": 200,
+            "movement_behavior": {
+                "type": "stand",
+                "movement_speed": 120,
+                "dirrection": false
+            }
         }
     ]
 }
