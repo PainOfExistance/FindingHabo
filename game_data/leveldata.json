@@ -61,7 +61,7 @@
                     "name": "Merchant",
                     "position": [500, 500],
                     "health": 150,
-                    "image": "game_data/wolf.png",
+                    "image": "game_data/merchant.png",
                     "type": "ally",
                     "xp": 50,
                     "status": "alive"
