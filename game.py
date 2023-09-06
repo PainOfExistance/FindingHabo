@@ -746,15 +746,24 @@ class Game:
                     ),
                 )
                 
-                if dx != None and dy != None:
+                if dx != x["rect"].centerx and dy != x["rect"].centery:
                     x["rect"].centerx = dx - self.delta_time
                     x["rect"].centery = dy - self.delta_time
                     relative__left = int(self.bg_rect.left + x["rect"].left)
                     relative__top = int(self.bg_rect.top + x["rect"].top)
-                    
-                elif dx == x["rect"].centerx and dy == x["rect"].centery:
+                else:
                     relative__left = int(self.bg_rect.left + x["rect"].left)
                     relative__top = int(self.bg_rect.top + x["rect"].top)
+                
+                other_obj_rect = pygame.Rect(
+                    relative__left,
+                    relative__top,
+                    x["rect"].width,
+                    x["rect"].height,
+                )
+                if self.player.player_rect.colliderect(other_obj_rect):
+                    print(x["rect"].centerx)
+                    self.player.update_health(-x["name"]["damage"]*self.delta_time)
                 # dx, dy = self.ai.update(x["name"]["name"], self.delta_time, self.collision_map, relative__left, relative__top, x["rect"])
                 # relative__left = int(self.bg_rect.left + dx)
                 # relative__top = int(self.bg_rect.top + dy)
@@ -771,7 +780,7 @@ class Game:
             ):
                 if "status" in x["name"] and x["name"]["status"] == "alive":
                     self.screen.blit(x["image"], (relative__left, relative__top))
-                elif "status" not in x["name"]:
+                else:
                     self.screen.blit(x["image"], (relative__left, relative__top))
 
                 if x["type"] == "container":
