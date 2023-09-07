@@ -47,7 +47,8 @@
                     "type": "enemy",
                     "xp": 200,
                     "status": "alive",
-                    "damage": 20
+                    "damage": 20,
+                    "attack_speed": 0.5
                 },
                 {
                     "name": "Wolf",
@@ -57,7 +58,8 @@
                     "type": "enemy",
                     "xp": 50,
                     "status": "alive",
-                    "damage": 10
+                    "damage": 10,
+                    "attack_speed": 0.3
                 },
                 {
                     "name": "Merchant",
@@ -67,7 +69,8 @@
                     "type": "ally",
                     "xp": 50,
                     "status": "alive",
-                    "damage": 30
+                    "damage": 30,
+                    "attack_speed": 0.7
                 }
             ]
         }

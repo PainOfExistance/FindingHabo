@@ -55,11 +55,11 @@ class Game:
         self.map_width = self.collision_map.shape[1]
         self.world_objects = list()
 
-        #self.bg_rect.topleft = (
+        # self.bg_rect.topleft = (
         #    -(self.bg_rect.centerx - self.screen_width // 3),
         #    -(self.bg_rect.centery - self.screen_height // 2),
-        #)
-        #print(self.bg_rect.center)
+        # )
+        # print(self.bg_rect.center)
 
         for data in self.worlds[self.player.current_world]["items"]:
             item = self.items[data["type"]]
@@ -98,6 +98,7 @@ class Game:
                     "rect": img_rect,
                     "type": "npc",
                     "name": data,
+                    "attack_diff": 0
                 }
             )
 
@@ -170,6 +171,7 @@ class Game:
 
         if self.time_diff >= 20:
             self.time_diff = 5
+
         self.relative_player_left = int(
             self.player.player_rect.left - self.bg_rect.left
         )
@@ -736,8 +738,6 @@ class Game:
                 and not self.menu.visible
                 and not self.player_menu.visible
             ):
-                relative__left = int(self.bg_rect.left + x["rect"].left)
-                relative__top = int(self.bg_rect.top + x["rect"].top)
 
                 dx, dy = self.ai.attack(
                     x["name"]["name"],
@@ -757,6 +757,7 @@ class Game:
                     x["rect"].centery = dy - self.delta_time
                     relative__left = int(self.bg_rect.left + x["rect"].left)
                     relative__top = int(self.bg_rect.top + x["rect"].top)
+                    
                 else:
                     relative__left = int(self.bg_rect.left + x["rect"].left)
                     relative__top = int(self.bg_rect.top + x["rect"].top)
@@ -767,9 +768,15 @@ class Game:
                     x["rect"].width,
                     x["rect"].height,
                 )
+                
                 if self.player.player_rect.colliderect(other_obj_rect):
-                    print(x["rect"].centerx)
-                    self.player.update_health(-x["name"]["damage"] * self.delta_time)
+                    if x["attack_diff"] > x["name"]["attack_speed"]:
+                        self.player.update_health(-x["name"]["damage"])
+                        self.world_objects[index]["attack_diff"] = 0
+                        
+                if self.world_objects[index]["attack_diff"] < 5:
+                    self.world_objects[index]["attack_diff"]+=self.delta_time
+                        
                 # dx, dy = self.ai.update(x["name"]["name"], self.delta_time, self.collision_map, relative__left, relative__top, x["rect"])
                 # relative__left = int(self.bg_rect.left + dx)
                 # relative__top = int(self.bg_rect.top + dy)
