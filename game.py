@@ -3,7 +3,7 @@ import sys
 import numpy as np
 from music_player import MusicPlayer
 from ai import Ai
-
+import math
 
 class Game:
     def __init__(
@@ -98,7 +98,8 @@ class Game:
                     "rect": img_rect,
                     "type": "npc",
                     "name": data,
-                    "attack_diff": 0
+                    "attack_diff": 0,
+                    "agroved": False
                 }
             )
 
@@ -738,7 +739,6 @@ class Game:
                 and not self.menu.visible
                 and not self.player_menu.visible
             ):
-
                 dx, dy = self.ai.attack(
                     x["name"]["name"],
                     self.delta_time,
@@ -757,10 +757,12 @@ class Game:
                     x["rect"].centery = dy - self.delta_time
                     relative__left = int(self.bg_rect.left + x["rect"].left)
                     relative__top = int(self.bg_rect.top + x["rect"].top)
+                    self.world_objects[index]["agroved"] = True
                     
                 else:
                     relative__left = int(self.bg_rect.left + x["rect"].left)
                     relative__top = int(self.bg_rect.top + x["rect"].top)
+                    self.world_objects[index]["agroved"] = False
 
                 other_obj_rect = pygame.Rect(
                     relative__left,
@@ -776,12 +778,24 @@ class Game:
                         
                 if self.world_objects[index]["attack_diff"] < 5:
                     self.world_objects[index]["attack_diff"]+=self.delta_time
-                        
-                # dx, dy = self.ai.update(x["name"]["name"], self.delta_time, self.collision_map, relative__left, relative__top, x["rect"])
-                # relative__left = int(self.bg_rect.left + dx)
-                # relative__top = int(self.bg_rect.top + dy)
 
             else:
+                relative__left = int(self.bg_rect.left + x["rect"].left)
+                relative__top = int(self.bg_rect.top + x["rect"].top)
+                
+            if (
+                "status" in x["name"]
+                and x["name"]["status"] == "alive"
+                and self.world_objects[index]["agroved"] == False
+                and not self.container_open
+                and not self.menu.visible
+                and not self.player_menu.visible
+            ):    
+                relative__left = abs(int(self.bg_rect.left + x["rect"].left))
+                relative__top =  abs(int(self.bg_rect.top + x["rect"].top))
+                dx, dy = self.ai.update(x["name"]["name"], self.delta_time, self.collision_map, relative__left, relative__top, x["rect"])
+                x["rect"].centerx = dx - self.delta_time
+                x["rect"].centery = dy - self.delta_time
                 relative__left = int(self.bg_rect.left + x["rect"].left)
                 relative__top = int(self.bg_rect.top + x["rect"].top)
 
@@ -853,6 +867,7 @@ class Game:
                     if self.attacking:
                         if x["name"]["type"] != "enemy":
                             self.world_objects[index]["name"]["type"] = "enemy"
+                            self.world_objects[index]["agroved"] = True
 
                         x["name"]["health"] = (
                             x["name"]["health"] - self.player.stats.weapon_damage
