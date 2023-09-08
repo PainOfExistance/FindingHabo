@@ -1,0 +1,90 @@
+{
+  "dialoge": [
+    {
+      "name": "Merchant",
+      "greeting": {
+        "text": "Welcome, traveler! How can I assist you today?",
+        "options": {
+          "tell_me_about_shop": {
+            "text": "Tell me about your shop.",
+            "options": {
+              "shop_history": {
+                "text": "Tell me more about your shop's history."
+              },
+              "items": {
+                "text": "What items do you sell?"
+              },
+              "business": {
+                "text": "How's business lately?"
+              }
+            }
+          },
+          "available_items": {
+            "text": "Ask about available items.",
+            "options": {
+              "weapons": {
+                "text": "Tell me about the available weapons.",
+                "options": {
+                  "swords": {
+                    "text": "Tell me about swords.",
+                    "options": {
+                      "steel_swords": {
+                        "text": "Tell me about steel swords."
+                      },
+                      "enchanted_swords": {
+                        "text": "Tell me about enchanted swords."
+                      }
+                    }
+                  },
+                  "bows": {
+                    "text": "Tell me about bows."
+                  },
+                  "axes": {
+                    "text": "Tell me about axes."
+                  }
+                }
+              },
+              "potions": {
+                "text": "Tell me about the potions."
+              },
+              "shields": {
+                "text": "Tell me about the shields."
+              },
+              "make_purchase": {
+                "text": "I'd like to make a purchase."
+              }
+            }
+          },
+          "local_area": {
+            "text": "Inquire about the local area."
+          }
+        }
+      },
+      "purchase": {
+        "text": "Certainly! What would you like to buy?",
+        "options": {
+          "buy_sword": {
+            "text": "Buy Sword"
+          },
+          "buy_potion": {
+            "text": "Buy Potion"
+          },
+          "buy_shield": {
+            "text": "Buy Shield"
+          },
+          "nevermind": {
+            "text": "Nevermind."
+          }
+        }
+      },
+      "thank": {
+        "text": "Thank you for your business! Come back anytime.",
+        "options": {
+          "goodbye": {
+            "text": "Goodbye."
+          }
+        }
+      }
+    }
+  ]
+}

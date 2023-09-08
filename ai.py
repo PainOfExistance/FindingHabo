@@ -22,17 +22,17 @@ class Ai:
                 name, collision_map, relative__left, relative__top, rect
             )
         elif self.ai_package[name]["movement_behavior"]["type"] == "stand":
-            return self.npcs[name]["position"]
+            return (rect.centerx, rect.centery)
 
     def random_patrol(self, name, collision_map, relative__left, relative__top, rect):
         # Simulate random movement within a patrol area
         speed = self.ai_package[name]["movement_behavior"]["movement_speed"]
-        
+
         if self.ai_package[name]["movement_behavior"]["dirrection"] == False:
             self.rng(name)
             return rect.centerx, rect.centery
 
-        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 0:
+        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 1:
             dy = int(-speed * self.dt)
             if (
                 np.count_nonzero(
@@ -49,7 +49,7 @@ class Ai:
                 rect.centery += dy
                 return rect.centerx, rect.centery
 
-        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 1:
+        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 2:
             dx = int(speed * self.dt)
             if (
                 np.count_nonzero(
@@ -66,9 +66,8 @@ class Ai:
                 rect.centerx += dx
                 return rect.centerx, rect.centery
 
-        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 2:
+        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 3:
             dy = int(speed * self.dt)
-            print(relative__top + dy)
             if (
                 np.count_nonzero(
                     collision_map[
@@ -84,7 +83,7 @@ class Ai:
                 rect.centery += dy
                 return rect.centerx, rect.centery
 
-        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 3:
+        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 4:
             dx = int(-speed * self.dt)
             if (
                 np.count_nonzero(
@@ -100,16 +99,12 @@ class Ai:
             else:
                 rect.centerx += dx
                 return rect.centerx, rect.centery
-            
+
         return rect.centerx, rect.centery
-        
 
     def rng(self, name):
-        rng = random.randint(0, 3)
-        if rng == 0:
-            self.ai_package[name]["movement_behavior"]["dirrection"] = rng
-
-        elif rng == 1:
+        rng = random.randint(1, 4)
+        if rng == 1:
             self.ai_package[name]["movement_behavior"]["dirrection"] = rng
 
         elif rng == 2:
@@ -118,22 +113,59 @@ class Ai:
         elif rng == 3:
             self.ai_package[name]["movement_behavior"]["dirrection"] = rng
 
-    def attack(self, name, dt, npc, player_possition):
+        elif rng == 4:
+            self.ai_package[name]["movement_behavior"]["dirrection"] = rng
+
+    def check_collision(self, collision_map, x, y, rect, move, name, dirrection):
+        prev_center = rect.center
+        rect.center = (x, y)
+
+        if (
+            np.count_nonzero(
+                collision_map[
+                    rect.top : rect.top + rect.height,
+                    rect.left : rect.left + rect.width,
+                ]
+            )
+            == 0
+        ):
+            return x, y
+
+        self.ai_package[name]["movement_behavior"]["dirrection"] == dirrection
+        rect.center = prev_center
+        return self.random_patrol(name, collision_map, rect.left, rect.top, rect)
+
+    def attack(self, name, dt, npc, player_possition, collision_map, rect):
         speed = self.ai_package[name]["movement_behavior"]["movement_speed"]
+
         distance = math.dist((npc), player_possition)
 
         if distance < self.ai_package[name]["detection_range"]:
             dx, dy = 0, 0
+            move = 0
+            direction = 0
             if player_possition[0] > npc[0]:
-                dx = npc[0] + speed * dt
+                move = int(speed * dt)
+                dx = npc[0] + move
+                direction = 4
             else:
-                dx = npc[0] - speed * dt
+                move = int(-speed * dt)
+                dx = npc[0] + move
+                direction = 2
 
-            if player_possition[1] > npc[1]:
-                dy = npc[1] + speed * dt
+            if player_possition[1]-10 > npc[1]:
+                move = int(speed * dt)
+                dy = npc[1] + move
+                direction = 1
             else:
-                dy = npc[1] - speed * dt
+                move = int(-speed * dt)
+                dy = npc[1] + move
+                direction = 3
 
+            dx, dy = self.check_collision(
+                collision_map, int(dx), int(dy), rect, move, name, direction
+            )
+            print(dy, dy)
             return dx, dy
 
         else:

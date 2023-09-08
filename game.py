@@ -750,11 +750,13 @@ class Game:
                         (self.relative_player_left + self.relative_player_right) // 2,
                         (self.relative_player_top + self.relative_player_bottom) // 2,
                     ),
+                    self.collision_map,
+                    x["rect"]
                 )
 
                 if dx != x["rect"].centerx and dy != x["rect"].centery:
-                    x["rect"].centerx = dx - self.delta_time
-                    x["rect"].centery = dy - self.delta_time
+                    x["rect"].centerx = dx 
+                    x["rect"].centery = dy 
                     relative__left = int(self.bg_rect.left + x["rect"].left)
                     relative__top = int(self.bg_rect.top + x["rect"].top)
                     self.world_objects[index]["agroved"] = True
@@ -791,11 +793,9 @@ class Game:
                 and not self.menu.visible
                 and not self.player_menu.visible
             ):    
-                relative__left = abs(int(self.bg_rect.left + x["rect"].left))
-                relative__top =  abs(int(self.bg_rect.top + x["rect"].top))
-                dx, dy = self.ai.update(x["name"]["name"], self.delta_time, self.collision_map, relative__left, relative__top, x["rect"])
-                x["rect"].centerx = dx - self.delta_time
-                x["rect"].centery = dy - self.delta_time
+                dx, dy = self.ai.update(x["name"]["name"], self.delta_time, self.collision_map, x["rect"].left, x["rect"].top, x["rect"])
+                x["rect"].centerx = dx
+                x["rect"].centery = dy
                 relative__left = int(self.bg_rect.left + x["rect"].left)
                 relative__top = int(self.bg_rect.top + x["rect"].top)
 
