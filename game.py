@@ -827,8 +827,6 @@ class Game:
                 if line != None and self.line_time + 5 < self.counter:
                     self.current_line = line
                     self.line_time = self.counter
-                    
-                    
 
                 if self.current_line != None and self.line_time + 5 >= self.counter:
                     
