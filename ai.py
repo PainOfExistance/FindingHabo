@@ -2,14 +2,15 @@ import pygame
 import random
 import numpy as np
 import math
-
+from dialogue import Dialougue
 
 class Ai:
-    def __init__(self, npcs, assets):
+    def __init__(self, npcs, assets, screen):
         self.npcs = npcs
         self.ai_package = assets.load_ai_package()
         self.dt = 0
         self.npc_movement = {}
+        self.strings = Dialougue(assets, self.ai_package, screen)
 
     def update_npcs(self, npcs):
         self.npcs = npcs
@@ -137,7 +138,6 @@ class Ai:
 
     def attack(self, name, dt, npc, player_possition, collision_map, rect):
         speed = self.ai_package[name]["movement_behavior"]["movement_speed"]
-
         distance = math.dist((npc), player_possition)
 
         if distance < self.ai_package[name]["detection_range"]:
@@ -153,7 +153,7 @@ class Ai:
                 dx = npc[0] + move
                 direction = 2
 
-            if player_possition[1]-10 > npc[1]:
+            if player_possition[1] - 10 > npc[1]:
                 move = int(speed * dt)
                 dy = npc[1] + move
                 direction = 1
@@ -170,3 +170,8 @@ class Ai:
 
         else:
             return npc[0], npc[1]
+        
+    def random_line(self, npc, player_possition, name):
+        distance = math.dist((npc), player_possition)
+        if distance < self.ai_package[name]["talk_range"] and not self.ai_package[name]["talking"] and self.dt*5 < pygame.time.get_ticks():
+            self.strings.random_line(name)

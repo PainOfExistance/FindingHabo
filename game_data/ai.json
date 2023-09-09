@@ -3,6 +3,8 @@
         {
             "name": "Wolf",
             "detection_range": 200,
+            "talk_range": 150,
+            "talking": false,
             "movement_behavior": {
                 "type": "patrol",
                 "movement_speed": 150,
@@ -12,6 +14,8 @@
         {
             "name": "Goblin",
             "detection_range": 300,
+            "talk_range": 150,
+            "talking": false,
             "movement_behavior": {
                 "type": "stand",
                 "movement_speed": 150,
@@ -21,6 +25,8 @@
         {
             "name": "Merchant",
             "detection_range": 200,
+            "talk_range": 250,
+            "talking": false,
             "movement_behavior": {
                 "type": "stand",
                 "movement_speed": 120,

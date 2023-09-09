@@ -2,89 +2,52 @@
   "dialoge": [
     {
       "name": "Merchant",
-      "greeting": {
-        "text": "Welcome, traveler! How can I assist you today?",
-        "options": {
-          "tell_me_about_shop": {
-            "text": "Tell me about your shop.",
-            "options": {
-              "shop_history": {
-                "text": "Tell me more about your shop's history."
-              },
-              "items": {
-                "text": "What items do you sell?"
-              },
-              "business": {
-                "text": "How's business lately?"
-              }
-            }
-          },
-          "available_items": {
-            "text": "Ask about available items.",
-            "options": {
-              "weapons": {
-                "text": "Tell me about the available weapons.",
-                "options": {
-                  "swords": {
-                    "text": "Tell me about swords.",
-                    "options": {
-                      "steel_swords": {
-                        "text": "Tell me about steel swords."
-                      },
-                      "enchanted_swords": {
-                        "text": "Tell me about enchanted swords."
-                      }
-                    }
-                  },
-                  "bows": {
-                    "text": "Tell me about bows."
-                  },
-                  "axes": {
-                    "text": "Tell me about axes."
-                  }
-                }
-              },
-              "potions": {
-                "text": "Tell me about the potions."
-              },
-              "shields": {
-                "text": "Tell me about the shields."
-              },
-              "make_purchase": {
-                "text": "I'd like to make a purchase."
-              }
-            }
-          },
-          "local_area": {
-            "text": "Inquire about the local area."
-          }
+      "greeting": "Hello fellow traveller, what brings you today?",
+      "options": [
+        {
+          "text": "What do you have to sell?",
+          "res": "barter_initiated",
+          "used": false
+        },
+        {
+          "text": "Tell me about yourself?",
+          "res": "about_merchant_initial",
+          "used": false
+        },
+        {
+          "text": "What happened?",
+          "res": "about_merchant_advanced_ambush",
+          "used": false
+        },
+        {
+          "text": "Sorry to hear that.",
+          "res": "wrap_to_start_merchant",
+          "used": false
         }
-      },
-      "purchase": {
-        "text": "Certainly! What would you like to buy?",
-        "options": {
-          "buy_sword": {
-            "text": "Buy Sword"
+      ],
+      "responses":
+        {
+          "barter_initiated":{
+            "text": "Here are my wares"
           },
-          "buy_potion": {
-            "text": "Buy Potion"
+          "about_merchant_initial":{
+            "text": "Well, i hail from the lands of halal. Atleast i used to before the war. I still have nightmares about that day.",
+            "enables": [2, 3]
           },
-          "buy_shield": {
-            "text": "Buy Shield"
+          "about_merchant_advanced_ambush":{
+            "text": "Well, it was bloody. We got ambushed, only 5 of us got out alive. We saw our officer stand and fight so we could escape. May his soul rest in peace.",
+            "enables": [3] 
           },
-          "nevermind": {
-            "text": "Nevermind."
+          "wrap_to_start_merchant":{
+            "text": "Thanks, but thats in the past, so, do you want to make a purchase?",
+            "enables": [0, 1]
           }
-        }
-      },
-      "thank": {
-        "text": "Thank you for your business! Come back anytime.",
-        "options": {
-          "goodbye": {
-            "text": "Goodbye."
-          }
-        }
-      }
+        },
+      "random":[
+        "Finest material around here!",
+        "Want to make a purchase?",
+        "Wares for alll!"
+      ]
     }
   ]
 }

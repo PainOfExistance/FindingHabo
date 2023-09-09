@@ -80,4 +80,11 @@ class AssetLoader:
             ai_package = {ai["name"]: ai for ai in ai_data["npcs"]}
         return ai_package
     
+    def load_dialogue(self):
+        dialogue_lines=np.array({})
+        with open("game_data/dialogue.json", "r") as dialogue_file:
+            dialogue_data = json.load(dialogue_file)
+            dialogue_lines = {dialogue["name"]: dialogue for dialogue in dialogue_data["dialoge"]}
+        return dialogue_lines
+    
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

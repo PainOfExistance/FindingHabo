@@ -3,7 +3,7 @@ import sys
 import numpy as np
 from music_player import MusicPlayer
 from ai import Ai
-import math
+
 
 class Game:
     def __init__(
@@ -99,7 +99,7 @@ class Game:
                     "type": "npc",
                     "name": data,
                     "attack_diff": 0,
-                    "agroved": False
+                    "agroved": False,
                 }
             )
 
@@ -107,7 +107,7 @@ class Game:
         for x in self.world_objects:
             if x["type"] == "npc":
                 temp[x["name"]["name"]] = x["name"]
-        self.ai = Ai(temp, assets)
+        self.ai = Ai(temp, assets, screen)
 
         self.clock = pygame.time.Clock()
         self.target_fps = 60
@@ -751,16 +751,16 @@ class Game:
                         (self.relative_player_top + self.relative_player_bottom) // 2,
                     ),
                     self.collision_map,
-                    x["rect"]
+                    x["rect"],
                 )
 
                 if dx != x["rect"].centerx and dy != x["rect"].centery:
-                    x["rect"].centerx = dx 
-                    x["rect"].centery = dy 
+                    x["rect"].centerx = dx
+                    x["rect"].centery = dy
                     relative__left = int(self.bg_rect.left + x["rect"].left)
                     relative__top = int(self.bg_rect.top + x["rect"].top)
                     self.world_objects[index]["agroved"] = True
-                    
+
                 else:
                     relative__left = int(self.bg_rect.left + x["rect"].left)
                     relative__top = int(self.bg_rect.top + x["rect"].top)
@@ -772,19 +772,19 @@ class Game:
                     x["rect"].width,
                     x["rect"].height,
                 )
-                
+
                 if self.player.player_rect.colliderect(other_obj_rect):
                     if x["attack_diff"] > x["name"]["attack_speed"]:
                         self.player.update_health(-x["name"]["damage"])
                         self.world_objects[index]["attack_diff"] = 0
-                        
+
                 if self.world_objects[index]["attack_diff"] < 5:
-                    self.world_objects[index]["attack_diff"]+=self.delta_time
+                    self.world_objects[index]["attack_diff"] += self.delta_time
 
             else:
                 relative__left = int(self.bg_rect.left + x["rect"].left)
                 relative__top = int(self.bg_rect.top + x["rect"].top)
-                
+
             if (
                 "status" in x["name"]
                 and x["name"]["status"] == "alive"
@@ -792,13 +792,30 @@ class Game:
                 and not self.container_open
                 and not self.menu.visible
                 and not self.player_menu.visible
-            ):    
-                dx, dy = self.ai.update(x["name"]["name"], self.delta_time, self.collision_map, x["rect"].left, x["rect"].top, x["rect"])
+            ):
+                dx, dy = self.ai.update(
+                    x["name"]["name"],
+                    self.delta_time,
+                    self.collision_map,
+                    x["rect"].left,
+                    x["rect"].top,
+                    x["rect"],
+                )
                 x["rect"].centerx = dx
                 x["rect"].centery = dy
                 relative__left = int(self.bg_rect.left + x["rect"].left)
                 relative__top = int(self.bg_rect.top + x["rect"].top)
-
+                self.ai.random_line(
+                    (
+                        (x["rect"].centerx),
+                        (x["rect"].centery),
+                    ),
+                    (
+                        (self.relative_player_left + self.relative_player_right) // 2,
+                        (self.relative_player_top + self.relative_player_bottom) // 2,
+                    ),
+                    x["name"]["name"],
+                )
             if (
                 relative__left > -80
                 and relative__left < self.screen_width + 80
