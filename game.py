@@ -30,7 +30,11 @@ class Game:
         self.items = assets.load_items()
         self.player = player
         self.player_menu = player_menu
+        self.current_line = None
+        self.line_time = -5.0
         self.prompt_font = pygame.font.Font("game_data/inter.ttf", 16)
+        self.subtitle_font = pygame.font.Font("game_data/inter.ttf", 24)
+
         self.relative_player_top = 0
         self.relative_player_left = 0
         self.relative_player_right = 0
@@ -111,7 +115,7 @@ class Game:
 
         self.clock = pygame.time.Clock()
         self.target_fps = 60
-
+        self.counter = 0
         self.last_frame_time = pygame.time.get_ticks()
         self.movement_speed = 200
         self.rotation_angle = 0
@@ -169,6 +173,7 @@ class Game:
         ) / 1000.0  # Convert to seconds
         self.last_frame_time = current_time
         self.time_diff += self.delta_time
+        self.counter += self.delta_time
 
         if self.time_diff >= 20:
             self.time_diff = 5
@@ -801,11 +806,13 @@ class Game:
                     x["rect"].top,
                     x["rect"],
                 )
+
                 x["rect"].centerx = dx
                 x["rect"].centery = dy
                 relative__left = int(self.bg_rect.left + x["rect"].left)
                 relative__top = int(self.bg_rect.top + x["rect"].top)
-                self.ai.random_line(
+
+                line = self.ai.random_line(
                     (
                         (x["rect"].centerx),
                         (x["rect"].centery),
@@ -816,6 +823,32 @@ class Game:
                     ),
                     x["name"]["name"],
                 )
+
+                if line != None and self.line_time + 5 < self.counter:
+                    self.current_line = line
+                    self.line_time = self.counter
+                    
+                    
+
+                if self.current_line != None and self.line_time + 5 >= self.counter:
+                    
+                    text = self.subtitle_font.render(
+                        self.current_line["text"], True, (44, 53, 57)
+                    )
+
+                    text_rect = text.get_rect(
+                        center=(
+                            self.screen.get_width() // 2,
+                            self.screen.get_height() - 50,
+                        )
+                    )
+                    
+                    self.screen.blit(text, text_rect)
+                    
+                else:
+                    self.current_line = None
+                    
+
             if (
                 relative__left > -80
                 and relative__left < self.screen_width + 80
