@@ -313,8 +313,6 @@ class Game:
             and not self.player_menu.visible
             and not self.selection_held
         ):
-            print(self.is_ready_to_talk)
-            
             if self.item_hovered != None:
                 self.selection_held = True
                 if (
@@ -333,22 +331,25 @@ class Game:
                     and self.container_hovered >= 0
                 ):
                     self.container_open = True
-                    
+
             elif self.is_ready_to_talk:
+                self.is_ready_to_talk = False
                 self.is_in_dialogue = True
-                    
+
         elif not keys[pygame.K_e] and not self.container_open:
             self.selection_held = False
 
         if (
             keys[pygame.K_TAB]
-            and self.container_open
             and not self.menu.visible
             and not self.player_menu.visible
             and not self.tab_pressed
         ):
             self.tab_pressed = True
             self.container_open = False
+
+            if self.is_in_dialogue:
+                self.is_in_dialogue = False
 
         elif not keys[pygame.K_TAB] and not self.container_open and self.tab_pressed:
             self.tab_pressed = False
@@ -756,7 +757,7 @@ class Game:
                 and not self.player_menu.visible
                 and not self.is_in_dialogue
             ):
-                dx, dy = self.ai.attack(
+                dx, dy, agroved = self.ai.attack(
                     x["name"]["name"],
                     self.delta_time,
                     (
@@ -771,17 +772,11 @@ class Game:
                     x["rect"],
                 )
 
-                if dx != x["rect"].centerx and dy != x["rect"].centery:
-                    x["rect"].centerx = dx
-                    x["rect"].centery = dy
-                    relative__left = int(self.bg_rect.left + x["rect"].left)
-                    relative__top = int(self.bg_rect.top + x["rect"].top)
-                    self.world_objects[index]["agroved"] = True
-
-                else:
-                    relative__left = int(self.bg_rect.left + x["rect"].left)
-                    relative__top = int(self.bg_rect.top + x["rect"].top)
-                    self.world_objects[index]["agroved"] = False
+                self.world_objects[index]["agroved"] = agroved
+                x["rect"].centerx = dx
+                x["rect"].centery = dy
+                relative__left = int(self.bg_rect.left + x["rect"].left)
+                relative__top = int(self.bg_rect.top + x["rect"].top)
 
                 other_obj_rect = pygame.Rect(
                     relative__left,
@@ -805,7 +800,7 @@ class Game:
             if (
                 "status" in x["name"]
                 and x["name"]["status"] == "alive"
-                and self.world_objects[index]["agroved"] == False
+                and not x["agroved"]
                 and not self.container_open
                 and not self.menu.visible
                 and not self.player_menu.visible
@@ -819,7 +814,6 @@ class Game:
                     x["rect"].top,
                     x["rect"],
                 )
-
                 x["rect"].centerx = dx
                 x["rect"].centery = dy
                 relative__left = int(self.bg_rect.left + x["rect"].left)
@@ -938,6 +932,7 @@ class Game:
                         if x["name"]["health"] <= 0:
                             self.player.level.gain_experience(x["name"]["xp"])
                             x["name"]["status"] = "dead"
+                            self.world_objects[index]["agroved"] = False
                             # del self.world_objects[index]
 
                     if x["name"]["type"] != "enemy" and x["name"]["status"] != "dead":
@@ -954,10 +949,9 @@ class Game:
 
                         self.screen.blit(text, text_rect)
                         self.is_ready_to_talk = True
-                        
+
                     else:
                         self.is_ready_to_talk = False
-                        
 
                     if x["name"]["health"] > 0 and x["name"]["type"] == "enemy":
                         text = self.prompt_font.render(

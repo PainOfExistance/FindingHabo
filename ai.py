@@ -166,11 +166,10 @@ class Ai:
             dx, dy = self.check_collision(
                 collision_map, int(dx), int(dy), rect, move, name, direction
             )
-            print(dy, dy)
-            return dx, dy
+            return dx, dy, True
 
         else:
-            return npc[0], npc[1]
+            return npc[0], npc[1], False
 
     def random_line(self, npc, player_possition, name):
         distance = math.dist((npc), player_possition)
