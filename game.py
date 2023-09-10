@@ -31,7 +31,8 @@ class Game:
         self.player = player
         self.player_menu = player_menu
         self.current_line = None
-        self.line_time = -5.0
+        self.line_time = 0.0
+        self.is_in_dialogue = False
         self.prompt_font = pygame.font.Font("game_data/inter.ttf", 16)
         self.subtitle_font = pygame.font.Font("game_data/inter.ttf", 24)
 
@@ -147,6 +148,7 @@ class Game:
                 not self.player_menu.visible
                 and not self.tab_pressed
                 and not self.container_open
+                and not self.is_in_dialogue
             ):
                 self.menu.handle_input()
 
@@ -154,6 +156,7 @@ class Game:
                 not self.menu.visible
                 and not self.tab_pressed
                 and not self.container_open
+                and not self.is_in_dialogue
             ):
                 self.player_menu.handle_input()
 
@@ -569,6 +572,7 @@ class Game:
             and not self.player_menu.visible
             and not self.attacking
             and not self.attack_button_held
+            and not self.is_in_dialogue
         ):
             timedif = 0
             if self.player.equipped_items["hand"] != None:
@@ -743,6 +747,7 @@ class Game:
                 and not self.container_open
                 and not self.menu.visible
                 and not self.player_menu.visible
+                and not self.is_in_dialogue
             ):
                 dx, dy = self.ai.attack(
                     x["name"]["name"],
@@ -797,6 +802,7 @@ class Game:
                 and not self.container_open
                 and not self.menu.visible
                 and not self.player_menu.visible
+                and not self.is_in_dialogue
             ):
                 dx, dy = self.ai.update(
                     x["name"]["name"],
@@ -826,9 +832,10 @@ class Game:
 
                 if line != None and self.line_time < self.counter:
                     self.current_line = line
-                    self.line_time = self.music_player.play_line(
-                        self.current_line["file"]
-                    ) + self.counter
+                    self.line_time = (
+                        self.music_player.play_line(self.current_line["file"])
+                        + self.counter
+                    )
 
                 if self.current_line != None and self.line_time >= self.counter:
                     text = self.subtitle_font.render(
@@ -925,18 +932,33 @@ class Game:
                             self.player.level.gain_experience(x["name"]["xp"])
                             x["name"]["status"] = "dead"
                             # del self.world_objects[index]
+                            
+                    if x["name"]["type"] != "enemy":
+                        text = self.prompt_font.render(
+                            f"E) {x['name']['name']}", True, (44, 53, 57)
+                        )
 
-                    if x["name"]["health"] > 0:
-                        self.text = self.prompt_font.render(
+                        text_rect = text.get_rect(
+                            center=(
+                                relative__left + x["rect"].width // 2,
+                                relative__top - 10,
+                            )
+                        )
+
+                        self.screen.blit(text, text_rect)
+                        # self.is_in_dialogue = True
+
+                    if x["name"]["health"] > 0 and x["name"]["type"] == "enemy":
+                        text = self.prompt_font.render(
                             str(x["name"]["health"]), True, (200, 0, 0)
                         )
-                        self.text_rect = self.text.get_rect(
+                        text_rect = text.get_rect(
                             center=(
                                 relative__left + x["rect"].width // 2,
                                 relative__top + x["rect"].height + 10,
                             )
                         )
-                        self.screen.blit(self.text, self.text_rect)
+                        self.screen.blit(text, text_rect)
 
     def draw(self):
         self.screen.fill((230, 60, 20))
