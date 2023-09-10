@@ -3,6 +3,7 @@
     {
       "name": "Merchant",
       "greeting": "Hello fellow traveller, what brings you today?",
+      "file": "merchang_greeting_init",
       "options": [
         {
           "text": "What do you have to sell?",
@@ -28,18 +29,22 @@
       "responses":
         {
           "barter_initiated":{
-            "text": "Here are my wares"
+            "text": "Here are my wares",
+            "file": "merchang_barter_init"
           },
           "about_merchant_initial":{
             "text": "Well, i hail from the lands of halal. Atleast i used to before the war. I still have nightmares about that day.",
+            "file": "about_merchant_initial",
             "enables": [2, 3]
           },
           "about_merchant_advanced_ambush":{
             "text": "Well, it was bloody. We got ambushed, only 5 of us got out alive. We saw our officer stand and fight so we could escape. May his soul rest in peace.",
+            "file": "about_merchant_advanced_ambush",
             "enables": [3] 
           },
           "wrap_to_start_merchant":{
             "text": "Thanks, but thats in the past, so, do you want to make a purchase?",
+            "file": "wrap_to_start_merchant",
             "enables": [0, 1]
           }
         },
@@ -49,9 +54,9 @@
         "Wares for alll!"
       ],
       "random_file": [
-        "game_data/clap.mp3",
-        "game_data/clap.mp3",
-        "game_data/clap.mp3"
+        "clap",
+        "clap",
+        "clap"
       ]
     }
   ]

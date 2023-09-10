@@ -29,12 +29,12 @@ class MusicPlayer:
     def set_tracks(self, music_tracks):
         self.music_tracks = music_tracks
         self.current_track_index = 0
-    
-    def play_line(self, line):
-        sound = pygame.mixer.Sound(line)
-        sound.play()
-        sound.set_volume(0.2)
-        return sound.get_length()
         
     def stop(self):
         pygame.mixer.music.stop()
+    
+    def play_line(self, line):
+        sound = pygame.mixer.Sound(f"game_data/{line}.mp3")
+        sound.play()
+        sound.set_volume(0.2)
+        return sound.get_length()
