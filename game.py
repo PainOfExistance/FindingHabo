@@ -33,6 +33,7 @@ class Game:
         self.current_line = None
         self.line_time = 0.0
         self.is_in_dialogue = False
+        self.is_ready_to_talk = False
         self.prompt_font = pygame.font.Font("game_data/inter.ttf", 16)
         self.subtitle_font = pygame.font.Font("game_data/inter.ttf", 24)
 
@@ -312,6 +313,8 @@ class Game:
             and not self.player_menu.visible
             and not self.selection_held
         ):
+            print(self.is_ready_to_talk)
+            
             if self.item_hovered != None:
                 self.selection_held = True
                 if (
@@ -330,6 +333,10 @@ class Game:
                     and self.container_hovered >= 0
                 ):
                     self.container_open = True
+                    
+            elif self.is_ready_to_talk:
+                self.is_in_dialogue = True
+                    
         elif not keys[pygame.K_e] and not self.container_open:
             self.selection_held = False
 
@@ -932,8 +939,8 @@ class Game:
                             self.player.level.gain_experience(x["name"]["xp"])
                             x["name"]["status"] = "dead"
                             # del self.world_objects[index]
-                            
-                    if x["name"]["type"] != "enemy":
+
+                    if x["name"]["type"] != "enemy" and x["name"]["status"] != "dead":
                         text = self.prompt_font.render(
                             f"E) {x['name']['name']}", True, (44, 53, 57)
                         )
@@ -946,7 +953,11 @@ class Game:
                         )
 
                         self.screen.blit(text, text_rect)
-                        # self.is_in_dialogue = True
+                        self.is_ready_to_talk = True
+                        
+                    else:
+                        self.is_ready_to_talk = False
+                        
 
                     if x["name"]["health"] > 0 and x["name"]["type"] == "enemy":
                         text = self.prompt_font.render(
