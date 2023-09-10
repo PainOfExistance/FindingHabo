@@ -47,6 +47,11 @@
         "Finest material around here!",
         "Want to make a purchase?",
         "Wares for alll!"
+      ],
+      "random_file": [
+        "game_data/clap.mp3",
+        "game_data/clap.mp3",
+        "game_data/clap.mp3"
       ]
     }
   ]

@@ -8,7 +8,7 @@ class MusicPlayer:
 
         pygame.mixer.init()
         pygame.mixer.music.set_endevent(pygame.USEREVENT)
-        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.set_volume(0.3)
         self.play_random_track()
 
     def play_next_track(self):
@@ -29,6 +29,12 @@ class MusicPlayer:
     def set_tracks(self, music_tracks):
         self.music_tracks = music_tracks
         self.current_track_index = 0
+    
+    def play_line(self, line):
+        sound = pygame.mixer.Sound(line)
+        sound.play()
+        sound.set_volume(0.2)
+        return sound.get_length()
         
     def stop(self):
         pygame.mixer.music.stop()

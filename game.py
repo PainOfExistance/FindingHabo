@@ -824,12 +824,13 @@ class Game:
                     x["name"]["name"],
                 )
 
-                if line != None and self.line_time + 5 < self.counter:
+                if line != None and self.line_time < self.counter:
                     self.current_line = line
-                    self.line_time = self.counter
+                    self.line_time = self.music_player.play_line(
+                        self.current_line["file"]
+                    ) + self.counter
 
-                if self.current_line != None and self.line_time + 5 >= self.counter:
-                    
+                if self.current_line != None and self.line_time >= self.counter:
                     text = self.subtitle_font.render(
                         self.current_line["text"], True, (44, 53, 57)
                     )
@@ -840,12 +841,11 @@ class Game:
                             self.screen.get_height() - 50,
                         )
                     )
-                    
+
                     self.screen.blit(text, text_rect)
-                    
+
                 else:
                     self.current_line = None
-                    
 
             if (
                 relative__left > -80
