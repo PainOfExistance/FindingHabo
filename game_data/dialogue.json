@@ -3,6 +3,7 @@
     {
       "name": "Merchant",
       "greeting": "Hello fellow traveller, what brings you today?",
+      "enables": [0, 1],
       "file": "merchang_greeting_init",
       "options": [
         {

@@ -7,7 +7,8 @@
             "music": [
                 "game_data/DOVAHKIIN.mp3",
                 "game_data/Angelia.mp3",
-                "game_data/It's Time.mp3"
+                "game_data/It's Time.mp3",
+                "game_data/V put.mp3"
             ],
             "spawn_point": [50, 50],
             "respawn_timer": 60,

@@ -34,6 +34,7 @@ class Game:
         self.line_time = 0.0
         self.is_in_dialogue = False
         self.is_ready_to_talk = False
+        self.talk_to_name=""
         self.prompt_font = pygame.font.Font("game_data/inter.ttf", 16)
         self.subtitle_font = pygame.font.Font("game_data/inter.ttf", 24)
 
@@ -160,7 +161,7 @@ class Game:
                 and not self.is_in_dialogue
             ):
                 self.player_menu.handle_input()
-
+                
             self.clock.tick(self.target_fps)
 
     def handle_events(self):
@@ -178,7 +179,8 @@ class Game:
         self.last_frame_time = current_time
         self.time_diff += self.delta_time
         self.counter += self.delta_time
-
+        #na lestvici 1-10 kako bi ocenili Saro Dugi iz ITK?
+        
         if self.time_diff >= 20:
             self.time_diff = 5
 
@@ -208,6 +210,7 @@ class Game:
             and not self.menu.visible
             and not self.player_menu.visible
             and not self.container_open
+            and not self.is_in_dialogue
         ):
             if self.player.player_rect.left > 10:
                 self.player.player_rect.move_ip(
@@ -236,6 +239,7 @@ class Game:
             and not self.menu.visible
             and not self.player_menu.visible
             and not self.container_open
+            and not self.is_in_dialogue
         ):
             if self.player.player_rect.right < self.screen_width - 10:
                 self.player.player_rect.move_ip(
@@ -263,6 +267,7 @@ class Game:
             and not self.menu.visible
             and not self.player_menu.visible
             and not self.container_open
+            and not self.is_in_dialogue
         ):
             if self.player.player_rect.top > 10:
                 self.player.player_rect.move_ip(
@@ -292,6 +297,7 @@ class Game:
             and not self.menu.visible
             and not self.player_menu.visible
             and not self.container_open
+            and not self.is_in_dialogue
         ):
             if self.player.player_rect.bottom < self.screen_height - 10:
                 self.player.player_rect.move_ip(
@@ -946,11 +952,12 @@ class Game:
                                 relative__top - 10,
                             )
                         )
-
+                        self.talk_to_name=x['name']['name']
                         self.screen.blit(text, text_rect)
                         self.is_ready_to_talk = True
 
                     else:
+                        self.talk_to_name=""
                         self.is_ready_to_talk = False
 
                     if x["name"]["health"] > 0 and x["name"]["type"] == "enemy":
@@ -973,5 +980,9 @@ class Game:
         self.menu.render()
         self.player_menu.render()
         self.draw_container()
+        
+        if self.is_in_dialogue:
+            self.ai.strings.draw(self.talk_to_name)
+            
         pygame.draw.rect(self.screen, (0, 0, 0), self.weapon_rect)
         pygame.display.flip()
