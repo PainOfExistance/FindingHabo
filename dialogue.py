@@ -1,6 +1,7 @@
-import pygame
-import numpy as np
 import random
+
+import numpy as np
+import pygame
 
 
 class Dialougue:
@@ -16,8 +17,11 @@ class Dialougue:
         self.selection_held = False
         self.name = ""
         self.current_talk = ""
+        self.current_lines = ""
         self.enabled = None
         self.offset = 0
+        self.talking = False
+        self.length = 0
 
     def random_line(self, name):
         current_string = {"text": "", "dialogue": False, "file": ""}
@@ -44,6 +48,7 @@ class Dialougue:
                     if i == self.selected_item - scroll_position
                     else (237, 106, 94)
                 )
+                
                 if i == self.selected_item - scroll_position:
                     txt = f"> {value['text']}"
                 else:
@@ -60,6 +65,7 @@ class Dialougue:
 
                 self.screen.blit(text, text_rect)
 
+            #self.music_player.play_greeting(self.strings[name]["file"])
             text = self.subtitle_font.render(
                 f"{name}: {self.strings[name]['greeting']}", True, (44, 53, 57)
             )
@@ -83,7 +89,10 @@ class Dialougue:
                     (44, 53, 57)
                     if i == self.selected_item - scroll_position
                     else (237, 106, 94)
+                    if self.talking == False
+                    else (237, 106, 94)
                 )
+
                 if i == self.selected_item - scroll_position:
                     txt = f"> {value['text']}"
                 else:
@@ -100,18 +109,50 @@ class Dialougue:
 
                 self.screen.blit(text, text_rect)
 
-            text = self.subtitle_font.render(
-                f"{name}: {self.current_talk}", True, (44, 53, 57)
-            )
+            for i, value in enumerate(self.current_talk):
+                while self.music_player.get_player_status():
+                    pass
 
-            text_rect = text.get_rect(
-                center=(
-                    self.screen.get_width() // 2,
-                    self.screen.get_height() - 200,
-                )
-            )
+                max_line_width = self.screen.get_width()
+                words = value.split()
+                lines = []
+                current_line = ""
 
-            self.screen.blit(text, text_rect)
+                for word in words:
+                    # Calculate the maximum number of characters that can fit in the line
+                    max_chars_per_line = (
+                        max_line_width // self.subtitle_font.size("J")[0]
+                    )
+
+                    if len(current_line) + len(word) <= max_chars_per_line:
+                        current_line += word + " "
+                    else:
+                        lines.append(current_line)
+                        current_line = word + " "
+
+                if current_line:
+                    lines.append(current_line)
+
+                lenght = len(lines) * 30 + 160
+                for y, line in enumerate(lines):
+                    if y == 0:
+                        text = self.subtitle_font.render(
+                            f"{name}: {line}", True, (44, 53, 57)
+                        )
+                    else:
+                        text = self.subtitle_font.render(f"{line}", True, (44, 53, 57))
+
+                    text_rect = text.get_rect(
+                        center=(
+                            self.screen.get_width() // 2,
+                            self.screen.get_height() - lenght + y * 30,
+                        )
+                    )
+
+                    self.screen.blit(text, text_rect)
+
+                length = self.music_player.play_current_line(self.current_lines[i])
+                #pygame.time.delay(int(length * 1000))
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
@@ -127,6 +168,7 @@ class Dialougue:
             elif keys[pygame.K_RETURN] and not self.selection_held:
                 self.index = 0
                 self.selection_held = True
+                # self.music_player.skip_current_line()
 
                 responce_id = self.strings[self.name]["options"][
                     self.selected_item + self.offset
@@ -135,6 +177,10 @@ class Dialougue:
                 self.current_talk = self.strings[self.name]["responses"][
                     responce_id["res"]
                 ]["text"]
+
+                self.current_lines = self.strings[self.name]["responses"][
+                    responce_id["res"]
+                ]["file"]
 
                 if (
                     "enables"
