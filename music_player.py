@@ -51,23 +51,16 @@ class MusicPlayer:
     
     def skip_current_line(self):
         self.sound.stop()
-        self.channel.stop()
         self.sound=None
         self.channel=None
     
     def play_greeting(self, line):
         self.sound = pygame.mixer.Sound(f"game_data/{line}.mp3")
         self.sound.set_volume(0.3)
-        lenght=self.sound.get_length()
-        self.channel = self.sound.play()
-        pygame.time.set_timer(pygame.USEREVENT, int(lenght * 1000))
+        self.sound.get_length()
+        self.sound.play()
     
     def get_player_status(self):
         if self.channel == None:
             return False
         return self.channel.get_busy()
-    
-    def handle_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.USEREVENT:
-                self.skip_current_line()

@@ -1,8 +1,10 @@
-import pygame
 import sys
+
 import numpy as np
-from music_player import MusicPlayer
+import pygame
+
 from ai import Ai
+from music_player import MusicPlayer
 
 
 class Game:
@@ -366,6 +368,7 @@ class Game:
             if self.is_in_dialogue:
                 self.is_in_dialogue = False
                 self.ai.strings.index = -1
+                self.ai.strings.greeting_played=False
 
         elif not keys[pygame.K_TAB] and not self.container_open and self.tab_pressed:
             self.tab_pressed = False

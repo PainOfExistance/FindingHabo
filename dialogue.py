@@ -22,6 +22,7 @@ class Dialougue:
         self.offset = 0
         self.talking = False
         self.length = 0
+        self.greeting_played = False
 
     def random_line(self, name):
         current_string = {"text": "", "dialogue": False, "file": ""}
@@ -64,8 +65,11 @@ class Dialougue:
                 )
 
                 self.screen.blit(text, text_rect)
-
-            self.music_player.play_greeting(self.strings[name]["file"])
+                
+            if not self.greeting_played:    
+                self.music_player.play_greeting(self.strings[name]["file"])
+                self.greeting_played = True
+            
             text = self.subtitle_font.render(
                 f"{name}: {self.strings[name]['greeting']}", True, (44, 53, 57)
             )
@@ -168,7 +172,7 @@ class Dialougue:
             elif keys[pygame.K_RETURN] and not self.selection_held:
                 self.index = 0
                 self.selection_held = True
-                # self.music_player.skip_current_line()
+                #self.music_player.skip_current_line()
 
                 responce_id = self.strings[self.name]["options"][
                     self.selected_item + self.offset
