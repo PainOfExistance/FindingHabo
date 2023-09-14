@@ -65,7 +65,7 @@ class Dialougue:
 
                 self.screen.blit(text, text_rect)
 
-            #self.music_player.play_greeting(self.strings[name]["file"])
+            self.music_player.play_greeting(self.strings[name]["file"])
             text = self.subtitle_font.render(
                 f"{name}: {self.strings[name]['greeting']}", True, (44, 53, 57)
             )
