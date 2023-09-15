@@ -368,7 +368,9 @@ class Game:
             if self.is_in_dialogue:
                 self.is_in_dialogue = False
                 self.ai.strings.index = -1
-                self.ai.strings.greeting_played=False
+                self.ai.strings.greeting_played = False
+                self.ai.strings.talking = False
+                self.ai.strings.music_player.skip_current_line()
 
         elif not keys[pygame.K_TAB] and not self.container_open and self.tab_pressed:
             self.tab_pressed = False

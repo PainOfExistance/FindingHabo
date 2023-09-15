@@ -47,7 +47,6 @@ class MusicPlayer:
         self.sound = pygame.mixer.Sound(f"game_data/{line}.mp3")
         self.channel = self.sound.play()
         self.sound.set_volume(0.3)
-        return self.sound.get_length()
     
     def skip_current_line(self):
         self.sound.stop()
@@ -61,6 +60,6 @@ class MusicPlayer:
         self.sound.play()
     
     def get_player_status(self):
-        if self.channel == None:
+        if self.channel==None:
             return False
         return self.channel.get_busy()

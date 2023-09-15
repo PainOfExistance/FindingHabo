@@ -40,8 +40,8 @@
             "enables": [2, 3]
           },
           "about_merchant_advanced_ambush":{
-            "text": ["Well, it was bloody. We got ambushed, only 5 of us got out alive. We saw our officer stand and fight so we could escape. May his soul rest in peace."],
-            "file": ["dialup"],
+            "text": ["Well, it was bloody. We got ambushed, only 5 of us got out alive. We saw our officer stand and fight so we could escape. May his soul rest in peace.", "Next thing i remember i was being healed by a healer.", "eeeeeeeeeee", "aaaaaaa", "hmmmmmm"],
+            "file": ["dialup", "neke", "dialup", "neke", "dialup"],
             "enables": [3] 
           },
           "wrap_to_start_merchant":{
