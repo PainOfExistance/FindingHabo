@@ -31,7 +31,22 @@
                 "type": "stand",
                 "movement_speed": 120,
                 "dirrection": false
-            }
+            },
+            "gold": 500,
+            "items": [
+                {
+                    "type": "Minor Health Potion",
+                    "quantity": 3
+                },
+                {
+                    "type": "Steel Armor",
+                    "quantity": 1
+                },
+                {
+                    "type": "Steel Sword",
+                    "quantity": 2
+                }
+            ]
         }
     ]
 }

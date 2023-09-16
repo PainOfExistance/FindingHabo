@@ -26,6 +26,18 @@ class Dialougue:
         self.talking = False
         self.length = 0
         self.greeting_played = False
+        self.bartering = False
+
+        self.bg_menu = pygame.Rect(
+            25,
+            self.screen.get_height() - 170,
+            self.screen.get_width() - 50,
+            170,
+        )
+
+        self.bg_surface_menu = pygame.Surface(
+            (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
+        )
 
     def random_line(self, name):
         current_string = {"text": "", "dialogue": False, "file": ""}
@@ -38,13 +50,31 @@ class Dialougue:
 
     def draw(self, name):
         self.name = name
-        if self.index == -1:
-            scroll_position = (self.selected_item // 3) * 3
+
+        if not self.bartering:
+            pygame.draw.rect(
+                self.bg_surface_menu,
+                (44, 53, 57),
+                (0, 0, self.bg_menu.width, self.bg_menu.height),
+                border_radius=15,
+            )
+
+            pygame.draw.rect(
+                self.bg_surface_menu,
+                (200, 210, 200, 150),
+                (5, 5, self.bg_menu.width - 10, self.bg_menu.height - 10),
+                border_radius=10,
+            )
+
+            self.screen.blit(self.bg_surface_menu, self.bg_menu)
+
+        if self.index == -1 and not self.bartering:
+            scroll_position = (self.selected_item // 4) * 4
             self.enabled = self.strings[name]["options"][
                 self.strings[name]["enables"][0] : self.strings[name]["enables"][1] + 1
             ]
             self.offset = self.strings[name]["enables"][0]
-            visible_options = list(self.enabled)[scroll_position : scroll_position + 3]
+            visible_options = list(self.enabled)[scroll_position : scroll_position + 4]
 
             for i, value in enumerate(visible_options):
                 color = (
@@ -88,7 +118,7 @@ class Dialougue:
 
             self.screen.blit(text, text_rect)
 
-        else:
+        elif not self.bartering:
             scroll_position = (self.selected_item // 3) * 3
 
             visible_options = list(self.enabled)[scroll_position : scroll_position + 3]
@@ -153,54 +183,53 @@ class Dialougue:
 
                 self.screen.blit(text, text_rect)
 
-            
             if not self.music_player.get_player_status() and self.talk != -1:
                 self.music_player.play_current_line(self.line)
-                
+
                 if self.talk != -1 and self.talk != self.prev_talk:
                     self.prev_talk = self.talk
-                    
+
                 self.talk = next(self.current_talk, -1)
-                self.line = next(self.current_lines, -1)            
-                    
+                self.line = next(self.current_lines, -1)
+
             elif not self.music_player.get_player_status() and self.talk == -1:
-                self.talking=False
+                self.talking = False
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
         if not self.selection_held:
-            if keys[pygame.K_UP] and not self.selection_held and not self.talking:
+            if keys[pygame.K_UP] and not self.selection_held and not self.talking and not self.bartering:
                 self.selected_item = (self.selected_item - 1) % len(self.enabled)
                 self.selection_held = True
 
-            elif keys[pygame.K_DOWN] and not self.selection_held and not self.talking:
+            elif keys[pygame.K_DOWN] and not self.selection_held and not self.talking and not self.bartering:
                 self.selected_item = (self.selected_item + 1) % len(self.enabled)
                 self.selection_held = True
 
-            elif keys[pygame.K_RETURN] and not self.selection_held:
+            elif keys[pygame.K_RETURN] and not self.selection_held and not self.bartering:
                 if self.index == -1:
                     self.music_player.skip_current_line()
                     self.index += 1
 
                 self.selection_held = True
-                
+
                 if self.talk != self.prev_talk and self.talk != -1:
                     self.music_player.skip_current_line()
                     self.prev_talk = self.talk
                     self.music_player.play_current_line(self.line)
                     return
-                
+
                 if self.talking:
                     self.talk = next(self.current_talk, -1)
                     self.line = next(self.current_lines, -1)
 
-                if self.talking and self.talk !=-1:
+                if self.talking and self.talk != -1:
                     self.music_player.skip_current_line()
-                    
-                elif self.talking and self.talk ==-1:
+
+                elif self.talking and self.talk == -1:
                     self.music_player.skip_current_line()
-                    self.talking=False
-                    
+                    self.talking = False
+
                 elif not self.talking and self.talk == -1:
                     responce_id = self.strings[self.name]["options"][
                         self.selected_item + self.offset
@@ -265,6 +294,12 @@ class Dialougue:
                         self.offset = self.strings[self.name]["responses"][
                             responce_id["res"]
                         ]["enables"][0]
+
+                    elif (
+                        "barter"
+                        in self.strings[self.name]["responses"][responce_id["res"]]
+                    ):
+                        self.bartering = True
 
                     self.talking = True
                 self.selected_item = 0

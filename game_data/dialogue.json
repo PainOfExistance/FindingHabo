@@ -9,22 +9,22 @@
         {
           "text": "What do you have to sell?",
           "res": "barter_initiated",
-          "used": false
+          "used": true
         },
         {
           "text": "Tell me about yourself?",
           "res": "about_merchant_initial",
-          "used": false
+          "used": true
         },
         {
           "text": "What happened?",
           "res": "about_merchant_advanced_ambush",
-          "used": false
+          "used": true
         },
         {
           "text": "Sorry to hear that.",
           "res": "wrap_to_start_merchant",
-          "used": false
+          "used": true
         }
       ],
       "responses":

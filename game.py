@@ -364,7 +364,11 @@ class Game:
         ):
             self.tab_pressed = True
             self.container_open = False
-
+            
+            if self.ai.strings.bartering:
+                self.ai.strings.bartering=False
+                return
+            
             if self.is_in_dialogue:
                 self.is_in_dialogue = False
                 self.ai.strings.index = -1
@@ -380,7 +384,7 @@ class Game:
         if (
             keys[pygame.K_UP]
             and not self.selection_held
-            and self.container_open
+            and (self.container_open or self.ai.strings.bartering)
             and not self.menu.visible
             and not self.player_menu.visible
         ):
@@ -399,7 +403,7 @@ class Game:
         elif (
             keys[pygame.K_DOWN]
             and not self.selection_held
-            and self.container_open
+            and (self.container_open or self.ai.strings.bartering)
             and not self.menu.visible
             and not self.player_menu.visible
         ):
@@ -418,7 +422,7 @@ class Game:
         if (
             keys[pygame.K_LEFT]
             and not self.selection_held
-            and self.container_open
+            and (self.container_open or self.ai.strings.bartering)
             and not self.menu.visible
             and not self.player_menu.visible
             and self.container_menu_selected
@@ -433,7 +437,7 @@ class Game:
         elif (
             keys[pygame.K_RIGHT]
             and not self.selection_held
-            and self.container_open
+            and (self.container_open or self.ai.strings.bartering)
             and not self.menu.visible
             and not self.player_menu.visible
             and not self.container_menu_selected
@@ -767,6 +771,117 @@ class Game:
                 item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
                 self.screen.blit(item_render, item_rect)
 
+    def draw_barter(self):
+        if self.ai.strings.bartering:
+
+            pygame.draw.rect(
+                self.bg_surface_menu,
+                (200, 210, 200, 180),
+                self.bg_surface_menu.get_rect(),
+            )
+            self.screen.blit(self.bg_surface_menu, self.bg_menu)
+
+            pygame.draw.line(
+                self.screen,
+                (22, 22, 22),
+                (self.screen.get_width() // 2, 0),
+                (self.screen.get_width() // 2, self.screen.get_height()),
+                4,
+            )
+
+            menu_font = pygame.font.Font("game_data/inter.ttf", 30)
+
+            scroll_position = (self.selected_inventory_item // 10) * 10
+            visible_items = list(
+                self.ai.ai_package[self.talk_to_name]["items"]
+            )[scroll_position : scroll_position + 10]
+            i = 0
+
+            item_render = menu_font.render(
+                self.player.name+ "  Gold: "+str(self.player.gold),
+                True,
+                (44, 53, 57),
+            )
+            item_rect = item_render.get_rect(
+                topleft=(
+                    self.screen.get_width() // 2 - self.screen.get_width() // 3,
+                    20 + i * 50,
+                )
+            )
+            self.screen.blit(item_render, item_rect)
+
+            item_render = menu_font.render(
+                self.talk_to_name+ "  Gold: "+str(self.ai.ai_package[self.talk_to_name]["gold"]),
+                True,
+                (44, 53, 57),
+            )
+            item_rect = item_render.get_rect(
+                topleft=(
+                    self.screen.get_width() // 2 + self.screen.get_width() // 5,
+                    20 + i * 50,
+                )
+            )
+            self.screen.blit(item_render, item_rect)
+            i += 1
+
+            pygame.draw.line(
+                self.screen,
+                (22, 22, 22),
+                (0, 20 + i * 50),
+                (self.screen.get_width(), 20 + i * 50),
+                4,
+            )
+
+            for index, (data) in enumerate(visible_items):
+                color = (
+                    (157, 157, 210)
+                    if index == self.selected_inventory_item - scroll_position
+                    else (237, 106, 94)
+                )
+
+                if not self.container_menu_selected:
+                    color = (44, 53, 57)
+
+                if (
+                    index == self.selected_inventory_item - scroll_position
+                    and self.container_menu_selected
+                ):
+                    item_text = f"> {data['type']}: {data['quantity']}"
+                else:
+                    item_text = f"    {data['type']}: {data['quantity']}"
+                item_render = menu_font.render(item_text, True, color)
+                item_rect = item_render.get_rect(
+                    topleft=(self.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
+                )
+                self.screen.blit(item_render, item_rect)
+
+            scroll_position = (self.selected_inventory_item // 10) * 10
+            visible_items = list(self.player.inventory.quantity.items())[
+                scroll_position : scroll_position + 10
+            ]
+
+            for index, (item_name, item_quantity) in enumerate(visible_items):
+                color = (
+                    (157, 157, 210)
+                    if index == self.selected_inventory_item - scroll_position
+                    else (237, 106, 94)
+                )
+
+                if self.container_menu_selected:
+                    color = (44, 53, 57)
+
+                if (
+                    index == self.selected_inventory_item - scroll_position
+                    and not self.container_menu_selected
+                ):
+                    item_text = f"> {item_name}: {item_quantity}"
+                else:
+                    item_text = f"    {item_name}: {item_quantity}"
+
+                item_render = menu_font.render(item_text, True, color)
+                item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
+                self.screen.blit(item_render, item_rect)
+                
     def draw_objects(self):
         for index, x in enumerate(self.world_objects):
             if (
@@ -998,6 +1113,9 @@ class Game:
 
         if self.is_in_dialogue:
             self.ai.strings.draw(self.talk_to_name)
+        
+        if self.ai.strings.bartering:
+            self.draw_barter()
 
         pygame.draw.rect(self.screen, (0, 0, 0), self.weapon_rect)
         pygame.display.flip()
