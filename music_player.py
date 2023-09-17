@@ -49,7 +49,8 @@ class MusicPlayer:
         self.sound.set_volume(0.3)
     
     def skip_current_line(self):
-        self.sound.stop()
+        if self.sound != None:
+            self.sound.stop()
         self.sound=None
         self.channel=None
     

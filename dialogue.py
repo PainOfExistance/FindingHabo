@@ -27,6 +27,7 @@ class Dialougue:
         self.length = 0
         self.greeting_played = False
         self.bartering = False
+        self.will_bartering = False
 
         self.bg_menu = pygame.Rect(
             25,
@@ -194,19 +195,34 @@ class Dialougue:
 
             elif not self.music_player.get_player_status() and self.talk == -1:
                 self.talking = False
+                if self.will_bartering:
+                    self.bartering = True
+                    self.will_bartering = False
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
         if not self.selection_held:
-            if keys[pygame.K_UP] and not self.selection_held and not self.talking and not self.bartering:
+            if (
+                keys[pygame.K_UP]
+                and not self.selection_held
+                and not self.talking
+                and not self.bartering
+            ):
                 self.selected_item = (self.selected_item - 1) % len(self.enabled)
                 self.selection_held = True
 
-            elif keys[pygame.K_DOWN] and not self.selection_held and not self.talking and not self.bartering:
+            elif (
+                keys[pygame.K_DOWN]
+                and not self.selection_held
+                and not self.talking
+                and not self.bartering
+            ):
                 self.selected_item = (self.selected_item + 1) % len(self.enabled)
                 self.selection_held = True
 
-            elif keys[pygame.K_RETURN] and not self.selection_held and not self.bartering:
+            elif (
+                keys[pygame.K_RETURN] and not self.selection_held and not self.bartering
+            ):
                 if self.index == -1:
                     self.music_player.skip_current_line()
                     self.index += 1
@@ -299,7 +315,7 @@ class Dialougue:
                         "barter"
                         in self.strings[self.name]["responses"][responce_id["res"]]
                     ):
-                        self.bartering = True
+                        self.will_bartering = True
 
                     self.talking = True
                 self.selected_item = 0

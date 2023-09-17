@@ -1,9 +1,10 @@
-import pygame
 import numpy as np
-from stats import Stats
+import pygame
+
+from effects import Effects
 from inventory import Inventory
 from leveling_system import LevelingSystem
-from effects import Effects
+from stats import Stats
 
 
 class Player:
@@ -15,7 +16,7 @@ class Player:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.name = f"Player"
-        self.gold = 0
+        self.gold = 1000
         self.current_world=f"Dream World"
         self.screen_width = screen_width
         self.range=5
