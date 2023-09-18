@@ -147,7 +147,7 @@ class Game:
             self.handle_events()
             self.draw()
             self.music_player.update()
-
+            self.player.check_experation(self.delta_time)
             if (
                 not self.player_menu.visible
                 and not self.tab_pressed
@@ -353,7 +353,11 @@ class Game:
                 self.is_ready_to_talk = False
                 self.is_in_dialogue = True
 
-        elif not keys[pygame.K_e] and not self.container_open and not self.ai.strings.bartering:
+        elif (
+            not keys[pygame.K_e]
+            and not self.container_open
+            and not self.ai.strings.bartering
+        ):
             self.selection_held = False
 
         if (
@@ -364,11 +368,11 @@ class Game:
         ):
             self.tab_pressed = True
             self.container_open = False
-            
+
             if self.ai.strings.bartering:
-                self.ai.strings.bartering=False
+                self.ai.strings.bartering = False
                 return
-            
+
             if self.is_in_dialogue:
                 self.is_in_dialogue = False
                 self.ai.strings.index = -1
@@ -388,31 +392,34 @@ class Game:
             and not self.menu.visible
             and not self.player_menu.visible
         ):
-            
-            if (self.container_menu_selected and self.ai.strings.bartering and len(
-                self.ai.ai_package[self.talk_to_name]["items"]
-            )):
+            if (
+                self.container_menu_selected
+                and self.ai.strings.bartering
+                and len(self.ai.ai_package[self.talk_to_name]["items"])
+            ):
                 self.selected_inventory_item = (self.selected_inventory_item - 1) % len(
                     self.ai.ai_package[self.talk_to_name]["items"]
                 )
                 self.selection_held = True
                 return
-                
+
             elif len(self.player.inventory.items) and self.ai.strings.bartering:
                 self.selected_inventory_item = (self.selected_inventory_item - 1) % len(
                     self.player.inventory.items
                 )
                 self.selection_held = True
                 return
-                        
-            if self.container_menu_selected and self.container_open and len(
-                self.world_objects[self.container_hovered]["name"]["items"]
+
+            if (
+                self.container_menu_selected
+                and self.container_open
+                and len(self.world_objects[self.container_hovered]["name"]["items"])
             ):
                 self.selected_inventory_item = (self.selected_inventory_item - 1) % len(
                     self.world_objects[self.container_hovered]["name"]["items"]
                 )
                 self.selection_held = True
-                
+
             elif len(self.player.inventory.items) and self.container_open:
                 self.selected_inventory_item = (self.selected_inventory_item - 1) % len(
                     self.player.inventory.items
@@ -426,23 +433,24 @@ class Game:
             and not self.menu.visible
             and not self.player_menu.visible
         ):
-            if (self.container_menu_selected and self.ai.strings.bartering and len(
-                self.ai.ai_package[self.talk_to_name]["items"]
-            )):
+            if (
+                self.container_menu_selected
+                and self.ai.strings.bartering
+                and len(self.ai.ai_package[self.talk_to_name]["items"])
+            ):
                 self.selected_inventory_item = (self.selected_inventory_item + 1) % len(
                     self.ai.ai_package[self.talk_to_name]["items"]
                 )
                 self.selection_held = True
                 return
-                
+
             elif len(self.player.inventory.items) and self.ai.strings.bartering:
                 self.selected_inventory_item = (self.selected_inventory_item + 1) % len(
                     self.player.inventory.items
                 )
                 self.selection_held = True
                 return
-                
-                
+
             if self.container_menu_selected and len(
                 self.world_objects[self.container_hovered]["name"]["items"]
             ):
@@ -504,23 +512,60 @@ class Game:
             and (self.container_open or self.ai.strings.bartering)
         ):
             self.selection_held = True
-            
+
             if self.ai.strings.bartering:
-                if (self.container_menu_selected and len(self.ai.ai_package[self.talk_to_name]["items"]) > 0):
-                    if (self.ai.ai_package[self.talk_to_name]["items"][self.selected_inventory_item]["quantity"] > 0 and self.player.gold >= self.items[self.ai.ai_package[self.talk_to_name]["items"][self.selected_inventory_item]["type"]]["price"]):
-                        self.player.gold -= self.items[self.ai.ai_package[self.talk_to_name]["items"][self.selected_inventory_item]["type"]]["price"]
-                        self.ai.ai_package[self.talk_to_name]["gold"] += self.items[self.ai.ai_package[self.talk_to_name]["items"][self.selected_inventory_item]["type"]]["price"]
-                        self.ai.ai_package[self.talk_to_name]["items"][self.selected_inventory_item]["quantity"] -= 1
+                if (
+                    self.container_menu_selected
+                    and len(self.ai.ai_package[self.talk_to_name]["items"]) > 0
+                ):
+                    if (
+                        self.ai.ai_package[self.talk_to_name]["items"][
+                            self.selected_inventory_item
+                        ]["quantity"]
+                        > 0
+                        and self.player.gold
+                        >= self.items[
+                            self.ai.ai_package[self.talk_to_name]["items"][
+                                self.selected_inventory_item
+                            ]["type"]
+                        ]["price"]
+                    ):
+                        self.player.gold -= self.items[
+                            self.ai.ai_package[self.talk_to_name]["items"][
+                                self.selected_inventory_item
+                            ]["type"]
+                        ]["price"]
+                        self.ai.ai_package[self.talk_to_name]["gold"] += self.items[
+                            self.ai.ai_package[self.talk_to_name]["items"][
+                                self.selected_inventory_item
+                            ]["type"]
+                        ]["price"]
+                        self.ai.ai_package[self.talk_to_name]["items"][
+                            self.selected_inventory_item
+                        ]["quantity"] -= 1
                         self.player.inventory.add_item(
-                        self.items[self.ai.ai_package[self.talk_to_name]["items"][self.selected_inventory_item]["type"]]
-                    )
-                        if (self.ai.ai_package[self.talk_to_name]["items"][self.selected_inventory_item]["quantity"] == 0):
-                            del self.ai.ai_package[self.talk_to_name]["items"][self.selected_inventory_item]
-                    
-                elif (not self.container_menu_selected and len(self.player.inventory.items) > 0):
-                    
-                    if self.ai.ai_package[self.talk_to_name]["gold"]<=0:
-                        self.ai.ai_package[self.talk_to_name]["gold"]=0
+                            self.items[
+                                self.ai.ai_package[self.talk_to_name]["items"][
+                                    self.selected_inventory_item
+                                ]["type"]
+                            ]
+                        )
+                        if (
+                            self.ai.ai_package[self.talk_to_name]["items"][
+                                self.selected_inventory_item
+                            ]["quantity"]
+                            == 0
+                        ):
+                            del self.ai.ai_package[self.talk_to_name]["items"][
+                                self.selected_inventory_item
+                            ]
+
+                elif (
+                    not self.container_menu_selected
+                    and len(self.player.inventory.items) > 0
+                ):
+                    if self.ai.ai_package[self.talk_to_name]["gold"] <= 0:
+                        self.ai.ai_package[self.talk_to_name]["gold"] = 0
                     key = list(self.player.inventory.quantity.keys())[
                         self.selected_inventory_item
                     ]
@@ -534,31 +579,43 @@ class Game:
                         ),
                         None,
                     )
-                    
+
                     if item_index != None:
-                        self.ai.ai_package[self.talk_to_name]["items"][item_index]["quantity"] += 1
-                        
+                        self.ai.ai_package[self.talk_to_name]["items"][item_index][
+                            "quantity"
+                        ] += 1
+
                     else:
                         self.ai.ai_package[self.talk_to_name]["items"].append(
                             {"type": key, "quantity": 1}
                         )
                     self.player.inventory.remove_item(key)
                     self.player.gold += self.items[key]["price"]
-                    self.ai.ai_package[self.talk_to_name]["gold"] -= self.items[key]["price"]
-                    
-                if (self.selected_inventory_item > len(self.player.inventory.items) - 1 and not self.container_menu_selected):
+                    self.ai.ai_package[self.talk_to_name]["gold"] -= self.items[key][
+                        "price"
+                    ]
+
+                if (
+                    self.selected_inventory_item > len(self.player.inventory.items) - 1
+                    and not self.container_menu_selected
+                ):
                     self.selected_inventory_item = len(self.player.inventory.items) - 1
-                    
-                elif (self.selected_inventory_item > len(self.ai.ai_package[self.talk_to_name]["items"]) - 1 and self.container_menu_selected):
-                    self.selected_inventory_item = len(self.ai.ai_package[self.talk_to_name]["items"]) - 1
+
+                elif (
+                    self.selected_inventory_item
+                    > len(self.ai.ai_package[self.talk_to_name]["items"]) - 1
+                    and self.container_menu_selected
+                ):
+                    self.selected_inventory_item = (
+                        len(self.ai.ai_package[self.talk_to_name]["items"]) - 1
+                    )
                     if self.selected_inventory_item < 0:
                         self.selected_inventory_item = 0
-                
-                
+
                 if self.selected_inventory_item < 0:
                     self.selected_inventory_item = 0
                 return
-                    
+
             if (
                 self.container_menu_selected
                 and len(self.world_objects[self.container_hovered]["name"]["items"]) > 0
@@ -635,7 +692,7 @@ class Game:
                 and not self.container_menu_selected
             ):
                 self.selected_inventory_item = len(self.player.inventory.items) - 1
-                
+
             elif (
                 self.selected_inventory_item
                 > len(self.world_objects[self.container_hovered]["name"]["items"]) - 1
@@ -852,7 +909,6 @@ class Game:
 
     def draw_barter(self):
         if self.ai.strings.bartering:
-
             pygame.draw.rect(
                 self.bg_surface_menu,
                 (200, 210, 200, 180),
@@ -871,13 +927,13 @@ class Game:
             menu_font = pygame.font.Font("game_data/inter.ttf", 30)
 
             scroll_position = (self.selected_inventory_item // 10) * 10
-            visible_items = list(
-                self.ai.ai_package[self.talk_to_name]["items"]
-            )[scroll_position : scroll_position + 10]
+            visible_items = list(self.ai.ai_package[self.talk_to_name]["items"])[
+                scroll_position : scroll_position + 10
+            ]
             i = 0
 
             item_render = menu_font.render(
-                self.player.name+ "  Gold: "+str(self.player.gold),
+                self.player.name + "  Gold: " + str(self.player.gold),
                 True,
                 (44, 53, 57),
             )
@@ -890,7 +946,9 @@ class Game:
             self.screen.blit(item_render, item_rect)
 
             item_render = menu_font.render(
-                self.talk_to_name+ "  Gold: "+str(self.ai.ai_package[self.talk_to_name]["gold"]),
+                self.talk_to_name
+                + "  Gold: "
+                + str(self.ai.ai_package[self.talk_to_name]["gold"]),
                 True,
                 (44, 53, 57),
             )
@@ -960,7 +1018,7 @@ class Game:
                 item_render = menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
                 self.screen.blit(item_render, item_rect)
-                
+
     def draw_objects(self):
         for index, x in enumerate(self.world_objects):
             if (
@@ -1002,7 +1060,12 @@ class Game:
 
                 if self.player.player_rect.colliderect(other_obj_rect):
                     if x["attack_diff"] > x["name"]["attack_speed"]:
-                        self.player.update_health(-x["name"]["damage"])
+                        res = self.player.stats.defense - x["name"]["damage"]
+                        
+                        if res > 0:
+                            res = 0
+                            
+                        self.player.update_health(res)
                         self.world_objects[index]["attack_diff"] = 0
 
                 if self.world_objects[index]["attack_diff"] < 5:
@@ -1192,7 +1255,7 @@ class Game:
 
         if self.is_in_dialogue:
             self.ai.strings.draw(self.talk_to_name)
-        
+
         if self.ai.strings.bartering:
             self.draw_barter()
 

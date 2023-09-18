@@ -23,7 +23,7 @@
             "image": "knowledge_potion.png",
             "effect": {
                 "name": "Knowledge Boost",
-                "duration": 0,
+                "duration": 10,
                 "stat": "knowledge",
                 "value": 40
             }
@@ -38,7 +38,7 @@
             "effect": {
                 "name": "Strength Boost",
                 "duration": 20,
-                "stat": "power",
+                "stat": "max_power",
                 "value": 60
             }
         },

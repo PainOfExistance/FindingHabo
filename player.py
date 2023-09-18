@@ -20,6 +20,7 @@ class Player:
         self.current_world=f"Dream World"
         self.screen_width = screen_width
         self.range=5
+        self.active_effects=[]
         
         self.player, self.player_rect = assets.load_player(
             path, (600, 500)
@@ -80,18 +81,22 @@ class Player:
         
     def update_stats(self, stat, amount):
         if stat=="max_health":
+            self.effects.effects[stat]["amount"] += amount
             self.update_max_health(amount)
         elif stat=="health":
             self.update_health(amount)
         elif stat=="max_power":
+            self.effects.effects[stat]["amount"] += amount
             self.stats.update_max_power(amount)
         elif stat=="power":
             self.stats.update_power(amount)
         elif stat=="max_knowledge":
+            self.effects.effects[stat]["amount"] += amount
             self.stats.update_max_knowlage(amount)
         elif stat=="knowledge":
             self.stats.update_knowlage(amount)
         elif stat=="weapon_damage":
+            self.effects.effects[stat]["amount"] += amount
             self.stats.update_weapon_damage(amount)
 
     def use_item(self, index):
@@ -114,8 +119,22 @@ class Player:
                 self.equip_item(keys[index])
         else:
             self.inventory.remove_item(keys[index])
+            if item["effect"]["duration"]>0:
+                self.active_effects.append(item["effect"])
             self.update_stats(item["effect"]["stat"], item["effect"]["value"])
+            
+    def check_experation(self, dt):
+        indexes=[]
+        print(self.active_effects)
+        for index in range(len(self.active_effects)):
+            self.active_effects[index]["duration"]-=dt
+            if self.active_effects[index]["duration"]<=0:
+                indexes.append(index)
 
+        for i in indexes:
+            self.update_stats(self.active_effects[i]["stat"], -self.active_effects[i]["value"])
+            self.active_effects.remove(self.active_effects[i])
+                        
     def draw(self, screen):
         screen.blit(self.player, self.player_rect)
         pygame.draw.rect(screen, (0, 0, 0), self.border_rect, border_radius=10)
@@ -133,6 +152,8 @@ class Player:
         if slot == "hand":
             self.range = self.inventory.items[item]["stats"]["range"]
             self.stats.weapon_damage = self.stats.weapon_damage + self.inventory.items[item]["stats"]["damage"]
+        else:
+            self.stats.defense = self.stats.defense + self.inventory.items[item]["stats"]["damage"]
 
     def unequip_item(self, item):
         if item != None:
@@ -147,3 +168,5 @@ class Player:
             if slot == "hand":
                 self.range = 5
                 self.stats.weapon_damage = self.stats.weapon_damage - self.inventory.items[item]["stats"]["damage"]
+            else:
+                self.stats.defense = self.stats.defense - self.inventory.items[item]["stats"]["damage"]

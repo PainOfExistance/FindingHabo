@@ -1,5 +1,7 @@
-import numpy as np
 import math
+
+import numpy as np
+
 
 class Stats:
     def __init__(self):
@@ -26,7 +28,7 @@ class Stats:
             self.health = 0
             
     def update_max_power(self, value):
-        self.max_power+=value
+        self.max_power+=value      
         self.weapon_damage = self.weapon_damage + math.ceil(math.log(self.max_power))
 
     def update_power(self, value):
@@ -35,8 +37,7 @@ class Stats:
             self.power = self.max_power
         elif self.power < 0:
             self.power = 0
-        
-            
+           
     def update_max_knowlage(self, value):
         self.max_knowlage+=value
 
