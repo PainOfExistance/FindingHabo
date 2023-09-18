@@ -1,6 +1,7 @@
-import pygame
-import sys
 import re
+import sys
+
+import pygame
 
 
 class PlayerMenu:
@@ -35,9 +36,9 @@ class PlayerMenu:
         )
 
         self.stats = [
-            f"Health: {self.player.stats.health}",
-            f"Power: {self.player.stats.power}",
-            f"Knowledge: {self.player.stats.knowlage}",
+            f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
+            f"Power: {self.player.stats.power}/{self.player.stats.max_power}",
+            f"Knowledge: {self.player.stats.knowlage}/{self.player.stats.max_knowlage}",
         ]
 
     def toggle_visibility(self):
@@ -52,10 +53,10 @@ class PlayerMenu:
             elif not self.tab_held:
                 self.toggle_visibility()
                 self.stats = [
-                    f"Health: {self.player.stats.health}",
-                    f"Power: {self.player.stats.power}",
-                    f"Knowledge: {self.player.stats.knowlage}",
-                ]
+                        f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
+                        f"Power: {self.player.stats.power}/{self.player.stats.max_power}",
+                        f"Knowledge: {self.player.stats.knowlage}/{self.player.stats.max_knowlage}",
+                    ]
             self.tab_held = True
         else:
             self.tab_held = False
@@ -123,6 +124,11 @@ class PlayerMenu:
             ):
                 if self.selected_item == 0:
                     self.player.use_item(self.selected_sub_item)
+                    self.stats = [
+                        f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
+                        f"Power: {self.player.stats.power}/{self.player.stats.max_power}",
+                        f"Knowledge: {self.player.stats.knowlage}/{self.player.stats.max_knowlage}",
+                    ]
                 elif self.selected_item == 1:
                     if (
                         self.trait_selection != -1
@@ -132,10 +138,10 @@ class PlayerMenu:
                         self.player.add_trait(self.selected_sub_item)
                         self.trait_selection = -1
                         self.stats = [
-                            f"Health: {self.player.stats.health}",
-                            f"Power: {self.player.stats.power}",
-                            f"Knowledge: {self.player.stats.knowlage}",
-                            ]
+                            f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
+                            f"Power: {self.player.stats.power}/{self.player.stats.max_power}",
+                            f"Knowledge: {self.player.stats.knowlage}/{self.player.stats.max_knowlage}",
+                        ]
                     elif (
                         self.player.level.traits.unused_trait_points > 0
                         and self.player.check_trait_conditions(self.selected_sub_item)
@@ -212,7 +218,7 @@ class PlayerMenu:
                 level_rect = level.get_rect(bottomleft=(20, text_y))
                 self.screen.blit(level, level_rect)
                 text_y += level_rect.height + 5
-                
+
                 level = stats_font.render(
                     f"Gold: {str(self.player.gold)}",
                     True,

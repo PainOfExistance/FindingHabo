@@ -23,7 +23,7 @@
             "image": "knowledge_potion.png",
             "effect": {
                 "name": "Knowledge Boost",
-                "duration": 10,
+                "duration": 0,
                 "stat": "knowledge",
                 "value": 40
             }

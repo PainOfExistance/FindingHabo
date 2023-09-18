@@ -125,7 +125,6 @@ class Player:
             
     def check_experation(self, dt):
         indexes=[]
-        print(self.active_effects)
         for index in range(len(self.active_effects)):
             self.active_effects[index]["duration"]-=dt
             if self.active_effects[index]["duration"]<=0:
