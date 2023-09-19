@@ -4,6 +4,7 @@ import pygame
 from effects import Effects
 from inventory import Inventory
 from leveling_system import LevelingSystem
+from quests import Quests
 from stats import Stats
 
 
@@ -21,6 +22,8 @@ class Player:
         self.screen_width = screen_width
         self.range=5
         self.active_effects=[]
+        self.quests=Quests(assets)
+        self.assets = assets
         
         self.player, self.player_rect = assets.load_player(
             path, (600, 500)
@@ -133,12 +136,6 @@ class Player:
         for i in indexes:
             self.update_stats(self.active_effects[i]["stat"], -self.active_effects[i]["value"])
             self.active_effects.remove(self.active_effects[i])
-                        
-    def draw(self, screen):
-        screen.blit(self.player, self.player_rect)
-        pygame.draw.rect(screen, (0, 0, 0), self.border_rect, border_radius=10)
-        pygame.draw.rect(screen, (255, 0, 0), self.depleted_rect, border_radius=10)
-        screen.blit(self.text, self.text_rect)
 
     def equip_item(self, item):
         slot = self.inventory.items[item]["stats"]["slot"]
@@ -168,4 +165,10 @@ class Player:
                 self.range = 5
                 self.stats.weapon_damage = self.stats.weapon_damage - self.inventory.items[item]["stats"]["damage"]
             else:
-                self.stats.defense = self.stats.defense - self.inventory.items[item]["stats"]["damage"]
+                self.stats.defense = self.stats.defense - self.inventory.items[item]["stats"]["damage"]             
+                           
+    def draw(self, screen):
+        screen.blit(self.player, self.player_rect)
+        pygame.draw.rect(screen, (0, 0, 0), self.border_rect, border_radius=10)
+        pygame.draw.rect(screen, (255, 0, 0), self.depleted_rect, border_radius=10)
+        screen.blit(self.text, self.text_rect)

@@ -248,3 +248,6 @@ class PlayerMenu:
                 self.player.effects.draw(
                     self.screen, self.selected_sub_item, self.sub_items
                 )
+            
+            elif self.selected_item == 3:
+                self.player.quests.draw(self.screen, self.selected_sub_item, self.sub_items)

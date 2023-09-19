@@ -1,7 +1,9 @@
-import pygame
-import random
-import numpy as np
 import math
+import random
+
+import numpy as np
+import pygame
+
 from dialogue import Dialougue
 
 
@@ -129,7 +131,7 @@ class Ai:
                     rect.left : rect.left + rect.width,
                 ]
             )
-            == 0
+            <= 30
         ):
             return x, y
 

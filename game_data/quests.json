@@ -1,0 +1,93 @@
+{
+  "quests": [
+    {
+      "id": 1,
+      "name": "The Missing Heirloom",
+      "description": "Help a villager find their missing heirloom.",
+      "started": true,
+      "active":false,
+      "stages": [
+        {
+          "description": "Talk to the villager in the village square.",
+          "objectives": {
+            "description": "Speak to Villager",
+            "state": 2
+          }
+        },
+        {
+          "description": "Investigate the forest for clues.",
+          "objectives": {
+            "description": "Search the Forest",
+            "state": 2
+          }
+        },
+        {
+          "description": "Follow the trail of clues to the abandoned cabin.",
+          "objectives": {
+            "description": "Investigate Cabin",
+            "state": 1
+          }
+        },
+        {
+          "description": "Return the missing heirloom to the villager.",
+          "objectives": {
+            "description": "Return Heirloom",
+            "state": 0
+          }
+        }
+      ],
+      "next_quest_id": 2
+    },
+    {
+      "id": 2,
+      "name": "The Curse of the Heirloom",
+      "description": "Uncover the mystery behind the missing heirloom.",
+      "started": false,
+      "active":false,
+      "stages": [
+        {
+          "description": "Examine the heirloom for hidden clues.",
+          "objectives": {
+            "description": "Inspect Heirloom",
+            "state": 0
+          }
+        },
+        {
+          "description": "Question the village historian about the heirloom's history.",
+          "objectives": {
+            "description": "Talk to Village Historian",
+            "state": 0
+          }
+        },
+        {
+          "description": "Visit the old hermit in the mountains for guidance.",
+          "objectives": {
+            "description": "Meet Old Hermit",
+            "state": 0
+          }
+        },
+        {
+          "description": "Retrieve a rare ingredient from the haunted forest.",
+          "objectives": {
+            "description": "Collect Rare Ingredient",
+            "state": 0
+          }
+        },
+        {
+          "description": "Perform a ritual at the ancient shrine to break the curse.",
+          "objectives": {
+            "description": "Perform Ritual",
+            "state": 0
+          }
+        },
+        {
+          "description": "Return to the villager with the cursed heirloom's new power.",
+          "objectives": {
+            "description": "Return Cursed Heirloom",
+            "state": 0
+          }
+        }
+      ]
+    }
+  ]
+}

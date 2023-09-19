@@ -1,7 +1,9 @@
-import pygame
-import numpy as np
-import cv2
 import json
+
+import cv2
+import numpy as np
+import pygame
+
 
 class AssetLoader:
     def __init__(self, screen_width, screen_height):
@@ -86,5 +88,12 @@ class AssetLoader:
             dialogue_data = json.load(dialogue_file)
             dialogue_lines = {dialogue["name"]: dialogue for dialogue in dialogue_data["dialoge"]}
         return dialogue_lines
+    
+    def load_quests(self):
+        quests=np.array({})
+        with open("game_data/quests.json", "r") as quest_file:
+            quest_data = json.load(quest_file)
+            quests = {quest["id"]: quest for quest in quest_data["quests"]}
+        return quests
     
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic
