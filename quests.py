@@ -52,7 +52,7 @@ class Quests:
                     i += item_spacing
                 
                     for stage in quest_data["stages"]:
-                        if stage["objectives"]["state"] in (1,2):
+                        if stage["objectives"]["state"] in (1,2) and quest_data["active"]:
                             if stage["objectives"]["state"]==2:
                                 stage_text = f"◆{stage['description']}"
                             elif stage["objectives"]["state"]==1:

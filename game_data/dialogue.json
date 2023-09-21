@@ -25,7 +25,13 @@
           "text": "Sorry to hear that.",
           "res": "wrap_to_start_merchant",
           "used": true
+        },
+        {
+          "text": "Need help gettting it back?",
+          "res": "wrap_to_start_quest",
+          "used": true
         }
+
       ],
       "responses":
         {
@@ -40,14 +46,20 @@
             "enables": [2, 3]
           },
           "about_merchant_advanced_ambush":{
-            "text": ["Well, it was bloody. We got ambushed, only 5 of us got out alive. We saw our officer stand and fight so we could escape. May his soul rest in peace.", "Next thing i remember i was being healed by a healer.", "eeeeeeeeeee", "aaaaaaa", "hmmmmmm"],
-            "file": ["dialup", "neke", "dialup", "neke", "dialup"],
-            "enables": [3] 
+            "text": ["Well, it was bloody. We got ambushed, only 5 of us got out alive. We saw our officer stand and fight so we could escape. May his soul rest in peace.", "Next thing i remember i was being healed by a healer.", "I also lost very precius thing to me, family heirloom"],
+            "file": ["dialup", "neke", "dialup"],
+            "enables": [3, 4] 
           },
           "wrap_to_start_merchant":{
             "text": ["Thanks, but thats in the past, so, do you want to make a purchase?"],
             "file": ["dialup"],
             "enables": [0, 1]
+          },
+          "wrap_to_start_quest":{
+            "text": ["Thanks, i am very greatfull for your help."],
+            "file": ["neke"],
+            "enables": [0, 1],
+            "starts": 1
           }
         },
       "random":[

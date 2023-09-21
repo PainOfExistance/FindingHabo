@@ -45,6 +45,11 @@ class PlayerMenu:
         self.visible = not self.visible
 
     def handle_input(self):
+        
+        num_started_quests = sum(1 for quest in self.player.quests.quests
+                        if self.player.quests.quests[quest]["started"]
+                    )
+        
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_TAB]:
@@ -53,10 +58,10 @@ class PlayerMenu:
             elif not self.tab_held:
                 self.toggle_visibility()
                 self.stats = [
-                        f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
-                        f"Power: {self.player.stats.power}/{self.player.stats.max_power}",
-                        f"Knowledge: {self.player.stats.knowlage}/{self.player.stats.max_knowlage}",
-                    ]
+                    f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
+                    f"Power: {self.player.stats.power}/{self.player.stats.max_power}",
+                    f"Knowledge: {self.player.stats.knowlage}/{self.player.stats.max_knowlage}",
+                ]
             self.tab_held = True
         else:
             self.tab_held = False
@@ -81,6 +86,13 @@ class PlayerMenu:
                     self.selected_sub_item = (self.selected_sub_item - 1) % len(
                         self.player.effects.effects
                     )
+                elif num_started_quests>0 and self.selected_item == 3:
+                    self.selected_sub_item = (
+                        self.selected_sub_item - 1
+                    ) % num_started_quests
+
+                if self.selected_sub_item < 0:
+                    self.selected_sub_item = 0
                 self.selection_held = True
 
             elif (
@@ -102,6 +114,13 @@ class PlayerMenu:
                     self.selected_sub_item = (self.selected_sub_item + 1) % len(
                         self.player.effects.effects
                     )
+                elif num_started_quests>0 and self.selected_item == 3:
+                    self.selected_sub_item = (
+                        self.selected_sub_item + 1
+                    ) % num_started_quests
+
+                if self.selected_sub_item < 0:
+                    self.selected_sub_item = 0
                 self.selection_held = True
 
             elif (
@@ -117,12 +136,8 @@ class PlayerMenu:
                 self.selected_sub_item = 0
                 self.selection_held = True
 
-            elif (
-                keys[pygame.K_RETURN]
-                and self.sub_items
-                and len(self.player.inventory.items) > 0
-            ):
-                if self.selected_item == 0:
+            elif keys[pygame.K_RETURN] and self.sub_items:
+                if self.selected_item == 0 and len(self.player.inventory.items) > 0:
                     self.player.use_item(self.selected_sub_item)
                     self.stats = [
                         f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
@@ -148,7 +163,10 @@ class PlayerMenu:
                         and self.trait_selection == -1
                     ):
                         self.trait_selection = self.selected_sub_item
-
+                elif self.selected_item == 3 and num_started_quests>0:
+                    keys_list = list(self.player.quests.quests.keys())
+                    self.player.quests.quests[keys_list[self.selected_sub_item]]["active"] = not self.player.quests.quests[keys_list[self.selected_sub_item]]["active"]
+                    
                 self.selection_held = True
 
         elif (
@@ -248,6 +266,8 @@ class PlayerMenu:
                 self.player.effects.draw(
                     self.screen, self.selected_sub_item, self.sub_items
                 )
-            
+
             elif self.selected_item == 3:
-                self.player.quests.draw(self.screen, self.selected_sub_item, self.sub_items)
+                self.player.quests.draw(
+                    self.screen, self.selected_sub_item, self.sub_items
+                )
