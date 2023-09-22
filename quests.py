@@ -5,15 +5,32 @@ import pygame
 class Quests:
     def __init__(self, assets):
         self.quests=assets.load_quests()
+        self.tics=0
+        self.text_to_draw=""
 
     def advance_quest(self, id):
         pass
 
     def start_quest(self, id):
-        pass
+        self.quests[id]["started"]=True
+        self.quests[id]["stages"][0]["objectives"]["state"]=1
+        self.text_to_draw="Started: "+self.quests[id]["name"]
+        self.tics=pygame.time.get_ticks()
+        
 
     def end_quest(self, id):
-        pass
+        self.quests[id]["started"]="finished"
+        self.text_to_draw="Completed: "+self.quests[id]["name"]
+        self.tics=pygame.time.get_ticks()
+        
+        
+    def draw_quest_info(self, screen):
+        if pygame.time.get_ticks() - self.tics <=5000:
+            quest_start_font = pygame.font.Font("game_data/inter.ttf", 34)
+            item_render = quest_start_font.render(self.text_to_draw, True, (44, 53, 57))
+            item_rect = item_render.get_rect(center=(screen.get_width()//2, 200))
+            screen.blit(item_render, item_rect)
+        
     
     def draw(self, screen, selected_sub_item, sub_items):
         quests_font = pygame.font.Font("game_data/inter.ttf", 24)

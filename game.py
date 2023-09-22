@@ -172,6 +172,9 @@ class Game:
                 and not self.menu.visible
             ):
                 self.ai.strings.handle_input()
+                if self.ai.strings.starts!=0:
+                    self.player.quests.start_quest(self.ai.strings.starts)
+                    self.ai.strings.starts=0
 
             self.clock.tick(self.target_fps)
 
@@ -1252,6 +1255,7 @@ class Game:
         self.menu.render()
         self.player_menu.render()
         self.draw_container()
+        self.player.quests.draw_quest_info(self.screen)
 
         if self.is_in_dialogue:
             self.ai.strings.draw(self.talk_to_name)
