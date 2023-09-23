@@ -22,6 +22,8 @@ class Quests:
                     )
                 elif index == len(self.quests[id]["stages"]) - 1:
                     self.end_quest(id)
+                    
+            self.tics = pygame.time.get_ticks()
             return
 
     def start_quest(self, id):
@@ -47,6 +49,7 @@ class Quests:
                     center=(screen.get_width() // 2, 200 + index * 40)
                 )
                 screen.blit(item_render, item_rect)
+        
 
     def check_quest_advancement(self, quest_objective, world="default"):
         for index, (kv, quest) in enumerate(self.quests.items()):
