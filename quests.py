@@ -1,37 +1,68 @@
+import math
+
 import numpy as np
 import pygame
 
 
 class Quests:
     def __init__(self, assets):
-        self.quests=assets.load_quests()
-        self.tics=0
-        self.text_to_draw=""
+        self.quests = assets.load_quests()
+        self.tics = 0
+        self.text_to_draw = []
 
     def advance_quest(self, id):
-        pass
+        for index, stages in enumerate(self.quests[id]["stages"]):
+            if stages["objectives"]["state"] == 1:
+                self.quests[id]["stages"][index]["objectives"]["state"] = 2
+                if index < len(self.quests[id]["stages"]) - 1:
+                    self.quests[id]["stages"][index + 1]["objectives"]["state"] = 1
+                    self.text_to_draw.clear()
+                    self.text_to_draw.append(
+                        "◇" + self.quests[id]["stages"][index + 1]["description"]
+                    )
+                elif index == len(self.quests[id]["stages"]) - 1:
+                    self.end_quest(id)
+            return
 
     def start_quest(self, id):
-        self.quests[id]["started"]=True
-        self.quests[id]["stages"][0]["objectives"]["state"]=1
-        self.text_to_draw="Started: "+self.quests[id]["name"]
-        self.tics=pygame.time.get_ticks()
-        
+        self.quests[id]["started"] = True
+        self.quests[id]["stages"][0]["objectives"]["state"] = 1
+        self.text_to_draw.clear()
+        self.text_to_draw.append("Started: " + self.quests[id]["name"])
+        self.text_to_draw.append("◇" + self.quests[id]["stages"][0]["description"])
+        self.tics = pygame.time.get_ticks()
 
     def end_quest(self, id):
-        self.quests[id]["started"]="finished"
-        self.text_to_draw="Completed: "+self.quests[id]["name"]
-        self.tics=pygame.time.get_ticks()
-        
-        
+        self.quests[id]["started"] = "finished"
+        self.text_to_draw.clear()
+        self.text_to_draw.append("Completed: " + self.quests[id]["name"])
+        self.tics = pygame.time.get_ticks()
+
     def draw_quest_info(self, screen):
-        if pygame.time.get_ticks() - self.tics <=5000:
-            quest_start_font = pygame.font.Font("game_data/inter.ttf", 34)
-            item_render = quest_start_font.render(self.text_to_draw, True, (44, 53, 57))
-            item_rect = item_render.get_rect(center=(screen.get_width()//2, 200))
-            screen.blit(item_render, item_rect)
-        
-    
+        if pygame.time.get_ticks() - self.tics <= 5000:
+            quest_start_font = pygame.font.Font("game_data/inter.ttf", 32)
+            for index, v in enumerate(self.text_to_draw):
+                item_render = quest_start_font.render(v, True, (44, 53, 57))
+                item_rect = item_render.get_rect(
+                    center=(screen.get_width() // 2, 200 + index * 40)
+                )
+                screen.blit(item_render, item_rect)
+
+    def check_quest_advancement(self, quest_objective, world="default"):
+        for index, (kv, quest) in enumerate(self.quests.items()):
+            if quest["started"]:
+                for j, stage in enumerate(quest["stages"]):
+                    if "radius" in stage["objectives"]:
+                        if stage["objectives"]["world"] == world:
+                            distance = math.dist(
+                                tuple(stage["objectives"]["possition"]), quest_objective
+                            )
+                            if (
+                                distance <= stage["objectives"]["radius"]
+                                and stage["objectives"]["state"] == 1
+                            ):
+                                self.advance_quest(kv)
+
     def draw(self, screen, selected_sub_item, sub_items):
         quests_font = pygame.font.Font("game_data/inter.ttf", 24)
         item_spacing = 30
@@ -51,12 +82,12 @@ class Quests:
                     if sub_items
                     else (120, 120, 120)
                 )
-                
+
                 quest_text = f"{quest_data['name']}"
                 item_render = quests_font.render(quest_text, True, color)
                 item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
                 screen.blit(item_render, item_rect)
-                
+
                 if index == selected_sub_item - scroll_position:
                     i += item_spacing
                     line_render = quests_font.render(
@@ -67,14 +98,17 @@ class Quests:
                     )
                     screen.blit(line_render, line_rect)
                     i += item_spacing
-                
+
                     for stage in quest_data["stages"]:
-                        if stage["objectives"]["state"] in (1,2) and quest_data["active"]:
-                            if stage["objectives"]["state"]==2:
+                        if (
+                            stage["objectives"]["state"] in (1, 2)
+                            and quest_data["active"]
+                        ):
+                            if stage["objectives"]["state"] == 2:
                                 stage_text = f"◆{stage['description']}"
-                            elif stage["objectives"]["state"]==1:
+                            elif stage["objectives"]["state"] == 1:
                                 stage_text = f"◇{stage['description']}"
-                                
+
                             stage_render = quests_font.render(stage_text, True, color)
                             stage_rect = stage_render.get_rect(
                                 center=(coords, 20 + index * 40 + i)

@@ -11,7 +11,10 @@
           "description": "Investigate the forest for clues.",
           "objectives": {
             "description": "Search the Forest",
-            "state": 0
+            "state": 0,
+            "world": "Dream World",
+            "possition": [200, 200],
+            "radius": 300
           }
         },
         {

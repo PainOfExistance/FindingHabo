@@ -195,20 +195,26 @@ class Game:
         self.counter += self.delta_time
         # na lestvici 1-10 kako bi ocenili Saro Dugi iz ITK?
 
+
         if self.time_diff >= 20:
             self.time_diff = 5
 
         self.relative_player_left = int(
             self.player.player_rect.left - self.bg_rect.left
         )
+        
         self.relative_player_right = int(
             self.player.player_rect.right - self.bg_rect.left
         )
+        
         self.relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
+        
         self.relative_player_bottom = int(
             self.player.player_rect.bottom - self.bg_rect.top
         )
         movement = int(self.movement_speed * self.delta_time)
+        
+        self.player.quests.check_quest_advancement((self.relative_player_top+self.player.player_rect.height//2, self.relative_player_left+self.player.player_rect.width//2), self.player.current_world)
 
         keys = pygame.key.get_pressed()
         if (
