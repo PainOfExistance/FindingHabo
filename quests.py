@@ -17,6 +17,7 @@ class Quests:
                 if index < len(self.quests[id]["stages"]) - 1:
                     self.quests[id]["stages"][index + 1]["objectives"]["state"] = 1
                     self.text_to_draw.clear()
+                    self.text_to_draw.append(self.quests[id]["name"])
                     self.text_to_draw.append(
                         "◇" + self.quests[id]["stages"][index + 1]["description"]
                     )
