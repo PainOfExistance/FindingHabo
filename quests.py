@@ -16,16 +16,19 @@ class Quests:
                 self.quests[id]["stages"][index]["objectives"]["state"] = 2
                 if index < len(self.quests[id]["stages"]) - 1:
                     self.quests[id]["stages"][index + 1]["objectives"]["state"] = 1
+                    print(self.quests[id]["stages"][index+1])
                     self.text_to_draw.clear()
                     self.text_to_draw.append(self.quests[id]["name"])
                     self.text_to_draw.append(
                         "◇" + self.quests[id]["stages"][index + 1]["description"]
                     )
+                    self.tics = pygame.time.get_ticks()
+                    return
                 elif index == len(self.quests[id]["stages"]) - 1:
                     self.end_quest(id)
-                    
-            self.tics = pygame.time.get_ticks()
-            return
+                    self.tics = pygame.time.get_ticks()
+                    return
+
 
     def start_quest(self, id):
         self.quests[id]["started"] = True
@@ -50,7 +53,6 @@ class Quests:
                     center=(screen.get_width() // 2, 200 + index * 40)
                 )
                 screen.blit(item_render, item_rect)
-        
 
     def check_quest_advancement(self, quest_objective, world="default"):
         for index, (kv, quest) in enumerate(self.quests.items()):
@@ -66,6 +68,9 @@ class Quests:
                                 and stage["objectives"]["state"] == 1
                             ):
                                 self.advance_quest(kv)
+                    elif "inventory" in stage["objectives"] and stage["objectives"]["state"] == 1 and stage["objectives"]["inventory"]:
+                            self.advance_quest(kv)
+                        
 
     def draw(self, screen, selected_sub_item, sub_items):
         quests_font = pygame.font.Font("game_data/inter.ttf", 24)

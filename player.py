@@ -14,6 +14,7 @@ class Player:
         self.inventory = Inventory()
         self.level = LevelingSystem(assets)
         self.effects = Effects(assets)
+        self.quests=Quests(assets)
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.name = f"Player"
@@ -22,7 +23,6 @@ class Player:
         self.screen_width = screen_width
         self.range=5
         self.active_effects=[]
-        self.quests=Quests(assets)
         self.assets = assets
         
         self.player, self.player_rect = assets.load_player(
@@ -101,11 +101,23 @@ class Player:
         elif stat=="weapon_damage":
             self.effects.effects[stat]["amount"] += amount
             self.stats.update_weapon_damage(amount)
+            
+    def add_item(self, item):
+        if "quest" in item:
+            self.quests.quests[item["quest"][0]]["stages"][item["quest"][1]]["objectives"]["inventory"]=True
+        
+        self.inventory.add_item(item)
+    
+    def remove_item(self, key):
+        if key in self.inventory.items and self.inventory.items[key]["dropable"]:
+            self.inventory.remove_item(key)
+            return True
+        return False
 
     def use_item(self, index):
         keys = list(self.inventory.items.keys())
         item = self.inventory.items[keys[index]]
-        if "stats" in item:
+        if "stats" in item and "effect" in item:
             if (
                 item["name"]
                 == self.equipped_items[
@@ -120,7 +132,7 @@ class Player:
                     ]
                 )
                 self.equip_item(keys[index])
-        else:
+        elif "effect" in item:
             self.inventory.remove_item(keys[index])
             if item["effect"]["duration"]>0:
                 self.active_effects.append(item["effect"])
@@ -152,7 +164,7 @@ class Player:
             self.stats.defense = self.stats.defense + self.inventory.items[item]["stats"]["damage"]
 
     def unequip_item(self, item):
-        if item != None:
+        if item != None and "stats" in self.inventory.items[item]:
             slot = self.inventory.items[item]["stats"]["slot"]
             if slot in self.equipped_items and self.equipped_items[slot] is not None:
                 unequipped_item = self.equipped_items[slot]

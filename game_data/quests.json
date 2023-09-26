@@ -21,7 +21,10 @@
           "description": "Follow the trail of clues to the abandoned cabin.",
           "objectives": {
             "description": "Investigate Cabin",
-            "state": 0
+            "state": 0,
+            "world": "Dream World",
+            "possition": [50, 200],
+            "inventory":false
           }
         },
         {

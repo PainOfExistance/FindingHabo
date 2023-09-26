@@ -1,7 +1,9 @@
-import pygame
-import numpy as np
 import random
 import string
+
+import numpy as np
+import pygame
+
 
 class Inventory:
     def __init__(self):

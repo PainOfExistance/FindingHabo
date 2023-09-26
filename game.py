@@ -345,7 +345,7 @@ class Game:
                     self.item_hovered < len(self.world_objects)
                     and self.item_hovered >= 0
                 ):
-                    self.player.inventory.add_item(
+                    self.player.add_item(
                         self.items[self.world_objects[self.item_hovered]["name"]]
                     )
                     del self.world_objects[self.item_hovered]
@@ -651,7 +651,7 @@ class Game:
                     self.world_objects[self.container_hovered]["name"]["items"][
                         self.selected_inventory_item
                     ]["quantity"] -= 1
-                    self.player.inventory.add_item(
+                    self.player.add_item(
                         self.items[
                             self.world_objects[self.container_hovered]["name"]["items"][
                                 self.selected_inventory_item
@@ -726,20 +726,21 @@ class Game:
                 self.player_menu.selected_sub_item
             ]
             self.player.unequip_item(key)
-            self.player.inventory.remove_item(key)
-            img, img_rect = self.asets.load_images(
+            ret=self.player.remove_item(key)
+            if ret:
+                img, img_rect = self.asets.load_images(
                 self.items[key]["image"],
                 (64, 64),
                 (self.player.player_rect.centerx, self.player.player_rect.centery),
-            )
-            self.world_objects.append(
+                )
+                self.world_objects.append(
                 {
                     "name": key,
                     "image": img,
                     "rect": img_rect,
                     "type": "item",
                 }
-            )
+                )
 
         elif not keys[pygame.K_r] and self.r_pressed:
             self.r_pressed = False
