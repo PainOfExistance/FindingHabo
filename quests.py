@@ -9,7 +9,7 @@ class Quests:
         self.quests = assets.load_quests()
         self.tics = 0
         self.text_to_draw = []
-        self.items=inventory
+        self.inventory=inventory
 
     def advance_quest(self, id):
         for index, stages in enumerate(self.quests[id]["stages"]):
@@ -73,8 +73,15 @@ class Quests:
                         self.advance_quest(kv)
                             
                     elif "items" in stage["objectives"] and stage["objectives"]["state"] == 1:
+                        tmp=0
                         for items in stage["objectives"]["items"]:
-                            
+                            for key in self.inventory.quantity:
+                                if key == items["name"] and self.inventory.quantity[key] == items["quantity"]:
+                                    tmp+=1
+                        
+                        if tmp == len(stage["objectives"]["items"]):
+                            for key in self.inventory.items:
+                                self.inventory.items[key]["dropable"]=False
                             self.advance_quest(kv)     
                         
 
