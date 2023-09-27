@@ -5,10 +5,11 @@ import pygame
 
 
 class Quests:
-    def __init__(self, assets):
+    def __init__(self, assets, inventory):
         self.quests = assets.load_quests()
         self.tics = 0
         self.text_to_draw = []
+        self.items=inventory
 
     def advance_quest(self, id):
         for index, stages in enumerate(self.quests[id]["stages"]):
@@ -16,7 +17,6 @@ class Quests:
                 self.quests[id]["stages"][index]["objectives"]["state"] = 2
                 if index < len(self.quests[id]["stages"]) - 1:
                     self.quests[id]["stages"][index + 1]["objectives"]["state"] = 1
-                    print(self.quests[id]["stages"][index+1])
                     self.text_to_draw.clear()
                     self.text_to_draw.append(self.quests[id]["name"])
                     self.text_to_draw.append(
@@ -57,8 +57,8 @@ class Quests:
     def check_quest_advancement(self, quest_objective, world="default"):
         for index, (kv, quest) in enumerate(self.quests.items()):
             if quest["started"]:
-                for j, stage in enumerate(quest["stages"]):
-                    if "radius" in stage["objectives"]:
+                for stage in quest["stages"]:
+                    if "radius" in stage["objectives"] and stage["objectives"]["state"] == 1:
                         if stage["objectives"]["world"] == world:
                             distance = math.dist(
                                 tuple(stage["objectives"]["possition"]), quest_objective
@@ -68,8 +68,14 @@ class Quests:
                                 and stage["objectives"]["state"] == 1
                             ):
                                 self.advance_quest(kv)
+                                
                     elif "inventory" in stage["objectives"] and stage["objectives"]["state"] == 1 and stage["objectives"]["inventory"]:
-                            self.advance_quest(kv)
+                        self.advance_quest(kv)
+                            
+                    elif "items" in stage["objectives"] and stage["objectives"]["state"] == 1:
+                        for items in stage["objectives"]["items"]:
+                            
+                            self.advance_quest(kv)     
                         
 
     def draw(self, screen, selected_sub_item, sub_items):

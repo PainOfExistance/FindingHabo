@@ -14,7 +14,7 @@ class Player:
         self.inventory = Inventory()
         self.level = LevelingSystem(assets)
         self.effects = Effects(assets)
-        self.quests=Quests(assets)
+        self.quests=Quests(assets, self.inventory)
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.name = f"Player"
@@ -105,7 +105,6 @@ class Player:
     def add_item(self, item):
         if "quest" in item:
             self.quests.quests[item["quest"][0]]["stages"][item["quest"][1]]["objectives"]["inventory"]=True
-        
         self.inventory.add_item(item)
     
     def remove_item(self, key):

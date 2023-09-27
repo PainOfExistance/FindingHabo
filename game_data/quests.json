@@ -31,14 +31,27 @@
           "description": "Search the cabin for the heirloom.",
           "objectives": {
             "description": "Search the cabin",
-            "state": 0
+            "state": 0,
+            "items": [
+              {
+                "name": "Steel Sword",
+                "quantity": 1
+              },
+              {
+                "name":"Minor Health Potion",
+                "quantity": 2
+              }
+            ]
           }
         },
         {
           "description": "Return the missing heirloom to the villager.",
           "objectives": {
             "description": "Return Heirloom",
-            "state": 0
+            "state": 0,
+            "world": "Dream World",
+            "possition": [50, 200],
+            "inventory":false
           }
         }
       ],
