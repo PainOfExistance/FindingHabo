@@ -117,7 +117,7 @@ class Game:
             if x["type"] == "npc":
                 temp[x["name"]["name"]] = x["name"]
         self.ai = Ai(temp, assets, screen, self.music_player)
-
+        self.player.quests.dialogue=self.ai.strings
         self.clock = pygame.time.Clock()
         self.target_fps = 60
         self.counter = 0
@@ -175,6 +175,10 @@ class Game:
                 if self.ai.strings.starts!=0:
                     self.player.quests.start_quest(self.ai.strings.starts)
                     self.ai.strings.starts=0
+                
+                if self.ai.strings.advances!=0:
+                    self.player.quests.advance_quest(self.ai.strings.advances)
+                    self.ai.strings.advances=0
 
             self.clock.tick(self.target_fps)
 
@@ -779,6 +783,9 @@ class Game:
         ):
             self.attack_button_held = False
 
+        if keys[pygame.K_o]:
+            print(self.player.quests.quests)
+        
         if self.rotation_angle == 90:
             self.weapon_rect = pygame.Rect(
                 self.player.player_rect.left - self.player.range,

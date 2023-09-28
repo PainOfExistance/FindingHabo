@@ -50,7 +50,8 @@
             "description": "Return Heirloom",
             "state": 0,
             "world": "Dream World",
-            "npc": "Merchant"
+            "npc": "Merchant",
+            "option": 4
           }
         }
       ],

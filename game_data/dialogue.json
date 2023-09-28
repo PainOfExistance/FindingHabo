@@ -29,7 +29,9 @@
         {
           "text": "Need help gettting it back?",
           "res": "wrap_to_start_quest",
-          "used": true
+          "used": true,
+          "res_after": "wrap_to_end_quest",
+          "text_after": "Here is your heirloom."
         }
 
       ],
@@ -60,6 +62,13 @@
             "file": ["neke"],
             "enables": [0, 1],
             "starts": 1
+          },
+          "wrap_to_end_quest":{
+            "text": ["Thanks, i am very greatfull that you found it.", "There is something wrong with it, it seems cursed, broken.", "Please, go and uncover what happend with it."],
+            "file": ["neke", "dialup", "neke"],
+            "enables": [0, 1],
+            "advances": 1,
+            "starts": 2
           }
         },
       "random":[

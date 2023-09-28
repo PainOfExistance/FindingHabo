@@ -24,7 +24,6 @@ class Player:
         self.range=5
         self.active_effects=[]
         self.assets = assets
-        
         self.player, self.player_rect = assets.load_player(
             path, (600, 500)
         )

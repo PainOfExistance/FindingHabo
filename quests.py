@@ -10,6 +10,7 @@ class Quests:
         self.tics = 0
         self.text_to_draw = []
         self.inventory=inventory
+        self.dialogue=None
 
     def advance_quest(self, id):
         for index, stages in enumerate(self.quests[id]["stages"]):
@@ -76,13 +77,16 @@ class Quests:
                         tmp=0
                         for items in stage["objectives"]["items"]:
                             for key in self.inventory.quantity:
-                                if key == items["name"] and self.inventory.quantity[key] == items["quantity"]:
+                                if key == items["name"] and self.inventory.quantity[key] >= items["quantity"]:
                                     tmp+=1
                         
                         if tmp == len(stage["objectives"]["items"]):
                             for key in self.inventory.items:
                                 self.inventory.items[key]["dropable"]=False
                             self.advance_quest(kv)     
+                    
+                    elif "npc" in stage["objectives"] and stage["objectives"]["state"] == 1:
+                        self.dialogue.strings[stage["objectives"]["npc"]]["options"][stage["objectives"]["option"]]["used"] = True
                         
 
     def draw(self, screen, selected_sub_item, sub_items):

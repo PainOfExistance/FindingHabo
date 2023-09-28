@@ -29,6 +29,7 @@ class Dialougue:
         self.bartering = False
         self.will_bartering = False
         self.starts = 0
+        self.advances = 0
 
         self.bg_menu = pygame.Rect(
             25,
@@ -133,10 +134,10 @@ class Dialougue:
                     if self.talking == False
                     else (237, 106, 94)
                 )
-                
+
                 if not value["used"]:
                     color = (237, 106, 94)
-                    
+
                 if i == self.selected_item - scroll_position:
                     txt = f"> {value['text']}"
                 else:
@@ -159,7 +160,6 @@ class Dialougue:
             current_line = ""
 
             for word in words:
-                # Calculate the maximum number of characters that can fit in the line
                 max_chars_per_line = max_line_width // self.subtitle_font.size("J")[0]
                 if len(current_line) + len(word) <= max_chars_per_line:
                     current_line += word + " "
@@ -250,14 +250,40 @@ class Dialougue:
                     self.music_player.skip_current_line()
                     self.talking = False
 
-                elif not self.talking and self.talk == -1 and self.strings[self.name]["options"][self.selected_item + self.offset]["used"]:
+                elif (
+                    not self.talking
+                    and self.talk == -1
+                    and self.strings[self.name]["options"][
+                        self.selected_item + self.offset
+                    ]["used"]
+                ):
                     responce_id = self.strings[self.name]["options"][
                         self.selected_item + self.offset
                     ]
                     
-                    if ("starts" in self.strings[self.name]["responses"][responce_id["res"]]):
-                        self.starts = self.strings[self.name]["responses"][responce_id["res"]]["starts"]
-                        self.strings[self.name]["options"][self.selected_item + self.offset]["used"]=False
+                    selected=self.selected_item + self.offset
+
+                    if (
+                        "starts"
+                        in self.strings[self.name]["responses"][responce_id["res"]]
+                    ):
+                        self.starts = self.strings[self.name]["responses"][
+                            responce_id["res"]
+                        ]["starts"]
+                        self.strings[self.name]["options"][
+                            self.selected_item + self.offset
+                        ]["used"] = False
+
+                    if (
+                        "advances"
+                        in self.strings[self.name]["responses"][responce_id["res"]]
+                    ):
+                        self.advances = self.strings[self.name]["responses"][
+                            responce_id["res"]
+                        ]["advances"]
+                        self.strings[self.name]["options"][
+                            self.selected_item + self.offset
+                        ]["used"] = False
 
                     self.current_talk = iter(
                         self.strings[self.name]["responses"][responce_id["res"]]["text"]
@@ -324,7 +350,35 @@ class Dialougue:
                         in self.strings[self.name]["responses"][responce_id["res"]]
                     ):
                         self.will_bartering = True
+
+                    if (
+                        "res_after"
+                        in self.strings[self.name]["options"][
+                            selected
+                        ]
+                        and self.strings[self.name]["options"][
+                            selected
+                        ]["res"]
+                        != self.strings[self.name]["options"][
+                            selected
+                        ]["res_after"]
+                    ):
+                        self.strings[self.name]["options"][
+                            selected
+                        ]["res"] = self.strings[self.name]["options"][
+                            selected
+                        ][
+                            "res_after"
+                        ]
+                        self.strings[self.name]["options"][
+                            selected
+                        ]["text"] = self.strings[self.name]["options"][
+                            selected
+                        ][
+                            "text_after"
+                        ]
                         
+
                     self.talking = True
                 self.selected_item = 0
 
