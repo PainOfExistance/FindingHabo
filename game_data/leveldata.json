@@ -12,6 +12,7 @@
                 "game_data/RadioGaGa.mp3"
             ],
             "spawn_point": [50, 50],
+            "offset": [0, 0],
             "respawn_timer": 60,
             "items": [
                 {
@@ -78,7 +79,29 @@
                     "damage": 30,
                     "attack_speed": 0.7
                 }
+            ],
+            "portals":[
+                {
+                    "world": "Land of the Free",
+                    "position": [1400, 600],
+                    "image": "game_data/door.png"
+                }
             ]
+        },
+        {
+            "name": "Land of the Free",
+            "collision_set": "game_data/lotf.png",
+            "background": "game_data/lotf.png",
+            "music": [
+                "game_data/DOVAHKIIN.mp3",
+                "game_data/Angelia.mp3",
+                "game_data/It's Time.mp3",
+                "game_data/V put.mp3",
+                "game_data/RadioGaGa.mp3"
+            ],
+            "spawn_point": [600, 500],
+            "offset": [300, 200],
+            "respawn_timer": 60
         }
     ]
 }

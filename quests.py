@@ -30,7 +30,6 @@ class Quests:
                     self.tics = pygame.time.get_ticks()
                     return
 
-
     def start_quest(self, id):
         self.quests[id]["started"] = True
         self.quests[id]["stages"][0]["objectives"]["state"] = 1

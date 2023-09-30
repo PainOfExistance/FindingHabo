@@ -36,6 +36,7 @@ class Game:
         self.line_time = 0.0
         self.is_in_dialogue = False
         self.is_ready_to_talk = False
+        self.world_to_travel_to = None
         self.talk_to_name = ""
         self.prompt_font = pygame.font.Font("game_data/inter.ttf", 16)
         self.subtitle_font = pygame.font.Font("game_data/inter.ttf", 24)
@@ -109,6 +110,19 @@ class Game:
                     "name": data,
                     "attack_diff": 0,
                     "agroved": False,
+                }
+            )
+            
+        for data in self.worlds[self.player.current_world]["portals"]:
+            img, img_rect = self.asets.load_images(
+                data["image"], (64, 64), tuple(data["position"])
+            )
+            self.world_objects.append(
+                {
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "portal",
+                    "name": data
                 }
             )
 
@@ -1260,6 +1274,45 @@ class Game:
                             )
                         )
                         self.screen.blit(text, text_rect)
+                        
+            if (
+                x["type"]=="portal"
+                and not self.container_open
+                and not self.menu.visible
+                and not self.player_menu.visible
+                and not self.is_in_dialogue
+            ):
+                relative__left = int(self.bg_rect.left + x["rect"].left)
+                relative__top = int(self.bg_rect.top + x["rect"].top)
+                
+                other_obj_rect = pygame.Rect(
+                    relative__left,
+                    relative__top,
+                    x["rect"].width,
+                    x["rect"].height,
+                )
+                
+                if other_obj_rect.colliderect(self.player.player_rect):
+                    text = self.prompt_font.render(
+                                f"E) {x['name']['world']}", True, (44, 53, 57)
+                            )
+
+                    text_rect = text.get_rect(
+                                center=(
+                                    relative__left + x["rect"].width // 2,
+                                    relative__top - 10,
+                                )
+                            )
+                    
+                    self.world_to_travel_to = x["name"]["world"]
+                    
+                    self.screen.blit(text, text_rect)
+                    
+                else:
+                    self.world_to_travel_to = None
+                
+                    
+                
 
     def draw(self):
         self.screen.fill((230, 60, 20))
