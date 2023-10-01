@@ -1,7 +1,9 @@
+import sys
+
 import numpy as np
 import pygame
+
 from main_menu import MainMenu
-import sys
 
 pygame.init()
 screen_width, screen_height = 800, 600

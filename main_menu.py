@@ -1,10 +1,13 @@
-import pygame
 import sys
-from player import Player
-from menu import Menu
-from player_menu import PlayerMenu
+
+import pygame
+
 from asset_loader import AssetLoader
 from game import Game
+from menu import Menu
+from player import Player
+from player_menu import PlayerMenu
+
 
 class MainMenu:
     def __init__(self, screen):

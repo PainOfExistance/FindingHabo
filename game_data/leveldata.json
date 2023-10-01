@@ -1,107 +1,128 @@
 {
-    "worlds": [
+  "worlds": [
+    {
+      "name": "Dream World",
+      "collision_set": "game_data/bg.png",
+      "background": "game_data/bg.png",
+      "music": [
+        "game_data/DOVAHKIIN.mp3",
+        "game_data/Angelia.mp3",
+        "game_data/It's Time.mp3",
+        "game_data/V put.mp3",
+        "game_data/RadioGaGa.mp3"
+      ],
+      "spawn_point": [50, 50],
+      "offset": [0, 0],
+      "respawn_timer": 60,
+      "items": [
         {
-            "name": "Dream World",
-            "collision_set": "game_data/bg.png",
-            "background": "game_data/bg.png",
-            "music": [
-                "game_data/DOVAHKIIN.mp3",
-                "game_data/Angelia.mp3",
-                "game_data/It's Time.mp3",
-                "game_data/V put.mp3",
-                "game_data/RadioGaGa.mp3"
-            ],
-            "spawn_point": [50, 50],
-            "offset": [0, 0],
-            "respawn_timer": 60,
-            "items": [
-                {
-                    "type": "Minor Health Potion",
-                    "position": [200, 100]
-                },
-                {
-                    "type": "Steel Sword",
-                    "position": [400, 100]
-                }
-            ],
-            "containers": [
-                {
-                    "name": "Chest",
-                    "image": "game_data/chest.jpg",
-                    "position": [50, 200],
-                    "items": [
-                        {
-                            "type": "Gold",
-                            "quantity": 50
-                        },
-                        {
-                            "type": "Minor Health Potion",
-                            "quantity": 3
-                        },
-                        {
-                            "type": "Heirloom",
-                            "quantity": 1
-                        }
-                    ]
-                }
-            ],
-            "npcs": [
-                {
-                    "name": "Goblin",
-                    "position": [300, 300],
-                    "health": 50,
-                    "image": "game_data/goblin.png",
-                    "type": "enemy",
-                    "xp": 200,
-                    "status": "alive",
-                    "damage": 20,
-                    "attack_speed": 0.5
-                },
-                {
-                    "name": "Wolf",
-                    "position": [200, 200],
-                    "health": 100,
-                    "image": "game_data/wolf.png",
-                    "type": "enemy",
-                    "xp": 50,
-                    "status": "alive",
-                    "damage": 10,
-                    "attack_speed": 0.3
-                },
-                {
-                    "name": "Merchant",
-                    "position": [1000, 500],
-                    "health": 150,
-                    "image": "game_data/merchant.png",
-                    "type": "ally",
-                    "xp": 50,
-                    "status": "alive",
-                    "damage": 30,
-                    "attack_speed": 0.7
-                }
-            ],
-            "portals":[
-                {
-                    "world": "Land of the Free",
-                    "position": [1400, 600],
-                    "image": "game_data/door.png"
-                }
-            ]
+          "type": "Minor Health Potion",
+          "position": [200, 100]
         },
         {
-            "name": "Land of the Free",
-            "collision_set": "game_data/lotf.png",
-            "background": "game_data/lotf.png",
-            "music": [
-                "game_data/DOVAHKIIN.mp3",
-                "game_data/Angelia.mp3",
-                "game_data/It's Time.mp3",
-                "game_data/V put.mp3",
-                "game_data/RadioGaGa.mp3"
-            ],
-            "spawn_point": [600, 500],
-            "offset": [300, 200],
-            "respawn_timer": 60
+          "type": "Steel Sword",
+          "position": [400, 100]
         }
-    ]
+      ],
+      "containers": [
+        {
+          "name": "Chest",
+          "image": "game_data/chest.jpg",
+          "position": [50, 200],
+          "items": [
+            {
+              "type": "Gold",
+              "quantity": 50
+            },
+            {
+              "type": "Minor Health Potion",
+              "quantity": 3
+            },
+            {
+              "type": "Heirloom",
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "npcs": [
+        {
+          "name": "Goblin",
+          "position": [300, 300],
+          "health": 50,
+          "image": "game_data/goblin.png",
+          "type": "enemy",
+          "xp": 200,
+          "status": "alive",
+          "damage": 20,
+          "attack_speed": 0.5
+        },
+        {
+          "name": "Wolf",
+          "position": [200, 200],
+          "health": 100,
+          "image": "game_data/wolf.png",
+          "type": "enemy",
+          "xp": 50,
+          "status": "alive",
+          "damage": 10,
+          "attack_speed": 0.3
+        },
+        {
+          "name": "Merchant",
+          "position": [1000, 500],
+          "health": 150,
+          "image": "game_data/merchant.png",
+          "type": "ally",
+          "xp": 50,
+          "status": "alive",
+          "damage": 30,
+          "attack_speed": 0.7
+        }
+      ],
+      "portals": [
+        {
+          "world": "Land of the Free",
+          "position": [1400, 600],
+          "image": "game_data/door.png"
+        }
+      ]
+    },
+    {
+      "name": "Land of the Free",
+      "collision_set": "game_data/lotf.png",
+      "background": "game_data/lotf.png",
+      "music": [
+        "game_data/DOVAHKIIN.mp3",
+        "game_data/Angelia.mp3",
+        "game_data/It's Time.mp3",
+        "game_data/V put.mp3",
+        "game_data/RadioGaGa.mp3"
+      ],
+      "spawn_point": [600, 500],
+      "offset": [300, 200],
+      "respawn_timer": 60,
+      "items": [
+        {
+          "type": "Minor Health Potion",
+          "position": [200, 100]
+        }
+      ],
+      "containers": [],
+      "npcs": [
+        {
+          "name": "Goblin",
+          "position": [300, 300],
+          "health": 50,
+          "image": "game_data/goblin.png",
+          "type": "enemy",
+          "xp": 200,
+          "status": "alive",
+          "damage": 20,
+          "attack_speed": 0.5
+        }
+      ],
+      "portals": []
+    }
+  ]
 }

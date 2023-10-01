@@ -32,7 +32,10 @@ class MusicPlayer:
                 
     def set_tracks(self, music_tracks):
         self.music_tracks = music_tracks
+        random.shuffle(self.music_tracks)
+        pygame.mixer.music.fadeout(1000)
         self.current_track_index = 0
+        self.play_random_track()
         
     def stop(self):
         pygame.mixer.music.stop()

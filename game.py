@@ -54,23 +54,58 @@ class Game:
         self.player.inventory.add_item(self.items["Divine Armor"])
         self.worlds = assets.load_worlds()
         self.music_player = MusicPlayer(self.worlds[self.player.current_world]["music"])
-
-        self.background, self.bg_rect = self.asets.load_background(
-            self.worlds[self.player.current_world]["collision_set"]
-        )
-        self.collision_map = self.asets.load_collision(
-            self.worlds[self.player.current_world]["background"]
-        )
-        self.map_height = self.collision_map.shape[0]
-        self.map_width = self.collision_map.shape[1]
         self.world_objects = list()
-
+        
         # self.bg_rect.topleft = (
         #    -(self.bg_rect.centerx - self.screen_width // 3),
         #    -(self.bg_rect.centery - self.screen_height // 2),
         # )
         # print(self.bg_rect.center)
 
+        temp=self.setup()
+        self.ai = Ai(temp, assets, screen, self.music_player)
+        self.player.quests.dialogue=self.ai.strings
+        self.clock = pygame.time.Clock()
+        self.target_fps = 60
+        self.counter = 0
+        self.last_frame_time = pygame.time.get_ticks()
+        self.movement_speed = 200
+        self.rotation_angle = 0
+        self.weapon_rect = pygame.Rect(
+            self.player.player_rect.left + self.player.player_rect.width // 4,
+            self.player.player_rect.top - self.player.range,
+            16,
+            self.player.range,
+        )
+
+        self.bg_menu = pygame.Rect(
+            0,
+            0,
+            self.screen.get_width(),
+            self.screen.get_height(),
+        )
+        self.bg_surface_menu = pygame.Surface(
+            (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
+        )
+        
+    def setup(self):
+        self.world_objects.clear()
+        self.background, self.bg_rect = self.asets.load_background(
+        self.worlds[self.player.current_world]["collision_set"]
+        )
+        self.collision_map = self.asets.load_collision(
+            self.worlds[self.player.current_world]["background"]
+        )
+        
+        self.map_height = self.collision_map.shape[0]
+        self.map_width = self.collision_map.shape[1]
+        
+        self.bg_rect.centerx=self.bg_rect.centerx-self.worlds[self.player.current_world]["offset"][0]
+        self.bg_rect.centery=self.bg_rect.centery-self.worlds[self.player.current_world]["offset"][1]
+        
+        self.player.player_rect.centerx=self.worlds[self.player.current_world]["spawn_point"][0]
+        self.player.player_rect.centery=self.worlds[self.player.current_world]["spawn_point"][1]
+        
         for data in self.worlds[self.player.current_world]["items"]:
             item = self.items[data["type"]]
             img, img_rect = self.asets.load_images(
@@ -130,31 +165,9 @@ class Game:
         for x in self.world_objects:
             if x["type"] == "npc":
                 temp[x["name"]["name"]] = x["name"]
-        self.ai = Ai(temp, assets, screen, self.music_player)
-        self.player.quests.dialogue=self.ai.strings
-        self.clock = pygame.time.Clock()
-        self.target_fps = 60
-        self.counter = 0
-        self.last_frame_time = pygame.time.get_ticks()
-        self.movement_speed = 200
-        self.rotation_angle = 0
-        self.weapon_rect = pygame.Rect(
-            self.player.player_rect.left + self.player.player_rect.width // 3,
-            self.player.player_rect.top - self.player.range,
-            self.player.player_rect.width // 3,
-            self.player.range,
-        )
-
-        self.bg_menu = pygame.Rect(
-            0,
-            0,
-            self.screen.get_width(),
-            self.screen.get_height(),
-        )
-        self.bg_surface_menu = pygame.Surface(
-            (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
-        )
-
+        
+        return temp
+               
     def run(self):
         while True:
             self.update()
@@ -212,7 +225,6 @@ class Game:
         self.time_diff += self.delta_time
         self.counter += self.delta_time
         # na lestvici 1-10 kako bi ocenili Saro Dugi iz ITK?
-
 
         if self.time_diff >= 20:
             self.time_diff = 5
@@ -379,6 +391,15 @@ class Game:
             elif self.is_ready_to_talk:
                 self.is_ready_to_talk = False
                 self.is_in_dialogue = True
+            
+            elif self.world_to_travel_to!=None:
+                self.loading()
+                self.player.current_world=self.world_to_travel_to
+                self.world_to_travel_to=None
+                temp=self.setup()
+                self.ai.update_npcs(temp)
+                self.player.quests.dialogue=self.ai.strings
+                self.music_player.set_tracks(self.worlds[self.player.current_world]["music"])
 
         elif (
             not keys[pygame.K_e]
@@ -803,30 +824,30 @@ class Game:
         if self.rotation_angle == 90:
             self.weapon_rect = pygame.Rect(
                 self.player.player_rect.left - self.player.range,
-                self.player.player_rect.top + self.player.player_rect.width // 3,
+                self.player.player_rect.top + self.player.player_rect.width // 4,
                 self.player.range,
-                self.player.player_rect.height // 3,
+                16,
             )
         elif self.rotation_angle == 0:
             self.weapon_rect = pygame.Rect(
-                self.player.player_rect.left + self.player.player_rect.width // 3,
+                self.player.player_rect.left + self.player.player_rect.width // 4,
                 self.player.player_rect.top - self.player.range,
-                self.player.player_rect.width // 3,
+                16,
                 self.player.range,
             )
         elif self.rotation_angle == 180:
             self.weapon_rect = pygame.Rect(
-                self.player.player_rect.left + self.player.player_rect.width // 3,
+                self.player.player_rect.left + self.player.player_rect.width // 4,
                 self.player.player_rect.bottom,
-                self.player.player_rect.width // 3,
+                16,
                 self.player.range,
             )
         elif self.rotation_angle == 270:
             self.weapon_rect = pygame.Rect(
                 self.player.player_rect.right,
-                self.player.player_rect.top + self.player.player_rect.width // 3,
+                self.player.player_rect.top + self.player.player_rect.width // 4,
                 self.player.range,
-                self.player.player_rect.height // 3,
+                16,
             )
 
     def draw_container(self):
@@ -1259,10 +1280,6 @@ class Game:
                         self.screen.blit(text, text_rect)
                         self.is_ready_to_talk = True
 
-                    else:
-                        self.talk_to_name = ""
-                        self.is_ready_to_talk = False
-
                     if x["name"]["health"] > 0 and x["name"]["type"] == "enemy":
                         text = self.prompt_font.render(
                             str(x["name"]["health"]), True, (200, 0, 0)
@@ -1274,6 +1291,10 @@ class Game:
                             )
                         )
                         self.screen.blit(text, text_rect)
+                        
+                else:
+                    self.talk_to_name = ""
+                    self.is_ready_to_talk = False
                         
             if (
                 x["type"]=="portal"
@@ -1311,9 +1332,13 @@ class Game:
                 else:
                     self.world_to_travel_to = None
                 
-                    
-                
-
+    def loading(self):
+        font = pygame.font.Font("game_data/inter.ttf", 30)
+        text = font.render("Loading...", True, (180, 180, 180))
+        text_rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5))
+        self.screen.blit(text, text_rect)
+        pygame.display.flip()
+    
     def draw(self):
         self.screen.fill((230, 60, 20))
         self.screen.blit(self.background, self.bg_rect.topleft)

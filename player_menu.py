@@ -247,7 +247,7 @@ class PlayerMenu:
 
             if self.selected_item == 0:
                 self.player.inventory.draw(
-                    self.screen, self.selected_sub_item, self.sub_items
+                    self.screen, self.selected_sub_item, self.sub_items, self.screen.get_width() // 4 + 20
                 )
                 if self.selected_sub_item > len(self.player.inventory.items) - 1:
                     self.selected_sub_item -= 1

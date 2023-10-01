@@ -21,7 +21,7 @@ class AssetLoader:
     def load_player(self, path, center):
         # Load player image
         player = pygame.image.load(path)
-        player = pygame.transform.scale(player, (self.screen_width // 10, self.screen_height // 10))
+        player = pygame.transform.scale(player, (32, 64))
         player_rect = player.get_rect()
         player_rect.center = center
         return player, player_rect
