@@ -770,7 +770,7 @@ class Game:
                 img, img_rect = self.asets.load_images(
                 self.items[key]["image"],
                 (64, 64),
-                (self.player.player_rect.centerx, self.player.player_rect.centery),
+                (self.relative_player_left+self.player.player_rect.width//2, self.relative_player_top+self.player.player_rect.height//2),
                 )
                 self.world_objects.append(
                 {

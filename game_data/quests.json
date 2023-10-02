@@ -51,7 +51,17 @@
             "state": 0,
             "world": "Dream World",
             "npc": "Merchant",
-            "option": 4
+            "option": 4,
+            "rmitems": [
+              {
+                "name": "Steel Sword",
+                "quantity": 1
+              },
+              {
+                "name":"Minor Health Potion",
+                "quantity": 2
+              }
+            ]
           }
         }
       ],

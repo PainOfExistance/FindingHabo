@@ -15,6 +15,12 @@ class Quests:
     def advance_quest(self, id):
         for index, stages in enumerate(self.quests[id]["stages"]):
             if stages["objectives"]["state"] == 1:
+                if "rmitems" in stages["objectives"]:
+                    for items in stages["objectives"]["rmitems"]:
+                        self.inventory.items[items["name"]]["dropable"]=True
+                        for x in range(items["quantity"]):
+                            self.inventory.remove_item(items["name"])
+                            
                 self.quests[id]["stages"][index]["objectives"]["state"] = 2
                 if index < len(self.quests[id]["stages"]) - 1:
                     self.quests[id]["stages"][index + 1]["objectives"]["state"] = 1
@@ -73,14 +79,14 @@ class Quests:
                         self.advance_quest(kv)
                             
                     elif "items" in stage["objectives"] and stage["objectives"]["state"] == 1:
-                        tmp=0
+                        tmp=list()
                         for items in stage["objectives"]["items"]:
                             for key in self.inventory.quantity:
                                 if key == items["name"] and self.inventory.quantity[key] >= items["quantity"]:
-                                    tmp+=1
+                                    tmp.append(key)
                         
-                        if tmp == len(stage["objectives"]["items"]):
-                            for key in self.inventory.items:
+                        if len(tmp) == len(stage["objectives"]["items"]):
+                            for key in tmp:
                                 self.inventory.items[key]["dropable"]=False
                             self.advance_quest(kv)     
                     
