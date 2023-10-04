@@ -84,7 +84,9 @@
         {
           "world": "Land of the Free",
           "position": [1400, 600],
-          "image": "game_data/door.png"
+          "image": "game_data/door.png", 
+          "locked": false,
+          "unlocked_by": "Key to the Land of the Free"
         }
       ]
     },

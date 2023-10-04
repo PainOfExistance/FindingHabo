@@ -55,16 +55,16 @@ class Game:
         self.worlds = assets.load_worlds()
         self.music_player = MusicPlayer(self.worlds[self.player.current_world]["music"])
         self.world_objects = list()
-        
+
         # self.bg_rect.topleft = (
         #    -(self.bg_rect.centerx - self.screen_width // 3),
         #    -(self.bg_rect.centery - self.screen_height // 2),
         # )
         # print(self.bg_rect.center)
 
-        temp=self.setup()
+        temp = self.setup()
         self.ai = Ai(temp, assets, screen, self.music_player)
-        self.player.quests.dialogue=self.ai.strings
+        self.player.quests.dialogue = self.ai.strings
         self.clock = pygame.time.Clock()
         self.target_fps = 60
         self.counter = 0
@@ -87,25 +87,33 @@ class Game:
         self.bg_surface_menu = pygame.Surface(
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
-        
+
     def setup(self):
         self.world_objects.clear()
         self.background, self.bg_rect = self.asets.load_background(
-        self.worlds[self.player.current_world]["collision_set"]
+            self.worlds[self.player.current_world]["collision_set"]
         )
         self.collision_map = self.asets.load_collision(
             self.worlds[self.player.current_world]["background"]
         )
-        
+
         self.map_height = self.collision_map.shape[0]
         self.map_width = self.collision_map.shape[1]
-        
-        self.bg_rect.centerx=self.bg_rect.centerx-self.worlds[self.player.current_world]["offset"][0]
-        self.bg_rect.centery=self.bg_rect.centery-self.worlds[self.player.current_world]["offset"][1]
-        
-        self.player.player_rect.centerx=self.worlds[self.player.current_world]["spawn_point"][0]
-        self.player.player_rect.centery=self.worlds[self.player.current_world]["spawn_point"][1]
-        
+
+        self.bg_rect.centerx = (
+            self.bg_rect.centerx - self.worlds[self.player.current_world]["offset"][0]
+        )
+        self.bg_rect.centery = (
+            self.bg_rect.centery - self.worlds[self.player.current_world]["offset"][1]
+        )
+
+        self.player.player_rect.centerx = self.worlds[self.player.current_world][
+            "spawn_point"
+        ][0]
+        self.player.player_rect.centery = self.worlds[self.player.current_world][
+            "spawn_point"
+        ][1]
+
         for data in self.worlds[self.player.current_world]["items"]:
             item = self.items[data["type"]]
             img, img_rect = self.asets.load_images(
@@ -147,27 +155,22 @@ class Game:
                     "agroved": False,
                 }
             )
-            
+
         for data in self.worlds[self.player.current_world]["portals"]:
             img, img_rect = self.asets.load_images(
                 data["image"], (64, 64), tuple(data["position"])
             )
             self.world_objects.append(
-                {
-                    "image": img,
-                    "rect": img_rect,
-                    "type": "portal",
-                    "name": data
-                }
+                {"image": img, "rect": img_rect, "type": "portal", "name": data}
             )
 
         temp = {}
         for x in self.world_objects:
             if x["type"] == "npc":
                 temp[x["name"]["name"]] = x["name"]
-        
+
         return temp
-               
+
     def run(self):
         while True:
             self.update()
@@ -199,13 +202,13 @@ class Game:
                 and not self.menu.visible
             ):
                 self.ai.strings.handle_input()
-                if self.ai.strings.starts!=0:
+                if self.ai.strings.starts != 0:
                     self.player.quests.start_quest(self.ai.strings.starts)
-                    self.ai.strings.starts=0
-                
-                if self.ai.strings.advances!=0:
+                    self.ai.strings.starts = 0
+
+                if self.ai.strings.advances != 0:
                     self.player.quests.advance_quest(self.ai.strings.advances)
-                    self.ai.strings.advances=0
+                    self.ai.strings.advances = 0
 
             self.clock.tick(self.target_fps)
 
@@ -232,19 +235,25 @@ class Game:
         self.relative_player_left = int(
             self.player.player_rect.left - self.bg_rect.left
         )
-        
+
         self.relative_player_right = int(
             self.player.player_rect.right - self.bg_rect.left
         )
-        
+
         self.relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
-        
+
         self.relative_player_bottom = int(
             self.player.player_rect.bottom - self.bg_rect.top
         )
         movement = int(self.movement_speed * self.delta_time)
-        
-        self.player.quests.check_quest_advancement((self.relative_player_top+self.player.player_rect.height//2, self.relative_player_left+self.player.player_rect.width//2), self.player.current_world)
+
+        self.player.quests.check_quest_advancement(
+            (
+                self.relative_player_top + self.player.player_rect.height // 2,
+                self.relative_player_left + self.player.player_rect.width // 2,
+            ),
+            self.player.current_world,
+        )
 
         keys = pygame.key.get_pressed()
         if (
@@ -391,15 +400,23 @@ class Game:
             elif self.is_ready_to_talk:
                 self.is_ready_to_talk = False
                 self.is_in_dialogue = True
-            
-            elif self.world_to_travel_to!=None:
+
+            elif self.world_to_travel_to != None and (
+                not self.world_to_travel_to["locked"]
+                or self.player.inventory.items.get(
+                    self.world_to_travel_to["unlocked_by"], "None"
+                )
+                != "None"
+            ):
                 self.loading()
-                self.player.current_world=self.world_to_travel_to
-                self.world_to_travel_to=None
-                temp=self.setup()
+                self.player.current_world = self.world_to_travel_to["world"]
+                self.world_to_travel_to = None
+                temp = self.setup()
                 self.ai.update_npcs(temp)
-                self.player.quests.dialogue=self.ai.strings
-                self.music_player.set_tracks(self.worlds[self.player.current_world]["music"])
+                self.player.quests.dialogue = self.ai.strings
+                self.music_player.set_tracks(
+                    self.worlds[self.player.current_world]["music"]
+                )
 
         elif (
             not keys[pygame.K_e]
@@ -765,20 +782,23 @@ class Game:
                 self.player_menu.selected_sub_item
             ]
             self.player.unequip_item(key)
-            ret=self.player.remove_item(key)
+            ret = self.player.remove_item(key)
             if ret:
                 img, img_rect = self.asets.load_images(
-                self.items[key]["image"],
-                (64, 64),
-                (self.relative_player_left+self.player.player_rect.width//2, self.relative_player_top+self.player.player_rect.height//2),
+                    self.items[key]["image"],
+                    (64, 64),
+                    (
+                        self.relative_player_left + self.player.player_rect.width // 2,
+                        self.relative_player_top + self.player.player_rect.height // 2,
+                    ),
                 )
                 self.world_objects.append(
-                {
-                    "name": key,
-                    "image": img,
-                    "rect": img_rect,
-                    "type": "item",
-                }
+                    {
+                        "name": key,
+                        "image": img,
+                        "rect": img_rect,
+                        "type": "item",
+                    }
                 )
 
         elif not keys[pygame.K_r] and self.r_pressed:
@@ -820,7 +840,7 @@ class Game:
 
         if keys[pygame.K_o]:
             print(self.player.quests.quests)
-        
+
         if self.rotation_angle == 90:
             self.weapon_rect = pygame.Rect(
                 self.player.player_rect.left - self.player.range,
@@ -1113,10 +1133,10 @@ class Game:
                 if self.player.player_rect.colliderect(other_obj_rect):
                     if x["attack_diff"] > x["name"]["attack_speed"]:
                         res = self.player.stats.defense - x["name"]["damage"]
-                        
+
                         if res > 0:
                             res = 0
-                            
+
                         self.player.update_health(res)
                         self.world_objects[index]["attack_diff"] = 0
 
@@ -1291,13 +1311,13 @@ class Game:
                             )
                         )
                         self.screen.blit(text, text_rect)
-                        
+
                 else:
                     self.talk_to_name = ""
                     self.is_ready_to_talk = False
-                        
+
             if (
-                x["type"]=="portal"
+                x["type"] == "portal"
                 and not self.container_open
                 and not self.menu.visible
                 and not self.player_menu.visible
@@ -1305,40 +1325,47 @@ class Game:
             ):
                 relative__left = int(self.bg_rect.left + x["rect"].left)
                 relative__top = int(self.bg_rect.top + x["rect"].top)
-                
+
                 other_obj_rect = pygame.Rect(
                     relative__left,
                     relative__top,
                     x["rect"].width,
                     x["rect"].height,
                 )
-                
+
                 if other_obj_rect.colliderect(self.player.player_rect):
-                    text = self.prompt_font.render(
-                                f"E) {x['name']['world']}", True, (44, 53, 57)
-                            )
+                    if x["name"]["locked"]:
+                        text = self.prompt_font.render(
+                            f"Key required) {x['name']['world']} ", True, (44, 53, 57)
+                        )
+                    else:
+                        text = self.prompt_font.render(
+                            f"E) {x['name']['world']} ", True, (44, 53, 57)
+                        )
 
                     text_rect = text.get_rect(
-                                center=(
-                                    relative__left + x["rect"].width // 2,
-                                    relative__top - 10,
-                                )
-                            )
-                    
-                    self.world_to_travel_to = x["name"]["world"]
-                    
+                        center=(
+                            relative__left + x["rect"].width // 2,
+                            relative__top + x["rect"].height + 10,
+                        )
+                    )
+
+                    self.world_to_travel_to = x["name"]
+
                     self.screen.blit(text, text_rect)
-                    
+
                 else:
                     self.world_to_travel_to = None
-                
+
     def loading(self):
         font = pygame.font.Font("game_data/inter.ttf", 30)
         text = font.render("Loading...", True, (180, 180, 180))
-        text_rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5))
+        text_rect = text.get_rect(
+            center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5)
+        )
         self.screen.blit(text, text_rect)
         pygame.display.flip()
-    
+
     def draw(self):
         self.screen.fill((230, 60, 20))
         self.screen.blit(self.background, self.bg_rect.topleft)
