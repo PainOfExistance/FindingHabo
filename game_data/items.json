@@ -124,6 +124,15 @@
             "image": "heirloom.png",
             "dropable": false,
             "quest": [1,1]
+        },
+        {
+            "id": "itmKeytolotf",
+            "name": "Key to the Land of the Free",
+            "type": "item",
+            "description": "Key to the Land of the Free.",
+            "price": 10,
+            "image": "heirloom.png",
+            "dropable": true
         }
     ]
 }

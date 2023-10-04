@@ -410,6 +410,7 @@ class Game:
             ):
                 self.loading()
                 self.player.current_world = self.world_to_travel_to["world"]
+                self.world_objects[self.world_to_travel_to["index"]]["name"]["locked"]=False
                 self.world_to_travel_to = None
                 temp = self.setup()
                 self.ai.update_npcs(temp)
@@ -1351,6 +1352,7 @@ class Game:
                     )
 
                     self.world_to_travel_to = x["name"]
+                    self.world_to_travel_to['index']=index
 
                     self.screen.blit(text, text_rect)
 

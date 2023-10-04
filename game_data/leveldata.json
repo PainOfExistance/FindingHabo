@@ -85,7 +85,7 @@
           "world": "Land of the Free",
           "position": [1400, 600],
           "image": "game_data/door.png", 
-          "locked": false,
+          "locked": true,
           "unlocked_by": "Key to the Land of the Free"
         }
       ]
@@ -124,7 +124,15 @@
           "attack_speed": 0.5
         }
       ],
-      "portals": []
+      "portals": [
+        {
+        "world": "Dream World",
+        "position": [900, 750],
+        "image": "game_data/door.png", 
+        "locked": true,
+        "unlocked_by": "Key to the Land of the Free"
+      }
+    ]
     }
   ]
 }
