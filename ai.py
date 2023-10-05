@@ -11,12 +11,14 @@ class Ai:
     def __init__(self, npcs, assets, screen, music_player):
         self.npcs = npcs
         self.ai_package = assets.load_ai_package()
+        self.assets=assets
         self.dt = 0
         self.npc_movement = {}
         self.strings = Dialougue(assets, self.ai_package, screen, music_player)
         
     def update_npcs(self, npcs):
         self.npcs = npcs
+        self.ai_package = self.assets.load_ai_package()
 
     def update(self, name, dt, collision_map, relative__left, relative__top, rect):
         self.dt = dt

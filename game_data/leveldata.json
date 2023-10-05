@@ -86,7 +86,9 @@
           "position": [1400, 600],
           "image": "game_data/door.png", 
           "locked": true,
-          "unlocked_by": "Key to the Land of the Free"
+          "unlocked_by": "Key to the Land of the Free",
+          "spawn_point": [900, 750],
+          "offset": [600, 400]
         }
       ]
     },
@@ -101,8 +103,8 @@
         "game_data/V put.mp3",
         "game_data/RadioGaGa.mp3"
       ],
-      "spawn_point": [600, 500],
-      "offset": [300, 200],
+      "spawn_point": [0, 0],
+      "offset": [0, 0],
       "respawn_timer": 60,
       "items": [
         {
@@ -130,7 +132,9 @@
         "position": [900, 750],
         "image": "game_data/door.png", 
         "locked": true,
-        "unlocked_by": "Key to the Land of the Free"
+        "unlocked_by": "Key to the Land of the Free",
+        "spawn_point": [1400, 600],
+        "offset": [1100, 250]
       }
     ]
     }

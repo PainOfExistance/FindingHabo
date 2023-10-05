@@ -1,3 +1,4 @@
+import copy
 import sys
 
 import numpy as np
@@ -84,6 +85,7 @@ class Game:
             self.screen.get_width(),
             self.screen.get_height(),
         )
+        
         self.bg_surface_menu = pygame.Surface(
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
@@ -100,19 +102,20 @@ class Game:
         self.map_height = self.collision_map.shape[0]
         self.map_width = self.collision_map.shape[1]
 
-        self.bg_rect.centerx = (
-            self.bg_rect.centerx - self.worlds[self.player.current_world]["offset"][0]
+        self.bg_rect.left = (
+            -self.worlds[self.player.current_world]["offset"][0]
         )
-        self.bg_rect.centery = (
-            self.bg_rect.centery - self.worlds[self.player.current_world]["offset"][1]
+        self.bg_rect.top = (
+            -self.worlds[self.player.current_world]["offset"][1]
         )
 
-        self.player.player_rect.centerx = self.worlds[self.player.current_world][
+        self.player.player_rect.top = (self.worlds[self.player.current_world][
             "spawn_point"
-        ][0]
-        self.player.player_rect.centery = self.worlds[self.player.current_world][
+        ][0]-self.worlds[self.player.current_world]["offset"][0])
+        
+        self.player.player_rect.left = (self.worlds[self.player.current_world][
             "spawn_point"
-        ][1]
+        ][1]-self.worlds[self.player.current_world]["offset"][1])
 
         for data in self.worlds[self.player.current_world]["items"]:
             item = self.items[data["type"]]
@@ -137,7 +140,7 @@ class Game:
                     "image": img,
                     "rect": img_rect,
                     "type": "container",
-                    "name": data,
+                    "name": copy.deepcopy(data),
                 }
             )
 
@@ -150,7 +153,7 @@ class Game:
                     "image": img,
                     "rect": img_rect,
                     "type": "npc",
-                    "name": data,
+                    "name": copy.deepcopy(data),
                     "attack_diff": 0,
                     "agroved": False,
                 }
@@ -161,13 +164,13 @@ class Game:
                 data["image"], (64, 64), tuple(data["position"])
             )
             self.world_objects.append(
-                {"image": img, "rect": img_rect, "type": "portal", "name": data}
+                {"image": img, "rect": img_rect, "type": "portal", "name": copy.deepcopy(data)}
             )
 
         temp = {}
         for x in self.world_objects:
             if x["type"] == "npc":
-                temp[x["name"]["name"]] = x["name"]
+                temp[x["name"]["name"]] = copy.deepcopy(x["name"])
 
         return temp
 
@@ -389,6 +392,7 @@ class Game:
                     )
                     del self.world_objects[self.item_hovered]
                     self.item_hovered = None
+                    
             elif self.container_hovered != None and not self.container_open:
                 self.selection_held = True
                 if (
@@ -398,6 +402,7 @@ class Game:
                     self.container_open = True
 
             elif self.is_ready_to_talk:
+                self.selection_held = True
                 self.is_ready_to_talk = False
                 self.is_in_dialogue = True
 
@@ -411,6 +416,13 @@ class Game:
                 self.loading()
                 self.player.current_world = self.world_to_travel_to["world"]
                 self.world_objects[self.world_to_travel_to["index"]]["name"]["locked"]=False
+                
+                self.worlds[self.player.current_world]["offset"][0]=self.world_to_travel_to["offset"][0]
+                self.worlds[self.player.current_world]["offset"][1]=self.world_to_travel_to["offset"][1]
+        
+                self.worlds[self.player.current_world]["spawn_point"][0]=self.world_to_travel_to["spawn_point"][0]
+                self.worlds[self.player.current_world]["spawn_point"][1]=self.world_to_travel_to["spawn_point"][1]
+                
                 self.world_to_travel_to = None
                 temp = self.setup()
                 self.ai.update_npcs(temp)
@@ -840,7 +852,7 @@ class Game:
             self.attack_button_held = False
 
         if keys[pygame.K_o]:
-            print(self.player.quests.quests)
+            print(self.worlds)
 
         if self.rotation_angle == 90:
             self.weapon_rect = pygame.Rect(
@@ -1356,8 +1368,8 @@ class Game:
 
                     self.screen.blit(text, text_rect)
 
-                else:
-                    self.world_to_travel_to = None
+            else:
+                self.world_to_travel_to = None
 
     def loading(self):
         font = pygame.font.Font("game_data/inter.ttf", 30)
