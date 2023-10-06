@@ -1,4 +1,5 @@
 import json
+import pickle
 
 import cv2
 import numpy as np
@@ -96,4 +97,13 @@ class AssetLoader:
             quests = {quest["id"]: quest for quest in quest_data["quests"]}
         return quests
     
+    def save(self, filename, game):
+        with open(filename, "wb") as file:
+            pickle.dump(game, file)
+            return True
+            
+    def load(self, filename):
+        with open(filename, "rb") as file:
+            game = pickle.load(file)
+            return game
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic
