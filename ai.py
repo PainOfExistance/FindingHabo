@@ -18,7 +18,9 @@ class Ai:
         
     def update_npcs(self, npcs):
         self.npcs = npcs
-        self.ai_package = self.assets.load_ai_package()
+        tmp=self.assets.load_ai_package()
+        for key in npcs:
+            self.ai_package[key]=tmp[key]
 
     def update(self, name, dt, collision_map, relative__left, relative__top, rect):
         self.dt = dt
