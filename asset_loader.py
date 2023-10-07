@@ -1,6 +1,6 @@
 import json
-import pickle
 
+import bson
 import cv2
 import numpy as np
 import pygame
@@ -98,12 +98,15 @@ class AssetLoader:
         return quests
     
     def save(self, filename, game):
-        with open(filename, "wb") as file:
-            pickle.dump(game, file)
+        with open(f"saves/{filename}.habo", "wb") as file:
+            
+            serialized_data = bson.encode(game)
+            file.write(serialized_data)
             return True
             
     def load(self, filename):
         with open(filename, "rb") as file:
-            game = pickle.load(file)
+            loaded_data = file.read()
+            game = bson.decode_all(loaded_data)
             return game
     #https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

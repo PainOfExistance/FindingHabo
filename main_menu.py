@@ -71,7 +71,7 @@ class MainMenu:
             player = Player(
                 "game_data/desk1.png", self.screen_width, self.screen_height, assets
             )
-            menu = Menu(self.screen)
+            menu = Menu(self.screen, assets, player)
             player_menu = PlayerMenu(self.screen, player)
             game = Game(
                 self.screen,
@@ -95,6 +95,11 @@ class MainMenu:
         elif selected_option == "Exit":
             pygame.quit()
             sys.exit()
+        elif self.in_sub_menu == 1:
+            assets = AssetLoader(self.screen_width, self.screen_height)
+            game=assets.load(f"saves/{selected_option}.habo")
+            self.is_menu_visible = False
+            game.run()
 
     def render(self):
         if self.in_sub_menu == 0:

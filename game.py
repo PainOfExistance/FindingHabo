@@ -1385,7 +1385,7 @@ class Game:
         self.screen.blit(self.background, self.bg_rect.topleft)
         self.draw_objects()
         self.player.draw(self.screen)
-        self.menu.render()
+        self.menu.render(self)
         self.player_menu.render()
         self.draw_container()
         self.player.quests.draw_quest_info(self.screen)
