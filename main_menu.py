@@ -67,21 +67,31 @@ class MainMenu:
         if selected_option == "Start":
             print("Starting the game...")
             self.loading()
-            assets = AssetLoader(self.screen_width, self.screen_height)
+
+            surface = pygame.Surface((800, 600))
+            offsetX=self.screen_width//2-surface.get_width()//2
+            offsetY=self.screen_height//2-surface.get_height()//2
+            self.screen.blit(surface, (offsetX, offsetY))
+            surface.get_width()
+            surface.get_height()
+            #pygame.display.update()
+            assets = AssetLoader(surface.get_width(), surface.get_height())
             player = Player(
-                "game_data/desk1.png", self.screen_width, self.screen_height, assets
+                "game_data/desk1.png", surface.get_width(), surface.get_height(), assets
             )
-            menu = Menu(self.screen, assets, player)
-            player_menu = PlayerMenu(self.screen, player)
+            menu = Menu(surface, assets, player)
+            player_menu = PlayerMenu(surface, player)
             game = Game(
                 self.screen,
-                self.screen_width,
-                self.screen_height,
+                surface,
+                surface.get_width(),
+                surface.get_height(),
                 menu,
                 player_menu,
                 player,
                 assets,
             )
+            
             self.is_menu_visible = False
             game.run()
         elif selected_option == "Load" and len(self.saves) > 0:

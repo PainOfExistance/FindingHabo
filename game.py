@@ -3,6 +3,7 @@ import sys
 
 import numpy as np
 import pygame
+from pygame.locals import *
 
 from ai import Ai
 from music_player import MusicPlayer
@@ -10,8 +11,17 @@ from music_player import MusicPlayer
 
 class Game:
     def __init__(
-        self, screen, screen_width, screen_height, menu, player_menu, player, assets
+        self,
+        tmp,
+        screen,
+        screen_width,
+        screen_height,
+        menu,
+        player_menu,
+        player,
+        assets,
     ):
+        self._scr = tmp
         self.screen = screen
         self.screen_width = screen_width
         self.screen_height = screen_height
@@ -85,7 +95,7 @@ class Game:
             self.screen.get_width(),
             self.screen.get_height(),
         )
-        
+
         self.bg_surface_menu = pygame.Surface(
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
@@ -102,20 +112,18 @@ class Game:
         self.map_height = self.collision_map.shape[0]
         self.map_width = self.collision_map.shape[1]
 
-        self.bg_rect.left = (
-            -self.worlds[self.player.current_world]["offset"][0]
-        )
-        self.bg_rect.top = (
-            -self.worlds[self.player.current_world]["offset"][1]
+        self.bg_rect.left = -self.worlds[self.player.current_world]["offset"][0]
+        self.bg_rect.top = -self.worlds[self.player.current_world]["offset"][1]
+
+        self.player.player_rect.top = (
+            self.worlds[self.player.current_world]["spawn_point"][0]
+            - self.worlds[self.player.current_world]["offset"][0]
         )
 
-        self.player.player_rect.top = (self.worlds[self.player.current_world][
-            "spawn_point"
-        ][0]-self.worlds[self.player.current_world]["offset"][0])
-        
-        self.player.player_rect.left = (self.worlds[self.player.current_world][
-            "spawn_point"
-        ][1]-self.worlds[self.player.current_world]["offset"][1])
+        self.player.player_rect.left = (
+            self.worlds[self.player.current_world]["spawn_point"][1]
+            - self.worlds[self.player.current_world]["offset"][1]
+        )
 
         for data in self.worlds[self.player.current_world]["items"]:
             item = self.items[data["type"]]
@@ -164,7 +172,12 @@ class Game:
                 data["image"], (64, 64), tuple(data["position"])
             )
             self.world_objects.append(
-                {"image": img, "rect": img_rect, "type": "portal", "name": copy.deepcopy(data)}
+                {
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "portal",
+                    "name": copy.deepcopy(data),
+                }
             )
 
         temp = {}
@@ -392,7 +405,7 @@ class Game:
                     )
                     del self.world_objects[self.item_hovered]
                     self.item_hovered = None
-                    
+
             elif self.container_hovered != None and not self.container_open:
                 self.selection_held = True
                 if (
@@ -415,14 +428,24 @@ class Game:
             ):
                 self.loading()
                 self.player.current_world = self.world_to_travel_to["world"]
-                self.world_objects[self.world_to_travel_to["index"]]["name"]["locked"]=False
-                
-                self.worlds[self.player.current_world]["offset"][0]=self.world_to_travel_to["offset"][0]
-                self.worlds[self.player.current_world]["offset"][1]=self.world_to_travel_to["offset"][1]
-        
-                self.worlds[self.player.current_world]["spawn_point"][0]=self.world_to_travel_to["spawn_point"][0]
-                self.worlds[self.player.current_world]["spawn_point"][1]=self.world_to_travel_to["spawn_point"][1]
-                
+                self.world_objects[self.world_to_travel_to["index"]]["name"][
+                    "locked"
+                ] = False
+
+                self.worlds[self.player.current_world]["offset"][
+                    0
+                ] = self.world_to_travel_to["offset"][0]
+                self.worlds[self.player.current_world]["offset"][
+                    1
+                ] = self.world_to_travel_to["offset"][1]
+
+                self.worlds[self.player.current_world]["spawn_point"][
+                    0
+                ] = self.world_to_travel_to["spawn_point"][0]
+                self.worlds[self.player.current_world]["spawn_point"][
+                    1
+                ] = self.world_to_travel_to["spawn_point"][1]
+
                 self.world_to_travel_to = None
                 temp = self.setup()
                 self.ai.update_npcs(temp)
@@ -1364,7 +1387,7 @@ class Game:
                     )
 
                     self.world_to_travel_to = x["name"]
-                    self.world_to_travel_to['index']=index
+                    self.world_to_travel_to["index"] = index
 
                     self.screen.blit(text, text_rect)
 
@@ -1397,4 +1420,14 @@ class Game:
             self.draw_barter()
 
         pygame.draw.rect(self.screen, (0, 0, 0), self.weapon_rect)
+        
+        subsurface_rect = pygame.Rect(0, 0, self.screen.get_width(), self.screen.get_height())
+
+        subsurface = self.screen.subsurface(subsurface_rect)
+        
+        streched=pygame.transform.scale(
+            subsurface, (self._scr.get_width(), self._scr.get_height())
+        )
+        
+        self._scr.blit(streched, (0, 0))
         pygame.display.flip()

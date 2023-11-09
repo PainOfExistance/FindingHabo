@@ -6,10 +6,9 @@ import pygame
 from main_menu import MainMenu
 
 pygame.init()
-screen_width, screen_height = 800, 600
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen_width, screen_height = 1920, 1080
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
 pygame.display.set_caption("Finding Habo")
-
 if __name__ == "__main__":
     menu=MainMenu(screen)
     menu.run()
