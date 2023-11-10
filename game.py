@@ -394,6 +394,8 @@ class Game:
             and not self.player_menu.visible
             and not self.selection_held
         ):
+            #print(f"is ready to talk: {self.is_ready_to_talk}")
+            #print(f"is in dialoge: {self.is_in_dialogue}")
             if self.item_hovered != None:
                 self.selection_held = True
                 if (

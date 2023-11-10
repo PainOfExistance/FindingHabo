@@ -68,10 +68,8 @@ class MainMenu:
             print("Starting the game...")
             self.loading()
 
-            surface = pygame.Surface((800, 600))
-            offsetX=self.screen_width//2-surface.get_width()//2
-            offsetY=self.screen_height//2-surface.get_height()//2
-            self.screen.blit(surface, (offsetX, offsetY))
+            surface = pygame.Surface((1080, 720))
+            self.screen.blit(surface, (0, 0))
             surface.get_width()
             surface.get_height()
             #pygame.display.update()
