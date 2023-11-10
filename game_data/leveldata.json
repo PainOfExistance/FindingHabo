@@ -84,7 +84,7 @@
         {
           "world": "Land of the Free",
           "position": [1400, 600],
-          "image": "game_data/door.png", 
+          "image": "game_data/door.png",
           "locked": true,
           "unlocked_by": "Key to the Land of the Free",
           "spawn_point": [900, 750],
@@ -128,15 +128,15 @@
       ],
       "portals": [
         {
-        "world": "Dream World",
-        "position": [900, 750],
-        "image": "game_data/door.png", 
-        "locked": true,
-        "unlocked_by": "Key to the Land of the Free",
-        "spawn_point": [1400, 600],
-        "offset": [1100, 250]
-      }
-    ]
+          "world": "Dream World",
+          "position": [900, 750],
+          "image": "game_data/door.png",
+          "locked": true,
+          "unlocked_by": "Key to the Land of the Free",
+          "spawn_point": [1400, 600],
+          "offset": [1100, 250]
+        }
+      ]
     }
   ]
 }

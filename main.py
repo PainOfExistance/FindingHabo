@@ -11,7 +11,8 @@ m=screeninfo.get_monitors()
 display=[x for x in m if x.is_primary==True]
 print(display)
 pygame.init()
-screen = pygame.display.set_mode((display[0].width, display[0].height), pygame.RESIZABLE)
+screen_width, screen_height = display[0].width, display[0].height
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
 pygame.display.set_caption("Finding Habo")
 if __name__ == "__main__":
     menu=MainMenu(screen)

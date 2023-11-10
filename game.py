@@ -394,8 +394,6 @@ class Game:
             and not self.player_menu.visible
             and not self.selection_held
         ):
-            #print(f"is ready to talk: {self.is_ready_to_talk}")
-            #print(f"is in dialoge: {self.is_in_dialogue}")
             if self.item_hovered != None:
                 self.selection_held = True
                 if (
@@ -1350,28 +1348,18 @@ class Game:
                         )
                         self.screen.blit(text, text_rect)
 
-                else:
+                elif not other_obj_rect.colliderect(self.weapon_rect) and x["type"] == "npc":
                     self.talk_to_name = ""
                     self.is_ready_to_talk = False
 
-            if (
+                if (
                 x["type"] == "portal"
                 and not self.container_open
                 and not self.menu.visible
                 and not self.player_menu.visible
                 and not self.is_in_dialogue
+                and other_obj_rect.colliderect(self.player.player_rect)
             ):
-                relative__left = int(self.bg_rect.left + x["rect"].left)
-                relative__top = int(self.bg_rect.top + x["rect"].top)
-
-                other_obj_rect = pygame.Rect(
-                    relative__left,
-                    relative__top,
-                    x["rect"].width,
-                    x["rect"].height,
-                )
-
-                if other_obj_rect.colliderect(self.player.player_rect):
                     if x["name"]["locked"]:
                         text = self.prompt_font.render(
                             f"Key required) {x['name']['world']} ", True, (44, 53, 57)
@@ -1380,22 +1368,19 @@ class Game:
                         text = self.prompt_font.render(
                             f"E) {x['name']['world']} ", True, (44, 53, 57)
                         )
-
                     text_rect = text.get_rect(
                         center=(
                             relative__left + x["rect"].width // 2,
                             relative__top + x["rect"].height + 10,
                         )
                     )
-
                     self.world_to_travel_to = x["name"]
                     self.world_to_travel_to["index"] = index
-
                     self.screen.blit(text, text_rect)
 
-            else:
-                self.world_to_travel_to = None
-
+                elif not other_obj_rect.colliderect(self.player.player_rect) and x["type"] == "portal":
+                    self.world_to_travel_to = None
+            
     def loading(self):
         font = pygame.font.Font("game_data/inter.ttf", 30)
         text = font.render("Loading...", True, (180, 180, 180))
