@@ -9,7 +9,6 @@ from main_menu import MainMenu
 m=screeninfo.get_monitors()
 
 display=[x for x in m if x.is_primary==True]
-print(display)
 pygame.init()
 screen_width, screen_height = display[0].width, display[0].height
 screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
