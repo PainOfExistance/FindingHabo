@@ -232,7 +232,6 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()
 
     def update(self):
         # Calculate delta time (time since last frame)
@@ -329,6 +328,32 @@ class Game:
             else:
                 self.bg_rect.move_ip(int(-self.movement_speed * self.delta_time), 0)
 
+        elif (
+            keys[pygame.K_d]
+            and not self.menu.visible
+            and not self.player_menu.visible
+            and not self.container_open
+            and not self.is_in_dialogue
+        ):
+            dx=np.count_nonzero(self.collision_map[self.relative_player_bottom, self.relative_player_right: self.relative_player_right + movement*2])
+            dy=np.count_nonzero(self.collision_map[self.relative_player_top : self.relative_player_bottom, self.relative_player_right + movement*2])
+            angle=np.arctan2(dy,dx)
+            print(np.rad2deg(angle))
+            if angle < 90:
+                if self.player.player_rect.right < self.screen_width - 10:
+                    self.player.player_rect.move_ip(
+                        int(self.movement_speed * self.delta_time * np.cos(angle)), int(self.movement_speed * self.delta_time * -np.sin(angle))
+                    )
+                    if self.rotation_angle != 270:
+                        self.rotation_angle = 270 - self.rotation_angle
+                        self.player.player = pygame.transform.rotate(
+                            self.player.player, self.rotation_angle
+                        )
+                        self.rotation_angle = 270
+                else:
+                    self.bg_rect.move_ip(int(-self.movement_speed * self.delta_time), 0)
+                
+                
         if (
             keys[pygame.K_w]
             and np.count_nonzero(
@@ -348,7 +373,6 @@ class Game:
                 self.player.player_rect.move_ip(
                     0, int(-self.movement_speed * self.delta_time)
                 )
-                # self.player.update_health(10)
                 if self.rotation_angle != 0:
                     self.rotation_angle = 0 - self.rotation_angle
                     self.player.player = pygame.transform.rotate(
@@ -1348,18 +1372,21 @@ class Game:
                         )
                         self.screen.blit(text, text_rect)
 
-                elif not other_obj_rect.colliderect(self.weapon_rect) and x["type"] == "npc":
+                elif (
+                    not other_obj_rect.colliderect(self.weapon_rect)
+                    and x["type"] == "npc"
+                ):
                     self.talk_to_name = ""
                     self.is_ready_to_talk = False
 
                 if (
-                x["type"] == "portal"
-                and not self.container_open
-                and not self.menu.visible
-                and not self.player_menu.visible
-                and not self.is_in_dialogue
-                and other_obj_rect.colliderect(self.player.player_rect)
-            ):
+                    x["type"] == "portal"
+                    and not self.container_open
+                    and not self.menu.visible
+                    and not self.player_menu.visible
+                    and not self.is_in_dialogue
+                    and other_obj_rect.colliderect(self.player.player_rect)
+                ):
                     if x["name"]["locked"]:
                         text = self.prompt_font.render(
                             f"Key required) {x['name']['world']} ", True, (44, 53, 57)
@@ -1378,9 +1405,12 @@ class Game:
                     self.world_to_travel_to["index"] = index
                     self.screen.blit(text, text_rect)
 
-                elif not other_obj_rect.colliderect(self.player.player_rect) and x["type"] == "portal":
+                elif (
+                    not other_obj_rect.colliderect(self.player.player_rect)
+                    and x["type"] == "portal"
+                ):
                     self.world_to_travel_to = None
-            
+
     def loading(self):
         font = pygame.font.Font("game_data/inter.ttf", 30)
         text = font.render("Loading...", True, (180, 180, 180))
@@ -1407,14 +1437,16 @@ class Game:
             self.draw_barter()
 
         pygame.draw.rect(self.screen, (0, 0, 0), self.weapon_rect)
-        
-        subsurface_rect = pygame.Rect(0, 0, self.screen.get_width(), self.screen.get_height())
+
+        subsurface_rect = pygame.Rect(
+            0, 0, self.screen.get_width(), self.screen.get_height()
+        )
 
         subsurface = self.screen.subsurface(subsurface_rect)
-        
-        streched=pygame.transform.scale(
+
+        streched = pygame.transform.scale(
             subsurface, (self._scr.get_width(), self._scr.get_height())
         )
-        
+
         self._scr.blit(streched, (0, 0))
         pygame.display.flip()
