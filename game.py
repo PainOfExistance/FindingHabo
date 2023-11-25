@@ -335,24 +335,34 @@ class Game:
             and not self.container_open
             and not self.is_in_dialogue
         ):
-            dx=np.count_nonzero(self.collision_map[self.relative_player_bottom, self.relative_player_right: self.relative_player_right + movement*2])
-            dy=np.count_nonzero(self.collision_map[self.relative_player_top : self.relative_player_bottom, self.relative_player_right + movement*2])
-            angle=np.arctan2(dy,dx)
-            print(np.rad2deg(angle))
-            if angle < 90:
+            dx = np.count_nonzero(self.collision_map[self.relative_player_bottom, self.relative_player_right:self.relative_player_right + movement * 2])
+            dt = np.count_nonzero(self.collision_map[self.relative_player_top, self.relative_player_right:self.relative_player_right + movement * 2])
+            dy = np.count_nonzero(self.collision_map[self.relative_player_top:self.relative_player_bottom, self.relative_player_right + movement * 2])
+
+            angle = np.arctan2(dy, dt if dt > dx else dx)
+
+            if angle < 70:
+                print("meow")
                 if self.player.player_rect.right < self.screen_width - 10:
+                    move_direction = -1 if dt < dx else 1
                     self.player.player_rect.move_ip(
-                        int(self.movement_speed * self.delta_time * np.cos(angle)), int(self.movement_speed * self.delta_time * -np.sin(angle))
+                        int(self.movement_speed * self.delta_time * np.cos(angle)),
+                        int(move_direction * self.movement_speed * self.delta_time * np.sin(angle))
                     )
+
                     if self.rotation_angle != 270:
                         self.rotation_angle = 270 - self.rotation_angle
                         self.player.player = pygame.transform.rotate(
                             self.player.player, self.rotation_angle
                         )
                         self.rotation_angle = 270
+                        
                 else:
-                    self.bg_rect.move_ip(int(-self.movement_speed * self.delta_time), 0)
-                
+                    move_direction = -1 if dt < dx else 1
+                    self.bg_rect.move_ip(
+                        int(-self.movement_speed * self.delta_time * np.cos(angle)),
+                        int(move_direction * -self.movement_speed * self.delta_time * np.sin(angle))
+                    )
                 
         if (
             keys[pygame.K_w]
