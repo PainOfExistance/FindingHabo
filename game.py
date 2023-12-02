@@ -660,7 +660,7 @@ class Game:
                             * np.sin(angle)
                         ),
                     )
-
+                    
                     #if self.rotation_angle != 180:
                     #    self.rotation_angle = 180 - self.rotation_angle
                     #    self.player.player = pygame.transform.rotate(
@@ -671,7 +671,7 @@ class Game:
                 else:
                     move_direction = -1 if dt < dx else 1
                     self.bg_rect.move_ip(
-                        int(self.movement_speed * self.delta_time * np.cos(angle)),
+                        int(-self.movement_speed * self.delta_time * np.cos(angle)),
                         int(
                             move_direction
                             * self.movement_speed
