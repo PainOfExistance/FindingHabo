@@ -290,7 +290,6 @@ class Game:
                 self.player.player_rect.move_ip(
                     int(-self.movement_speed * self.delta_time), 0
                 )
-                # self.player.add_trait("Health Boost")
                 # if self.rotation_angle != 90:
                 #    self.rotation_angle = 90 - self.rotation_angle
                 #    self.player.player = pygame.transform.rotate(
@@ -352,13 +351,12 @@ class Game:
                             * np.sin(angle)
                         ),
                     )
-
-                    # if self.rotation_angle != 270:
-                    #    self.rotation_angle = 270 - self.rotation_angle
+                    # if self.rotation_angle != 90:
+                    #    self.rotation_angle = 90 - self.rotation_angle
                     #    self.player.player = pygame.transform.rotate(
                     #        self.player.player, self.rotation_angle
                     #    )
-                    #    self.rotation_angle = 270
+                    #    self.rotation_angle = 90
 
                 else:
                     move_direction = -1 if dt < dx else 1
@@ -397,6 +395,7 @@ class Game:
                 #        self.player.player, self.rotation_angle
                 #    )
                 #    self.rotation_angle = 270
+
             else:
                 self.bg_rect.move_ip(int(-self.movement_speed * self.delta_time), 0)
 
@@ -510,18 +509,16 @@ class Game:
         ):
             dx = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top : self.relative_player_bottom,
+                    self.relative_player_top - movement * 2 : self.relative_player_top,
                     self.relative_player_right,
                 ]
             )
-
             dt = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top : self.relative_player_bottom,
+                    self.relative_player_top - movement * 2 : self.relative_player_top,
                     self.relative_player_left,
                 ]
             )
-
             dy = np.count_nonzero(
                 self.collision_map[
                     self.relative_player_top - movement * 2,
@@ -531,25 +528,6 @@ class Game:
 
             angle = np.arctan2(dy, dt if dt > dx else dx)
 
-            # print(dx)
-
-            print(
-                self.collision_map[
-                    self.relative_player_top : self.relative_player_bottom,
-                    self.relative_player_left,
-                ]
-            )
-
-            print("--------------------------------")
-
-            print(
-                self.collision_map[
-                    self.relative_player_top : self.relative_player_bottom,
-                    self.relative_player_right,
-                ]
-            )
-            print("--------------------------------")
-            print(np.rad2deg(angle))
             if (
                 np.rad2deg(angle) < 70
                 and np.count_nonzero(
@@ -560,23 +538,30 @@ class Game:
                 )
                 <= 5
             ):
-                if self.player.player_rect.left > 10:
-                    move_direction = -1 if dt < dx else 1
+                if self.player.player_rect.top > 10:
+                    move_direction_X = -1 if dt < dx else 1
+                    move_direction_Y = -1 if dt > dx else 1
                     self.player.player_rect.move_ip(
                         int(
-                            -self.movement_speed
+                            self.movement_speed
                             * self.delta_time
                             * np.cos(angle)
+                            * move_direction_X
                         ),
-                        int(self.movement_speed * move_direction * self.delta_time * np.sin(angle)),
+                        int(
+                            self.movement_speed
+                            * move_direction_Y
+                            * self.delta_time
+                            * np.sin(angle)
+                        ),
                     )
 
-                    # if self.rotation_angle != 270:
-                    #    self.rotation_angle = 270 - self.rotation_angle
+                    # if self.rotation_angle != 0:
+                    #    self.rotation_angle = 0 - self.rotation_angle
                     #    self.player.player = pygame.transform.rotate(
                     #        self.player.player, self.rotation_angle
                     #    )
-                    #    self.rotation_angle = 270
+                    #    self.rotation_angle = 0
 
                 else:
                     move_direction = -1 if dt < dx else 1
@@ -609,7 +594,6 @@ class Game:
                 self.player.player_rect.move_ip(
                     0, int(self.movement_speed * self.delta_time)
                 )
-                # self.player.update_health(-10)
                 if self.rotation_angle != 180:
                     self.rotation_angle = 180 - self.rotation_angle
                     self.player.player = pygame.transform.rotate(
@@ -618,6 +602,83 @@ class Game:
                     self.rotation_angle = 180
             else:
                 self.bg_rect.move_ip(0, int(-self.movement_speed * self.delta_time))
+
+        elif (
+            keys[pygame.K_s]
+            and not self.menu.visible
+            and not self.player_menu.visible
+            and not self.container_open
+            and not self.is_in_dialogue
+        ):
+            dx = np.count_nonzero(
+                self.collision_map[
+                    self.relative_player_bottom : self.relative_player_bottom
+                    + movement * 2,
+                    self.relative_player_right,
+                ]
+            )
+            dt = np.count_nonzero(
+                self.collision_map[
+                    self.relative_player_bottom : self.relative_player_bottom
+                    + movement * 2,
+                    self.relative_player_left,
+                ]
+            )
+            dy = np.count_nonzero(
+                self.collision_map[
+                    self.relative_player_bottom + movement * 2,
+                    self.relative_player_left : self.relative_player_right,
+                ]
+            )
+
+            angle = np.arctan2(dy, dt if dt > dx else dx)
+
+            if (
+                np.rad2deg(angle) < 70
+                and np.count_nonzero(
+                    self.collision_map[
+                        self.relative_player_left : self.relative_player_right,
+                        self.relative_player_top : self.relative_player_bottom,
+                    ]
+                )
+                <= 5
+            ):
+                if self.player.player_rect.bottom < self.screen_height - 10:
+                    move_direction_X = -1 if dt < dx else 1
+                    move_direction_Y = -1 if dt > dx else 1
+                    self.player.player_rect.move_ip(
+                        int(
+                            self.movement_speed
+                            * self.delta_time
+                            * np.cos(angle)
+                            * move_direction_X
+                        ),
+                        int(
+                            self.movement_speed
+                            * move_direction_Y
+                            * self.delta_time
+                            * np.sin(angle)
+                        ),
+                    )
+
+                    #if self.rotation_angle != 180:
+                    #    self.rotation_angle = 180 - self.rotation_angle
+                    #    self.player.player = pygame.transform.rotate(
+                    #        self.player.player, self.rotation_angle
+                    #    )
+                    #    self.rotation_angle = 180
+
+                else:
+                    move_direction = -1 if dt < dx else 1
+                    self.bg_rect.move_ip(
+                        int(self.movement_speed * self.delta_time * np.cos(angle)),
+                        int(
+                            move_direction
+                            * self.movement_speed
+                            * self.delta_time
+                            * np.sin(angle)
+                        ),
+                    )
 
         if (
             keys[pygame.K_e]
