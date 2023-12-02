@@ -290,12 +290,13 @@ class Game:
                 self.player.player_rect.move_ip(
                     int(-self.movement_speed * self.delta_time), 0
                 )
-                # if self.rotation_angle != 90:
-                #    self.rotation_angle = 90 - self.rotation_angle
-                #    self.player.player = pygame.transform.rotate(
-                #        self.player.player, self.rotation_angle
-                #    )
-                #    self.rotation_angle = 90
+                if self.rotation_angle != 90:
+                   self.rotation_angle = 90 - self.rotation_angle
+                   self.player.player = pygame.transform.rotate(
+                       self.player.player, self.rotation_angle
+                   )
+                   self.rotation_angle = 90
+                   
             else:
                 self.bg_rect.move_ip(int(self.movement_speed * self.delta_time), 0)
 
@@ -351,12 +352,12 @@ class Game:
                             * np.sin(angle)
                         ),
                     )
-                    # if self.rotation_angle != 90:
-                    #    self.rotation_angle = 90 - self.rotation_angle
-                    #    self.player.player = pygame.transform.rotate(
-                    #        self.player.player, self.rotation_angle
-                    #    )
-                    #    self.rotation_angle = 90
+                    if self.rotation_angle != 90:
+                       self.rotation_angle = 90 - self.rotation_angle
+                       self.player.player = pygame.transform.rotate(
+                           self.player.player, self.rotation_angle
+                       )
+                       self.rotation_angle = 90
 
                 else:
                     move_direction = -1 if dt < dx else 1
@@ -389,12 +390,12 @@ class Game:
                 self.player.player_rect.move_ip(
                     int(self.movement_speed * self.delta_time), 0
                 )
-                # if self.rotation_angle != 270:
-                #    self.rotation_angle = 270 - self.rotation_angle
-                #    self.player.player = pygame.transform.rotate(
-                #        self.player.player, self.rotation_angle
-                #    )
-                #    self.rotation_angle = 270
+                if self.rotation_angle != 270:
+                   self.rotation_angle = 270 - self.rotation_angle
+                   self.player.player = pygame.transform.rotate(
+                       self.player.player, self.rotation_angle
+                   )
+                   self.rotation_angle = 270
 
             else:
                 self.bg_rect.move_ip(int(-self.movement_speed * self.delta_time), 0)
@@ -452,12 +453,12 @@ class Game:
                         ),
                     )
 
-                    # if self.rotation_angle != 270:
-                    #    self.rotation_angle = 270 - self.rotation_angle
-                    #    self.player.player = pygame.transform.rotate(
-                    #        self.player.player, self.rotation_angle
-                    #    )
-                    #    self.rotation_angle = 270
+                    if self.rotation_angle != 270:
+                       self.rotation_angle = 270 - self.rotation_angle
+                       self.player.player = pygame.transform.rotate(
+                           self.player.player, self.rotation_angle
+                       )
+                       self.rotation_angle = 270
 
                 else:
                     move_direction = -1 if dt < dx else 1
@@ -490,12 +491,12 @@ class Game:
                 self.player.player_rect.move_ip(
                     0, int(-self.movement_speed * self.delta_time)
                 )
-                # if self.rotation_angle != 0:
-                #    self.rotation_angle = 0 - self.rotation_angle
-                #    self.player.player = pygame.transform.rotate(
-                #        self.player.player, self.rotation_angle
-                #    )
-                #    self.rotation_angle = 0
+                if self.rotation_angle != 0:
+                   self.rotation_angle = 0 - self.rotation_angle
+                   self.player.player = pygame.transform.rotate(
+                       self.player.player, self.rotation_angle
+                   )
+                   self.rotation_angle = 0
 
             else:
                 self.bg_rect.move_ip(0, int(self.movement_speed * self.delta_time))
@@ -556,12 +557,12 @@ class Game:
                         ),
                     )
 
-                    # if self.rotation_angle != 0:
-                    #    self.rotation_angle = 0 - self.rotation_angle
-                    #    self.player.player = pygame.transform.rotate(
-                    #        self.player.player, self.rotation_angle
-                    #    )
-                    #    self.rotation_angle = 0
+                    if self.rotation_angle != 0:
+                       self.rotation_angle = 0 - self.rotation_angle
+                       self.player.player = pygame.transform.rotate(
+                           self.player.player, self.rotation_angle
+                       )
+                       self.rotation_angle = 0
 
                 else:
                     move_direction = -1 if dt < dx else 1
@@ -661,12 +662,12 @@ class Game:
                         ),
                     )
                     
-                    #if self.rotation_angle != 180:
-                    #    self.rotation_angle = 180 - self.rotation_angle
-                    #    self.player.player = pygame.transform.rotate(
-                    #        self.player.player, self.rotation_angle
-                    #    )
-                    #    self.rotation_angle = 180
+                    if self.rotation_angle != 180:
+                        self.rotation_angle = 180 - self.rotation_angle
+                        self.player.player = pygame.transform.rotate(
+                            self.player.player, self.rotation_angle
+                        )
+                        self.rotation_angle = 180
 
                 else:
                     move_direction = -1 if dt < dx else 1
