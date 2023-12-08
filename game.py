@@ -82,6 +82,7 @@ class Game:
         self.last_frame_time = pygame.time.get_ticks()
         self.movement_speed = 200
         self.rotation_angle = 0
+        self.on_a_diagonal = False
         self.weapon_rect = pygame.Rect(
             self.player.player_rect.left + self.player.player_rect.width // 4,
             self.player.player_rect.top - self.player.range,
@@ -273,56 +274,62 @@ class Game:
         keys = pygame.key.get_pressed()
         if (
             self.player.player_rect.left <= 10
-            and np.count_nonzero(
+            and(keys[pygame.K_a] or keys[pygame.K_w] or keys[pygame.K_s])
+            and (np.count_nonzero(
                 self.collision_map[
                     self.relative_player_top : self.relative_player_bottom,
                     self.relative_player_left - movement,
                 ]
                 == 1
             )
-            <= 1
+            <= 1 or self.on_a_diagonal)
         ):
             self.bg_rect.move_ip(int(self.movement_speed * self.delta_time), 0)
 
         if (
             self.player.player_rect.right >= self.screen_width - 10
-            and np.count_nonzero(
+            and(keys[pygame.K_d] or keys[pygame.K_w] or keys[pygame.K_s])
+            and (np.count_nonzero(
                 self.collision_map[
                     self.relative_player_top : self.relative_player_bottom,
                     min(self.relative_player_right + movement, self.map_width - 1),
                 ]
                 == 1
             )
-            <= 1
+            <= 1 or self.on_a_diagonal)
         ):
             self.bg_rect.move_ip(int(-self.movement_speed * self.delta_time), 0)
 
         if (
             self.player.player_rect.top <= 10
-            and np.count_nonzero(
+            and(keys[pygame.K_a] or keys[pygame.K_w] or keys[pygame.K_d])
+            and (np.count_nonzero(
                 self.collision_map[
                     self.relative_player_top - movement,
                     self.relative_player_left : self.relative_player_right,
                 ]
                 == 1
             )
-            <= 1
+            <= 1 or self.on_a_diagonal)
         ):
             self.bg_rect.move_ip(0, int(self.movement_speed * self.delta_time))
 
         if (
             self.player.player_rect.bottom >= self.screen_height - 10
-            and np.count_nonzero(
+            and(keys[pygame.K_a] or keys[pygame.K_s] or keys[pygame.K_d])
+            and (np.count_nonzero(
                 self.collision_map[
                     min(self.relative_player_bottom + movement, self.map_height - 1),
                     self.relative_player_left : self.relative_player_right,
                 ]
                 == 1
             )
-            <= 1
+            <= 1 or self.on_a_diagonal)
         ):
             self.bg_rect.move_ip(0, int(-self.movement_speed * self.delta_time))
-
+            
+        self.on_a_diagonal=False
+        
         if (
             keys[pygame.K_a]
             and np.count_nonzero(
@@ -404,6 +411,7 @@ class Game:
                             * np.sin(angle)
                         ),
                     )
+                    self.on_a_diagonal=True
                     if self.rotation_angle != 90:
                         self.rotation_angle = 90 - self.rotation_angle
                         self.player.player = pygame.transform.rotate(
@@ -504,7 +512,7 @@ class Game:
                             * np.sin(angle)
                         ),
                     )
-
+                    self.on_a_diagonal=True
                     if self.rotation_angle != 270:
                         self.rotation_angle = 270 - self.rotation_angle
                         self.player.player = pygame.transform.rotate(
@@ -608,7 +616,7 @@ class Game:
                             * np.sin(angle)
                         ),
                     )
-
+                    self.on_a_diagonal=True
                     if self.rotation_angle != 0:
                         self.rotation_angle = 0 - self.rotation_angle
                         self.player.player = pygame.transform.rotate(
@@ -713,7 +721,7 @@ class Game:
                             * np.sin(angle)
                         ),
                     )
-
+                    self.on_a_diagonal=True
                     if self.rotation_angle != 180:
                         self.rotation_angle = 180 - self.rotation_angle
                         self.player.player = pygame.transform.rotate(
