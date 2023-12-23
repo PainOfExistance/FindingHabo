@@ -24,6 +24,8 @@ class Player:
         self.range=5
         self.active_effects=[]
         self.assets = assets
+        self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
+        
         self.player, self.player_rect = assets.load_player(
             path, (600, 500)
         )
@@ -42,8 +44,7 @@ class Player:
             20,
         )
         
-        font = pygame.font.Font("game_data/inter.ttf", 13)
-        self.text = font.render("Health", True, (255, 255, 255))
+        self.text = self.font.render("Health", True, (255, 255, 255))
         self.text_rect = self.text.get_rect(
             center=(screen_width // 2, screen_height - 12)
         )

@@ -17,6 +17,9 @@ class PlayerMenu:
         self.inventory_visible = False
         self.trait_selection = -1
         self.player = player
+        
+        self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
+        self.stats_font = pygame.font.Font("fonts/SovngardeBold.ttf", 22)
 
         self.bg = pygame.Rect(
             0, 0, self.screen.get_width() // 4, self.screen.get_height()
@@ -198,9 +201,6 @@ class PlayerMenu:
                 4,
             )
 
-            menu_font = pygame.font.Font("game_data/inter.ttf", 30)
-            stats_font = pygame.font.Font("game_data/inter.ttf", 18)
-
             for index, item in enumerate(self.menu_items):
                 color = (
                     (44, 53, 57)
@@ -210,25 +210,25 @@ class PlayerMenu:
                     else (160, 160, 160)
                 )
 
-                text = menu_font.render(item, True, color)
+                text = self.menu_font.render(item, True, color)
                 text_rect = text.get_rect(topleft=(20, 20 + index * 40))
                 self.screen.blit(text, text_rect)
                 text_y = self.screen.get_height() - 140
 
                 for stat in self.stats:
-                    stat_render = stats_font.render(stat, True, (44, 53, 57))
+                    stat_render = self.stats_font.render(stat, True, (44, 53, 57))
                     stat_rect = stat_render.get_rect(bottomleft=(20, text_y))
                     self.screen.blit(stat_render, stat_rect)
                     text_y += stat_rect.height + 5
 
-                level = stats_font.render(
+                level = self.stats_font.render(
                     f"Level: {str(self.player.level.level)}", True, (44, 53, 57)
                 )
                 level_rect = level.get_rect(bottomleft=(20, text_y))
                 self.screen.blit(level, level_rect)
                 text_y += level_rect.height + 5
 
-                level = stats_font.render(
+                level = self.stats_font.render(
                     f"Unused points: {str(self.player.level.traits.unused_trait_points)}",
                     True,
                     (44, 53, 57),
@@ -237,7 +237,7 @@ class PlayerMenu:
                 self.screen.blit(level, level_rect)
                 text_y += level_rect.height + 5
 
-                level = stats_font.render(
+                level = self.stats_font.render(
                     f"Gold: {str(self.player.gold)}",
                     True,
                     (44, 53, 57),

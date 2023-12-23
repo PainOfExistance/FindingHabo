@@ -98,8 +98,7 @@ class AssetLoader:
         return quests
     
     def save(self, filename, game):
-        with open(f"saves/{filename}.habo", "wb") as file:
-            
+        with open(f"saves/{filename}.habo", "wb") as file:      
             serialized_data = bson.encode(game)
             file.write(serialized_data)
             return True

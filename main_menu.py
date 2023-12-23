@@ -21,9 +21,9 @@ class MainMenu:
         self.screen_height = screen.get_height()
         self.is_menu_visible = True
         self.in_sub_menu = 0
-        self.font = pygame.font.Font("game_data/inter.ttf", 36)
         saves = glob.glob(os.path.join("saves", "*.habo"))
         self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves]
+        self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 40)  
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
@@ -75,7 +75,7 @@ class MainMenu:
             #pygame.display.update()
             assets = AssetLoader(surface.get_width(), surface.get_height())
             player = Player(
-                "game_data/desk1.png", surface.get_width(), surface.get_height(), assets
+                "textures/npc/desk1.png", surface.get_width(), surface.get_height(), assets
             )
             menu = Menu(surface, assets, player)
             player_menu = PlayerMenu(surface, player)

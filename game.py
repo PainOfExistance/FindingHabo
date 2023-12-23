@@ -49,13 +49,15 @@ class Game:
         self.is_ready_to_talk = False
         self.world_to_travel_to = None
         self.talk_to_name = ""
-        self.prompt_font = pygame.font.Font("game_data/inter.ttf", 16)
-        self.subtitle_font = pygame.font.Font("game_data/inter.ttf", 24)
 
         self.relative_player_top = 0
         self.relative_player_left = 0
         self.relative_player_right = 0
         self.relative_player_bottom = 0
+        
+        self.prompt_font = pygame.font.Font("fonts/SovngardeBold.ttf", 20)
+        self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
+        self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
 
         self.player.inventory.add_item(self.items["Minor Health Potion"])
         self.player.inventory.add_item(self.items["Knowledge Potion"])
@@ -66,12 +68,6 @@ class Game:
         self.worlds = assets.load_worlds()
         self.music_player = MusicPlayer(self.worlds[self.player.current_world]["music"])
         self.world_objects = list()
-
-        # self.bg_rect.topleft = (
-        #    -(self.bg_rect.centerx - self.screen_width // 3),
-        #    -(self.bg_rect.centery - self.screen_height // 2),
-        # )
-        # print(self.bg_rect.center)
 
         temp = self.setup()
         self.ai = Ai(temp, assets, screen, self.music_player)
@@ -1184,14 +1180,13 @@ class Game:
                 4,
             )
 
-            menu_font = pygame.font.Font("game_data/inter.ttf", 30)
             scroll_position = (self.selected_inventory_item // 10) * 10
             visible_items = list(
                 self.world_objects[self.container_hovered]["name"]["items"]
             )[scroll_position : scroll_position + 10]
             i = 0
 
-            item_render = menu_font.render(
+            item_render = self.menu_font.render(
                 self.player.name,
                 True,
                 (44, 53, 57),
@@ -1204,7 +1199,7 @@ class Game:
             )
             self.screen.blit(item_render, item_rect)
 
-            item_render = menu_font.render(
+            item_render = self.menu_font.render(
                 self.world_objects[self.container_hovered]["name"]["name"],
                 True,
                 (44, 53, 57),
@@ -1243,7 +1238,7 @@ class Game:
                     item_text = f"> {data['type']}: {data['quantity']}"
                 else:
                     item_text = f"    {data['type']}: {data['quantity']}"
-                item_render = menu_font.render(item_text, True, color)
+                item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(
                     topleft=(self.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
                 )
@@ -1272,7 +1267,7 @@ class Game:
                 else:
                     item_text = f"    {item_name}: {item_quantity}"
 
-                item_render = menu_font.render(item_text, True, color)
+                item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
                 self.screen.blit(item_render, item_rect)
 
@@ -1293,15 +1288,13 @@ class Game:
                 4,
             )
 
-            menu_font = pygame.font.Font("game_data/inter.ttf", 30)
-
             scroll_position = (self.selected_inventory_item // 10) * 10
             visible_items = list(self.ai.ai_package[self.talk_to_name]["items"])[
                 scroll_position : scroll_position + 10
             ]
             i = 0
 
-            item_render = menu_font.render(
+            item_render = self.menu_font.render(
                 self.player.name + "  Gold: " + str(self.player.gold),
                 True,
                 (44, 53, 57),
@@ -1314,7 +1307,7 @@ class Game:
             )
             self.screen.blit(item_render, item_rect)
 
-            item_render = menu_font.render(
+            item_render = self.menu_font.render(
                 self.talk_to_name
                 + "  Gold: "
                 + str(self.ai.ai_package[self.talk_to_name]["gold"]),
@@ -1355,7 +1348,7 @@ class Game:
                     item_text = f"> {data['type']}: {data['quantity']}  {self.items[self.ai.ai_package[self.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
                 else:
                     item_text = f"    {data['type']}: {data['quantity']}  {self.items[self.ai.ai_package[self.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
-                item_render = menu_font.render(item_text, True, color)
+                item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(
                     topleft=(self.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
                 )
@@ -1384,7 +1377,7 @@ class Game:
                 else:
                     item_text = f"    {item_name}: {item_quantity}  {self.items[item_name]['price']}"
 
-                item_render = menu_font.render(item_text, True, color)
+                item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
                 self.screen.blit(item_render, item_rect)
 

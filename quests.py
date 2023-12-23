@@ -11,6 +11,8 @@ class Quests:
         self.text_to_draw = []
         self.inventory=inventory
         self.dialogue=None
+        self.quests_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
+        self.quest_start_font = pygame.font.Font("fonts/SovngardeBold.ttf", 36)
 
     def advance_quest(self, id):
         for index, stages in enumerate(self.quests[id]["stages"]):
@@ -52,9 +54,8 @@ class Quests:
 
     def draw_quest_info(self, screen):
         if pygame.time.get_ticks() - self.tics <= 5000:
-            quest_start_font = pygame.font.Font("game_data/inter.ttf", 32)
             for index, v in enumerate(self.text_to_draw):
-                item_render = quest_start_font.render(v, True, (44, 53, 57))
+                item_render = self.quest_start_font.render(v, True, (44, 53, 57))
                 item_rect = item_render.get_rect(
                     center=(screen.get_width() // 2, 200 + index * 40)
                 )
@@ -95,7 +96,6 @@ class Quests:
                         
 
     def draw(self, screen, selected_sub_item, sub_items):
-        quests_font = pygame.font.Font("game_data/inter.ttf", 24)
         item_spacing = 30
         i = 0
         coords = (screen.get_width() + screen.get_width() // 4) / 2
@@ -115,13 +115,13 @@ class Quests:
                 )
 
                 quest_text = f"{quest_data['name']}"
-                item_render = quests_font.render(quest_text, True, color)
+                item_render = self.quests_font.render(quest_text, True, color)
                 item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
                 screen.blit(item_render, item_rect)
 
                 if index == selected_sub_item - scroll_position:
                     i += item_spacing
-                    line_render = quests_font.render(
+                    line_render = self.quests_font.render(
                         quest_data["description"], True, color
                     )
                     line_rect = line_render.get_rect(
@@ -140,7 +140,7 @@ class Quests:
                             elif stage["objectives"]["state"] == 1:
                                 stage_text = f"◇{stage['description']}"
 
-                            stage_render = quests_font.render(stage_text, True, color)
+                            stage_render = self.quests_font.render(stage_text, True, color)
                             stage_rect = stage_render.get_rect(
                                 center=(coords, 20 + index * 40 + i)
                             )

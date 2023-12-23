@@ -10,8 +10,6 @@ class Dialougue:
         self.ai = ai
         self.screen = screen
         self.music_player = music_player
-        self.subtitle_font = pygame.font.Font("game_data/inter.ttf", 24)
-        self.option_font = pygame.font.Font("game_data/inter.ttf", 20)
         self.index = -1
         self.selected_item = 0
         self.selection_held = False
@@ -30,7 +28,10 @@ class Dialougue:
         self.will_bartering = False
         self.starts = 0
         self.advances = 0
-
+        
+        self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
+        self.option_font = pygame.font.Font("fonts/SovngardeBold.ttf", 24)
+        
         self.bg_menu = pygame.Rect(
             25,
             self.screen.get_height() - 170,

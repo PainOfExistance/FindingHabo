@@ -6,7 +6,7 @@
             "type": "item",
             "description": "Restores health.",
             "price": 20,
-            "image": "game_data/health_potion_minor.jpg",
+            "image": "textures/items/health_potion_minor.jpg",
             "dropable": true,
             "effect": {
                 "name": "Healing",
@@ -36,7 +36,7 @@
             "type": "item",
             "description": "Temporarily boosts power.",
             "price": 25,
-            "image": "game_data/power_potion_grand.jpg",
+            "image": "textures/items/power_potion_grand.jpg",
             "dropable": true,
             "effect": {
                 "name": "Strength Boost",
@@ -51,7 +51,7 @@
             "type": "btitem",
             "description": "Steel sword.",
             "price": 40,
-            "image": "game_data/steel_sword.jpg",
+            "image": "textures/items/steel_sword.jpg",
             "dropable": true,
             "effect": {
                 "name": "",
@@ -75,7 +75,7 @@
             "type": "btitem",
             "description": "Steel armor.",
             "price": 80,
-            "image": "game_data/steel_armor.png",
+            "image": "textures/items/steel_armor.png",
             "dropable": true,
             "effect": {
                 "name": "",
@@ -98,7 +98,7 @@
             "type": "btitem",
             "description": "Divine armor.",
             "price": 150,
-            "image": "game_data/divine_armor.png",
+            "image": "textures/items/divine_armor.png",
             "dropable": true,
             "effect": {
                 "name": "",

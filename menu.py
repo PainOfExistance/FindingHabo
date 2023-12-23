@@ -21,6 +21,7 @@ class Menu:
         self.assets=assets
         self.player=player
         self.game=None
+        self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 40)   
 
     def toggle_visibility(self):
         self.visible = not self.visible
@@ -101,11 +102,10 @@ class Menu:
     def render(self, game):
         self.game=game
         if self.visible:
-            menu_font = pygame.font.Font("game_data/inter.ttf", 36)
             if self.in_sub_menu == 0:
                 for index, item in enumerate(self.menu_items):
                     color = (0, 0, 0) if index == self.selected_item else (180, 180, 180)
-                    text = menu_font.render(item, True, color)
+                    text = self.menu_font.render(item, True, color)
                     text_rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5 + index * 50))
                     self.screen.blit(text, text_rect)
             
@@ -124,7 +124,7 @@ class Menu:
                         save_text = f"> {save}"
                     else:
                         save_text = f"  {save}"
-                    item_render = menu_font.render(save_text, True, color)
+                    item_render = self.menu_font.render(save_text, True, color)
                     item_rect = item_render.get_rect(
                         center=(
                             self.screen.get_width() // 2,

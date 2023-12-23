@@ -2,14 +2,17 @@
   "worlds": [
     {
       "name": "Dream World",
-      "collision_set": "game_data/bg.png",
-      "background": "game_data/bg.png",
+      "collision_set": "textures/terrain/bg.png",
+      "background": "textures/terrain/bg.png",
       "music": [
-        "game_data/DOVAHKIIN.mp3",
-        "game_data/Angelia.mp3",
-        "game_data/It's Time.mp3",
-        "game_data/V put.mp3",
-        "game_data/RadioGaGa.mp3"
+        "sounds/bgm/DOVAHKIIN.mp3",
+        "sounds/bgm/Angelia.mp3",
+        "sounds/bgm/It's Time.mp3",
+        "sounds/bgm/V put.mp3",
+        "sounds/bgm/finding_habo_bgm.mp3",
+        "sounds/bgm/peace.mp3",
+        "sounds/bgm/theme_dark.mp3",
+        "sounds/bgm/RadioGaGa.mp3"
       ],
       "spawn_point": [50, 50],
       "offset": [0, 0],
@@ -27,7 +30,7 @@
       "containers": [
         {
           "name": "Chest",
-          "image": "game_data/chest.jpg",
+          "image": "textures/static/chest.jpg",
           "position": [50, 200],
           "items": [
             {
@@ -50,7 +53,7 @@
           "name": "Goblin",
           "position": [300, 300],
           "health": 50,
-          "image": "game_data/goblin.png",
+          "image": "textures/npc/goblin.png",
           "type": "enemy",
           "xp": 200,
           "status": "alive",
@@ -61,7 +64,7 @@
           "name": "Wolf",
           "position": [200, 200],
           "health": 100,
-          "image": "game_data/wolf.png",
+          "image": "textures/npc/wolf.png",
           "type": "enemy",
           "xp": 50,
           "status": "alive",
@@ -72,7 +75,7 @@
           "name": "Merchant",
           "position": [1000, 500],
           "health": 150,
-          "image": "game_data/merchant.png",
+          "image": "textures/npc/merchant.png",
           "type": "ally",
           "xp": 50,
           "status": "alive",
@@ -84,7 +87,7 @@
         {
           "world": "Land of the Free",
           "position": [1400, 600],
-          "image": "game_data/door.png",
+          "image": "textures/static/door.png",
           "locked": true,
           "unlocked_by": "Key to the Land of the Free",
           "spawn_point": [900, 750],
@@ -94,14 +97,17 @@
     },
     {
       "name": "Land of the Free",
-      "collision_set": "game_data/lotf.png",
-      "background": "game_data/lotf.png",
+      "collision_set": "textures/terrain/lotf.png",
+      "background": "textures/terrain/lotf.png",
       "music": [
-        "game_data/DOVAHKIIN.mp3",
-        "game_data/Angelia.mp3",
-        "game_data/It's Time.mp3",
-        "game_data/V put.mp3",
-        "game_data/RadioGaGa.mp3"
+        "sounds/bgm/DOVAHKIIN.mp3",
+        "sounds/bgm/Angelia.mp3",
+        "sounds/bgm/It's Time.mp3",
+        "sounds/bgm/V put.mp3",
+        "sounds/bgm/finding_habo_bgm.mp3",
+        "sounds/bgm/peace.mp3",
+        "sounds/bgm/theme_dark.mp3",
+        "sounds/bgm/RadioGaGa.mp3"
       ],
       "spawn_point": [0, 0],
       "offset": [0, 0],
@@ -118,7 +124,7 @@
           "name": "Goblin",
           "position": [300, 300],
           "health": 50,
-          "image": "game_data/goblin.png",
+          "image": "textures/npc/goblin.png",
           "type": "enemy",
           "xp": 200,
           "status": "alive",
@@ -130,7 +136,7 @@
         {
           "world": "Dream World",
           "position": [900, 750],
-          "image": "game_data/door.png",
+          "image": "textures/static/door.png",
           "locked": true,
           "unlocked_by": "Key to the Land of the Free",
           "spawn_point": [1400, 600],

@@ -1,5 +1,6 @@
-import pygame
 import numpy as np
+import pygame
+
 from traits import Traits
 
 
@@ -9,6 +10,7 @@ class LevelingSystem:
         self.experience = 0
         self.required_experience = 100
         self.traits = Traits(assets)
+        self.trait_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
 
     def gain_experience(self, amount):
         self.experience += amount
@@ -31,7 +33,6 @@ class LevelingSystem:
         )
 
     def draw(self, screen, selected_sub_item, sub_items, trait_selection):
-        trait_font = pygame.font.Font("game_data/inter.ttf", 24)
         item_spacing = 30
         i = 0
         coords = (screen.get_width() + screen.get_width() // 4) / 2
@@ -51,13 +52,13 @@ class LevelingSystem:
             )
 
             trait_text = f"{trait_name}"
-            item_render = trait_font.render(trait_text, True, color)
+            item_render = self.trait_font.render(trait_text, True, color)
             item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
             screen.blit(item_render, item_rect)
 
             if index == selected_sub_item - scroll_position:
                 i += item_spacing
-                line_render = trait_font.render(trait_data["description"], True, color)
+                line_render = self.trait_font.render(trait_data["description"], True, color)
                 line_rect = line_render.get_rect(center=(coords, 20 + index * 40 + i))
                 screen.blit(line_render, line_rect)
             i += item_spacing
@@ -83,10 +84,10 @@ class LevelingSystem:
 
             taken_text = "Taken:"
             for level_info in trait_data["levels"]:
-                taken_text += f" {'○' if not level_info['taken'] else '●':<2}"
+                taken_text += f" {'O' if not level_info['taken'] else 'Ø':<2}"
 
-            level_render = trait_font.render(level_text, True, clr)
-            taken_render = trait_font.render(taken_text, True, color)
+            level_render = self.trait_font.render(level_text, True, clr)
+            taken_render = self.trait_font.render(taken_text, True, color)
 
             level_rect = level_render.get_rect(
                 center=(coords, 20 + index * 40 + i + item_spacing)
