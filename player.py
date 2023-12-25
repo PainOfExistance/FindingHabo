@@ -25,8 +25,6 @@ class Player:
         self.active_effects=[]
         self.assets = assets
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
-        self.counter=0
-        
 
         self.player, self.player_rect = assets.load_player(
             path, (600, 500)
@@ -182,7 +180,7 @@ class Player:
             else:
                 self.stats.defense = self.stats.defense - self.inventory.items[item]["stats"]["damage"]             
                            
-    def draw(self, screen, counter):
+    def draw(self, screen, counter, delta_time, moving, attacking, rotation):
         screen.blit(self.player, self.player_rect)
         pygame.draw.rect(screen, (0, 0, 0), self.border_rect, border_radius=10)
         pygame.draw.rect(screen, (255, 0, 0), self.depleted_rect, border_radius=10)
