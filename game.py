@@ -1654,7 +1654,7 @@ class Game:
         self.screen.fill((230, 60, 20))
         self.screen.blit(self.background, self.bg_rect.topleft)
         self.draw_objects()
-        self.player.draw(self.screen)#.lulekSprulek.123.fafajMi)
+        self.player.draw(self.screen, self.counter)#.lulekSprulek.123.fafajMi)
         self.menu.render(self)
         self.player_menu.render()
         self.draw_container()
