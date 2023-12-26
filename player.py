@@ -182,8 +182,8 @@ class Player:
                            
     def draw(self, screen, delta_time, moving, attacking, rotation, speed):
         self.player, new_rect= self.animation.player_anim(delta_time, moving, attacking, rotation, self.equipped_items["hand"], speed)
-        new_rect.top=self.player_rect.top
-        new_rect.left=self.player_rect.left
+        new_rect.centerx=self.player_rect.centerx
+        new_rect.centery=self.player_rect.centery
         self.player_rect=new_rect
         screen.blit(self.player, self.player_rect)
         pygame.draw.rect(screen, (0, 0, 0), self.border_rect, border_radius=10)
