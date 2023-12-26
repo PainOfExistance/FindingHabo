@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 
+from animation import Animation
 from effects import Effects
 from inventory import Inventory
 from leveling_system import LevelingSystem
@@ -25,10 +26,9 @@ class Player:
         self.active_effects=[]
         self.assets = assets
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
+        self.animation = Animation(assets)
 
-        self.player, self.player_rect = assets.load_player(
-            path, (600, 500)
-        )
+        self.player, self.player_rect = self.animation.init_player()
         
         self.player_rect.center=(600, 500)
         
@@ -180,7 +180,11 @@ class Player:
             else:
                 self.stats.defense = self.stats.defense - self.inventory.items[item]["stats"]["damage"]             
                            
-    def draw(self, screen, counter, delta_time, moving, attacking, rotation):
+    def draw(self, screen, delta_time, moving, attacking, rotation, speed):
+        self.player, new_rect= self.animation.player_anim(delta_time, moving, attacking, rotation, self.equipped_items["hand"], speed)
+        new_rect.top=self.player_rect.top
+        new_rect.left=self.player_rect.left
+        self.player_rect=new_rect
         screen.blit(self.player, self.player_rect)
         pygame.draw.rect(screen, (0, 0, 0), self.border_rect, border_radius=10)
         pygame.draw.rect(screen, (255, 0, 0), self.depleted_rect, border_radius=10)
