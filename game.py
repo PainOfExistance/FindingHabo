@@ -77,12 +77,12 @@ class Game:
         self.target_fps = 60
         self.counter = 0
         self.last_frame_time = pygame.time.get_ticks()
-        self.movement_speed = 200
+        self.player.movement_speed = 200
         self.rotation_angle = 0
         self.on_a_diagonal = False
         self.weapon_rect = pygame.Rect(
             self.player.player_rect.left + self.player.player_rect.width // 4,
-            self.player.player_rect.top - self.player.range,
+            self.player.player_rect.top - self.player.range//2,
             16,
             self.player.range,
         )
@@ -258,7 +258,7 @@ class Game:
         self.relative_player_bottom = int(
             self.player.player_rect.bottom - self.bg_rect.top
         )
-        movement = int(self.movement_speed * self.delta_time)
+        movement = int(self.player.movement_speed * self.delta_time)
 
         self.player.quests.check_quest_advancement(
             (
@@ -313,7 +313,7 @@ class Game:
         ):
             if self.player.player_rect.left > 10:
                 self.player.player_rect.move_ip(
-                    int(-self.movement_speed * self.delta_time), 0
+                    int(-self.player.movement_speed * self.delta_time), 0
                 )
                 if self.rotation_angle != 90:
                     self.rotation_angle = 90 - self.rotation_angle
@@ -365,10 +365,10 @@ class Game:
             ):
                 move_direction = -1 if dt < dx else 1
                 self.player.player_rect.move_ip(
-                    int(-self.movement_speed * self.delta_time * np.cos(angle)),
+                    int(-self.player.movement_speed * self.delta_time * np.cos(angle)),
                     int(
                         move_direction
-                        * self.movement_speed
+                        * self.player.movement_speed
                         * self.delta_time
                         * np.sin(angle)
                     ),
@@ -398,7 +398,7 @@ class Game:
         ):
             if self.player.player_rect.right < self.screen_width - 10:
                 self.player.player_rect.move_ip(
-                    int(self.movement_speed * self.delta_time), 0
+                    int(self.player.movement_speed * self.delta_time), 0
                 )
                 if self.rotation_angle != 270:
                     self.rotation_angle = 270 - self.rotation_angle
@@ -449,10 +449,10 @@ class Game:
             ):
                 move_direction = -1 if dt < dx else 1
                 self.player.player_rect.move_ip(
-                    int(self.movement_speed * self.delta_time * np.cos(angle)),
+                    int(self.player.movement_speed * self.delta_time * np.cos(angle)),
                     int(
                         move_direction
-                        * self.movement_speed
+                        * self.player.movement_speed
                         * self.delta_time
                         * np.sin(angle)
                     ),
@@ -482,7 +482,7 @@ class Game:
         ):
             if self.player.player_rect.top > 10:
                 self.player.player_rect.move_ip(
-                    0, int(-self.movement_speed * self.delta_time)
+                    0, int(-self.player.movement_speed * self.delta_time)
                 )
                 if self.rotation_angle != 0:
                     self.rotation_angle = 0 - self.rotation_angle
@@ -532,13 +532,13 @@ class Game:
                 move_direction_Y = -1 if dt > dx else 1
                 self.player.player_rect.move_ip(
                     int(
-                        self.movement_speed
+                        self.player.movement_speed
                         * self.delta_time
                         * np.cos(angle)
                         * move_direction_X
                     ),
                     int(
-                        self.movement_speed
+                        self.player.movement_speed
                         * move_direction_Y
                         * self.delta_time
                         * np.sin(angle)
@@ -568,7 +568,7 @@ class Game:
         ):
             if self.player.player_rect.bottom < self.screen_height - 10:
                 self.player.player_rect.move_ip(
-                    0, int(self.movement_speed * self.delta_time)
+                    0, int(self.player.movement_speed * self.delta_time)
                 )
                 if self.rotation_angle != 180:
                     self.rotation_angle = 180 - self.rotation_angle
@@ -620,13 +620,13 @@ class Game:
                 move_direction_Y = -1 if dt > dx else 1
                 self.player.player_rect.move_ip(
                     int(
-                        self.movement_speed
+                        self.player.movement_speed
                         * self.delta_time
                         * np.cos(angle)
                         * move_direction_X
                     ),
                     int(
-                        self.movement_speed
+                        self.player.movement_speed
                         * move_direction_Y
                         * self.delta_time
                         * np.sin(angle)
@@ -1130,7 +1130,7 @@ class Game:
 
         if self.rotation_angle == 90:
             self.weapon_rect = pygame.Rect(
-                self.player.player_rect.left - self.player.range,
+                self.player.player_rect.left - self.player.range//2,
                 self.player.player_rect.top + self.player.player_rect.height // 2,
                 self.player.range,
                 self.player.player_rect.height // 4,
@@ -1138,20 +1138,20 @@ class Game:
         elif self.rotation_angle == 0:
             self.weapon_rect = pygame.Rect(
                 self.player.player_rect.left + self.player.player_rect.width // 4,
-                self.player.player_rect.top - self.player.range,
+                self.player.player_rect.top - self.player.range//2,
                 16,
                 self.player.range,
             )
         elif self.rotation_angle == 180:
             self.weapon_rect = pygame.Rect(
                 self.player.player_rect.left + self.player.player_rect.width // 4,
-                self.player.player_rect.bottom,
+                self.player.player_rect.bottom-self.player.range//2,
                 16,
                 self.player.range,
             )
         elif self.rotation_angle == 270:
             self.weapon_rect = pygame.Rect(
-                self.player.player_rect.right,
+                self.player.player_rect.right-self.player.range//2,
                 self.player.player_rect.top + self.player.player_rect.height // 2,
                 self.player.range,
                 self.player.player_rect.height // 4,
@@ -1648,7 +1648,7 @@ class Game:
         self.screen.fill((230, 60, 20))
         self.screen.blit(self.background, self.bg_rect.topleft)
         self.draw_objects()
-        self.player.draw(self.screen, self.delta_time, self.moving, self.attacking, self.rotation_angle, self.movement_speed)#.lulekSprulek.123.fafajMi)
+        self.player.draw(self.screen, self.delta_time, self.moving, self.attacking, self.rotation_angle)#.lulekSprulek.123.fafajMi)
         self.menu.render(self)
         self.player_menu.render()
         self.draw_container()

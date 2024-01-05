@@ -27,9 +27,9 @@ class Player:
         self.assets = assets
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
         self.animation = Animation(assets)
+        self.movement_speed = 200
 
         self.player, self.player_rect = self.animation.init_player()
-        
         self.player_rect.center=(600, 500)
         
         self.depleted_rect = pygame.Rect(
@@ -180,9 +180,10 @@ class Player:
             else:
                 self.stats.defense = self.stats.defense - self.inventory.items[item]["stats"]["damage"]             
                            
-    def draw(self, screen, delta_time, moving, attacking, rotation, speed):
-        self.player, new_rect= self.animation.player_anim(delta_time, moving, attacking, rotation, self.equipped_items["hand"], speed)
-        screen.blit(self.player, self.player_rect.topleft)
+    def draw(self, screen, delta_time, moving, attacking, rotation):
+        self.player, new_rect= self.animation.player_anim(delta_time, moving, attacking, rotation, self.equipped_items["hand"], self.movement_speed)
+        new_rect.center= self.player_rect.center
+        screen.blit(self.player, new_rect.topleft)
         pygame.draw.rect(screen, (0, 0, 0), self.border_rect, border_radius=10)
         pygame.draw.rect(screen, (255, 0, 0), self.depleted_rect, border_radius=10)
         screen.blit(self.text, self.text_rect)
