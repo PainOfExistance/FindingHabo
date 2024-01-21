@@ -10,7 +10,8 @@
 	"customFields" : {},
 	"layers": [
 		"BG.png",
-		"IntGrid.png"
+		"Houses.png",
+		"Collision.png"
 	],
 	"entities" : {}
 }

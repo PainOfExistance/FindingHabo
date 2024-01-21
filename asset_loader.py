@@ -52,6 +52,7 @@ class AssetLoader:
         # print(collision_map)
         # return collision_map
         image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+        image = cv2.resize(image, (image.shape[0]*8, image.shape[1]*8), interpolation = cv2.INTER_AREA)
         binary_image = 1 - (image // 255)
         print(binary_image)
         # np.savetxt('map.txt', binary_image, fmt='%d')

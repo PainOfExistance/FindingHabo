@@ -101,10 +101,10 @@ class Game:
     def setup(self):
         self.world_objects.clear()
         self.background, self.bg_rect = self.asets.load_background(
-            self.worlds[self.player.current_world]["collision_set"]
+            self.worlds[self.player.current_world]["background"]
         )
         self.collision_map = self.asets.load_collision(
-            self.worlds[self.player.current_world]["background"]
+            self.worlds[self.player.current_world]["collision_set"]
         )
 
         self.map_height = self.collision_map.shape[0]
