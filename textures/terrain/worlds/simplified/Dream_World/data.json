@@ -1,0 +1,16 @@
+{
+	"identifier": "Dream_World",
+	"uniqueIdentifer": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+	"x": 128,
+	"y": 32,
+	"width": 4096,
+	"height": 4096,
+	"bgColor": "#CB410E",
+	"neighbourLevels": [],
+	"customFields" : {},
+	"layers": [
+		"BG.png",
+		"IntGrid-int.png"
+	],
+	"entities" : {}
+}
