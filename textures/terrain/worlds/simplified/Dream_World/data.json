@@ -1,17 +1,17 @@
 {
 	"identifier": "Dream_World",
 	"uniqueIdentifer": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
-	"x": 128,
-	"y": 32,
-	"width": 4096,
-	"height": 4096,
+	"x": 0,
+	"y": 0,
+	"width": 6416,
+	"height": 6416,
 	"bgColor": "#CB410E",
 	"neighbourLevels": [],
 	"customFields" : {},
 	"layers": [
-		"Houses.png",
 		"BG.png",
-		"Collision-int.png"
+		"Houses.png",
+		"Collision.png"
 	],
 	"entities" : {}
 }
