@@ -24,7 +24,7 @@ class Animation:
         #print(self.prev_frame)
         move=(speed*delta_time)/35
         anim_speed=(speed*delta_time)/100
-        #todo make better
+        
         if attacking:
             self.attacking=True
             
