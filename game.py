@@ -1636,7 +1636,7 @@ class Game:
                     self.world_to_travel_to = None
 
     def loading(self):
-        font = pygame.font.Font("game_data/inter.ttf", 30)
+        font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
         text = font.render("Loading...", True, (180, 180, 180))
         text_rect = text.get_rect(
             center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5)
