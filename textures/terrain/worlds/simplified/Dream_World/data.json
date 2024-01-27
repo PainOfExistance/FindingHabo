@@ -9,9 +9,82 @@
 	"neighbourLevels": [],
 	"customFields" : {},
 	"layers": [
+		"Collision.png",
 		"BG.png",
-		"Houses.png",
-		"Collision.png"
+		"Houses.png"
 	],
-	"entities" : {}
+	"entities": {
+		"Player_spawn": [
+			{
+				"id": "Player_spawn",
+				"iid": "c32e9910-b0a0-11ee-b02a-19bd021af181",
+				"layer": "LeveL_Data",
+				"x": 3416,
+				"y": 2056,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "lotf_portal"
+				}
+			},
+			{
+				"id": "Player_spawn",
+				"iid": "d47e0e30-b0a0-11ee-b02a-f332dd1d2863",
+				"layer": "LeveL_Data",
+				"x": 3624,
+				"y": 3688,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "default"
+				}
+			}
+		],
+		"Enemy_Random_Spawn": [
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "a4ef42f0-b0a0-11ee-b02a-2f33a30b0e15",
+				"layer": "LeveL_Data",
+				"x": 512,
+				"y": 3168,
+				"width": 32,
+				"height": 32,
+				"color": 12470831,
+				"customFields": {
+					"chance": 0.5,
+					"Enemy_Type": "Bandit_Low"
+				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "bb2f8520-b0a0-11ee-b02a-d383876d63fd",
+				"layer": "LeveL_Data",
+				"x": 1312,
+				"y": 2944,
+				"width": 32,
+				"height": 32,
+				"color": 12470831,
+				"customFields": {
+					"chance": 0.6,
+					"Enemy_Type": "Goblin"
+				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "c0e43e70-b0a0-11ee-b02a-6583af3deefd",
+				"layer": "LeveL_Data",
+				"x": 1248,
+				"y": 3200,
+				"width": 32,
+				"height": 32,
+				"color": 12470831,
+				"customFields": {
+					"chance": 0.1,
+					"Enemy_Type": "Boss"
+				}
+			}
+		]
+	}
 }
