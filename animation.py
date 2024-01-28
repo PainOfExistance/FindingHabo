@@ -1,5 +1,7 @@
 import pygame
 
+from game_manager import GameManager as GM
+
 
 class Animation:
     def __init__(self, assets):
@@ -20,16 +22,16 @@ class Animation:
     def init_player(self):
         return self.action_images["Player_Walk_Up_1"]["image"], self.action_images["Player_Walk_Up_1"]["rect"]
     
-    def player_anim(self, delta_time, moving, attacking, rotation, weapon_equiped, speed=200):
+    def player_anim(self, weapon_equiped, speed=200):
         #print(self.prev_frame)
-        move=(speed*delta_time)/35
-        anim_speed=(speed*delta_time)/100
+        move=(speed*GM.delta_time)/24
+        anim_speed=(speed*GM.delta_time)/100
         
-        if attacking:
+        if GM.attacking:
             self.attacking=True
             
-        if rotation == 0:
-            if not moving and not self.attacking:
+        if GM.rotation_angle == 0:
+            if not GM.moving and not self.attacking:
                 if weapon_equiped==None:
                     return self.action_images["Player_Walk_Up_1"]["image"], self.action_images["Player_Walk_Up_1"]["rect"]
                 else:
@@ -47,27 +49,27 @@ class Animation:
                         else:
                             return self.action_images["Player_Walk_Up_Weapon_1"]["image"], self.action_images["Player_Walk_Up_1"]["rect"]
                 else:
-                    self.prev_frame+=delta_time
+                    self.prev_frame+=GM.delta_time
                 if weapon_equiped==None:
                     return self.action_images["Player_Attack_Up_"+str(self.anim_counter)]["image"], self.action_images["Player_Attack_Up_"+str(self.anim_counter)]["rect"]
                 else:
                     return self.action_images["Player_Attack_Up_"+str(self.anim_counter)]["image"], self.action_images["Player_Attack_Up_"+str(self.anim_counter)]["rect"]
             
-            elif moving:
+            elif GM.moving:
                 if self.prev_frame>move:
                     self.anim_counter+=1
                     self.prev_frame=0
                     if self.anim_counter==5:
                         self.anim_counter=1
                 else:
-                    self.prev_frame+=delta_time
+                    self.prev_frame+=GM.delta_time
                 if weapon_equiped==None:
                     return self.action_images["Player_Walk_Up_"+str(self.anim_counter)]["image"], self.action_images["Player_Walk_Up_"+str(self.anim_counter)]["rect"]
                 else:
                     return self.action_images["Player_Walk_Up_Weapon_"+str(self.anim_counter)]["image"], self.action_images["Player_Walk_Up_Weapon_"+str(self.anim_counter)]["rect"]
                 
-        elif rotation == 90:
-            if not moving and not self.attacking:
+        elif GM.rotation_angle == 90:
+            if not GM.moving and not self.attacking:
                 if weapon_equiped==None:
                     return self.action_images["Player_Walk_Left_1"]["image"], self.action_images["Player_Walk_Left_1"]["rect"]
                 else:
@@ -85,27 +87,27 @@ class Animation:
                         else:
                             return self.action_images["Player_Walk_Left_Weapon_1"]["image"], self.action_images["Player_Walk_Left_1"]["rect"]
                 else:
-                    self.prev_frame+=delta_time
+                    self.prev_frame+=GM.delta_time
                 if weapon_equiped==None:
                     return self.action_images["Player_Attack_Left_"+str(self.anim_counter)]["image"], self.action_images["Player_Attack_Left_"+str(self.anim_counter)]["rect"]
                 else:
                     return self.action_images["Player_Attack_Left_"+str(self.anim_counter)]["image"], self.action_images["Player_Attack_Left_"+str(self.anim_counter)]["rect"]
             
-            elif moving:
+            elif GM.moving:
                 if self.prev_frame>move:
                     self.anim_counter+=1
                     self.prev_frame=0
                     if self.anim_counter==5:
                         self.anim_counter=1
                 else:
-                    self.prev_frame+=delta_time
+                    self.prev_frame+=GM.delta_time
                 if weapon_equiped==None:
                     return self.action_images["Player_Walk_Left_"+str(self.anim_counter)]["image"], self.action_images["Player_Walk_Left_"+str(self.anim_counter)]["rect"]
                 else:
                     return self.action_images["Player_Walk_Left_Weapon_"+str(self.anim_counter)]["image"], self.action_images["Player_Walk_Left_Weapon_"+str(self.anim_counter)]["rect"]
                 
-        elif rotation == 180:
-            if not moving and not self.attacking:
+        elif GM.rotation_angle == 180:
+            if not GM.moving and not self.attacking:
                 if weapon_equiped==None:
                     return self.action_images["Player_Walk_Down_1"]["image"], self.action_images["Player_Walk_Down_1"]["rect"]
                 else:
@@ -123,27 +125,27 @@ class Animation:
                         else:
                             return self.action_images["Player_Walk_Down_Weapon_1"]["image"], self.action_images["Player_Walk_Down_1"]["rect"]
                 else:
-                    self.prev_frame+=delta_time
+                    self.prev_frame+=GM.delta_time
                 if weapon_equiped==None:
                     return self.action_images["Player_Attack_Down_"+str(self.anim_counter)]["image"], self.action_images["Player_Attack_Down_"+str(self.anim_counter)]["rect"]
                 else:
                     return self.action_images["Player_Attack_Down_"+str(self.anim_counter)]["image"], self.action_images["Player_Attack_Down_"+str(self.anim_counter)]["rect"]
             
-            elif moving:
+            elif GM.moving:
                 if self.prev_frame>move:
                     self.anim_counter+=1
                     self.prev_frame=0
                     if self.anim_counter==5:
                         self.anim_counter=1
                 else:
-                    self.prev_frame+=delta_time
+                    self.prev_frame+=GM.delta_time
                 if weapon_equiped==None:
                     return self.action_images["Player_Walk_Down_"+str(self.anim_counter)]["image"], self.action_images["Player_Walk_Down_"+str(self.anim_counter)]["rect"]
                 else:
                     return self.action_images["Player_Walk_Down_Weapon_"+str(self.anim_counter)]["image"], self.action_images["Player_Walk_Down_Weapon_"+str(self.anim_counter)]["rect"]
                 
-        elif rotation == 270:
-            if not moving and not self.attacking:
+        elif GM.rotation_angle == 270:
+            if not GM.moving and not self.attacking:
                 if weapon_equiped==None:
                     return self.action_images["Player_Walk_Right_1"]["image"], self.action_images["Player_Walk_Right_1"]["rect"]
                 else:
@@ -161,20 +163,20 @@ class Animation:
                         else:
                             return self.action_images["Player_Walk_Right_Weapon_1"]["image"], self.action_images["Player_Walk_Right_1"]["rect"]
                 else:
-                    self.prev_frame+=delta_time
+                    self.prev_frame+=GM.delta_time
                 if weapon_equiped==None:
                     return self.action_images["Player_Attack_Right_"+str(self.anim_counter)]["image"], self.action_images["Player_Attack_Right_"+str(self.anim_counter)]["rect"]
                 else:
                     return self.action_images["Player_Attack_Right_"+str(self.anim_counter)]["image"], self.action_images["Player_Attack_Right_"+str(self.anim_counter)]["rect"]
             
-            elif moving:
+            elif GM.moving:
                 if self.prev_frame>move:
                     self.anim_counter+=1
                     self.prev_frame=0
                     if self.anim_counter==5:
                         self.anim_counter=1
                 else:
-                    self.prev_frame+=delta_time
+                    self.prev_frame+=GM.delta_time
                 if weapon_equiped==None:
                     return self.action_images["Player_Walk_Right_"+str(self.anim_counter)]["image"], self.action_images["Player_Walk_Right_"+str(self.anim_counter)]["rect"]
                 else:

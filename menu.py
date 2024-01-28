@@ -22,6 +22,16 @@ class Menu:
         self.player=player
         self.game=None
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 40)   
+        self.bg_menu = pygame.Rect(
+            0,
+            0,
+            self.screen.get_width(),
+            self.screen.get_height(),
+        )
+
+        self.bg_surface_menu = pygame.Surface(
+            (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
+        )
 
     def toggle_visibility(self):
         self.visible = not self.visible
@@ -102,6 +112,14 @@ class Menu:
     def render(self, game):
         self.game=game
         if self.visible:
+            
+            pygame.draw.rect(
+                self.bg_surface_menu,
+                (100, 100, 100, 180),
+                self.bg_surface_menu.get_rect(),
+            )
+            self.screen.blit(self.bg_surface_menu, self.bg_menu)
+            
             if self.in_sub_menu == 0:
                 for index, item in enumerate(self.menu_items):
                     color = (0, 0, 0) if index == self.selected_item else (180, 180, 180)

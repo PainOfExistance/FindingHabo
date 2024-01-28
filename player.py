@@ -33,18 +33,20 @@ class Player:
         self.player_rect.center=(600, 500)
         
         self.depleted_rect = pygame.Rect(
-            screen_width // 2 - self.stats.max_health // 2,
+            screen_width // 2 - 150 // 2,
             screen_height - 19,
-            self.stats.health,
+            min(self.stats.health/self.stats.max_health*150, 150),
             18,
         )
         
         self.border_rect = pygame.Rect(
-            (screen_width // 2 - self.stats.max_health // 2)-2,
+            (screen_width // 2 - 150 // 2)-2,
             screen_height - 20,
-            self.stats.max_health+4,
+            154,
             20,
         )
+        self.depleted_rect.center=(self.screen_width // 2, self.screen_height - 10)
+        self.border_rect.center=(self.screen_width // 2, self.screen_height - 10)
         
         self.text = self.font.render("Health", True, (255, 255, 255))
         self.text_rect = self.text.get_rect(
@@ -62,13 +64,12 @@ class Player:
 
     def update_health(self, health):
         self.stats.update_health(health)
-        self.depleted_rect.width = self.stats.health
+        
+        self.depleted_rect.width = min(self.stats.health/self.stats.max_health*150, 150)
         self.depleted_rect.center=(self.screen_width // 2, self.screen_height - 10)
         
     def update_max_health(self, health):
         self.stats.update_max_health(health)
-        self.border_rect.width = self.stats.max_health+4
-        self.border_rect.left = (self.screen_width // 2 - self.stats.max_health // 2)-2
         self.update_health(self.stats.max_health)
 
     def add_trait(self, index):
@@ -180,8 +181,8 @@ class Player:
             else:
                 self.stats.defense = self.stats.defense - self.inventory.items[item]["stats"]["damage"]             
                            
-    def draw(self, screen, delta_time, moving, attacking, rotation):
-        self.player, new_rect= self.animation.player_anim(delta_time, moving, attacking, rotation, self.equipped_items["hand"], self.movement_speed)
+    def draw(self, screen):
+        self.player, new_rect= self.animation.player_anim(self.equipped_items["hand"], self.movement_speed)
         new_rect.center= self.player_rect.center
         screen.blit(self.player, new_rect.topleft)
         pygame.draw.rect(screen, (0, 0, 0), self.border_rect, border_radius=10)
