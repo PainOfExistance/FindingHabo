@@ -27,7 +27,7 @@ class Player:
         self.assets = assets
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
         self.animation = Animation(assets)
-        self.movement_speed = 200
+        self.movement_speed = 150
 
         self.player, self.player_rect = self.animation.init_player()
         self.player_rect.center=(600, 500)

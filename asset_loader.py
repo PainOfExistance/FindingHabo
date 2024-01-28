@@ -41,6 +41,12 @@ class AssetLoader:
         bg = pygame.image.load(path)
         bg_rect = bg.get_rect()
         return bg, bg_rect
+    
+    def load_level_data(self, path):
+        level_data = np.array({})
+        with open(path, "r") as ai_file:
+            level_data = json.load(ai_file)
+        return level_data
 
     def load_collision(self, path):
         # collision_map = np.zeros((self.bg_rect.height, self.bg_rect.width), dtype=int)
