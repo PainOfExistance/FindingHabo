@@ -90,9 +90,8 @@
           "position": [1400, 600],
           "image": "textures/static/door.png",
           "locked": true,
-          "unlocked_by": "Key to the Land of the Free",
-          "spawn_point": [900, 750],
-          "offset": [600, 400]
+          "unlocked_by": "Key to the Land of the Free", 
+          "ref": "dw_lotf_portal_01"
         }
       ],
       "puzzles": [

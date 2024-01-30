@@ -13,5 +13,34 @@
 		"BG.png",
 		"Houses.png"
 	],
-	"entities" : {}
+	"entities": {
+		"Player_spawn": [
+			{
+				"id": "Player_spawn",
+				"iid": "cc337620-b0a0-11ee-90c2-5dbef1522b45",
+				"layer": "LeveL_Data",
+				"x": 1880,
+				"y": 2152,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "default"
+				}
+			},
+			{
+				"id": "Player_spawn",
+				"iid": "d3cb6e60-b0a0-11ee-90c2-5f1507e00573",
+				"layer": "LeveL_Data",
+				"x": 1112,
+				"y": 2376,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "dw_lotf_portal_01"
+				}
+			}
+		]
+	}
 }

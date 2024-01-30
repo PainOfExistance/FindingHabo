@@ -24,7 +24,7 @@ class Animation:
     
     def player_anim(self, weapon_equiped, speed=200):
         #print(self.prev_frame)
-        move=(speed*GM.delta_time)/24
+        move=(speed*GM.delta_time)/28
         anim_speed=(speed*GM.delta_time)/100
         
         if GM.attacking:

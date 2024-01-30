@@ -5,6 +5,7 @@ import numpy as np
 import pygame
 
 from dialogue import Dialougue
+from game_manager import GameManager as GM
 
 
 class Ai:
@@ -12,7 +13,7 @@ class Ai:
         self.npcs = npcs
         self.ai_package = assets.load_ai_package()
         self.assets=assets
-        self.dt = 0
+        GM.delta_time = 0
         self.npc_movement = {}
         self.strings = Dialougue(assets, self.ai_package, music_player)
         
@@ -22,8 +23,7 @@ class Ai:
         for key in npcs:
             self.ai_package[key]=tmp[key]
 
-    def update(self, name, dt, collision_map, relative__left, relative__top, rect):
-        self.dt = dt
+    def update(self, name, collision_map, relative__left, relative__top, rect):
         if self.ai_package[name]["movement_behavior"]["type"] == "patrol":
             # Implement random movement within a patrol area
             return self.random_patrol(
@@ -41,7 +41,7 @@ class Ai:
             return rect.centerx, rect.centery
 
         elif self.ai_package[name]["movement_behavior"]["dirrection"] == 1:
-            dy = int(-speed * self.dt)
+            dy = int(-speed * GM.delta_time)
             if (
                 np.count_nonzero(
                     collision_map[
@@ -58,7 +58,7 @@ class Ai:
                 return rect.centerx, rect.centery
 
         elif self.ai_package[name]["movement_behavior"]["dirrection"] == 2:
-            dx = int(speed * self.dt)
+            dx = int(speed * GM.delta_time)
             if (
                 np.count_nonzero(
                     collision_map[
@@ -75,7 +75,7 @@ class Ai:
                 return rect.centerx, rect.centery
 
         elif self.ai_package[name]["movement_behavior"]["dirrection"] == 3:
-            dy = int(speed * self.dt)
+            dy = int(speed * GM.delta_time)
             if (
                 np.count_nonzero(
                     collision_map[
@@ -92,7 +92,7 @@ class Ai:
                 return rect.centerx, rect.centery
 
         elif self.ai_package[name]["movement_behavior"]["dirrection"] == 4:
-            dx = int(-speed * self.dt)
+            dx = int(-speed * GM.delta_time)
             if (
                 np.count_nonzero(
                     collision_map[
@@ -143,7 +143,7 @@ class Ai:
         rect.center = prev_center
         return self.random_patrol(name, collision_map, rect.left, rect.top, rect)
 
-    def attack(self, name, dt, npc, player_possition, collision_map, rect):
+    def attack(self, name, npc, player_possition, collision_map, rect):
         speed = self.ai_package[name]["movement_behavior"]["movement_speed"]
         distance = math.dist((npc), player_possition)
 
@@ -152,20 +152,20 @@ class Ai:
             move = 0
             direction = 0
             if player_possition[0] > npc[0]:
-                move = int(speed * dt)
+                move = int(speed * GM.delta_time)
                 dx = npc[0] + move
                 direction = 4
             else:
-                move = int(-speed * dt)
+                move = int(-speed * GM.delta_time)
                 dx = npc[0] + move
                 direction = 2
 
             if player_possition[1] - 10 > npc[1]:
-                move = int(speed * dt)
+                move = int(speed * GM.delta_time)
                 dy = npc[1] + move
                 direction = 1
             else:
-                move = int(-speed * dt)
+                move = int(-speed * GM.delta_time)
                 dy = npc[1] + move
                 direction = 3
 

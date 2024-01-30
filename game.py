@@ -69,7 +69,7 @@ class Game:
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
 
-    def setup(self):
+    def setup(self, type="default"):
         self.world_objects.clear()
         self.background, self.bg_rect = self.asets.load_background(
             self.worlds[self.player.current_world]["background"]
@@ -86,8 +86,11 @@ class Game:
         )
         
         spawn_point = (0, 0)
+        print(type)
+        print("")
+        print(level_data["entities"])
         for i in level_data["entities"]["Player_spawn"]:
-            if i["customFields"]["type"] == "default":
+            if i["customFields"]["type"] == type:
                 spawn_point = (i["x"], i["y"])
                 break
 
@@ -610,22 +613,8 @@ class Game:
                     "locked"
                 ] = False
 
-                self.worlds[self.player.current_world]["offset"][
-                    0
-                ] = GM.world_to_travel_to["offset"][0]
-                self.worlds[self.player.current_world]["offset"][
-                    1
-                ] = GM.world_to_travel_to["offset"][1]
-
-                self.worlds[self.player.current_world]["spawn_point"][
-                    0
-                ] = GM.world_to_travel_to["spawn_point"][0]
-                self.worlds[self.player.current_world]["spawn_point"][
-                    1
-                ] = GM.world_to_travel_to["spawn_point"][1]
-
+                temp = self.setup(GM.world_to_travel_to["ref"])
                 GM.world_to_travel_to = None
-                temp = self.setup()
                 self.ai.update_npcs(temp)
                 self.player.quests.dialogue = self.ai.strings
                 self.music_player.set_tracks(
@@ -1315,7 +1304,6 @@ class Game:
             ):
                 dx, dy, agroved = self.ai.attack(
                     x["name"]["name"],
-                    GM.delta_time,
                     (
                         (x["rect"].centerx),
                         (x["rect"].centery),
@@ -1369,7 +1357,6 @@ class Game:
             ):
                 dx, dy = self.ai.update(
                     x["name"]["name"],
-                    GM.delta_time,
                     self.collision_map,
                     x["rect"].left,
                     x["rect"].top,
