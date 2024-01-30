@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 
+from game_manager import GameManager as GM
 from traits import Traits
 
 
@@ -32,10 +33,10 @@ class LevelingSystem:
             + (experience_increment * (increment_multiplier ** (current_level - 2)))
         )
 
-    def draw(self, screen, selected_sub_item, sub_items, trait_selection):
+    def draw(self, selected_sub_item, sub_items, trait_selection):
         item_spacing = 30
         i = 0
-        coords = (screen.get_width() + screen.get_width() // 4) / 2
+        coords = (GM.screen.get_width() + GM.screen.get_width() // 4) / 2
 
         scroll_position = (selected_sub_item // 4) * 4
         selected = (trait_selection // 4) * 4
@@ -54,13 +55,13 @@ class LevelingSystem:
             trait_text = f"{trait_name}"
             item_render = self.trait_font.render(trait_text, True, color)
             item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
-            screen.blit(item_render, item_rect)
+            GM.screen.blit(item_render, item_rect)
 
             if index == selected_sub_item - scroll_position:
                 i += item_spacing
                 line_render = self.trait_font.render(trait_data["description"], True, color)
                 line_rect = line_render.get_rect(center=(coords, 20 + index * 40 + i))
-                screen.blit(line_render, line_rect)
+                GM.screen.blit(line_render, line_rect)
             i += item_spacing
 
             level_text = f""
@@ -93,6 +94,6 @@ class LevelingSystem:
                 center=(coords, 20 + index * 40 + i + item_spacing)
             )
             taken_rect = taken_render.get_rect(center=(coords, 20 + index * 40 + i))
-            screen.blit(taken_render, taken_rect)
-            screen.blit(level_render, level_rect)
+            GM.screen.blit(taken_render, taken_rect)
+            GM.screen.blit(level_render, level_rect)
             i += 2.5 * item_spacing

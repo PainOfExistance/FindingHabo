@@ -5,10 +5,11 @@ from datetime import datetime
 
 import pygame
 
+from game_manager import GameManager as GM
+
 
 class Menu:
-    def __init__(self, screen, assets, player):
-        self.screen = screen
+    def __init__(self, assets, player):
         self.visible = False
         self.menu_items = ["Continue", "Save and Load", "Options", "Exit"]
         self.selected_item = 0
@@ -25,8 +26,8 @@ class Menu:
         self.bg_menu = pygame.Rect(
             0,
             0,
-            self.screen.get_width(),
-            self.screen.get_height(),
+            GM.screen.get_width(),
+            GM.screen.get_height(),
         )
 
         self.bg_surface_menu = pygame.Surface(
@@ -118,14 +119,14 @@ class Menu:
                 (100, 100, 100, 180),
                 self.bg_surface_menu.get_rect(),
             )
-            self.screen.blit(self.bg_surface_menu, self.bg_menu)
+            GM.screen.blit(self.bg_surface_menu, self.bg_menu)
             
             if self.in_sub_menu == 0:
                 for index, item in enumerate(self.menu_items):
                     color = (0, 0, 0) if index == self.selected_item else (180, 180, 180)
                     text = self.menu_font.render(item, True, color)
-                    text_rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5 + index * 50))
-                    self.screen.blit(text, text_rect)
+                    text_rect = text.get_rect(center=(GM.screen.get_width() // 2, GM.screen.get_height() // 2.5 + index * 50))
+                    GM.screen.blit(text, text_rect)
             
             if self.in_sub_menu==1:
                 scroll_position = (self.selected_item // 6) * 6
@@ -145,8 +146,8 @@ class Menu:
                     item_render = self.menu_font.render(save_text, True, color)
                     item_rect = item_render.get_rect(
                         center=(
-                            self.screen.get_width() // 2,
-                            self.screen.get_height() // 4 + index * 50,
+                            GM.screen.get_width() // 2,
+                            GM.screen.get_height() // 4 + index * 50,
                         )
                     )
-                    self.screen.blit(item_render, item_rect)
+                    GM.screen.blit(item_render, item_rect)

@@ -24,4 +24,8 @@ class GameManager:
     moving = False
     rotation_angle = 0
     counter = 0
+    screen=None
+    _scr=None
+    screen_width=None
+    screen_height=None
 

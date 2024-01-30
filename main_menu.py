@@ -6,19 +6,19 @@ import pygame
 
 from asset_loader import AssetLoader
 from game import Game
+from game_manager import GameManager as GM
 from menu import Menu
 from player import Player
 from player_menu import PlayerMenu
 
 
 class MainMenu:
-    def __init__(self, screen):
-        self.screen = screen
+    def __init__(self):
         self.menu_items = ["Start", "Load", "Options", "Exit"]
         self.selected_item = 0
         self.selection_held = False
-        self.screen_width = screen.get_width()
-        self.screen_height = screen.get_height()
+        GM.screen_width = GM._scr.get_width()
+        GM.screen_height = GM._scr.get_height()
         self.is_menu_visible = True
         self.in_sub_menu = 0
         saves = glob.glob(os.path.join("saves", "*.habo"))
@@ -68,22 +68,17 @@ class MainMenu:
             print("Starting the game...")
             self.loading()
 
-            surface = pygame.Surface((1080, 720))
-            self.screen.blit(surface, (0, 0))
-            surface.get_width()
-            surface.get_height()
+            GM._scr.blit(GM.screen, (0, 0))
+            GM.screen_width = GM.screen.get_width()
+            GM.screen_height = GM.screen.get_height()
             #pygame.display.update()
-            assets = AssetLoader(surface.get_width(), surface.get_height())
+            assets = AssetLoader()
             player = Player(
-                "textures/npc/desk1.png", surface.get_width(), surface.get_height(), assets
+                assets
             )
-            menu = Menu(surface, assets, player)
-            player_menu = PlayerMenu(surface, player)
+            menu = Menu(assets, player)
+            player_menu = PlayerMenu(player)
             game = Game(
-                self.screen,
-                surface,
-                surface.get_width(),
-                surface.get_height(),
                 menu,
                 player_menu,
                 player,
@@ -104,7 +99,7 @@ class MainMenu:
             pygame.quit()
             sys.exit()
         elif self.in_sub_menu == 1:
-            assets = AssetLoader(self.screen_width, self.screen_height)
+            assets = AssetLoader()
             game=assets.load(f"saves/{selected_option}.habo")
             self.is_menu_visible = False
             game.run()
@@ -124,11 +119,11 @@ class MainMenu:
                 text = self.font.render(item, True, color)
                 text_rect = text.get_rect(
                     center=(
-                        self.screen.get_width() // 2,
-                        self.screen.get_height() // 2.5 + index * 50,
+                        GM._scr.get_width() // 2,
+                        GM._scr.get_height() // 2.5 + index * 50,
                     )
                 )
-                self.screen.blit(text, text_rect)
+                GM._scr.blit(text, text_rect)
 
         elif self.in_sub_menu == 1:
             scroll_position = (self.selected_item // 6) * 6
@@ -148,18 +143,18 @@ class MainMenu:
                 item_render = self.font.render(save_text, True, color)
                 item_rect = item_render.get_rect(
                     center=(
-                        self.screen.get_width() // 2,
-                        self.screen.get_height() // 4 + index * 50,
+                        GM._scr.get_width() // 2,
+                        GM._scr.get_height() // 4 + index * 50,
                     )
                 )
-                self.screen.blit(item_render, item_rect)
+                GM._scr.blit(item_render, item_rect)
 
     def loading(self):
         text = self.font.render("Loading...", True, (180, 180, 180))
         text_rect = text.get_rect(
-            center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5)
+            center=(GM._scr.get_width() // 2, GM._scr.get_height() // 2.5)
         )
-        self.screen.blit(text, text_rect)
+        GM._scr.blit(text, text_rect)
 
     def run(self):
         while self.is_menu_visible:
@@ -167,7 +162,7 @@ class MainMenu:
                 if event.type == pygame.QUIT:
                     self.is_menu_visible = False
 
-            self.screen.fill((255, 255, 255))
+            GM._scr.fill((255, 255, 255))
             self.handle_input()
             self.render()
             pygame.display.flip()

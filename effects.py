@@ -1,16 +1,18 @@
 import numpy as np
 import pygame
 
+from game_manager import GameManager as GM
+
 
 class Effects:
     def __init__(self, assets):
         self.effects = assets.load_effects()
         self.effects_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
 
-    def draw(self, screen, selected_sub_item, sub_items):
+    def draw(self, selected_sub_item, sub_items):
         item_spacing = 30
         i = 0
-        coords = (screen.get_width() + screen.get_width() // 4) / 2
+        coords = (GM.screen.get_width() + GM.screen.get_width() // 4) / 2
 
         scroll_position = (selected_sub_item // 5) * 5
         visible_effects = list(self.effects.items())[
@@ -29,7 +31,7 @@ class Effects:
                 effect_text = f"{effect_data['name']}"
                 item_render = self.effects_font.render(effect_text, True, color)
                 item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
-                screen.blit(item_render, item_rect)
+                GM.screen.blit(item_render, item_rect)
                 
                 if index == selected_sub_item - scroll_position:
                     i += item_spacing
@@ -39,7 +41,7 @@ class Effects:
                     line_rect = line_render.get_rect(
                         center=(coords, 20 + index * 40 + i)
                     )
-                    screen.blit(line_render, line_rect)
+                    GM.screen.blit(line_render, line_rect)
                 i += item_spacing
                 
                 amount_text = f"Effect amount: {effect_data['amount']}"
@@ -47,5 +49,5 @@ class Effects:
                 amount_rect = amount_render.get_rect(
                     center=(coords, 20 + index * 40 + i)
                 )
-                screen.blit(amount_render, amount_rect)
+                GM.screen.blit(amount_render, amount_rect)
                 i += item_spacing

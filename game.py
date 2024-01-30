@@ -13,19 +13,11 @@ from music_player import MusicPlayer
 class Game:
     def __init__(
         self,
-        tmp,
-        screen,
-        screen_width,
-        screen_height,
         menu,
         player_menu,
         player,
         assets,
     ):
-        self._scr = tmp
-        self.screen = screen
-        self.screen_width = screen_width
-        self.screen_height = screen_height
         self.asets = assets
         self.menu = menu
         
@@ -53,7 +45,7 @@ class Game:
         self.world_objects = list()
 
         temp = self.setup()
-        self.ai = Ai(temp, assets, screen, self.music_player)
+        self.ai = Ai(temp, assets, self.music_player)
         self.player.quests.dialogue = self.ai.strings
         self.clock = pygame.time.Clock()
         self.target_fps = 60
@@ -69,8 +61,8 @@ class Game:
         self.bg_menu = pygame.Rect(
             0,
             0,
-            self.screen.get_width(),
-            self.screen.get_height(),
+            GM.screen.get_width(),
+            GM.screen.get_height(),
         )
 
         self.bg_surface_menu = pygame.Surface(
@@ -100,8 +92,8 @@ class Game:
                 break
 
         offset = (
-            spawn_point[0] - self.screen.get_width() // 2,
-            spawn_point[1] - self.screen.get_height() // 2,
+            spawn_point[0] - GM.screen.get_width() // 2,
+            spawn_point[1] - GM.screen.get_height() // 2,
         )
         
         self.bg_rect.left = -offset[0]
@@ -260,13 +252,13 @@ class Game:
             self.bg_rect.move_ip(movement, 0)
             self.player.player_rect.move_ip(movement, 0)
 
-        if self.player.player_rect.right >= self.screen_width - 10:
+        if self.player.player_rect.right >= GM.screen_width - 10:
             self.bg_rect.move_ip(-movement, 0)
             self.player.player_rect.move_ip(-movement, 0)
         if self.player.player_rect.top <= 10:
             self.bg_rect.move_ip(0, movement)
             self.player.player_rect.move_ip(0, movement)
-        if self.player.player_rect.bottom >= self.screen_height - 10:
+        if self.player.player_rect.bottom >= GM.screen_height - 10:
             self.bg_rect.move_ip(0, -movement)
             self.player.player_rect.move_ip(0, -movement)
 
@@ -363,7 +355,7 @@ class Game:
             and not GM.container_open
             and not GM.is_in_dialogue
         ):
-            if self.player.player_rect.right < self.screen_width - 10:
+            if self.player.player_rect.right < GM.screen_width - 10:
                 self.player.player_rect.move_ip(movement, 0)
                 if GM.rotation_angle != 270:
                     GM.rotation_angle = 270 - GM.rotation_angle
@@ -513,7 +505,7 @@ class Game:
             and not GM.container_open
             and not GM.is_in_dialogue
         ):
-            if self.player.player_rect.bottom < self.screen_height - 10:
+            if self.player.player_rect.bottom < GM.screen_height - 10:
                 self.player.player_rect.move_ip(0, movement)
                 if GM.rotation_angle != 180:
                     GM.rotation_angle = 180 - GM.rotation_angle
@@ -1099,13 +1091,13 @@ class Game:
                 (200, 210, 200, 180),
                 self.bg_surface_menu.get_rect(),
             )
-            self.screen.blit(self.bg_surface_menu, self.bg_menu)
+            GM.screen.blit(self.bg_surface_menu, self.bg_menu)
 
             pygame.draw.line(
-                self.screen,
+                GM.screen,
                 (22, 22, 22),
-                (self.screen.get_width() // 2, 0),
-                (self.screen.get_width() // 2, self.screen.get_height()),
+                (GM.screen.get_width() // 2, 0),
+                (GM.screen.get_width() // 2, GM.screen.get_height()),
                 4,
             )
 
@@ -1122,11 +1114,11 @@ class Game:
             )
             item_rect = item_render.get_rect(
                 topleft=(
-                    self.screen.get_width() // 2 - self.screen.get_width() // 3,
+                    GM.screen.get_width() // 2 - GM.screen.get_width() // 3,
                     20 + i * 50,
                 )
             )
-            self.screen.blit(item_render, item_rect)
+            GM.screen.blit(item_render, item_rect)
 
             item_render = self.menu_font.render(
                 self.world_objects[GM.container_hovered]["name"]["name"],
@@ -1135,18 +1127,18 @@ class Game:
             )
             item_rect = item_render.get_rect(
                 topleft=(
-                    self.screen.get_width() // 2 + self.screen.get_width() // 5,
+                    GM.screen.get_width() // 2 + GM.screen.get_width() // 5,
                     20 + i * 50,
                 )
             )
-            self.screen.blit(item_render, item_rect)
+            GM.screen.blit(item_render, item_rect)
             i += 1
 
             pygame.draw.line(
-                self.screen,
+                GM.screen,
                 (22, 22, 22),
                 (0, 20 + i * 50),
-                (self.screen.get_width(), 20 + i * 50),
+                (GM.screen.get_width(), 20 + i * 50),
                 4,
             )
 
@@ -1169,9 +1161,9 @@ class Game:
                     item_text = f"    {data['type']}: {data['quantity']}"
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(
-                    topleft=(self.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
+                    topleft=(GM.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
                 )
-                self.screen.blit(item_render, item_rect)
+                GM.screen.blit(item_render, item_rect)
 
             scroll_position = (GM.selected_inventory_item // 10) * 10
             visible_items = list(self.player.inventory.quantity.items())[
@@ -1198,7 +1190,7 @@ class Game:
 
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
-                self.screen.blit(item_render, item_rect)
+                GM.screen.blit(item_render, item_rect)
 
     def draw_barter(self):
         if self.ai.strings.bartering:
@@ -1207,13 +1199,13 @@ class Game:
                 (200, 210, 200, 180),
                 self.bg_surface_menu.get_rect(),
             )
-            self.screen.blit(self.bg_surface_menu, self.bg_menu)
+            GM.screen.blit(self.bg_surface_menu, self.bg_menu)
 
             pygame.draw.line(
-                self.screen,
+                GM.screen,
                 (22, 22, 22),
-                (self.screen.get_width() // 2, 0),
-                (self.screen.get_width() // 2, self.screen.get_height()),
+                (GM.screen.get_width() // 2, 0),
+                (GM.screen.get_width() // 2, GM.screen.get_height()),
                 4,
             )
 
@@ -1230,11 +1222,11 @@ class Game:
             )
             item_rect = item_render.get_rect(
                 topleft=(
-                    self.screen.get_width() // 2 - self.screen.get_width() // 2.5,
+                    GM.screen.get_width() // 2 - GM.screen.get_width() // 2.5,
                     20 + i * 50,
                 )
             )
-            self.screen.blit(item_render, item_rect)
+            GM.screen.blit(item_render, item_rect)
 
             item_render = self.menu_font.render(
                 GM.talk_to_name
@@ -1245,18 +1237,18 @@ class Game:
             )
             item_rect = item_render.get_rect(
                 topleft=(
-                    self.screen.get_width() // 2 + self.screen.get_width() // 9,
+                    GM.screen.get_width() // 2 + GM.screen.get_width() // 9,
                     20 + i * 50,
                 )
             )
-            self.screen.blit(item_render, item_rect)
+            GM.screen.blit(item_render, item_rect)
             i += 1
 
             pygame.draw.line(
-                self.screen,
+                GM.screen,
                 (22, 22, 22),
                 (0, 20 + i * 50),
-                (self.screen.get_width(), 20 + i * 50),
+                (GM.screen.get_width(), 20 + i * 50),
                 4,
             )
 
@@ -1279,9 +1271,9 @@ class Game:
                     item_text = f"    {data['type']}: {data['quantity']}  {self.items[self.ai.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(
-                    topleft=(self.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
+                    topleft=(GM.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
                 )
-                self.screen.blit(item_render, item_rect)
+                GM.screen.blit(item_render, item_rect)
 
             scroll_position = (GM.selected_inventory_item // 10) * 10
             visible_items = list(self.player.inventory.quantity.items())[
@@ -1308,7 +1300,7 @@ class Game:
 
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
-                self.screen.blit(item_render, item_rect)
+                GM.screen.blit(item_render, item_rect)
 
     def draw_objects(self):
         for index, x in enumerate(self.world_objects):
@@ -1414,26 +1406,26 @@ class Game:
 
                     text_rect = text.get_rect(
                         center=(
-                            self.screen.get_width() // 2,
-                            self.screen.get_height() - 50,
+                            GM.screen.get_width() // 2,
+                            GM.screen.get_height() - 50,
                         )
                     )
 
-                    self.screen.blit(text, text_rect)
+                    GM.screen.blit(text, text_rect)
 
                 else:
                     GM.current_line = None
 
             if (
                 relative__left > -80
-                and relative__left < self.screen_width + 80
+                and relative__left < GM.screen_width + 80
                 and relative__top > -80
-                and relative__top < self.screen_height + 80
+                and relative__top < GM.screen_height + 80
             ):
                 if "status" in x["name"] and x["name"]["status"] == "alive":
-                    self.screen.blit(x["image"], (relative__left, relative__top))
+                    GM.screen.blit(x["image"], (relative__left, relative__top))
                 elif "status" not in x["name"]:
-                    self.screen.blit(x["image"], (relative__left, relative__top))
+                    GM.screen.blit(x["image"], (relative__left, relative__top))
 
                 if x["type"] == "container":
                     self.collision_map[
@@ -1460,7 +1452,7 @@ class Game:
                             relative__top + x["rect"].height + 10,
                         )
                     )
-                    self.screen.blit(self.text, self.text_rect)
+                    GM.screen.blit(self.text, self.text_rect)
                 elif (
                     not other_obj_rect.colliderect(self.player.player_rect)
                     and x["type"] == "item"
@@ -1480,7 +1472,7 @@ class Game:
                             relative__top + x["rect"].height + 10,
                         )
                     )
-                    self.screen.blit(self.text, self.text_rect)
+                    GM.screen.blit(self.text, self.text_rect)
                 elif (
                     not other_obj_rect.colliderect(self.player.player_rect)
                     and x["type"] == "container"
@@ -1516,7 +1508,7 @@ class Game:
                             )
                         )
                         GM.talk_to_name = x["name"]["name"]
-                        self.screen.blit(text, text_rect)
+                        GM.screen.blit(text, text_rect)
                         GM.is_ready_to_talk = True
 
                     if x["name"]["health"] > 0 and x["name"]["type"] == "enemy":
@@ -1529,7 +1521,7 @@ class Game:
                                 relative__top + x["rect"].height + 10,
                             )
                         )
-                        self.screen.blit(text, text_rect)
+                        GM.screen.blit(text, text_rect)
 
                 elif (
                     not other_obj_rect.colliderect(self.weapon_rect)
@@ -1562,7 +1554,7 @@ class Game:
                     )
                     GM.world_to_travel_to = x["name"]
                     GM.world_to_travel_to["index"] = index
-                    self.screen.blit(text, text_rect)
+                    GM.screen.blit(text, text_rect)
 
                 elif (
                     not other_obj_rect.colliderect(self.player.player_rect)
@@ -1574,22 +1566,20 @@ class Game:
         font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
         text = font.render("Loading...", True, (180, 180, 180))
         text_rect = text.get_rect(
-            center=(self.screen.get_width() // 2, self.screen.get_height() // 2.5)
+            center=(GM.screen.get_width() // 2, GM.screen.get_height() // 2.5)
         )
-        self.screen.blit(text, text_rect)
+        GM.screen.blit(text, text_rect)
         pygame.display.flip()
 
     def draw(self):
-        self.screen.fill((230, 60, 20))
-        self.screen.blit(self.background, self.bg_rect.topleft)
+        GM.screen.fill((230, 60, 20))
+        GM.screen.blit(self.background, self.bg_rect.topleft)
         self.draw_objects()
-        self.player.draw(
-            self.screen
-        )  # .lulekSprulek.123.fafajMi)
+        self.player.draw()  # .lulekSprulek.123.fafajMi)
         self.menu.render(self)
         self.player_menu.render()
         self.draw_container()
-        self.player.quests.draw_quest_info(self.screen)
+        self.player.quests.draw_quest_info()
 
         if GM.is_in_dialogue:
             self.ai.strings.draw(GM.talk_to_name)
@@ -1597,17 +1587,17 @@ class Game:
         if self.ai.strings.bartering:
             self.draw_barter()
 
-        #pygame.draw.rect(self.screen, (0, 0, 0), self.weapon_rect)
+        #pygame.draw.rect(GM.screen, (0, 0, 0), self.weapon_rect)
 
         subsurface_rect = pygame.Rect(
-            0, 0, self.screen.get_width(), self.screen.get_height()
+            0, 0, GM.screen.get_width(), GM.screen.get_height()
         )
 
-        subsurface = self.screen.subsurface(subsurface_rect)
+        subsurface = GM.screen.subsurface(subsurface_rect)
 
         streched = pygame.transform.scale(
-            subsurface, (self._scr.get_width(), self._scr.get_height())
+            subsurface, (GM._scr.get_width(), GM._scr.get_height())
         )
 
-        self._scr.blit(streched, (0, 0))
+        GM._scr.blit(streched, (0, 0))
         pygame.display.flip()

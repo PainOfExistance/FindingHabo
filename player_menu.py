@@ -3,10 +3,11 @@ import sys
 
 import pygame
 
+from game_manager import GameManager as GM
+
 
 class PlayerMenu:
-    def __init__(self, screen, player):
-        self.screen = screen
+    def __init__(self, player):
         self.visible = False
         self.menu_items = ["Items", "Traits", "Effects", "Quests"]
         self.selected_item = 0
@@ -22,17 +23,17 @@ class PlayerMenu:
         self.stats_font = pygame.font.Font("fonts/SovngardeBold.ttf", 22)
 
         self.bg = pygame.Rect(
-            0, 0, self.screen.get_width() // 4, self.screen.get_height()
+            0, 0, GM.screen.get_width() // 4, GM.screen.get_height()
         )
         self.bg_surface = pygame.Surface(
             (self.bg.width, self.bg.height), pygame.SRCALPHA
         )
 
         self.bg_menu = pygame.Rect(
-            self.screen.get_width() // 4,
+            GM.screen.get_width() // 4,
             0,
-            self.screen.get_width() - (self.screen.get_width() // 4),
-            self.screen.get_height(),
+            GM.screen.get_width() - (GM.screen.get_width() // 4),
+            GM.screen.get_height(),
         )
         self.bg_surface_menu = pygame.Surface(
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
@@ -186,18 +187,18 @@ class PlayerMenu:
             pygame.draw.rect(
                 self.bg_surface, (200, 210, 200, 180), self.bg_surface.get_rect()
             )
-            self.screen.blit(self.bg_surface, self.bg)
+            GM.screen.blit(self.bg_surface, self.bg)
 
             pygame.draw.rect(
                 self.bg_surface_menu, (44, 44, 44, 200), self.bg_surface_menu.get_rect()
             )
-            self.screen.blit(self.bg_surface_menu, self.bg_menu)
+            GM.screen.blit(self.bg_surface_menu, self.bg_menu)
 
             pygame.draw.line(
-                self.screen,
+                GM.screen,
                 (22, 22, 22),
-                (self.screen.get_width() // 4, 0),
-                (self.screen.get_width() // 4, self.screen.get_height()),
+                (GM.screen.get_width() // 4, 0),
+                (GM.screen.get_width() // 4, GM.screen.get_height()),
                 4,
             )
 
@@ -212,20 +213,20 @@ class PlayerMenu:
 
                 text = self.menu_font.render(item, True, color)
                 text_rect = text.get_rect(topleft=(20, 20 + index * 40))
-                self.screen.blit(text, text_rect)
-                text_y = self.screen.get_height() - 140
+                GM.screen.blit(text, text_rect)
+                text_y = GM.screen.get_height() - 140
 
                 for stat in self.stats:
                     stat_render = self.stats_font.render(stat, True, (44, 53, 57))
                     stat_rect = stat_render.get_rect(bottomleft=(20, text_y))
-                    self.screen.blit(stat_render, stat_rect)
+                    GM.screen.blit(stat_render, stat_rect)
                     text_y += stat_rect.height + 5
 
                 level = self.stats_font.render(
                     f"Level: {str(self.player.level.level)}", True, (44, 53, 57)
                 )
                 level_rect = level.get_rect(bottomleft=(20, text_y))
-                self.screen.blit(level, level_rect)
+                GM.screen.blit(level, level_rect)
                 text_y += level_rect.height + 5
 
                 level = self.stats_font.render(
@@ -234,7 +235,7 @@ class PlayerMenu:
                     (44, 53, 57),
                 )
                 level_rect = level.get_rect(bottomleft=(20, text_y))
-                self.screen.blit(level, level_rect)
+                GM.screen.blit(level, level_rect)
                 text_y += level_rect.height + 5
 
                 level = self.stats_font.render(
@@ -243,11 +244,11 @@ class PlayerMenu:
                     (44, 53, 57),
                 )
                 level_rect = level.get_rect(bottomleft=(20, text_y))
-                self.screen.blit(level, level_rect)
+                GM.screen.blit(level, level_rect)
 
             if self.selected_item == 0:
                 self.player.inventory.draw(
-                    self.screen, self.selected_sub_item, self.sub_items, self.screen.get_width() // 4 + 20
+                    self.selected_sub_item, self.sub_items, GM.screen.get_width() // 4 + 20
                 )
                 if self.selected_sub_item > len(self.player.inventory.items) - 1:
                     self.selected_sub_item -= 1
@@ -256,7 +257,6 @@ class PlayerMenu:
 
             elif self.selected_item == 1:
                 self.player.level.draw(
-                    self.screen,
                     self.selected_sub_item,
                     self.sub_items,
                     self.trait_selection,
@@ -264,10 +264,10 @@ class PlayerMenu:
 
             elif self.selected_item == 2:
                 self.player.effects.draw(
-                    self.screen, self.selected_sub_item, self.sub_items
+                    self.selected_sub_item, self.sub_items
                 )
 
             elif self.selected_item == 3:
                 self.player.quests.draw(
-                    self.screen, self.selected_sub_item, self.sub_items
+                    self.selected_sub_item, self.sub_items
                 )

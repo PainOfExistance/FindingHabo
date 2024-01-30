@@ -3,12 +3,13 @@ import random
 import numpy as np
 import pygame
 
+from game_manager import GameManager as GM
+
 
 class Dialougue:
-    def __init__(self, assets, ai, screen, music_player):
+    def __init__(self, assets, ai, music_player):
         self.strings = assets.load_dialogue()
         self.ai = ai
-        self.screen = screen
         self.music_player = music_player
         self.index = -1
         self.selected_item = 0
@@ -34,8 +35,8 @@ class Dialougue:
         
         self.bg_menu = pygame.Rect(
             25,
-            self.screen.get_height() - 170,
-            self.screen.get_width() - 50,
+            GM.screen.get_height() - 170,
+            GM.screen.get_width() - 50,
             170,
         )
 
@@ -70,7 +71,7 @@ class Dialougue:
                 border_radius=10,
             )
 
-            self.screen.blit(self.bg_surface_menu, self.bg_menu)
+            GM.screen.blit(self.bg_surface_menu, self.bg_menu)
 
         if self.index == -1 and not self.bartering:
             scroll_position = (self.selected_item // 4) * 4
@@ -98,12 +99,12 @@ class Dialougue:
 
                 text_rect = text.get_rect(
                     center=(
-                        self.screen.get_width() // 2,
-                        self.screen.get_height() - 140 + i * 35,
+                        GM.screen.get_width() // 2,
+                        GM.screen.get_height() - 140 + i * 35,
                     )
                 )
 
-                self.screen.blit(text, text_rect)
+                GM.screen.blit(text, text_rect)
 
             if not self.greeting_played:
                 self.music_player.play_greeting(self.strings[name]["file"])
@@ -115,12 +116,12 @@ class Dialougue:
 
             text_rect = text.get_rect(
                 center=(
-                    self.screen.get_width() // 2,
-                    self.screen.get_height() - 200,
+                    GM.screen.get_width() // 2,
+                    GM.screen.get_height() - 200,
                 )
             )
 
-            self.screen.blit(text, text_rect)
+            GM.screen.blit(text, text_rect)
 
         elif not self.bartering:
             scroll_position = (self.selected_item // 3) * 3
@@ -148,14 +149,14 @@ class Dialougue:
 
                 text_rect = text.get_rect(
                     center=(
-                        self.screen.get_width() // 2,
-                        self.screen.get_height() - 140 + i * 35,
+                        GM.screen.get_width() // 2,
+                        GM.screen.get_height() - 140 + i * 35,
                     )
                 )
 
-                self.screen.blit(text, text_rect)
+                GM.screen.blit(text, text_rect)
 
-            max_line_width = self.screen.get_width()
+            max_line_width = GM.screen.get_width()
             words = self.prev_talk.split()
             lines = []
             current_line = ""
@@ -182,12 +183,12 @@ class Dialougue:
 
                 text_rect = text.get_rect(
                     center=(
-                        self.screen.get_width() // 2,
-                        self.screen.get_height() - lenght + y * 30,
+                        GM.screen.get_width() // 2,
+                        GM.screen.get_height() - lenght + y * 30,
                     )
                 )
 
-                self.screen.blit(text, text_rect)
+                GM.screen.blit(text, text_rect)
 
             if not self.music_player.get_player_status() and self.talk != -1:
                 self.music_player.play_current_line(self.line)

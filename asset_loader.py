@@ -6,11 +6,12 @@ import cv2
 import numpy as np
 import pygame
 
+from game_manager import GameManager as GM
+
 
 class AssetLoader:
-    def __init__(self, screen_width, screen_height):
-        self.screen_width = screen_width
-        self.screen_height = screen_height
+    def __init__(self):
+        pass
 
     def load_images(self, path, size, center):
         # Load and return images as needed
@@ -20,7 +21,7 @@ class AssetLoader:
         img_rect.center = center
         return img, img_rect
 
-    def load_player(self, path, center):
+    def load_player(self, path):
         # Load player image
         player = pygame.image.load(path)
         player = pygame.transform.scale(player, (32, 64))

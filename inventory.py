@@ -4,6 +4,8 @@ import string
 import numpy as np
 import pygame
 
+from game_manager import GameManager as GM
+
 
 class Inventory:
     def __init__(self):
@@ -26,7 +28,7 @@ class Inventory:
             del self.items[name]
             del self.quantity[name]
             
-    def draw(self, screen, selected_sub_item, sub_items, left=220, ofset=0):
+    def draw(self, selected_sub_item, sub_items, left=220, ofset=0):
         scroll_position = (selected_sub_item // 10) * 10
         visible_items = list(self.quantity.items())[scroll_position : scroll_position + 10]
 
@@ -49,5 +51,5 @@ class Inventory:
 
             item_render = self.inventory_font.render(item_text, True, color)
             item_rect = item_render.get_rect(topleft=(left, ofset + 20 + index * 40))
-            screen.blit(item_render, item_rect)
+            GM.screen.blit(item_render, item_rect)
         

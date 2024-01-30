@@ -3,6 +3,8 @@ import math
 import numpy as np
 import pygame
 
+from game_manager import GameManager as GM
+
 
 class Quests:
     def __init__(self, assets, inventory):
@@ -52,14 +54,14 @@ class Quests:
         self.text_to_draw.append("Completed: " + self.quests[id]["name"])
         self.tics = pygame.time.get_ticks()
 
-    def draw_quest_info(self, screen):
+    def draw_quest_info(self):
         if pygame.time.get_ticks() - self.tics <= 5000:
             for index, v in enumerate(self.text_to_draw):
                 item_render = self.quest_start_font.render(v, True, (44, 53, 57))
                 item_rect = item_render.get_rect(
-                    center=(screen.get_width() // 2, 200 + index * 40)
+                    center=(GM.GM.screen.get_width() // 2, 200 + index * 40)
                 )
-                screen.blit(item_render, item_rect)
+                GM.GM.screen.blit(item_render, item_rect)
 
     def check_quest_advancement(self, quest_objective, world="default"):
         for index, (kv, quest) in enumerate(self.quests.items()):
@@ -95,10 +97,10 @@ class Quests:
                         self.dialogue.strings[stage["objectives"]["npc"]]["options"][stage["objectives"]["option"]]["used"] = True
                         
 
-    def draw(self, screen, selected_sub_item, sub_items):
+    def draw(self, selected_sub_item, sub_items):
         item_spacing = 30
         i = 0
-        coords = (screen.get_width() + screen.get_width() // 4) / 2
+        coords = (GM.screen.get_width() + GM.screen.get_width() // 4) / 2
 
         scroll_position = (selected_sub_item // 5) * 5
         visible_quests = list(self.quests.items())[
@@ -117,7 +119,7 @@ class Quests:
                 quest_text = f"{quest_data['name']}"
                 item_render = self.quests_font.render(quest_text, True, color)
                 item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
-                screen.blit(item_render, item_rect)
+                GM.GM.screen.blit(item_render, item_rect)
 
                 if index == selected_sub_item - scroll_position:
                     i += item_spacing
@@ -127,7 +129,7 @@ class Quests:
                     line_rect = line_render.get_rect(
                         center=(coords, 20 + index * 40 + i)
                     )
-                    screen.blit(line_render, line_rect)
+                    GM.GM.screen.blit(line_render, line_rect)
                     i += item_spacing
 
                     for stage in quest_data["stages"]:
@@ -144,5 +146,5 @@ class Quests:
                             stage_rect = stage_render.get_rect(
                                 center=(coords, 20 + index * 40 + i)
                             )
-                            screen.blit(stage_render, stage_rect)
+                            GM.GM.screen.blit(stage_render, stage_rect)
                             i += item_spacing

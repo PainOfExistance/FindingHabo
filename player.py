@@ -3,6 +3,7 @@ import pygame
 
 from animation import Animation
 from effects import Effects
+from game_manager import GameManager as GM
 from inventory import Inventory
 from leveling_system import LevelingSystem
 from quests import Quests
@@ -10,18 +11,15 @@ from stats import Stats
 
 
 class Player:
-    def __init__(self, path, screen_width, screen_height, assets):
+    def __init__(self, assets):
         self.stats = Stats()
         self.inventory = Inventory()
         self.level = LevelingSystem(assets)
         self.effects = Effects(assets)
         self.quests=Quests(assets, self.inventory)
-        self.screen_width = screen_width
-        self.screen_height = screen_height
         self.name = f"Player"
         self.gold = 1000
         self.current_world=f"Dream World"
-        self.screen_width = screen_width
         self.range=5
         self.active_effects=[]
         self.assets = assets
@@ -33,24 +31,24 @@ class Player:
         self.player_rect.center=(600, 500)
         
         self.depleted_rect = pygame.Rect(
-            screen_width // 2 - 150 // 2,
-            screen_height - 19,
+            GM.screen_width // 2 - 150 // 2,
+            GM.screen_height - 19,
             min(self.stats.health/self.stats.max_health*150, 150),
             18,
         )
         
         self.border_rect = pygame.Rect(
-            (screen_width // 2 - 150 // 2)-2,
-            screen_height - 20,
+            (GM.screen_width // 2 - 150 // 2)-2,
+            GM.screen_height - 20,
             154,
             20,
         )
-        self.depleted_rect.center=(self.screen_width // 2, self.screen_height - 10)
-        self.border_rect.center=(self.screen_width // 2, self.screen_height - 10)
+        self.depleted_rect.center=(GM.screen_width // 2, GM.screen_height - 10)
+        self.border_rect.center=(GM.screen_width // 2, GM.screen_height - 10)
         
         self.text = self.font.render("Health", True, (255, 255, 255))
         self.text_rect = self.text.get_rect(
-            center=(screen_width // 2, screen_height - 12)
+            center=(GM.screen_width // 2, GM.screen_height - 12)
         )
 
         self.equipped_items = {
@@ -66,7 +64,7 @@ class Player:
         self.stats.update_health(health)
         
         self.depleted_rect.width = min(self.stats.health/self.stats.max_health*150, 150)
-        self.depleted_rect.center=(self.screen_width // 2, self.screen_height - 10)
+        self.depleted_rect.center=(GM.screen_width // 2, GM.screen_height - 10)
         
     def update_max_health(self, health):
         self.stats.update_max_health(health)
@@ -181,10 +179,10 @@ class Player:
             else:
                 self.stats.defense = self.stats.defense - self.inventory.items[item]["stats"]["damage"]             
                            
-    def draw(self, screen):
+    def draw(self):
         self.player, new_rect= self.animation.player_anim(self.equipped_items["hand"], self.movement_speed)
         new_rect.center= self.player_rect.center
-        screen.blit(self.player, new_rect.topleft)
-        pygame.draw.rect(screen, (0, 0, 0), self.border_rect, border_radius=10)
-        pygame.draw.rect(screen, (255, 0, 0), self.depleted_rect, border_radius=10)
-        screen.blit(self.text, self.text_rect)
+        GM.screen.blit(self.player, new_rect.topleft)
+        pygame.draw.rect(GM.screen, (0, 0, 0), self.border_rect, border_radius=10)
+        pygame.draw.rect(GM.screen, (255, 0, 0), self.depleted_rect, border_radius=10)
+        GM.screen.blit(self.text, self.text_rect)
