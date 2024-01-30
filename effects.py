@@ -1,12 +1,13 @@
 import numpy as np
 import pygame
 
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 class Effects:
-    def __init__(self, assets):
-        self.effects = assets.load_effects()
+    def __init__(self):
+        self.effects = CM.assets.load_effects()
         self.effects_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
 
     def draw(self, selected_sub_item, sub_items):

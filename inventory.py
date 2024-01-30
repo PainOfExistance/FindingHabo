@@ -4,6 +4,7 @@ import string
 import numpy as np
 import pygame
 
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 

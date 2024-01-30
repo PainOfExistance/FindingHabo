@@ -3,6 +3,7 @@ import pygame
 
 from animation import Animation
 from effects import Effects
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from inventory import Inventory
 from leveling_system import LevelingSystem
@@ -11,21 +12,20 @@ from stats import Stats
 
 
 class Player:
-    def __init__(self, assets):
+    def __init__(self):
         self.stats = Stats()
-        self.inventory = Inventory()
-        self.level = LevelingSystem(assets)
-        self.effects = Effects(assets)
-        self.quests=Quests(assets, self.inventory)
+        CM.inventory = Inventory()
+        self.level = LevelingSystem()
+        self.effects = Effects()
+        self.quests = Quests()
         self.name = f"Player"
         self.gold = 1000
         self.current_world=f"Dream World"
         self.range=5
         self.active_effects=[]
-        self.assets = assets
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
-        self.animation = Animation(assets)
-        self.movement_speed = 150
+        self.animation = Animation()
+        self.movement_speed = 125
 
         self.player, self.player_rect = self.animation.init_player()
         self.player_rect.center=(600, 500)
@@ -106,34 +106,34 @@ class Player:
     def add_item(self, item):
         if "quest" in item:
             self.quests.quests[item["quest"][0]]["stages"][item["quest"][1]]["objectives"]["inventory"]=True
-        self.inventory.add_item(item)
+        CM.inventory.add_item(item)
     
     def remove_item(self, key):
-        if key in self.inventory.items and self.inventory.items[key]["dropable"]:
-            self.inventory.remove_item(key)
+        if key in CM.inventory.items and CM.inventory.items[key]["dropable"]:
+            CM.inventory.remove_item(key)
             return True
         return False
 
     def use_item(self, index):
-        keys = list(self.inventory.items.keys())
-        item = self.inventory.items[keys[index]]
+        keys = list(CM.inventory.items.keys())
+        item = CM.inventory.items[keys[index]]
         if "stats" in item and "effect" in item:
             if (
                 item["name"]
                 == self.equipped_items[
-                    self.inventory.items[item["name"]]["stats"]["slot"]
+                    CM.inventory.items[item["name"]]["stats"]["slot"]
                 ]
             ):
                 self.unequip_item(keys[index])
             else:
                 self.unequip_item(
                     self.equipped_items[
-                        self.inventory.items[item["name"]]["stats"]["slot"]
+                        CM.inventory.items[item["name"]]["stats"]["slot"]
                     ]
                 )
                 self.equip_item(keys[index])
         elif "effect" in item:
-            self.inventory.remove_item(keys[index])
+            CM.inventory.remove_item(keys[index])
             if item["effect"]["duration"]>0:
                 self.active_effects.append(item["effect"])
             self.update_stats(item["effect"]["stat"], item["effect"]["value"])
@@ -150,34 +150,34 @@ class Player:
             self.active_effects.remove(self.active_effects[i])
 
     def equip_item(self, item):
-        slot = self.inventory.items[item]["stats"]["slot"]
+        slot = CM.inventory.items[item]["stats"]["slot"]
         if slot in self.equipped_items:
             self.equipped_items[slot] = item
-            self.inventory.items[item]["stats"]["equiped"] = True
+            CM.inventory.items[item]["stats"]["equiped"] = True
             print(f"Equipped {item} in {slot}")
         else:
             print(f"Cannot equip {item} in {slot}")
         if slot == "hand":
-            self.range = self.inventory.items[item]["stats"]["range"]
-            self.stats.weapon_damage = self.stats.weapon_damage + self.inventory.items[item]["stats"]["damage"]
+            self.range = CM.inventory.items[item]["stats"]["range"]
+            self.stats.weapon_damage = self.stats.weapon_damage + CM.inventory.items[item]["stats"]["damage"]
         else:
-            self.stats.defense = self.stats.defense + self.inventory.items[item]["stats"]["damage"]
+            self.stats.defense = self.stats.defense + CM.inventory.items[item]["stats"]["damage"]
 
     def unequip_item(self, item):
-        if item != None and "stats" in self.inventory.items[item]:
-            slot = self.inventory.items[item]["stats"]["slot"]
+        if item != None and "stats" in CM.inventory.items[item]:
+            slot = CM.inventory.items[item]["stats"]["slot"]
             if slot in self.equipped_items and self.equipped_items[slot] is not None:
                 unequipped_item = self.equipped_items[slot]
                 self.equipped_items[slot] = None
-                self.inventory.items[item]["stats"]["equiped"] = False
+                CM.inventory.items[item]["stats"]["equiped"] = False
                 print(f"Unequipped {unequipped_item} from {slot}")
             else:
                 print(f"No item equipped in {slot}")
             if slot == "hand":
                 self.range = 5
-                self.stats.weapon_damage = self.stats.weapon_damage - self.inventory.items[item]["stats"]["damage"]
+                self.stats.weapon_damage = self.stats.weapon_damage - CM.inventory.items[item]["stats"]["damage"]
             else:
-                self.stats.defense = self.stats.defense - self.inventory.items[item]["stats"]["damage"]             
+                self.stats.defense = self.stats.defense - CM.inventory.items[item]["stats"]["damage"]             
                            
     def draw(self):
         self.player, new_rect= self.animation.player_anim(self.equipped_items["hand"], self.movement_speed)

@@ -5,21 +5,21 @@ import numpy as np
 import pygame
 
 from dialogue import Dialougue
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 class Ai:
-    def __init__(self, npcs, assets, music_player):
+    def __init__(self, npcs, ):
         self.npcs = npcs
-        self.ai_package = assets.load_ai_package()
-        self.assets=assets
+        self.ai_package = CM.assets.load_ai_package()
         GM.delta_time = 0
         self.npc_movement = {}
-        self.strings = Dialougue(assets, self.ai_package, music_player)
+        self.strings = Dialougue(self.ai_package)
         
     def update_npcs(self, npcs):
         self.npcs = npcs
-        tmp=self.assets.load_ai_package()
+        tmp=CM.assets.load_ai_package()
         for key in npcs:
             self.ai_package[key]=tmp[key]
 

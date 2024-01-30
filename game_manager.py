@@ -28,4 +28,23 @@ class GameManager:
     _scr=None
     screen_width=None
     screen_height=None
+    worlds=None
 
+class ClassManager:
+    ai=None
+    animation=None
+    assets=None
+    dialogue=None
+    effects=None
+    game=None
+    inventory=None
+    level=None
+    menu=None
+    music_player=None
+    player_menu=None
+    player=None
+    puzzle=None
+    quests=None
+    stats=None
+    traits=None
+    

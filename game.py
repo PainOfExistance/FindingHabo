@@ -6,24 +6,16 @@ import pygame
 from pygame.locals import *
 
 from ai import Ai
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from music_player import MusicPlayer
 
 
 class Game:
     def __init__(
-        self,
-        menu,
-        player_menu,
-        player,
-        assets,
+        self
     ):
-        self.asets = assets
-        self.menu = menu
-        
-        self.player = player
-        self.items = assets.load_items()
-        self.player_menu = player_menu
+        self.items = CM.assets.load_items()
 
         self.relative_player_top = 0
         self.relative_player_left = 0
@@ -34,28 +26,28 @@ class Game:
         self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
 
-        self.player.inventory.add_item(self.items["Minor Health Potion"])
-        self.player.inventory.add_item(self.items["Knowledge Potion"])
-        self.player.inventory.add_item(self.items["Power Elixir"])
-        self.player.inventory.add_item(self.items["Steel Sword"])
-        self.player.inventory.add_item(self.items["Steel Armor"])
-        self.player.inventory.add_item(self.items["Divine Armor"])
-        self.worlds = assets.load_worlds()
-        self.music_player = MusicPlayer(self.worlds[self.player.current_world]["music"])
+        CM.inventory.add_item(self.items["Minor Health Potion"])
+        CM.inventory.add_item(self.items["Knowledge Potion"])
+        CM.inventory.add_item(self.items["Power Elixir"])
+        CM.inventory.add_item(self.items["Steel Sword"])
+        CM.inventory.add_item(self.items["Steel Armor"])
+        CM.inventory.add_item(self.items["Divine Armor"])
+        GM.worlds = CM.assets.load_worlds()
+        CM.music_player = MusicPlayer(GM.worlds[CM.player.current_world]["music"])
         self.world_objects = list()
 
-        temp = self.setup()
-        self.ai = Ai(temp, assets, self.music_player)
-        self.player.quests.dialogue = self.ai.strings
+        npcs = self.setup()
+        self.ai = Ai(npcs)
+        CM.player.quests.dialogue = self.ai.strings
         self.clock = pygame.time.Clock()
         self.target_fps = 60
         self.last_frame_time = pygame.time.get_ticks()
         self.on_a_diagonal = False
         self.weapon_rect = pygame.Rect(
-            self.player.player_rect.left + self.player.player_rect.width // 4,
-            self.player.player_rect.top - self.player.range // 2,
+            CM.player.player_rect.left + CM.player.player_rect.width // 4,
+            CM.player.player_rect.top - CM.player.range // 2,
             16,
-            self.player.range,
+            CM.player.range,
         )
 
         self.bg_menu = pygame.Rect(
@@ -71,24 +63,21 @@ class Game:
 
     def setup(self, type="default"):
         self.world_objects.clear()
-        self.background, self.bg_rect = self.asets.load_background(
-            self.worlds[self.player.current_world]["background"]
+        self.background, self.bg_rect = CM.assets.load_background(
+            GM.worlds[CM.player.current_world]["background"]
         )
-        self.collision_map = self.asets.load_collision(
-            self.worlds[self.player.current_world]["collision_set"]
+        self.collision_map = CM.assets.load_collision(
+            GM.worlds[CM.player.current_world]["collision_set"]
         )
 
         self.map_height = self.collision_map.shape[0]
         self.map_width = self.collision_map.shape[1]
 
-        level_data = self.asets.load_level_data(
-            self.worlds[self.player.current_world]["data"]
+        level_data = CM.assets.load_level_data(
+            GM.worlds[CM.player.current_world]["data"]
         )
         
         spawn_point = (0, 0)
-        print(type)
-        print("")
-        print(level_data["entities"])
         for i in level_data["entities"]["Player_spawn"]:
             if i["customFields"]["type"] == type:
                 spawn_point = (i["x"], i["y"])
@@ -102,12 +91,12 @@ class Game:
         self.bg_rect.left = -offset[0]
         self.bg_rect.top = -offset[1]
         
-        self.player.player_rect.left = spawn_point[0]-offset[0]
-        self.player.player_rect.top = spawn_point[1]-offset[1]
+        CM.player.player_rect.left = spawn_point[0]-offset[0]
+        CM.player.player_rect.top = spawn_point[1]-offset[1]
 
-        for data in self.worlds[self.player.current_world]["items"]:
+        for data in GM.worlds[CM.player.current_world]["items"]:
             item = self.items[data["type"]]
-            img, img_rect = self.asets.load_images(
+            img, img_rect = CM.assets.load_images(
                 item["image"], (64, 64), tuple(data["position"])
             )
             self.world_objects.append(
@@ -119,8 +108,8 @@ class Game:
                 }
             )
 
-        for data in self.worlds[self.player.current_world]["containers"]:
-            img, img_rect = self.asets.load_images(
+        for data in GM.worlds[CM.player.current_world]["containers"]:
+            img, img_rect = CM.assets.load_images(
                 data["image"], (64, 64), tuple(data["position"])
             )
             self.world_objects.append(
@@ -132,8 +121,8 @@ class Game:
                 }
             )
 
-        for data in self.worlds[self.player.current_world]["npcs"]:
-            img, img_rect = self.asets.load_images(
+        for data in GM.worlds[CM.player.current_world]["npcs"]:
+            img, img_rect = CM.assets.load_images(
                 data["image"], (64, 64), tuple(data["position"])
             )
             self.world_objects.append(
@@ -147,8 +136,8 @@ class Game:
                 }
             )
 
-        for data in self.worlds[self.player.current_world]["portals"]:
-            img, img_rect = self.asets.load_images(
+        for data in GM.worlds[CM.player.current_world]["portals"]:
+            img, img_rect = CM.assets.load_images(
                 data["image"], (64, 64), tuple(data["position"])
             )
             self.world_objects.append(
@@ -181,38 +170,38 @@ class Game:
             self.update()
             self.handle_events()
             self.draw()
-            self.music_player.update()
-            self.player.check_experation(GM.delta_time)
+            CM.music_player.update()
+            CM.player.check_experation(GM.delta_time)
             if (
-                not self.player_menu.visible
+                not CM.player_menu.visible
                 and not GM.tab_pressed
                 and not GM.container_open
                 and not GM.is_in_dialogue
             ):
-                self.menu.handle_input()
+                CM.menu.handle_input()
 
             if (
-                not self.menu.visible
+                not CM.menu.visible
                 and not GM.tab_pressed
                 and not GM.container_open
                 and not GM.is_in_dialogue
             ):
-                self.player_menu.handle_input()
+                CM.player_menu.handle_input()
 
             if (
                 GM.is_in_dialogue
                 and not GM.tab_pressed
                 and not GM.container_open
-                and not self.player_menu.visible
-                and not self.menu.visible
+                and not CM.player_menu.visible
+                and not CM.menu.visible
             ):
                 self.ai.strings.handle_input()
                 if self.ai.strings.starts != 0:
-                    self.player.quests.start_quest(self.ai.strings.starts)
+                    CM.player.quests.start_quest(self.ai.strings.starts)
                     self.ai.strings.starts = 0
 
                 if self.ai.strings.advances != 0:
-                    self.player.quests.advance_quest(self.ai.strings.advances)
+                    CM.player.quests.advance_quest(self.ai.strings.advances)
                     self.ai.strings.advances = 0
 
             self.clock.tick(self.target_fps)
@@ -228,42 +217,42 @@ class Game:
             GM.time_diff = 5
 
         self.relative_player_left = int(
-            self.player.player_rect.left - self.bg_rect.left
+            CM.player.player_rect.left - self.bg_rect.left
         )
 
         self.relative_player_right = int(
-            self.player.player_rect.right - self.bg_rect.left
+            CM.player.player_rect.right - self.bg_rect.left
         )
 
-        self.relative_player_top = int(self.player.player_rect.top - self.bg_rect.top)
+        self.relative_player_top = int(CM.player.player_rect.top - self.bg_rect.top)
 
         self.relative_player_bottom = int(
-            self.player.player_rect.bottom - self.bg_rect.top
+            CM.player.player_rect.bottom - self.bg_rect.top
         )
-        movement = int(self.player.movement_speed * GM.delta_time)
+        movement = int(CM.player.movement_speed * GM.delta_time)
 
-        self.player.quests.check_quest_advancement(
+        CM.player.quests.check_quest_advancement(
             (
-                self.relative_player_top + self.player.player_rect.height // 2,
-                self.relative_player_left + self.player.player_rect.width // 2,
+                self.relative_player_top + CM.player.player_rect.height // 2,
+                self.relative_player_left + CM.player.player_rect.width // 2,
             ),
-            self.player.current_world,
+            CM.player.current_world,
         )
 
         keys = pygame.key.get_pressed()
-        if self.player.player_rect.left <= 10:
+        if CM.player.player_rect.left <= 10:
             self.bg_rect.move_ip(movement, 0)
-            self.player.player_rect.move_ip(movement, 0)
+            CM.player.player_rect.move_ip(movement, 0)
 
-        if self.player.player_rect.right >= GM.screen_width - 10:
+        if CM.player.player_rect.right >= GM.screen_width - 10:
             self.bg_rect.move_ip(-movement, 0)
-            self.player.player_rect.move_ip(-movement, 0)
-        if self.player.player_rect.top <= 10:
+            CM.player.player_rect.move_ip(-movement, 0)
+        if CM.player.player_rect.top <= 10:
             self.bg_rect.move_ip(0, movement)
-            self.player.player_rect.move_ip(0, movement)
-        if self.player.player_rect.bottom >= GM.screen_height - 10:
+            CM.player.player_rect.move_ip(0, movement)
+        if CM.player.player_rect.bottom >= GM.screen_height - 10:
             self.bg_rect.move_ip(0, -movement)
-            self.player.player_rect.move_ip(0, -movement)
+            CM.player.player_rect.move_ip(0, -movement)
 
         GM.moving = False
         if (
@@ -276,23 +265,23 @@ class Game:
                 == 1
             )
             <= 1
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
         ):
-            if self.player.player_rect.left > 10:
-                self.player.player_rect.move_ip(-movement, 0)
+            if CM.player.player_rect.left > 10:
+                CM.player.player_rect.move_ip(-movement, 0)
                 if GM.rotation_angle != 90:
                     GM.rotation_angle = 90 - GM.rotation_angle
-                    # self.player.player = pygame.transform.rotate(self.player.player, GM.rotation_angle)
+                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 90
                 GM.moving = True
 
         elif (
             keys[pygame.K_a]
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
         ):
@@ -331,14 +320,14 @@ class Game:
                 <= 5
             ):
                 move_direction = -1 if dt < dx else 1
-                self.player.player_rect.move_ip(
+                CM.player.player_rect.move_ip(
                     int(-movement * np.cos(angle)),
                     int(move_direction * movement * np.sin(angle)),
                 )
                 self.on_a_diagonal = True
                 if GM.rotation_angle != 90:
                     GM.rotation_angle = 90 - GM.rotation_angle
-                    # self.player.player = pygame.transform.rotate(self.player.player, GM.rotation_angle)
+                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 90
                 self.on_a_diagonal = True
                 GM.moving = True
@@ -353,23 +342,23 @@ class Game:
                 == 1
             )
             <= 1
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
         ):
-            if self.player.player_rect.right < GM.screen_width - 10:
-                self.player.player_rect.move_ip(movement, 0)
+            if CM.player.player_rect.right < GM.screen_width - 10:
+                CM.player.player_rect.move_ip(movement, 0)
                 if GM.rotation_angle != 270:
                     GM.rotation_angle = 270 - GM.rotation_angle
-                    # self.player.player = pygame.transform.rotate(self.player.player, GM.rotation_angle)
+                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 270
                 GM.moving = True
 
         elif (
             keys[pygame.K_d]
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
         ):
@@ -408,13 +397,13 @@ class Game:
                 <= 5
             ):
                 move_direction = -1 if dt < dx else 1
-                self.player.player_rect.move_ip(
+                CM.player.player_rect.move_ip(
                     int(movement * np.cos(angle)),
                     int(move_direction * movement * np.sin(angle)),
                 )
                 if GM.rotation_angle != 270:
                     GM.rotation_angle = 270 - GM.rotation_angle
-                    # self.player.player = pygame.transform.rotate(self.player.player, GM.rotation_angle)
+                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 270
                 self.on_a_diagonal = True
                 GM.moving = True
@@ -429,23 +418,23 @@ class Game:
                 == 1
             )
             <= 1
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
         ):
-            if self.player.player_rect.top > 10:
-                self.player.player_rect.move_ip(0, -movement)
+            if CM.player.player_rect.top > 10:
+                CM.player.player_rect.move_ip(0, -movement)
                 if GM.rotation_angle != 0:
                     GM.rotation_angle = 0 - GM.rotation_angle
-                    # self.player.player = pygame.transform.rotate(self.player.player, GM.rotation_angle)
+                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 0
                 GM.moving = True
 
         elif (
             keys[pygame.K_w]
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
         ):
@@ -482,13 +471,13 @@ class Game:
             ):
                 move_direction_X = -1 if dt < dx else 1
                 move_direction_Y = -1 if dt > dx else 1
-                self.player.player_rect.move_ip(
+                CM.player.player_rect.move_ip(
                     int(movement * np.cos(angle) * move_direction_X),
                     int(movement * move_direction_Y * np.sin(angle)),
                 )
                 if GM.rotation_angle != 0:
                     GM.rotation_angle = 0 - GM.rotation_angle
-                    # self.player.player = pygame.transform.rotate(self.player.player, GM.rotation_angle)
+                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 0
                 self.on_a_diagonal = True
                 GM.moving = True
@@ -503,23 +492,23 @@ class Game:
                 == 1
             )
             <= 1
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
         ):
-            if self.player.player_rect.bottom < GM.screen_height - 10:
-                self.player.player_rect.move_ip(0, movement)
+            if CM.player.player_rect.bottom < GM.screen_height - 10:
+                CM.player.player_rect.move_ip(0, movement)
                 if GM.rotation_angle != 180:
                     GM.rotation_angle = 180 - GM.rotation_angle
-                    # self.player.player = pygame.transform.rotate(self.player.player, GM.rotation_angle)
+                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 180
                 GM.moving = True
 
         elif (
             keys[pygame.K_s]
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
         ):
@@ -558,21 +547,21 @@ class Game:
             ):
                 move_direction_X = -1 if dt < dx else 1
                 move_direction_Y = -1 if dt > dx else 1
-                self.player.player_rect.move_ip(
+                CM.player.player_rect.move_ip(
                     int(movement * np.cos(angle) * move_direction_X),
                     int(movement * move_direction_Y * np.sin(angle)),
                 )
                 if GM.rotation_angle != 180:
                     GM.rotation_angle = 180 - GM.rotation_angle
-                    # self.player.player = pygame.transform.rotate(self.player.player, GM.rotation_angle)
+                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 180
                 self.on_a_diagonal = True
                 GM.moving = True
 
         if (
             keys[pygame.K_e]
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.selection_held
         ):
             if GM.item_hovered != None:
@@ -581,7 +570,7 @@ class Game:
                     GM.item_hovered < len(self.world_objects)
                     and GM.item_hovered >= 0
                 ):
-                    self.player.add_item(
+                    CM.player.add_item(
                         self.items[self.world_objects[GM.item_hovered]["name"]]
                     )
                     del self.world_objects[GM.item_hovered]
@@ -602,13 +591,13 @@ class Game:
 
             elif GM.world_to_travel_to != None and (
                 not GM.world_to_travel_to["locked"]
-                or self.player.inventory.items.get(
+                or CM.inventory.items.get(
                     GM.world_to_travel_to["unlocked_by"], "None"
                 )
                 != "None"
             ):
                 self.loading()
-                self.player.current_world = GM.world_to_travel_to["world"]
+                CM.player.current_world = GM.world_to_travel_to["world"]
                 self.world_objects[GM.world_to_travel_to["index"]]["name"][
                     "locked"
                 ] = False
@@ -616,9 +605,9 @@ class Game:
                 temp = self.setup(GM.world_to_travel_to["ref"])
                 GM.world_to_travel_to = None
                 self.ai.update_npcs(temp)
-                self.player.quests.dialogue = self.ai.strings
-                self.music_player.set_tracks(
-                    self.worlds[self.player.current_world]["music"]
+                CM.player.quests.dialogue = self.ai.strings
+                CM.music_player.set_tracks(
+                    GM.worlds[CM.player.current_world]["music"]
                 )
 
         elif (
@@ -630,8 +619,8 @@ class Game:
 
         if (
             keys[pygame.K_TAB]
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.tab_pressed
         ):
             GM.tab_pressed = True
@@ -646,7 +635,7 @@ class Game:
                 self.ai.strings.index = -1
                 self.ai.strings.greeting_played = False
                 self.ai.strings.talking = False
-                self.ai.strings.music_player.skip_current_line()
+                CM.music_player.skip_current_line()
 
         elif not keys[pygame.K_TAB] and not GM.container_open and GM.tab_pressed:
             GM.tab_pressed = False
@@ -657,8 +646,8 @@ class Game:
             keys[pygame.K_UP]
             and not GM.selection_held
             and (GM.container_open or self.ai.strings.bartering)
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
         ):
             if (
                 GM.container_menu_selected
@@ -671,9 +660,9 @@ class Game:
                 GM.selection_held = True
                 return
 
-            elif len(self.player.inventory.items) and self.ai.strings.bartering:
+            elif len(CM.inventory.items) and self.ai.strings.bartering:
                 GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
-                    self.player.inventory.items
+                    CM.inventory.items
                 )
                 GM.selection_held = True
                 return
@@ -688,9 +677,9 @@ class Game:
                 )
                 GM.selection_held = True
 
-            elif len(self.player.inventory.items) and GM.container_open:
+            elif len(CM.inventory.items) and GM.container_open:
                 GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
-                    self.player.inventory.items
+                    CM.inventory.items
                 )
                 GM.selection_held = True
 
@@ -698,8 +687,8 @@ class Game:
             keys[pygame.K_DOWN]
             and not GM.selection_held
             and (GM.container_open or self.ai.strings.bartering)
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
         ):
             if (
                 GM.container_menu_selected
@@ -712,9 +701,9 @@ class Game:
                 GM.selection_held = True
                 return
 
-            elif len(self.player.inventory.items) and self.ai.strings.bartering:
+            elif len(CM.inventory.items) and self.ai.strings.bartering:
                 GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
-                    self.player.inventory.items
+                    CM.inventory.items
                 )
                 GM.selection_held = True
                 return
@@ -726,9 +715,9 @@ class Game:
                     self.world_objects[GM.container_hovered]["name"]["items"]
                 )
                 GM.selection_held = True
-            elif len(self.player.inventory.items):
+            elif len(CM.inventory.items):
                 GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
-                    self.player.inventory.items
+                    CM.inventory.items
                 )
                 GM.selection_held = True
 
@@ -736,8 +725,8 @@ class Game:
             keys[pygame.K_LEFT]
             and not GM.selection_held
             and (GM.container_open or self.ai.strings.bartering)
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and GM.container_menu_selected
         ):
             GM.container_menu_selected = False
@@ -751,8 +740,8 @@ class Game:
             keys[pygame.K_RIGHT]
             and not GM.selection_held
             and (GM.container_open or self.ai.strings.bartering)
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.container_menu_selected
         ):
             GM.container_menu_selected = True
@@ -774,8 +763,8 @@ class Game:
 
         if (
             keys[pygame.K_RETURN]
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.selection_held
             and (GM.container_open or self.ai.strings.bartering)
         ):
@@ -791,14 +780,14 @@ class Game:
                             GM.selected_inventory_item
                         ]["quantity"]
                         > 0
-                        and self.player.gold
+                        and CM.player.gold
                         >= self.items[
                             self.ai.ai_package[GM.talk_to_name]["items"][
                                 GM.selected_inventory_item
                             ]["type"]
                         ]["price"]
                     ):
-                        self.player.gold -= self.items[
+                        CM.player.gold -= self.items[
                             self.ai.ai_package[GM.talk_to_name]["items"][
                                 GM.selected_inventory_item
                             ]["type"]
@@ -811,7 +800,7 @@ class Game:
                         self.ai.ai_package[GM.talk_to_name]["items"][
                             GM.selected_inventory_item
                         ]["quantity"] -= 1
-                        self.player.inventory.add_item(
+                        CM.inventory.add_item(
                             self.items[
                                 self.ai.ai_package[GM.talk_to_name]["items"][
                                     GM.selected_inventory_item
@@ -830,11 +819,11 @@ class Game:
 
                 elif (
                     not GM.container_menu_selected
-                    and len(self.player.inventory.items) > 0
+                    and len(CM.inventory.items) > 0
                 ):
                     if self.ai.ai_package[GM.talk_to_name]["gold"] <= 0:
                         self.ai.ai_package[GM.talk_to_name]["gold"] = 0
-                    key = list(self.player.inventory.quantity.keys())[
+                    key = list(CM.inventory.quantity.keys())[
                         GM.selected_inventory_item
                     ]
                     item_index = next(
@@ -857,17 +846,17 @@ class Game:
                         self.ai.ai_package[GM.talk_to_name]["items"].append(
                             {"type": key, "quantity": 1}
                         )
-                    self.player.inventory.remove_item(key)
-                    self.player.gold += self.items[key]["price"]
+                    CM.inventory.remove_item(key)
+                    CM.player.gold += self.items[key]["price"]
                     self.ai.ai_package[GM.talk_to_name]["gold"] -= self.items[key][
                         "price"
                     ]
 
                 if (
-                    GM.selected_inventory_item > len(self.player.inventory.items) - 1
+                    GM.selected_inventory_item > len(CM.inventory.items) - 1
                     and not GM.container_menu_selected
                 ):
-                    GM.selected_inventory_item = len(self.player.inventory.items) - 1
+                    GM.selected_inventory_item = len(CM.inventory.items) - 1
 
                 elif (
                     GM.selected_inventory_item
@@ -894,7 +883,7 @@ class Game:
                     ]["type"]
                     == "Gold"
                 ):
-                    self.player.gold += self.world_objects[GM.container_hovered][
+                    CM.player.gold += self.world_objects[GM.container_hovered][
                         "name"
                     ]["items"][GM.selected_inventory_item]["quantity"]
                     del self.world_objects[GM.container_hovered]["name"]["items"][
@@ -910,7 +899,7 @@ class Game:
                     self.world_objects[GM.container_hovered]["name"]["items"][
                         GM.selected_inventory_item
                     ]["quantity"] -= 1
-                    self.player.add_item(
+                    CM.player.add_item(
                         self.items[
                             self.world_objects[GM.container_hovered]["name"]["items"][
                                 GM.selected_inventory_item
@@ -929,9 +918,9 @@ class Game:
 
             elif (
                 not GM.container_menu_selected
-                and len(self.player.inventory.items) > 0
+                and len(CM.inventory.items) > 0
             ):
-                key = list(self.player.inventory.quantity.keys())[
+                key = list(CM.inventory.quantity.keys())[
                     GM.selected_inventory_item
                 ]
                 item_index = next(
@@ -953,13 +942,13 @@ class Game:
                     self.world_objects[GM.container_hovered]["name"]["items"].append(
                         {"type": key, "quantity": 1}
                     )
-                self.player.inventory.remove_item(key)
+                CM.inventory.remove_item(key)
 
             if (
-                GM.selected_inventory_item > len(self.player.inventory.items) - 1
+                GM.selected_inventory_item > len(CM.inventory.items) - 1
                 and not GM.container_menu_selected
             ):
-                GM.selected_inventory_item = len(self.player.inventory.items) - 1
+                GM.selected_inventory_item = len(CM.inventory.items) - 1
 
             elif (
                 GM.selected_inventory_item
@@ -975,24 +964,24 @@ class Game:
 
         if (
             keys[pygame.K_r]
-            and self.player_menu.selected_item == 0
+            and CM.player_menu.selected_item == 0
             and not GM.r_pressed
             and not GM.selection_held
-            and self.player_menu.visible
+            and CM.player_menu.visible
         ):
             GM.r_pressed = True
-            key = list(self.player.inventory.quantity.keys())[
-                self.player_menu.selected_sub_item
+            key = list(CM.inventory.quantity.keys())[
+                CM.player_menu.selected_sub_item
             ]
-            self.player.unequip_item(key)
-            ret = self.player.remove_item(key)
+            CM.player.unequip_item(key)
+            ret = CM.player.remove_item(key)
             if ret:
-                img, img_rect = self.asets.load_images(
+                img, img_rect = CM.CM.assets.load_images(
                     self.items[key]["image"],
                     (64, 64),
                     (
-                        self.relative_player_left + self.player.player_rect.width // 2,
-                        self.relative_player_top + self.player.player_rect.height // 2,
+                        self.relative_player_left + CM.player.player_rect.width // 2,
+                        self.relative_player_top + CM.player.player_rect.height // 2,
                     ),
                 )
                 self.world_objects.append(
@@ -1010,15 +999,15 @@ class Game:
         mouse_buttons = pygame.mouse.get_pressed()
         if (
             (mouse_buttons[0] or keys[pygame.K_SPACE])
-            and not self.menu.visible
-            and not self.player_menu.visible
+            and not CM.menu.visible
+            and not CM.player_menu.visible
             and not GM.attacking
             and not GM.attack_button_held
             and not GM.is_in_dialogue
         ):
             timedif = 0
-            if self.player.equipped_items["hand"] != None:
-                weapon = self.player.inventory.items[self.player.equipped_items["hand"]]
+            if CM.player.equipped_items["hand"] != None:
+                weapon = CM.inventory.items[CM.player.equipped_items["hand"]]
                 timedif = weapon["stats"]["speed"]
             else:
                 timedif = 0.3
@@ -1026,7 +1015,7 @@ class Game:
             if GM.time_diff >= timedif and not GM.attacking:
                 GM.attacking = True
                 GM.attack_button_held = True
-                print(f"attacked with a: {self.player.equipped_items['hand']}")
+                print(f"attacked with a: {CM.player.equipped_items['hand']}")
                 GM.time_diff = 0
                 self.diff = pygame.time.get_ticks()
 
@@ -1042,35 +1031,35 @@ class Game:
             GM.attack_button_held = False
 
         if keys[pygame.K_o]:
-            print(self.worlds)
+            print(GM.worlds)
 
         if GM.rotation_angle == 90:
             self.weapon_rect = pygame.Rect(
-                self.player.player_rect.left - self.player.range // 2,
-                self.player.player_rect.top + self.player.player_rect.height // 2,
-                self.player.range,
-                self.player.player_rect.height // 4,
+                CM.player.player_rect.left - CM.player.range // 2,
+                CM.player.player_rect.top + CM.player.player_rect.height // 2,
+                CM.player.range,
+                CM.player.player_rect.height // 4,
             )
         elif GM.rotation_angle == 0:
             self.weapon_rect = pygame.Rect(
-                self.player.player_rect.left + self.player.player_rect.width // 4,
-                self.player.player_rect.top - self.player.range // 2,
+                CM.player.player_rect.left + CM.player.player_rect.width // 4,
+                CM.player.player_rect.top - CM.player.range // 2,
                 16,
-                self.player.range,
+                CM.player.range,
             )
         elif GM.rotation_angle == 180:
             self.weapon_rect = pygame.Rect(
-                self.player.player_rect.left + self.player.player_rect.width // 4,
-                self.player.player_rect.bottom - self.player.range // 2,
+                CM.player.player_rect.left + CM.player.player_rect.width // 4,
+                CM.player.player_rect.bottom - CM.player.range // 2,
                 16,
-                self.player.range,
+                CM.player.range,
             )
         elif GM.rotation_angle == 270:
             self.weapon_rect = pygame.Rect(
-                self.player.player_rect.right - self.player.range // 2,
-                self.player.player_rect.top + self.player.player_rect.height // 2,
-                self.player.range,
-                self.player.player_rect.height // 4,
+                CM.player.player_rect.right - CM.player.range // 2,
+                CM.player.player_rect.top + CM.player.player_rect.height // 2,
+                CM.player.range,
+                CM.player.player_rect.height // 4,
             )
 
     def draw_container(self):
@@ -1097,7 +1086,7 @@ class Game:
             i = 0
 
             item_render = self.menu_font.render(
-                self.player.name,
+                CM.player.name,
                 True,
                 (44, 53, 57),
             )
@@ -1155,7 +1144,7 @@ class Game:
                 GM.screen.blit(item_render, item_rect)
 
             scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = list(self.player.inventory.quantity.items())[
+            visible_items = list(CM.inventory.quantity.items())[
                 scroll_position : scroll_position + 10
             ]
 
@@ -1205,7 +1194,7 @@ class Game:
             i = 0
 
             item_render = self.menu_font.render(
-                self.player.name + "  Gold: " + str(self.player.gold),
+                CM.player.name + "  Gold: " + str(CM.player.gold),
                 True,
                 (44, 53, 57),
             )
@@ -1265,7 +1254,7 @@ class Game:
                 GM.screen.blit(item_render, item_rect)
 
             scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = list(self.player.inventory.quantity.items())[
+            visible_items = list(CM.inventory.quantity.items())[
                 scroll_position : scroll_position + 10
             ]
 
@@ -1298,8 +1287,8 @@ class Game:
                 and x["name"]["status"] == "alive"
                 and x["name"]["type"] == "enemy"
                 and not GM.container_open
-                and not self.menu.visible
-                and not self.player_menu.visible
+                and not CM.menu.visible
+                and not CM.player_menu.visible
                 and not GM.is_in_dialogue
             ):
                 dx, dy, agroved = self.ai.attack(
@@ -1329,14 +1318,14 @@ class Game:
                     x["rect"].height,
                 )
 
-                if self.player.player_rect.colliderect(other_obj_rect):
+                if CM.player.player_rect.colliderect(other_obj_rect):
                     if x["attack_diff"] > x["name"]["attack_speed"]:
-                        res = self.player.stats.defense - x["name"]["damage"]
+                        res = CM.player.stats.defense - x["name"]["damage"]
 
                         if res > 0:
                             res = 0
 
-                        self.player.update_health(res)
+                        CM.player.update_health(res)
                         self.world_objects[index]["attack_diff"] = 0
 
                 if self.world_objects[index]["attack_diff"] < 5:
@@ -1351,8 +1340,8 @@ class Game:
                 and x["name"]["status"] == "alive"
                 and not x["agroved"]
                 and not GM.container_open
-                and not self.menu.visible
-                and not self.player_menu.visible
+                and not CM.menu.visible
+                and not CM.player_menu.visible
                 and not GM.is_in_dialogue
             ):
                 dx, dy = self.ai.update(
@@ -1382,7 +1371,7 @@ class Game:
                 if line != None and GM.line_time < GM.counter:
                     GM.current_line = line
                     GM.line_time = (
-                        self.music_player.play_line(GM.current_line["file"])
+                        CM.music_player.play_line(GM.current_line["file"])
                         + GM.counter
                     )
 
@@ -1428,7 +1417,7 @@ class Game:
                 )
 
                 if (
-                    other_obj_rect.colliderect(self.player.player_rect)
+                    other_obj_rect.colliderect(CM.player.player_rect)
                     and x["type"] == "item"
                 ):
                     GM.item_hovered = index
@@ -1441,14 +1430,14 @@ class Game:
                     )
                     GM.screen.blit(self.text, self.text_rect)
                 elif (
-                    not other_obj_rect.colliderect(self.player.player_rect)
+                    not other_obj_rect.colliderect(CM.player.player_rect)
                     and x["type"] == "item"
                     and index == GM.item_hovered
                 ):
                     GM.item_hovered = None
 
                 if (
-                    other_obj_rect.colliderect(self.player.player_rect)
+                    other_obj_rect.colliderect(CM.player.player_rect)
                     and x["type"] == "container"
                 ):
                     GM.container_hovered = index
@@ -1461,7 +1450,7 @@ class Game:
                     )
                     GM.screen.blit(self.text, self.text_rect)
                 elif (
-                    not other_obj_rect.colliderect(self.player.player_rect)
+                    not other_obj_rect.colliderect(CM.player.player_rect)
                     and x["type"] == "container"
                     and index == GM.container_hovered
                 ):
@@ -1474,11 +1463,11 @@ class Game:
                             self.world_objects[index]["agroved"] = True
 
                         x["name"]["health"] = (
-                            x["name"]["health"] - self.player.stats.weapon_damage
+                            x["name"]["health"] - CM.player.stats.weapon_damage
                         )
 
                         if x["name"]["health"] <= 0:
-                            self.player.level.gain_experience(x["name"]["xp"])
+                            CM.player.level.gain_experience(x["name"]["xp"])
                             x["name"]["status"] = "dead"
                             self.world_objects[index]["agroved"] = False
                             # del self.world_objects[index]
@@ -1520,10 +1509,10 @@ class Game:
                 if (
                     x["type"] == "portal"
                     and not GM.container_open
-                    and not self.menu.visible
-                    and not self.player_menu.visible
+                    and not CM.menu.visible
+                    and not CM.player_menu.visible
                     and not GM.is_in_dialogue
-                    and other_obj_rect.colliderect(self.player.player_rect)
+                    and other_obj_rect.colliderect(CM.player.player_rect)
                 ):
                     if x["name"]["locked"]:
                         text = self.prompt_font.render(
@@ -1544,7 +1533,7 @@ class Game:
                     GM.screen.blit(text, text_rect)
 
                 elif (
-                    not other_obj_rect.colliderect(self.player.player_rect)
+                    not other_obj_rect.colliderect(CM.player.player_rect)
                     and x["type"] == "portal"
                 ):
                     GM.world_to_travel_to = None
@@ -1562,11 +1551,11 @@ class Game:
         GM.screen.fill((230, 60, 20))
         GM.screen.blit(self.background, self.bg_rect.topleft)
         self.draw_objects()
-        self.player.draw()  # .lulekSprulek.123.fafajMi)
-        self.menu.render(self)
-        self.player_menu.render()
+        CM.player.draw()  # .lulekSprulek.123.fafajMi)
+        CM.menu.render(self)
+        CM.player_menu.render()
         self.draw_container()
-        self.player.quests.draw_quest_info()
+        CM.player.quests.draw_quest_info()
 
         if GM.is_in_dialogue:
             self.ai.strings.draw(GM.talk_to_name)

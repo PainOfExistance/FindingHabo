@@ -1,11 +1,12 @@
 import pygame
 
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 class Animation:
-    def __init__(self, assets):
-        images =assets.load_player_sprites()
+    def __init__(self):
+        images = CM.assets.load_player_sprites()
         self.action_images = self.slice_image(images)
         self.anim_counter=1
         self.prev_frame=0

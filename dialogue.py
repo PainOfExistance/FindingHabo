@@ -3,14 +3,14 @@ import random
 import numpy as np
 import pygame
 
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 class Dialougue:
-    def __init__(self, assets, ai, music_player):
-        self.strings = assets.load_dialogue()
+    def __init__(self,ai):
+        self.strings = CM.assets.load_dialogue()
         self.ai = ai
-        self.music_player = music_player
         self.index = -1
         self.selected_item = 0
         self.selection_held = False
@@ -107,7 +107,7 @@ class Dialougue:
                 GM.screen.blit(text, text_rect)
 
             if not self.greeting_played:
-                self.music_player.play_greeting(self.strings[name]["file"])
+                CM.music_player.play_greeting(self.strings[name]["file"])
                 self.greeting_played = True
 
             text = self.subtitle_font.render(
@@ -190,8 +190,8 @@ class Dialougue:
 
                 GM.screen.blit(text, text_rect)
 
-            if not self.music_player.get_player_status() and self.talk != -1:
-                self.music_player.play_current_line(self.line)
+            if not CM.music_player.get_player_status() and self.talk != -1:
+                CM.music_player.play_current_line(self.line)
 
                 if self.talk != -1 and self.talk != self.prev_talk:
                     self.prev_talk = self.talk
@@ -199,7 +199,7 @@ class Dialougue:
                 self.talk = next(self.current_talk, -1)
                 self.line = next(self.current_lines, -1)
 
-            elif not self.music_player.get_player_status() and self.talk == -1:
+            elif not CM.music_player.get_player_status() and self.talk == -1:
                 self.talking = False
                 if self.will_bartering:
                     self.bartering = True
@@ -230,15 +230,15 @@ class Dialougue:
                 keys[pygame.K_RETURN] and not self.selection_held and not self.bartering
             ):
                 if self.index == -1:
-                    self.music_player.skip_current_line()
+                    CM.music_player.skip_current_line()
                     self.index += 1
 
                 self.selection_held = True
 
                 if self.talk != self.prev_talk and self.talk != -1:
-                    self.music_player.skip_current_line()
+                    CM.music_player.skip_current_line()
                     self.prev_talk = self.talk
-                    self.music_player.play_current_line(self.line)
+                    CM.music_player.play_current_line(self.line)
                     return
 
                 if self.talking:
@@ -246,10 +246,10 @@ class Dialougue:
                     self.line = next(self.current_lines, -1)
 
                 if self.talking and self.talk != -1:
-                    self.music_player.skip_current_line()
+                    CM.music_player.skip_current_line()
 
                 elif self.talking and self.talk == -1:
-                    self.music_player.skip_current_line()
+                    CM.music_player.skip_current_line()
                     self.talking = False
 
                 elif (

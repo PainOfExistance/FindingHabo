@@ -6,6 +6,7 @@ import pygame
 
 from asset_loader import AssetLoader
 from game import Game
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from menu import Menu
 from player import Player
@@ -72,21 +73,14 @@ class MainMenu:
             GM.screen_width = GM.screen.get_width()
             GM.screen_height = GM.screen.get_height()
             #pygame.display.update()
-            assets = AssetLoader()
-            player = Player(
-                assets
-            )
-            menu = Menu(assets, player)
-            player_menu = PlayerMenu(player)
-            game = Game(
-                menu,
-                player_menu,
-                player,
-                assets,
-            )
+            CM.assets = AssetLoader()
+            CM.player = Player()
+            CM.menu = Menu()
+            CM.player_menu = PlayerMenu()
+            CM.game = Game()
             
             self.is_menu_visible = False
-            game.run()
+            CM.game.run()
         elif selected_option == "Load" and len(self.saves) > 0:
             print("Opening load menu...")
             self.in_sub_menu = 1

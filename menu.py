@@ -5,12 +5,14 @@ from datetime import datetime
 
 import pygame
 
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 class Menu:
-    def __init__(self, assets, player):
+    def __init__(self):
         self.visible = False
+        self.menu_items = ["Continue", "Save and Load", "Options", "Exit"]
         self.menu_items = ["Continue", "Save and Load", "Options", "Exit"]
         self.selected_item = 0
         self.m_key_held = False
@@ -19,8 +21,6 @@ class Menu:
         saves = glob.glob(os.path.join("saves", "*.habo"))
         self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves]
         self.action="Save"
-        self.assets=assets
-        self.player=player
         self.game=None
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 40)   
         self.bg_menu = pygame.Rect(
@@ -104,8 +104,8 @@ class Menu:
             sys.exit()
         elif self.in_sub_menu==1:
             if self.action=="Save":
-                save_name=f"{self.player.name}_{self.player.current_world}_{datetime.now().strftime('%d-%m-%Y %H-%M-%S')}"
-                tmp=self.assets.save(save_name, self.game)
+                save_name=f"{CM.player.name}_{CM.player.current_world}_{datetime.now().strftime('%d-%m-%Y %H-%M-%S')}"
+                tmp=CM.assets.save(save_name, self.game)
                 if tmp:
                     saves = glob.glob(os.path.join("saves", "*.habo"))
                     self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves]

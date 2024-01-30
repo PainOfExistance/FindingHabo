@@ -3,11 +3,12 @@ import sys
 
 import pygame
 
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 class PlayerMenu:
-    def __init__(self, player):
+    def __init__(self):
         self.visible = False
         self.menu_items = ["Items", "Traits", "Effects", "Quests"]
         self.selected_item = 0
@@ -17,7 +18,6 @@ class PlayerMenu:
         self.selection_held = False
         self.inventory_visible = False
         self.trait_selection = -1
-        self.player = player
         
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
         self.stats_font = pygame.font.Font("fonts/SovngardeBold.ttf", 22)
@@ -40,9 +40,9 @@ class PlayerMenu:
         )
 
         self.stats = [
-            f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
-            f"Power: {self.player.stats.power}/{self.player.stats.max_power}",
-            f"Knowledge: {self.player.stats.knowlage}/{self.player.stats.max_knowlage}",
+            f"Health: {CM.player.stats.health}/{CM.player.stats.max_health}",
+            f"Power: {CM.player.stats.power}/{CM.player.stats.max_power}",
+            f"Knowledge: {CM.player.stats.knowlage}/{CM.player.stats.max_knowlage}",
         ]
 
     def toggle_visibility(self):
@@ -50,8 +50,8 @@ class PlayerMenu:
 
     def handle_input(self):
         
-        num_started_quests = sum(1 for quest in self.player.quests.quests
-                        if self.player.quests.quests[quest]["started"]
+        num_started_quests = sum(1 for quest in CM.player.quests.quests
+                        if CM.player.quests.quests[quest]["started"]
                     )
         
         keys = pygame.key.get_pressed()
@@ -62,9 +62,9 @@ class PlayerMenu:
             elif not self.tab_held:
                 self.toggle_visibility()
                 self.stats = [
-                    f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
-                    f"Power: {self.player.stats.power}/{self.player.stats.max_power}",
-                    f"Knowledge: {self.player.stats.knowlage}/{self.player.stats.max_knowlage}",
+                    f"Health: {CM.player.stats.health}/{CM.player.stats.max_health}",
+                    f"Power: {CM.player.stats.power}/{CM.player.stats.max_power}",
+                    f"Knowledge: {CM.player.stats.knowlage}/{CM.player.stats.max_knowlage}",
                 ]
             self.tab_held = True
         else:
@@ -78,17 +78,17 @@ class PlayerMenu:
             ):
                 if not self.sub_items:
                     self.selected_item = (self.selected_item - 1) % len(self.menu_items)
-                elif len(self.player.inventory.items) > 0 and self.selected_item == 0:
+                elif len(CM.inventory.items) > 0 and self.selected_item == 0:
                     self.selected_sub_item = (self.selected_sub_item - 1) % len(
-                        self.player.inventory.items
+                        CM.inventory.items
                     )
                 elif self.selected_item == 1:
                     self.selected_sub_item = (self.selected_sub_item - 1) % len(
-                        self.player.level.traits.traits
+                        CM.player.level.traits.traits
                     )
                 elif self.selected_item == 2:
                     self.selected_sub_item = (self.selected_sub_item - 1) % len(
-                        self.player.effects.effects
+                        CM.player.effects.effects
                     )
                 elif num_started_quests>0 and self.selected_item == 3:
                     self.selected_sub_item = (
@@ -106,17 +106,17 @@ class PlayerMenu:
             ):
                 if not self.sub_items:
                     self.selected_item = (self.selected_item + 1) % len(self.menu_items)
-                elif len(self.player.inventory.items) > 0 and self.selected_item == 0:
+                elif len(CM.inventory.items) > 0 and self.selected_item == 0:
                     self.selected_sub_item = (self.selected_sub_item + 1) % len(
-                        self.player.inventory.items
+                        CM.inventory.items
                     )
                 elif self.selected_item == 1:
                     self.selected_sub_item = (self.selected_sub_item + 1) % len(
-                        self.player.level.traits.traits
+                        CM.player.level.traits.traits
                     )
                 elif self.selected_item == 2:
                     self.selected_sub_item = (self.selected_sub_item + 1) % len(
-                        self.player.effects.effects
+                        CM.player.effects.effects
                     )
                 elif num_started_quests>0 and self.selected_item == 3:
                     self.selected_sub_item = (
@@ -141,35 +141,35 @@ class PlayerMenu:
                 self.selection_held = True
 
             elif keys[pygame.K_RETURN] and self.sub_items:
-                if self.selected_item == 0 and len(self.player.inventory.items) > 0:
-                    self.player.use_item(self.selected_sub_item)
+                if self.selected_item == 0 and len(CM.inventory.items) > 0:
+                    CM.player.use_item(self.selected_sub_item)
                     self.stats = [
-                        f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
-                        f"Power: {self.player.stats.power}/{self.player.stats.max_power}",
-                        f"Knowledge: {self.player.stats.knowlage}/{self.player.stats.max_knowlage}",
+                        f"Health: {CM.player.stats.health}/{CM.player.stats.max_health}",
+                        f"Power: {CM.player.stats.power}/{CM.player.stats.max_power}",
+                        f"Knowledge: {CM.player.stats.knowlage}/{CM.player.stats.max_knowlage}",
                     ]
                 elif self.selected_item == 1:
                     if (
                         self.trait_selection != -1
-                        and self.player.level.traits.unused_trait_points > 0
-                        and self.player.check_trait_conditions(self.selected_sub_item)
+                        and CM.player.level.traits.unused_trait_points > 0
+                        and CM.player.check_trait_conditions(self.selected_sub_item)
                     ):
-                        self.player.add_trait(self.selected_sub_item)
+                        CM.player.add_trait(self.selected_sub_item)
                         self.trait_selection = -1
                         self.stats = [
-                            f"Health: {self.player.stats.health}/{self.player.stats.max_health}",
-                            f"Power: {self.player.stats.power}/{self.player.stats.max_power}",
-                            f"Knowledge: {self.player.stats.knowlage}/{self.player.stats.max_knowlage}",
+                            f"Health: {CM.player.stats.health}/{CM.player.stats.max_health}",
+                            f"Power: {CM.player.stats.power}/{CM.player.stats.max_power}",
+                            f"Knowledge: {CM.player.stats.knowlage}/{CM.player.stats.max_knowlage}",
                         ]
                     elif (
-                        self.player.level.traits.unused_trait_points > 0
-                        and self.player.check_trait_conditions(self.selected_sub_item)
+                        CM.player.level.traits.unused_trait_points > 0
+                        and CM.player.check_trait_conditions(self.selected_sub_item)
                         and self.trait_selection == -1
                     ):
                         self.trait_selection = self.selected_sub_item
                 elif self.selected_item == 3 and num_started_quests>0:
-                    keys_list = list(self.player.quests.quests.keys())
-                    self.player.quests.quests[keys_list[self.selected_sub_item]]["active"] = not self.player.quests.quests[keys_list[self.selected_sub_item]]["active"]
+                    keys_list = list(CM.player.quests.quests.keys())
+                    CM.player.quests.quests[keys_list[self.selected_sub_item]]["active"] = not CM.player.quests.quests[keys_list[self.selected_sub_item]]["active"]
                     
                 self.selection_held = True
 
@@ -223,14 +223,14 @@ class PlayerMenu:
                     text_y += stat_rect.height + 5
 
                 level = self.stats_font.render(
-                    f"Level: {str(self.player.level.level)}", True, (44, 53, 57)
+                    f"Level: {str(CM.player.level.level)}", True, (44, 53, 57)
                 )
                 level_rect = level.get_rect(bottomleft=(20, text_y))
                 GM.screen.blit(level, level_rect)
                 text_y += level_rect.height + 5
 
                 level = self.stats_font.render(
-                    f"Unused points: {str(self.player.level.traits.unused_trait_points)}",
+                    f"Unused points: {str(CM.player.level.traits.unused_trait_points)}",
                     True,
                     (44, 53, 57),
                 )
@@ -239,7 +239,7 @@ class PlayerMenu:
                 text_y += level_rect.height + 5
 
                 level = self.stats_font.render(
-                    f"Gold: {str(self.player.gold)}",
+                    f"Gold: {str(CM.player.gold)}",
                     True,
                     (44, 53, 57),
                 )
@@ -247,27 +247,27 @@ class PlayerMenu:
                 GM.screen.blit(level, level_rect)
 
             if self.selected_item == 0:
-                self.player.inventory.draw(
+                CM.inventory.draw(
                     self.selected_sub_item, self.sub_items, GM.screen.get_width() // 4 + 20
                 )
-                if self.selected_sub_item > len(self.player.inventory.items) - 1:
+                if self.selected_sub_item > len(CM.inventory.items) - 1:
                     self.selected_sub_item -= 1
                 elif self.selected_sub_item < 0:
                     self.selected_sub_item = 0
 
             elif self.selected_item == 1:
-                self.player.level.draw(
+                CM.player.level.draw(
                     self.selected_sub_item,
                     self.sub_items,
                     self.trait_selection,
                 )
 
             elif self.selected_item == 2:
-                self.player.effects.draw(
+                CM.player.effects.draw(
                     self.selected_sub_item, self.sub_items
                 )
 
             elif self.selected_item == 3:
-                self.player.quests.draw(
+                CM.player.quests.draw(
                     self.selected_sub_item, self.sub_items
                 )

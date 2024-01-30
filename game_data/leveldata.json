@@ -165,8 +165,7 @@
           "image": "textures/static/door.png",
           "locked": true,
           "unlocked_by": "Key to the Land of the Free",
-          "spawn_point": [1400, 600],
-          "offset": [1100, 250]
+          "ref": "dw_lotf_portal_01"
         }
       ]
     }

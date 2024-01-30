@@ -3,15 +3,15 @@ import math
 import numpy as np
 import pygame
 
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 class Quests:
-    def __init__(self, assets, inventory):
-        self.quests = assets.load_quests()
+    def __init__(self):
+        self.quests = CM.assets.load_quests()
         self.tics = 0
         self.text_to_draw = []
-        self.inventory=inventory
         self.dialogue=None
         self.quests_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
         self.quest_start_font = pygame.font.Font("fonts/SovngardeBold.ttf", 36)
@@ -21,9 +21,9 @@ class Quests:
             if stages["objectives"]["state"] == 1:
                 if "rmitems" in stages["objectives"]:
                     for items in stages["objectives"]["rmitems"]:
-                        self.inventory.items[items["name"]]["dropable"]=True
+                        CM.inventory.items[items["name"]]["dropable"]=True
                         for x in range(items["quantity"]):
-                            self.inventory.remove_item(items["name"])
+                            CM.inventory.remove_item(items["name"])
                             
                 self.quests[id]["stages"][index]["objectives"]["state"] = 2
                 if index < len(self.quests[id]["stages"]) - 1:
@@ -59,9 +59,9 @@ class Quests:
             for index, v in enumerate(self.text_to_draw):
                 item_render = self.quest_start_font.render(v, True, (44, 53, 57))
                 item_rect = item_render.get_rect(
-                    center=(GM.GM.screen.get_width() // 2, 200 + index * 40)
+                    center=(GM.screen.get_width() // 2, 200 + index * 40)
                 )
-                GM.GM.screen.blit(item_render, item_rect)
+                GM.screen.blit(item_render, item_rect)
 
     def check_quest_advancement(self, quest_objective, world="default"):
         for index, (kv, quest) in enumerate(self.quests.items()):
@@ -84,13 +84,13 @@ class Quests:
                     elif "items" in stage["objectives"] and stage["objectives"]["state"] == 1:
                         tmp=list()
                         for items in stage["objectives"]["items"]:
-                            for key in self.inventory.quantity:
-                                if key == items["name"] and self.inventory.quantity[key] >= items["quantity"]:
+                            for key in CM.inventory.quantity:
+                                if key == items["name"] and CM.inventory.quantity[key] >= items["quantity"]:
                                     tmp.append(key)
                         
                         if len(tmp) == len(stage["objectives"]["items"]):
                             for key in tmp:
-                                self.inventory.items[key]["dropable"]=False
+                                CM.inventory.items[key]["dropable"]=False
                             self.advance_quest(kv)     
                     
                     elif "npc" in stage["objectives"] and stage["objectives"]["state"] == 1:
@@ -119,7 +119,7 @@ class Quests:
                 quest_text = f"{quest_data['name']}"
                 item_render = self.quests_font.render(quest_text, True, color)
                 item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
-                GM.GM.screen.blit(item_render, item_rect)
+                GM.screen.blit(item_render, item_rect)
 
                 if index == selected_sub_item - scroll_position:
                     i += item_spacing
@@ -129,7 +129,7 @@ class Quests:
                     line_rect = line_render.get_rect(
                         center=(coords, 20 + index * 40 + i)
                     )
-                    GM.GM.screen.blit(line_render, line_rect)
+                    GM.screen.blit(line_render, line_rect)
                     i += item_spacing
 
                     for stage in quest_data["stages"]:
@@ -146,5 +146,5 @@ class Quests:
                             stage_rect = stage_render.get_rect(
                                 center=(coords, 20 + index * 40 + i)
                             )
-                            GM.GM.screen.blit(stage_render, stage_rect)
+                            GM.screen.blit(stage_render, stage_rect)
                             i += item_spacing

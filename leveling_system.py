@@ -1,16 +1,17 @@
 import numpy as np
 import pygame
 
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from traits import Traits
 
 
 class LevelingSystem:
-    def __init__(self, assets):
+    def __init__(self):
         self.level = 1
         self.experience = 0
         self.required_experience = 100
-        self.traits = Traits(assets)
+        self.traits = Traits()
         self.trait_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
 
     def gain_experience(self, amount):
