@@ -1,3 +1,4 @@
+import os
 import sys
 
 import numpy as np
@@ -11,6 +12,15 @@ m=screeninfo.get_monitors()
 
 display=[x for x in m if x.is_primary==True]
 pygame.init()
+
+file_path = "./textures/logo.png"
+if os.path.isfile(file_path):
+    pygame_icon = pygame.image.load(file_path)
+    pygame.display.set_icon(pygame_icon)
+else:
+    print(f"No file '{file_path}' found.")
+
+
 screen_width, screen_height = display[0].width, display[0].height
 screen = pygame.display.set_mode((1080, 720), pygame.RESIZABLE)
 GM._scr=screen
