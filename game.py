@@ -976,9 +976,9 @@ class Game:
             CM.player.unequip_item(key)
             ret = CM.player.remove_item(key)
             if ret:
-                img, img_rect = CM.CM.assets.load_images(
+                img, img_rect = CM.assets.load_images(
                     self.items[key]["image"],
-                    (64, 64),
+                    (0, 0),
                     (
                         self.relative_player_left + CM.player.player_rect.width // 2,
                         self.relative_player_top + CM.player.player_rect.height // 2,
@@ -1018,7 +1018,6 @@ class Game:
                 print(f"attacked with a: {CM.player.equipped_items['hand']}")
                 GM.time_diff = 0
                 self.diff = pygame.time.get_ticks()
-
         elif GM.attacking:
             print("no longer attacking")
             GM.attacking = False
@@ -1429,6 +1428,16 @@ class Game:
                         )
                     )
                     GM.screen.blit(self.text, self.text_rect)
+                    
+                    self.text = self.prompt_font.render(x["name"], True, (0, 0, 0))
+                    self.text_rect = self.text.get_rect(
+                        center=(
+                            relative__left + x["rect"].width // 2,
+                            relative__top + x["rect"].height + 25,
+                        )
+                    )
+                    GM.screen.blit(self.text, self.text_rect)
+                    
                 elif (
                     not other_obj_rect.colliderect(CM.player.player_rect)
                     and x["type"] == "item"

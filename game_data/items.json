@@ -6,7 +6,7 @@
             "type": "item",
             "description": "Restores health.",
             "price": 20,
-            "image": "textures/items/health_potion_minor.jpg",
+            "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - RED - 0000.png",
             "dropable": true,
             "effect": {
                 "name": "Healing",
@@ -21,7 +21,7 @@
             "type": "item",
             "description": "Increases knowledge temporarily.",
             "price": 30,
-            "image": "knowledge_potion.png",
+            "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - BLUE - 0000.png",
             "dropable": true,
             "effect": {
                 "name": "Knowledge Boost",
@@ -36,7 +36,7 @@
             "type": "item",
             "description": "Temporarily boosts power.",
             "price": 25,
-            "image": "textures/items/power_potion_grand.jpg",
+            "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - TEAL - 0000.png",
             "dropable": true,
             "effect": {
                 "name": "Strength Boost",
@@ -75,7 +75,7 @@
             "type": "btitem",
             "description": "Steel armor.",
             "price": 80,
-            "image": "textures/items/steel_armor.png",
+            "image": "textures/items/heirloom.png",
             "dropable": true,
             "effect": {
                 "name": "",
@@ -98,7 +98,7 @@
             "type": "btitem",
             "description": "Divine armor.",
             "price": 150,
-            "image": "textures/items/divine_armor.png",
+            "image": "textures/items/heirloom.png",
             "dropable": true,
             "effect": {
                 "name": "",
@@ -121,7 +121,7 @@
             "type": "item",
             "description": "Family heirloom.",
             "price": 50,
-            "image": "heirloom.png",
+            "image": "textures/items/heirloom.png",
             "dropable": false,
             "quest": [1,1]
         },
@@ -131,7 +131,7 @@
             "type": "item",
             "description": "Key to the Land of the Free.",
             "price": 10,
-            "image": "heirloom.png",
+            "image": "textures/items/heirloom.png",
             "dropable": true
         }
     ]

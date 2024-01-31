@@ -16,7 +16,8 @@ class AssetLoader:
     def load_images(self, path, size, center):
         # Load and return images as needed
         img = pygame.image.load(path)
-        img = pygame.transform.scale(img, size)
+        if size!=(0,0):
+            img = pygame.transform.scale(img, size)
         img_rect = img.get_rect()
         img_rect.center = center
         return img, img_rect
@@ -50,14 +51,6 @@ class AssetLoader:
         return level_data
 
     def load_collision(self, path):
-        # collision_map = np.zeros((self.bg_rect.height, self.bg_rect.width), dtype=int)
-        # collision_map[0, :] = 1
-        # collision_map[-1, :] = 1
-        # collision_map[:, 0] = 1
-        # collision_map[:, -1] = 1
-        # collision_map[200:300, 200:300] = 1
-        # print(collision_map)
-        # return collision_map
         image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
         image = cv2.resize(image, (image.shape[0]*8, image.shape[1]*8), interpolation = cv2.INTER_AREA)
         binary_image = 1 - (image // 255)
