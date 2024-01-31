@@ -97,7 +97,7 @@ class Game:
         for data in GM.worlds[CM.player.current_world]["items"]:
             item = self.items[data["type"]]
             img, img_rect = CM.assets.load_images(
-                item["image"], (64, 64), tuple(data["position"])
+                item["image"], (0, 0), tuple(data["position"])
             )
             self.world_objects.append(
                 {

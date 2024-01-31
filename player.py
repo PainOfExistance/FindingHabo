@@ -105,8 +105,14 @@ class Player:
             
     def add_item(self, item):
         if "quest" in item:
-            self.quests.quests[item["quest"][0]]["stages"][item["quest"][1]]["objectives"]["inventory"]=True
-        CM.inventory.add_item(item)
+            self.quests.quests[item["quest"][0]]["stages"][item["quest"][1]]["objectives"]["inventory"]=Tru
+            
+        if item["name"] == "Gold":
+            self.gold += 1
+        elif item["name"] == "Gold Sack":
+            self.gold += 10
+        else:
+            CM.inventory.add_item(item)
     
     def remove_item(self, key):
         if key in CM.inventory.items and CM.inventory.items[key]["dropable"]:

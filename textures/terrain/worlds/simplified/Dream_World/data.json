@@ -85,6 +85,102 @@
 					"Enemy_Type": "Boss"
 				}
 			}
+		],
+		"Item_field": [
+			{
+				"id": "Item_field",
+				"iid": "905ee1f0-b0a0-11ee-a869-c77111c9f3d8",
+				"layer": "LeveL_Data",
+				"x": 3480,
+				"y": 3336,
+				"width": 16,
+				"height": 16,
+				"color": 39387,
+				"customFields": {
+					"name": [
+						"Power Elixir"
+					],
+					"chance": [
+						0.8
+					]
+				}
+			},
+			{
+				"id": "Item_field",
+				"iid": "911d4ff0-b0a0-11ee-a869-adbe292779af",
+				"layer": "LeveL_Data",
+				"x": 3064,
+				"y": 3352,
+				"width": 16,
+				"height": 16,
+				"color": 39387,
+				"customFields": {
+					"name": [
+						"Steel Sword"
+					],
+					"chance": [
+						0.9
+					]
+				}
+			},
+			{
+				"id": "Item_field",
+				"iid": "91b83060-b0a0-11ee-a869-8f71127cb5aa",
+				"layer": "LeveL_Data",
+				"x": 3128,
+				"y": 3512,
+				"width": 16,
+				"height": 16,
+				"color": 39387,
+				"customFields": {
+					"name": [
+						"Minor Health Potion"
+					],
+					"chance": [
+						1
+					]
+				}
+			},
+			{
+				"id": "Item_field",
+				"iid": "aa352280-b0a0-11ee-a869-47cc6d623350",
+				"layer": "LeveL_Data",
+				"x": 2216,
+				"y": 2968,
+				"width": 16,
+				"height": 16,
+				"color": 39387,
+				"customFields": {
+					"name": [
+						"common"
+					],
+					"chance": [
+						0.9
+					]
+				}
+			}
+		],
+		"Container_field": [
+			{
+				"id": "Container_field",
+				"iid": "d8fcfed0-b0a0-11ee-a869-d112b8c4abe7",
+				"layer": "LeveL_Data",
+				"x": 2136,
+				"y": 3240,
+				"width": 16,
+				"height": 16,
+				"color": 2513986,
+				"customFields": {
+					"name": "common chest",
+					"image": "../static/chest.jpg",
+					"items": [
+						"common"
+					],
+					"chance": [
+						0.9
+					]
+				}
+			}
 		]
 	}
 }
