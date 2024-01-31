@@ -10,37 +10,36 @@ from game_manager import GameManager as GM
 
 
 class Ai:
-    def __init__(self, npcs, ):
+    def __init__(self, npcs):
         self.npcs = npcs
-        self.ai_package = CM.assets.load_ai_package()
         GM.delta_time = 0
         self.npc_movement = {}
-        self.strings = Dialougue(self.ai_package)
+        self.strings = Dialougue()
         
     def update_npcs(self, npcs):
         self.npcs = npcs
         tmp=CM.assets.load_ai_package()
         for key in npcs:
-            self.ai_package[key]=tmp[key]
+            GM.ai_package[key]=tmp[key]
 
     def update(self, name, collision_map, relative__left, relative__top, rect):
-        if self.ai_package[name]["movement_behavior"]["type"] == "patrol":
+        if GM.ai_package[name]["movement_behavior"]["type"] == "patrol":
             # Implement random movement within a patrol area
             return self.random_patrol(
                 name, collision_map, relative__left, relative__top, rect
             )
-        elif self.ai_package[name]["movement_behavior"]["type"] == "stand":
+        elif GM.ai_package[name]["movement_behavior"]["type"] == "stand":
             return (rect.centerx, rect.centery)
 
     def random_patrol(self, name, collision_map, relative__left, relative__top, rect):
         # Simulate random movement within a patrol area
-        speed = self.ai_package[name]["movement_behavior"]["movement_speed"]
+        speed = GM.ai_package[name]["movement_behavior"]["movement_speed"]
 
-        if self.ai_package[name]["movement_behavior"]["dirrection"] == False:
+        if GM.ai_package[name]["movement_behavior"]["dirrection"] == False:
             self.rng(name)
             return rect.centerx, rect.centery
 
-        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 1:
+        elif GM.ai_package[name]["movement_behavior"]["dirrection"] == 1:
             dy = int(-speed * GM.delta_time)
             if (
                 np.count_nonzero(
@@ -57,7 +56,7 @@ class Ai:
                 rect.centery += dy
                 return rect.centerx, rect.centery
 
-        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 2:
+        elif GM.ai_package[name]["movement_behavior"]["dirrection"] == 2:
             dx = int(speed * GM.delta_time)
             if (
                 np.count_nonzero(
@@ -74,7 +73,7 @@ class Ai:
                 rect.centerx += dx
                 return rect.centerx, rect.centery
 
-        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 3:
+        elif GM.ai_package[name]["movement_behavior"]["dirrection"] == 3:
             dy = int(speed * GM.delta_time)
             if (
                 np.count_nonzero(
@@ -91,7 +90,7 @@ class Ai:
                 rect.centery += dy
                 return rect.centerx, rect.centery
 
-        elif self.ai_package[name]["movement_behavior"]["dirrection"] == 4:
+        elif GM.ai_package[name]["movement_behavior"]["dirrection"] == 4:
             dx = int(-speed * GM.delta_time)
             if (
                 np.count_nonzero(
@@ -113,16 +112,16 @@ class Ai:
     def rng(self, name):
         rng = random.randint(1, 4)
         if rng == 1:
-            self.ai_package[name]["movement_behavior"]["dirrection"] = rng
+            GM.ai_package[name]["movement_behavior"]["dirrection"] = rng
 
         elif rng == 2:
-            self.ai_package[name]["movement_behavior"]["dirrection"] = rng
+            GM.ai_package[name]["movement_behavior"]["dirrection"] = rng
 
         elif rng == 3:
-            self.ai_package[name]["movement_behavior"]["dirrection"] = rng
+            GM.ai_package[name]["movement_behavior"]["dirrection"] = rng
 
         elif rng == 4:
-            self.ai_package[name]["movement_behavior"]["dirrection"] = rng
+            GM.ai_package[name]["movement_behavior"]["dirrection"] = rng
 
     def check_collision(self, collision_map, x, y, rect, move, name, dirrection):
         prev_center = rect.center
@@ -139,15 +138,15 @@ class Ai:
         ):
             return x, y
 
-        self.ai_package[name]["movement_behavior"]["dirrection"] == dirrection
+        GM.ai_package[name]["movement_behavior"]["dirrection"] == dirrection
         rect.center = prev_center
         return self.random_patrol(name, collision_map, rect.left, rect.top, rect)
 
     def attack(self, name, npc, player_possition, collision_map, rect):
-        speed = self.ai_package[name]["movement_behavior"]["movement_speed"]
+        speed = GM.ai_package[name]["movement_behavior"]["movement_speed"]
         distance = math.dist((npc), player_possition)
 
-        if distance < self.ai_package[name]["detection_range"]:
+        if distance < GM.ai_package[name]["detection_range"]:
             dx, dy = 0, 0
             move = 0
             direction = 0
@@ -180,7 +179,7 @@ class Ai:
     def random_line(self, npc, player_possition, name):
         distance = math.dist((npc), player_possition)
         rng = random.randint(1, 100)
-        if distance < self.ai_package[name]["talk_range"] and rng == 5:
+        if distance < GM.ai_package[name]["talk_range"] and rng == 5:
             return self.strings.random_line(name)
         
         return None

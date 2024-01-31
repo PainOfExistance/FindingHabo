@@ -8,9 +8,8 @@ from game_manager import GameManager as GM
 
 
 class Dialougue:
-    def __init__(self,ai):
+    def __init__(self):
         self.strings = CM.assets.load_dialogue()
-        self.ai = ai
         self.index = -1
         self.selected_item = 0
         self.selection_held = False

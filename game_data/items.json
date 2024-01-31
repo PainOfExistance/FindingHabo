@@ -3,7 +3,7 @@
         {
             "id": "itmHealing",
             "name": "Minor Health Potion",
-            "type": "item",
+            "type": "potion",
             "description": "Restores health.",
             "price": 20,
             "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - RED - 0000.png",
@@ -18,7 +18,7 @@
         {
             "id": "itmKnowledge",
             "name": "Knowledge Potion",
-            "type": "item",
+            "type": "potion",
             "description": "Increases knowledge temporarily.",
             "price": 30,
             "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - BLUE - 0000.png",
@@ -33,7 +33,7 @@
         {
             "id": "itmPower",
             "name": "Power Elixir",
-            "type": "item",
+            "type": "potion",
             "description": "Temporarily boosts power.",
             "price": 25,
             "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - TEAL - 0000.png",
@@ -48,7 +48,7 @@
         {
             "id": "btgSword",
             "name": "Steel Sword",
-            "type": "btitem",
+            "type": "weapon",
             "description": "Steel sword.",
             "price": 40,
             "image": "textures/items/steel_sword.jpg",
@@ -72,7 +72,7 @@
         {
             "id": "btgSteelArmor",
             "name": "Steel Armor",
-            "type": "btitem",
+            "type": "armor",
             "description": "Steel armor.",
             "price": 80,
             "image": "textures/items/heirloom.png",
@@ -95,7 +95,7 @@
         {
             "id": "btgDivineArmor",
             "name": "Divine Armor",
-            "type": "btitem",
+            "type": "armor",
             "description": "Divine armor.",
             "price": 150,
             "image": "textures/items/heirloom.png",

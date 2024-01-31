@@ -15,7 +15,8 @@ class Game:
     def __init__(
         self
     ):
-        self.items = CM.assets.load_items()
+        GM.items = CM.assets.load_items()
+        GM.ai_package = CM.assets.load_ai_package()
 
         self.relative_player_top = 0
         self.relative_player_left = 0
@@ -26,12 +27,12 @@ class Game:
         self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
 
-        CM.inventory.add_item(self.items["Minor Health Potion"])
-        CM.inventory.add_item(self.items["Knowledge Potion"])
-        CM.inventory.add_item(self.items["Power Elixir"])
-        CM.inventory.add_item(self.items["Steel Sword"])
-        CM.inventory.add_item(self.items["Steel Armor"])
-        CM.inventory.add_item(self.items["Divine Armor"])
+        CM.inventory.add_item(GM.items["Minor Health Potion"])
+        CM.inventory.add_item(GM.items["Knowledge Potion"])
+        CM.inventory.add_item(GM.items["Power Elixir"])
+        CM.inventory.add_item(GM.items["Steel Sword"])
+        CM.inventory.add_item(GM.items["Steel Armor"])
+        CM.inventory.add_item(GM.items["Divine Armor"])
         GM.worlds = CM.assets.load_worlds()
         CM.music_player = MusicPlayer(GM.worlds[CM.player.current_world]["music"])
         self.world_objects = list()
@@ -95,7 +96,7 @@ class Game:
         CM.player.player_rect.top = spawn_point[1]-offset[1]
 
         for data in GM.worlds[CM.player.current_world]["items"]:
-            item = self.items[data["type"]]
+            item = GM.items[data["type"]]
             img, img_rect = CM.assets.load_images(
                 item["image"], (0, 0), tuple(data["position"])
             )
@@ -571,7 +572,7 @@ class Game:
                     and GM.item_hovered >= 0
                 ):
                     CM.player.add_item(
-                        self.items[self.world_objects[GM.item_hovered]["name"]]
+                        GM.items[self.world_objects[GM.item_hovered]["name"]]
                     )
                     del self.world_objects[GM.item_hovered]
                     GM.item_hovered = None
@@ -781,18 +782,18 @@ class Game:
                         ]["quantity"]
                         > 0
                         and CM.player.gold
-                        >= self.items[
+                        >= GM.items[
                             self.ai.ai_package[GM.talk_to_name]["items"][
                                 GM.selected_inventory_item
                             ]["type"]
                         ]["price"]
                     ):
-                        CM.player.gold -= self.items[
+                        CM.player.gold -= GM.items[
                             self.ai.ai_package[GM.talk_to_name]["items"][
                                 GM.selected_inventory_item
                             ]["type"]
                         ]["price"]
-                        self.ai.ai_package[GM.talk_to_name]["gold"] += self.items[
+                        self.ai.ai_package[GM.talk_to_name]["gold"] += GM.items[
                             self.ai.ai_package[GM.talk_to_name]["items"][
                                 GM.selected_inventory_item
                             ]["type"]
@@ -801,7 +802,7 @@ class Game:
                             GM.selected_inventory_item
                         ]["quantity"] -= 1
                         CM.inventory.add_item(
-                            self.items[
+                            GM.items[
                                 self.ai.ai_package[GM.talk_to_name]["items"][
                                     GM.selected_inventory_item
                                 ]["type"]
@@ -847,8 +848,8 @@ class Game:
                             {"type": key, "quantity": 1}
                         )
                     CM.inventory.remove_item(key)
-                    CM.player.gold += self.items[key]["price"]
-                    self.ai.ai_package[GM.talk_to_name]["gold"] -= self.items[key][
+                    CM.player.gold += GM.items[key]["price"]
+                    self.ai.ai_package[GM.talk_to_name]["gold"] -= GM.items[key][
                         "price"
                     ]
 
@@ -900,7 +901,7 @@ class Game:
                         GM.selected_inventory_item
                     ]["quantity"] -= 1
                     CM.player.add_item(
-                        self.items[
+                        GM.items[
                             self.world_objects[GM.container_hovered]["name"]["items"][
                                 GM.selected_inventory_item
                             ]["type"]
@@ -977,7 +978,7 @@ class Game:
             ret = CM.player.remove_item(key)
             if ret:
                 img, img_rect = CM.assets.load_images(
-                    self.items[key]["image"],
+                    GM.items[key]["image"],
                     (0, 0),
                     (
                         self.relative_player_left + CM.player.player_rect.width // 2,
@@ -1243,9 +1244,9 @@ class Game:
                     index == GM.selected_inventory_item - scroll_position
                     and GM.container_menu_selected
                 ):
-                    item_text = f"> {data['type']}: {data['quantity']}  {self.items[self.ai.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
+                    item_text = f"> {data['type']}: {data['quantity']}  {GM.items[self.ai.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
                 else:
-                    item_text = f"    {data['type']}: {data['quantity']}  {self.items[self.ai.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
+                    item_text = f"    {data['type']}: {data['quantity']}  {GM.items[self.ai.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(
                     topleft=(GM.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
@@ -1271,9 +1272,9 @@ class Game:
                     index == GM.selected_inventory_item - scroll_position
                     and not GM.container_menu_selected
                 ):
-                    item_text = f"> {item_name}: {item_quantity}  {self.items[item_name]['price']}"
+                    item_text = f"> {item_name}: {item_quantity}  {GM.items[item_name]['price']}"
                 else:
-                    item_text = f"    {item_name}: {item_quantity}  {self.items[item_name]['price']}"
+                    item_text = f"    {item_name}: {item_quantity}  {GM.items[item_name]['price']}"
 
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))

@@ -11,7 +11,8 @@
 	"layers": [
 		"Collision.png",
 		"BG.png",
-		"Houses.png"
+		"Houses.png",
+		"Portals.png"
 	],
 	"entities": {
 		"Player_spawn": [
@@ -25,7 +26,10 @@
 				"height": 16,
 				"color": 0,
 				"customFields": {
-					"type": "default"
+					"type": "default",
+					"unlocked_by": "",
+					"locked": false,
+					"world_to_load": "worlds/simplified/Land_Of_the_Free/data.json"
 				}
 			},
 			{
@@ -38,7 +42,33 @@
 				"height": 16,
 				"color": 0,
 				"customFields": {
-					"type": "dw_lotf_portal_01"
+					"type": "dw_lotf_portal_01",
+					"unlocked_by": "Key to the Land of the Free",
+					"locked": true,
+					"world_to_load": "worlds/simplified/Dream_World/data.json"
+				}
+			}
+		],
+		"Metadata": [
+			{
+				"id": "Metadata",
+				"iid": "1694bc90-b0a0-11ee-aff9-4dd714d424fd",
+				"layer": "LeveL_Data",
+				"x": 40,
+				"y": 40,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"name": "Land of the Free",
+					"respawn_timer": 40,
+					"time_passed": 0,
+					"music": [
+						"../../sounds/bgm/Angelia.mp3",
+						"../../sounds/bgm/Christmas Time.mp3",
+						"../../sounds/bgm/DOVAHKIIN.mp3",
+						"../../sounds/bgm/peace.mp3"
+					]
 				}
 			}
 		]

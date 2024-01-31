@@ -29,6 +29,8 @@ class GameManager:
     screen_width=None
     screen_height=None
     worlds=None
+    ai_package=None
+    items=None
 
 class ClassManager:
     ai=None

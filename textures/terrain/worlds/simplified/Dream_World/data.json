@@ -11,7 +11,8 @@
 	"layers": [
 		"Collision.png",
 		"BG.png",
-		"Houses.png"
+		"Houses.png",
+		"Portals.png"
 	],
 	"entities": {
 		"Player_spawn": [
@@ -25,7 +26,10 @@
 				"height": 16,
 				"color": 0,
 				"customFields": {
-					"type": "dw_lotf_portal_01"
+					"type": "dw_lotf_portal_01",
+					"unlocked_by": "",
+					"locked": false,
+					"world_to_load": "worlds/simplified/Dream_World/data.json"
 				}
 			},
 			{
@@ -38,7 +42,10 @@
 				"height": 16,
 				"color": 0,
 				"customFields": {
-					"type": "default"
+					"type": "default",
+					"unlocked_by": "Key to the Land of the Free",
+					"locked": true,
+					"world_to_load": "worlds/simplified/Land_Of_the_Free/data.json"
 				}
 			}
 		],
@@ -49,12 +56,13 @@
 				"layer": "LeveL_Data",
 				"x": 512,
 				"y": 3168,
-				"width": 32,
-				"height": 32,
+				"width": 16,
+				"height": 16,
 				"color": 12470831,
 				"customFields": {
 					"chance": 0.5,
-					"Enemy_Type": "Bandit_Low"
+					"enemy_Type": "bandit",
+					"rarity": "common"
 				}
 			},
 			{
@@ -63,12 +71,13 @@
 				"layer": "LeveL_Data",
 				"x": 1312,
 				"y": 2944,
-				"width": 32,
-				"height": 32,
+				"width": 16,
+				"height": 16,
 				"color": 12470831,
 				"customFields": {
 					"chance": 0.6,
-					"Enemy_Type": "Goblin"
+					"enemy_Type": "Goblin",
+					"rarity": "common"
 				}
 			},
 			{
@@ -77,12 +86,13 @@
 				"layer": "LeveL_Data",
 				"x": 1248,
 				"y": 3200,
-				"width": 32,
-				"height": 32,
+				"width": 16,
+				"height": 16,
 				"color": 12470831,
 				"customFields": {
 					"chance": 0.1,
-					"Enemy_Type": "Boss"
+					"enemy_Type": "Boss",
+					"rarity": "rare"
 				}
 			}
 		],
@@ -178,6 +188,31 @@
 					],
 					"chance": [
 						0.9
+					]
+				}
+			}
+		],
+		"Metadata": [
+			{
+				"id": "Metadata",
+				"iid": "80ec7850-b0a0-11ee-aff9-f32c022415c1",
+				"layer": "LeveL_Data",
+				"x": 136,
+				"y": 104,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"name": "",
+					"respawn_timer": 50,
+					"time_passed": 0,
+					"music": [
+						"../../sounds/bgm/V put.mp3",
+						"../../sounds/bgm/It's Time.mp3",
+						"../../sounds/bgm/DOVAHKIIN.mp3",
+						"../../sounds/bgm/RadioGaGa.mp3",
+						"../../sounds/bgm/finding_habo_bgm.mp3",
+						"../../sounds/bgm/Angelia.mp3"
 					]
 				}
 			}

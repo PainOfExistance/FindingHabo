@@ -5,10 +5,21 @@
             "detection_range": 200,
             "talk_range": 150,
             "talking": false,
+            "attack_speed": 0.3,
             "movement_behavior": {
                 "type": "patrol",
                 "movement_speed": 150,
                 "dirrection": false
+            },
+            "stats":{
+                "health": 100,
+                "type": "enemy",
+                "xp": 50,
+                "status": "alive",
+                "damage": 10,
+                "rarity": "common",
+                "group": "wolf",
+                "mutable": true
             }
         },
         {
@@ -16,10 +27,21 @@
             "detection_range": 300,
             "talk_range": 150,
             "talking": false,
+            "attack_speed": 0.5,
             "movement_behavior": {
                 "type": "stand",
                 "movement_speed": 150,
                 "dirrection": false
+            },
+            "stats":{
+                "health": 50,
+                "type": "enemy",
+                "xp": 200,
+                "status": "alive",
+                "damage": 20,
+                "rarity": "uncommon",
+                "group": "goblin",
+                "mutable": true
             }
         },
         {
@@ -27,10 +49,22 @@
             "detection_range": 200,
             "talk_range": 250,
             "talking": false,
+            "attack_speed": 0.7,
             "movement_behavior": {
                 "type": "stand",
                 "movement_speed": 120,
                 "dirrection": false
+            },
+            "stats":{
+                "health": 150,
+                "type": "ally",
+                "xp": 50,
+                "status": "alive",
+                "damage": 30,
+                "rarity": "rare",
+                "group": "human",
+                "mutable": false,
+                "inventory_type": "common"
             },
             "gold": 500,
             "items": [
@@ -51,6 +85,28 @@
                     "quantity": 1
                 }
             ]
+        },
+        {
+            "name": "Bandit",
+            "detection_range": 350,
+            "talk_range": 150,
+            "talking": false,
+            "attack_speed": 0.6,
+            "movement_behavior": {
+                "type": "stand",
+                "movement_speed": 150,
+                "dirrection": false
+            },
+            "stats":{
+                "health": 50,
+                "type": "enemy",
+                "xp": 200,
+                "status": "alive",
+                "damage": 20,
+                "rarity": "common",
+                "group": "bandit",
+                "mutable": true
+            }
         }
     ]
 }
