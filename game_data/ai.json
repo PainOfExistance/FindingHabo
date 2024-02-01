@@ -19,7 +19,8 @@
                 "damage": 10,
                 "rarity": "common",
                 "group": "wolf",
-                "mutable": true
+                "mutable": true,
+                "image": "textures/npc/wolf.png"
             }
         },
         {
@@ -39,9 +40,10 @@
                 "xp": 200,
                 "status": "alive",
                 "damage": 20,
-                "rarity": "uncommon",
+                "rarity": "common",
                 "group": "goblin",
-                "mutable": true
+                "mutable": true,
+                "image": "textures/npc/goblin.png"
             }
         },
         {
@@ -61,10 +63,11 @@
                 "xp": 50,
                 "status": "alive",
                 "damage": 30,
-                "rarity": "rare",
-                "group": "human",
+                "rarity": "always",
+                "group": "Merchant",
                 "mutable": false,
-                "inventory_type": "common"
+                "inventory_type": "common",
+                "image": "textures/npc/merchant.png"
             },
             "gold": 500,
             "items": [
@@ -103,9 +106,10 @@
                 "xp": 200,
                 "status": "alive",
                 "damage": 20,
-                "rarity": "common",
+                "rarity": "uncommon",
                 "group": "bandit",
-                "mutable": true
+                "mutable": true,
+                "image": "textures/npc/merchant.png"
             }
         }
     ]

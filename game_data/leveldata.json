@@ -2,8 +2,8 @@
   "worlds": [
     {
       "name": "Dream World",
-      "collision_set": "textures/terrain/worlds/simplified/Dream_World/Collision-int.png",
-      "background": "textures/terrain/worlds/simplified/Dream_World/_composite.png",
+      "collision_set": "terrain/worlds/simplified/Dream_World/Collision-int.png",
+      "background": "terrain/worlds/simplified/Dream_World/_composite.png",
       "music": [
         "sounds/bgm/DOVAHKIIN.mp3",
         "sounds/bgm/Angelia.mp3",
@@ -14,7 +14,7 @@
         "sounds/bgm/theme_dark.mp3",
         "sounds/bgm/RadioGaGa.mp3"
       ],
-      "data": "textures/terrain/worlds/simplified/Dream_World/data.json",
+      "data": "terrain/worlds/simplified/Dream_World/data.json",
       "spawn_point": [100, 100],
       "offset": [0, 0],
       "respawn_timer": 60,

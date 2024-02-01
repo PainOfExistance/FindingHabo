@@ -105,7 +105,7 @@
             "price": 150,
             "image": "textures/items/heirloom.png",
             "dropable": true,
-            "rarity": "ultra rare",
+            "rarity": "epic",
             "effect": {
                 "name": "",
                 "duration": 0,
@@ -135,11 +135,21 @@
         {
             "id": "itmKeytolotf",
             "name": "Key to the Land of the Free",
-            "type": "item",
+            "type": "key",
             "description": "Key to the Land of the Free.",
             "price": 10,
             "image": "textures/items/heirloom.png",
             "dropable": true,
+            "rarity": "common"
+        },
+        {
+            "id": "itmGold",
+            "name": "Gold",
+            "type": "gold",
+            "description": "Gold.",
+            "price": 1,
+            "image": "textures/items/heirloom.png",
+            "dropable": false,
             "rarity": "common"
         }
     ]

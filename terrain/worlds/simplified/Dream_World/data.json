@@ -62,7 +62,7 @@
 				"customFields": {
 					"chance": 0.5,
 					"enemy_Type": "bandit",
-					"rarity": "common"
+					"rarity": "uncommon"
 				}
 			},
 			{
@@ -91,8 +91,23 @@
 				"color": 12470831,
 				"customFields": {
 					"chance": 0.1,
-					"enemy_Type": "boss",
+					"enemy_Type": "wolf",
 					"rarity": "rare"
+				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "d9ee4550-b0a0-11ee-8a46-ddc674d0e8da",
+				"layer": "LeveL_Data",
+				"x": 872,
+				"y": 3032,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 1,
+					"enemy_Type": "Merchant",
+					"rarity": "always"
 				}
 			}
 		],
@@ -190,13 +205,19 @@
 					"name": "common chest",
 					"image": "../textures/static/chest.jpg",
 					"items": [
-						"common"
+						"common",
+						"uncommon",
+						"Heirloom"
 					],
 					"chance": [
-						0.9
+						0.9,
+						0.6,
+						1
 					],
 					"type": [
-						"weapon"
+						"weapon",
+						"potion",
+						"unique"
 					]
 				}
 			}
@@ -212,7 +233,7 @@
 				"height": 16,
 				"color": 0,
 				"customFields": {
-					"name": "",
+					"name": "Dream World",
 					"respawn_timer": 50,
 					"time_passed": 0,
 					"music": [
@@ -222,7 +243,9 @@
 						"../sounds/bgm/RadioGaGa.mp3",
 						"../sounds/bgm/finding_habo_bgm.mp3",
 						"../sounds/bgm/Angelia.mp3"
-					]
+					],
+					"collision_set": "terrain\\worlds\\simplified\\Dream_World\\Collision-int.png",
+					"background": "terrain\\worlds\\simplified\\Dream_World\\_composite.png"
 				}
 			}
 		]
