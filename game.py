@@ -1569,6 +1569,7 @@ class Game:
 
         if GM.is_in_dialogue:
             self.ai.strings.draw(GM.talk_to_name)
+            #todo fix
 
         if self.ai.strings.bartering:
             self.draw_barter()

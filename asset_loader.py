@@ -44,7 +44,7 @@ class AssetLoader:
         bg_rect = bg.get_rect()
         return bg, bg_rect
     
-    def load_level_data(self, path):
+    def load_level_data(self, path="terrain/worlds/simplified/Dream_World/data.json"):
         level_data = np.array({})
         with open(path, "r") as ai_file:
             level_data = json.load(ai_file)

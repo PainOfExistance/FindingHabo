@@ -8,6 +8,7 @@
             "price": 20,
             "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - RED - 0000.png",
             "dropable": true,
+            "rarity": "common",
             "effect": {
                 "name": "Healing",
                 "duration": 0,
@@ -23,6 +24,7 @@
             "price": 30,
             "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - BLUE - 0000.png",
             "dropable": true,
+            "rarity": "common",
             "effect": {
                 "name": "Knowledge Boost",
                 "duration": 0,
@@ -38,6 +40,7 @@
             "price": 25,
             "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - TEAL - 0000.png",
             "dropable": true,
+            "rarity": "uncommon",
             "effect": {
                 "name": "Strength Boost",
                 "duration": 20,
@@ -53,6 +56,7 @@
             "price": 40,
             "image": "textures/items/steel_sword.jpg",
             "dropable": true,
+            "rarity": "common",
             "effect": {
                 "name": "",
                 "duration": 0,
@@ -77,6 +81,7 @@
             "price": 80,
             "image": "textures/items/heirloom.png",
             "dropable": true,
+            "rarity": "rare",
             "effect": {
                 "name": "",
                 "duration": 0,
@@ -100,6 +105,7 @@
             "price": 150,
             "image": "textures/items/heirloom.png",
             "dropable": true,
+            "rarity": "ultra rare",
             "effect": {
                 "name": "",
                 "duration": 0,
@@ -123,6 +129,7 @@
             "price": 50,
             "image": "textures/items/heirloom.png",
             "dropable": false,
+            "rarity": "unique",
             "quest": [1,1]
         },
         {
@@ -132,7 +139,8 @@
             "description": "Key to the Land of the Free.",
             "price": 10,
             "image": "textures/items/heirloom.png",
-            "dropable": true
+            "dropable": true,
+            "rarity": "common"
         }
     ]
 }
