@@ -220,6 +220,23 @@
 						"unique"
 					]
 				}
+			},
+			{
+				"id": "Container_field",
+				"iid": "59ae2300-b0a0-11ee-a333-d91b3f0968a7",
+				"layer": "LeveL_Data",
+				"x": 1880,
+				"y": 2840,
+				"width": 16,
+				"height": 16,
+				"color": 2513986,
+				"customFields": {
+					"name": "chest",
+					"image": "../textures/static/chest.jpg",
+					"items": [],
+					"chance": [],
+					"type": []
+				}
 			}
 		],
 		"Metadata": [

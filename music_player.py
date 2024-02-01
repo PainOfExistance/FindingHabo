@@ -4,7 +4,7 @@ import pygame
 
 
 class MusicPlayer:
-    def __init__(self, music_tracks):
+    def __init__(self, music_tracks=""):
         self.music_tracks = music_tracks
         self.current_track_index = 0
 

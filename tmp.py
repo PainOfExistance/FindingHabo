@@ -99,9 +99,7 @@ for x in world["entities"]:
         for y in world["entities"][x]:
             tmp = setContainer(y["customFields"])
             file_name=os.path.basename(y["customFields"]["image"]).split('/')[-1]
-            
-            if tmp:
-                containers.append(
+            containers.append(
                     (
                         tmp,
                         y["x"],
@@ -129,3 +127,6 @@ print(containers)
 print("-------------------")
 print(metadata)
 print("-------------------")
+
+for x in containers:
+    print(x)

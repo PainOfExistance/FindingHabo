@@ -5,6 +5,7 @@ import numpy as np
 import pygame
 from pygame.locals import *
 
+import world_parser as wp
 from ai import Ai
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
@@ -33,8 +34,6 @@ class Game:
         CM.inventory.add_item(GM.items["Steel Sword"])
         CM.inventory.add_item(GM.items["Steel Armor"])
         CM.inventory.add_item(GM.items["Divine Armor"])
-        GM.worlds = CM.assets.load_worlds()
-        CM.music_player = MusicPlayer(GM.worlds[CM.player.current_world]["music"])
         self.world_objects = list()
 
         npcs = self.setup()
@@ -44,6 +43,7 @@ class Game:
         self.target_fps = 60
         self.last_frame_time = pygame.time.get_ticks()
         self.on_a_diagonal = False
+        
         self.weapon_rect = pygame.Rect(
             CM.player.player_rect.left + CM.player.player_rect.width // 4,
             CM.player.player_rect.top - CM.player.range // 2,
@@ -62,32 +62,29 @@ class Game:
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
 
-    def setup(self, type="default"):
+    def setup(self, path="terrain/worlds/simplified/Dream_World/data.json"):
         self.world_objects.clear()
+        
+        level_data = CM.assets.load_level_data(path)
+        spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
+        CM.music_player = MusicPlayer(metadata["music"])
+        
         self.background, self.bg_rect = CM.assets.load_background(
-            GM.worlds[CM.player.current_world]["background"]
+            metadata["background"], 
         )
         self.collision_map = CM.assets.load_collision(
-            GM.worlds[CM.player.current_world]["collision_set"]
+            metadata["collision_set"]
         )
 
         self.map_height = self.collision_map.shape[0]
         self.map_width = self.collision_map.shape[1]
 
-        level_data = CM.assets.load_level_data(
-            GM.worlds[CM.player.current_world]["data"]
-        )
-        
-        spawn_point = (0, 0)
-        for i in level_data["entities"]["Player_spawn"]:
-            if i["customFields"]["type"] == type:
-                spawn_point = (i["x"], i["y"])
-                break
-
         offset = (
             spawn_point[0] - GM.screen.get_width() // 2,
             spawn_point[1] - GM.screen.get_height() // 2,
         )
+        
+        #todo fix
         
         self.bg_rect.left = -offset[0]
         self.bg_rect.top = -offset[1]
@@ -95,10 +92,10 @@ class Game:
         CM.player.player_rect.left = spawn_point[0]-offset[0]
         CM.player.player_rect.top = spawn_point[1]-offset[1]
 
-        for data in GM.worlds[CM.player.current_world]["items"]:
-            item = GM.items[data["type"]]
+        for data in final_items:
+            item = GM.items[data[0]]
             img, img_rect = CM.assets.load_images(
-                item["image"], (0, 0), tuple(data["position"])
+                item["image"], (0, 0), (data[1], data[2])
             )
             self.world_objects.append(
                 {
@@ -109,51 +106,51 @@ class Game:
                 }
             )
 
-        for data in GM.worlds[CM.player.current_world]["containers"]:
+        for data in containers:
             img, img_rect = CM.assets.load_images(
-                data["image"], (64, 64), tuple(data["position"])
+                data[4], (64, 64), (data[1], data[2])
             )
             self.world_objects.append(
                 {
                     "image": img,
                     "rect": img_rect,
                     "type": "container",
-                    "name": copy.deepcopy(data),
+                    "name": data,
                 }
             )
 
-        for data in GM.worlds[CM.player.current_world]["npcs"]:
+        for data in npcs:
             img, img_rect = CM.assets.load_images(
-                data["image"], (64, 64), tuple(data["position"])
+                GM.ai_package[data[0]]["stats"]["image"], (64, 64), (data[1], data[2])
             )
             self.world_objects.append(
                 {
                     "image": img,
                     "rect": img_rect,
                     "type": "npc",
-                    "name": copy.deepcopy(data),
+                    "name": GM.ai_package[data[0]],
                     "attack_diff": 0,
                     "agroved": False,
                 }
             )
 
-        for data in GM.worlds[CM.player.current_world]["portals"]:
+        for data in portals:
             img, img_rect = CM.assets.load_images(
-                data["image"], (64, 64), tuple(data["position"])
+                "textures\static\door.png", (64, 64), (data[1], data[2])
             )
             self.world_objects.append(
                 {
                     "image": img,
                     "rect": img_rect,
                     "type": "portal",
-                    "name": copy.deepcopy(data),
+                    "name": data[0],
                 }
             )
 
         temp = {}
         for x in self.world_objects:
             if x["type"] == "npc":
-                temp[x["name"]["name"]] = copy.deepcopy(x["name"])
+                temp[x["name"]["name"]] = x["name"]
 
         return temp
 
@@ -603,13 +600,10 @@ class Game:
                     "locked"
                 ] = False
 
-                temp = self.setup(GM.world_to_travel_to["ref"])
+                temp = self.setup("terrain/"+GM.world_to_travel_to["world_to_load"])
                 GM.world_to_travel_to = None
                 self.ai.update_npcs(temp)
                 CM.player.quests.dialogue = self.ai.strings
-                CM.music_player.set_tracks(
-                    GM.worlds[CM.player.current_world]["music"]
-                )
 
         elif (
             not keys[pygame.K_e]
