@@ -218,6 +218,11 @@
 						"weapon",
 						"potion",
 						"unique"
+					],
+					"number_of_items": [
+						0,
+						0,
+						1
 					]
 				}
 			},
@@ -235,7 +240,8 @@
 					"image": "../textures/static/chest.jpg",
 					"items": [],
 					"chance": [],
-					"type": []
+					"type": [],
+					"number_of_items": []
 				}
 			}
 		],
@@ -261,8 +267,8 @@
 						"../sounds/bgm/finding_habo_bgm.mp3",
 						"../sounds/bgm/Angelia.mp3"
 					],
-					"collision_set": "terrain\\worlds\\simplified\\Dream_World\\Collision-int.png",
-					"background": "terrain\\worlds\\simplified\\Dream_World\\_composite.png"
+					"collision_set": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\Collision-int.png",
+					"background": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\_composite.png"
 				}
 			}
 		]

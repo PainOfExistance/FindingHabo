@@ -41,6 +41,7 @@ def setItems(item):
 
 def setContainer(item):
     tmp = []
+    num_of_items=[]
     for i, x in enumerate(item["items"]):
         if (
             x == "common"
@@ -49,13 +50,33 @@ def setContainer(item):
             or x == "epic"
             or x == "legendary"
         ):
-            for y in items:
-                if (
-                    items[y]["type"] == item["type"][i]
-                    and item["chance"][i] >= random.random()
-                    and item["items"][i] == items[y]["rarity"]
-                ):
-                    tmp.append(y)
+            if item["number_of_items"][i]==0:
+                for j in range(0, random.randint(2,4)):
+                    for y in items:
+                        if (
+                            items[y]["type"] == item["type"][i]
+                            and item["chance"][i] >= random.random()
+                            and item["items"][i] == items[y]["rarity"]
+                        ):
+                            if y in tmp:
+                                index=tmp.index(y)
+                                num_of_items[index]+=random.randint(1,3)
+                            else:
+                                num_of_items.append(random.randint(1,3))
+                                tmp.append(y)
+            else:
+                for y in items:
+                    if (
+                        items[y]["type"] == item["type"][i]
+                        and item["chance"][i] >= random.random()
+                        and item["items"][i] == items[y]["rarity"]
+                    ):
+                        if y in tmp:
+                            index=tmp.index(y)
+                            num_of_items[index]+=item["number_of_items"][i]
+                        else:
+                            num_of_items.append(item["number_of_items"][i])
+                            tmp.append(y)
         else:
             for y in items:
                 if (
@@ -63,9 +84,9 @@ def setContainer(item):
                     and item["items"][i] == y
                     ):
                         tmp.append(y)
+                        num_of_items.append(item["number_of_items"][i])
 
-    return tmp
-
+    return tmp, num_of_items
 
 
 
@@ -99,7 +120,7 @@ def parser(world):
     
         elif x == "Container_field":
             for y in world["entities"][x]:
-                tmp = setContainer(y["customFields"])
+                tmp, nums = setContainer(y["customFields"])
                 file_name=os.path.basename(y["customFields"]["image"]).split('/')[-1]
                 containers.append(
                         (
@@ -108,6 +129,7 @@ def parser(world):
                             y["y"],
                             y["customFields"]["name"],
                             "textures/static/"+file_name,
+                            nums
                         )
                     )
                     
@@ -130,4 +152,4 @@ def parser(world):
     print(metadata)
     print("-------------------")
         
-    return spawn, portals, enemies, final_items, containers, metadata  
+    return spawn, portals, enemies, final_items, containers, metadata

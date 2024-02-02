@@ -110,6 +110,7 @@ class Game:
             img, img_rect = CM.assets.load_images(
                 data[4], (64, 64), (data[1], data[2])
             )
+            print(data)
             self.world_objects.append(
                 {
                     "image": img,
@@ -1074,9 +1075,7 @@ class Game:
             )
 
             scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = list(
-                self.world_objects[GM.container_hovered]["name"]["items"]
-            )[scroll_position : scroll_position + 10]
+            visible_items = self.world_objects[GM.container_hovered]["name"][scroll_position : scroll_position + 10]
             i = 0
 
             item_render = self.menu_font.render(
@@ -1093,7 +1092,7 @@ class Game:
             GM.screen.blit(item_render, item_rect)
 
             item_render = self.menu_font.render(
-                self.world_objects[GM.container_hovered]["name"]["name"],
+                self.world_objects[GM.container_hovered]["name"][3],
                 True,
                 (44, 53, 57),
             )
@@ -1120,7 +1119,8 @@ class Game:
                     if index == GM.selected_inventory_item - scroll_position
                     else (237, 106, 94)
                 )
-
+                #todo fix
+                print(visible_items)
                 if not GM.container_menu_selected:
                     color = (44, 53, 57)
 
