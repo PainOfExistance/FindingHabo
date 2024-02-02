@@ -109,6 +109,36 @@
 					"enemy_Type": "Merchant",
 					"rarity": "always"
 				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "a7a02530-b0a0-11ee-b847-0be54bd7a963",
+				"layer": "LeveL_Data",
+				"x": 3288,
+				"y": 3320,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 0.8,
+					"enemy_Type": "bandit",
+					"rarity": "uncommon"
+				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "ae5dc300-b0a0-11ee-b847-2559a52a68f0",
+				"layer": "LeveL_Data",
+				"x": 3192,
+				"y": 3384,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 1,
+					"enemy_Type": "bandit",
+					"rarity": "uncommon"
+				}
 			}
 		],
 		"Item_field": [
@@ -267,8 +297,8 @@
 						"../sounds/bgm/finding_habo_bgm.mp3",
 						"../sounds/bgm/Angelia.mp3"
 					],
-					"collision_set": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\Collision-int.png",
-					"background": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\_composite.png"
+					"collision_set": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\Collision-int.png",
+					"background": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\_composite.png"
 				}
 			}
 		]

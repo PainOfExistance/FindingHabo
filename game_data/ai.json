@@ -96,8 +96,8 @@
             "talking": false,
             "attack_speed": 0.6,
             "movement_behavior": {
-                "type": "stand",
-                "movement_speed": 150,
+                "type": "patrol",
+                "movement_speed": 100,
                 "dirrection": false
             },
             "stats":{

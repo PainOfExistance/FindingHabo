@@ -105,7 +105,7 @@ class Player:
             
     def add_item(self, item):
         if "quest" in item:
-            self.quests.quests[item["quest"][0]]["stages"][item["quest"][1]]["objectives"]["inventory"]=Tru
+            self.quests.quests[item["quest"][0]]["stages"][item["quest"][1]]["objectives"]["inventory"]=True
             
         if item["name"] == "Gold":
             self.gold += 1

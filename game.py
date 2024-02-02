@@ -110,13 +110,16 @@ class Game:
             img, img_rect = CM.assets.load_images(
                 data[4], (64, 64), (data[1], data[2])
             )
-            print(data)
+            
+            for i, _ in enumerate(data[5]):
+                data[0][i]={"type": data[0][i], "quantity": data[5][i]}
+                
             self.world_objects.append(
                 {
                     "image": img,
                     "rect": img_rect,
                     "type": "container",
-                    "name": data,
+                    "name": data
                 }
             )
 
@@ -129,7 +132,7 @@ class Game:
                     "image": img,
                     "rect": img_rect,
                     "type": "npc",
-                    "name": GM.ai_package[data[0]],
+                    "name": copy.deepcopy(GM.ai_package[data[0]]),
                     "attack_diff": 0,
                     "agroved": False,
                 }
@@ -153,6 +156,7 @@ class Game:
             if x["type"] == "npc":
                 temp[x["name"]["name"]] = x["name"]
 
+        print(self.world_objects)
         return temp
 
     def run(self):
@@ -666,10 +670,10 @@ class Game:
             if (
                 GM.container_menu_selected
                 and GM.container_open
-                and len(self.world_objects[GM.container_hovered]["name"]["items"])
+                and len(self.world_objects[GM.container_hovered]["name"][0])
             ):
                 GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
-                    self.world_objects[GM.container_hovered]["name"]["items"]
+                    self.world_objects[GM.container_hovered]["name"][0]
                 )
                 GM.selection_held = True
 
@@ -705,10 +709,10 @@ class Game:
                 return
 
             if GM.container_menu_selected and len(
-                self.world_objects[GM.container_hovered]["name"]["items"]
+                self.world_objects[GM.container_hovered]["name"][0]
             ):
                 GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
-                    self.world_objects[GM.container_hovered]["name"]["items"]
+                    self.world_objects[GM.container_hovered]["name"][0]
                 )
                 GM.selection_held = True
             elif len(CM.inventory.items):
@@ -871,44 +875,44 @@ class Game:
 
             if (
                 GM.container_menu_selected
-                and len(self.world_objects[GM.container_hovered]["name"]["items"]) > 0
+                and len(self.world_objects[GM.container_hovered]["name"][0]) > 0
             ):
                 if (
-                    self.world_objects[GM.container_hovered]["name"]["items"][
+                    self.world_objects[GM.container_hovered]["name"][0][
                         GM.selected_inventory_item
                     ]["type"]
                     == "Gold"
                 ):
                     CM.player.gold += self.world_objects[GM.container_hovered][
                         "name"
-                    ]["items"][GM.selected_inventory_item]["quantity"]
-                    del self.world_objects[GM.container_hovered]["name"]["items"][
+                    ][0][GM.selected_inventory_item]["quantity"]
+                    del self.world_objects[GM.container_hovered]["name"][0][
                         GM.selected_inventory_item
                     ]
 
                 elif (
-                    self.world_objects[GM.container_hovered]["name"]["items"][
+                    self.world_objects[GM.container_hovered]["name"][0][
                         GM.selected_inventory_item
                     ]["quantity"]
                     > 0
                 ):
-                    self.world_objects[GM.container_hovered]["name"]["items"][
+                    self.world_objects[GM.container_hovered]["name"][0][
                         GM.selected_inventory_item
                     ]["quantity"] -= 1
                     CM.player.add_item(
                         GM.items[
-                            self.world_objects[GM.container_hovered]["name"]["items"][
+                            self.world_objects[GM.container_hovered]["name"][0][
                                 GM.selected_inventory_item
                             ]["type"]
                         ]
                     )
                     if (
-                        self.world_objects[GM.container_hovered]["name"]["items"][
+                        self.world_objects[GM.container_hovered]["name"][0][
                             GM.selected_inventory_item
                         ]["quantity"]
                         == 0
                     ):
-                        del self.world_objects[GM.container_hovered]["name"]["items"][
+                        del self.world_objects[GM.container_hovered]["name"][0][
                             GM.selected_inventory_item
                         ]
 
@@ -923,7 +927,7 @@ class Game:
                     (
                         index
                         for index, item in enumerate(
-                            self.world_objects[GM.container_hovered]["name"]["items"]
+                            self.world_objects[GM.container_hovered]["name"][0]
                         )
                         if item["type"] == key
                     ),
@@ -931,11 +935,11 @@ class Game:
                 )
 
                 if item_index != None:
-                    self.world_objects[GM.container_hovered]["name"]["items"][
+                    self.world_objects[GM.container_hovered]["name"][0][
                         item_index
                     ]["quantity"] += 1
                 else:
-                    self.world_objects[GM.container_hovered]["name"]["items"].append(
+                    self.world_objects[GM.container_hovered]["name"][0].append(
                         {"type": key, "quantity": 1}
                     )
                 CM.inventory.remove_item(key)
@@ -948,11 +952,11 @@ class Game:
 
             elif (
                 GM.selected_inventory_item
-                > len(self.world_objects[GM.container_hovered]["name"]["items"]) - 1
+                > len(self.world_objects[GM.container_hovered]["name"][0]) - 1
                 and GM.container_menu_selected
             ):
                 GM.selected_inventory_item = (
-                    len(self.world_objects[GM.container_hovered]["name"]["items"]) - 1
+                    len(self.world_objects[GM.container_hovered]["name"][0]) - 1
                 )
 
             if GM.selected_inventory_item < 0:
@@ -1075,7 +1079,7 @@ class Game:
             )
 
             scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = self.world_objects[GM.container_hovered]["name"][scroll_position : scroll_position + 10]
+            visible_items = self.world_objects[GM.container_hovered]["name"][0][scroll_position : scroll_position + 10]
             i = 0
 
             item_render = self.menu_font.render(
@@ -1119,11 +1123,9 @@ class Game:
                     if index == GM.selected_inventory_item - scroll_position
                     else (237, 106, 94)
                 )
-                #todo fix
-                print(visible_items)
+                
                 if not GM.container_menu_selected:
                     color = (44, 53, 57)
-
                 if (
                     index == GM.selected_inventory_item - scroll_position
                     and GM.container_menu_selected
@@ -1131,6 +1133,7 @@ class Game:
                     item_text = f"> {data['type']}: {data['quantity']}"
                 else:
                     item_text = f"    {data['type']}: {data['quantity']}"
+                    
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(
                     topleft=(GM.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
@@ -1277,14 +1280,16 @@ class Game:
     def draw_objects(self):
         for index, x in enumerate(self.world_objects):
             if (
-                "status" in x["name"]
-                and x["name"]["status"] == "alive"
-                and x["name"]["type"] == "enemy"
+                "stats" in x['name'] and
+                "status" in x["name"]["stats"]
+                and x["name"]["stats"]["status"] == "alive"
+                and x["name"]["stats"]["type"] == "enemy"
                 and not GM.container_open
                 and not CM.menu.visible
                 and not CM.player_menu.visible
                 and not GM.is_in_dialogue
             ):
+                #print(x)
                 dx, dy, agroved = self.ai.attack(
                     x["name"]["name"],
                     (
@@ -1314,7 +1319,7 @@ class Game:
 
                 if CM.player.player_rect.colliderect(other_obj_rect):
                     if x["attack_diff"] > x["name"]["attack_speed"]:
-                        res = CM.player.stats.defense - x["name"]["damage"]
+                        res = CM.player.stats.defense - x["name"]["stats"]["damage"]
 
                         if res > 0:
                             res = 0
@@ -1330,8 +1335,9 @@ class Game:
                 relative__top = int(self.bg_rect.top + x["rect"].top)
 
             if (
-                "status" in x["name"]
-                and x["name"]["status"] == "alive"
+                "stats" in x['name'] and
+                "status" in x["name"]["stats"]
+                and x["name"]["stats"]["status"] == "alive"
                 and not x["agroved"]
                 and not GM.container_open
                 and not CM.menu.visible
@@ -1392,9 +1398,9 @@ class Game:
                 and relative__top > -80
                 and relative__top < GM.screen_height + 80
             ):
-                if "status" in x["name"] and x["name"]["status"] == "alive":
+                if "stats" in x['name'] and "status" in x["name"]["stats"] and x["name"]["stats"]["status"] == "alive":
                     GM.screen.blit(x["image"], (relative__left, relative__top))
-                elif "status" not in x["name"]:
+                elif "stats" not in x['name']:
                     GM.screen.blit(x["image"], (relative__left, relative__top))
 
                 if x["type"] == "container":
@@ -1462,23 +1468,24 @@ class Game:
 
                 if other_obj_rect.colliderect(self.weapon_rect) and x["type"] == "npc":
                     if GM.attacking:
-                        if x["name"]["type"] != "enemy":
-                            self.world_objects[index]["name"]["type"] = "enemy"
+                        if x["name"]["stats"]["type"] != "enemy":
+                            self.world_objects[index]["name"]["stats"]["type"] = "enemy"
                             self.world_objects[index]["agroved"] = True
+                            
+                        enemy_index = index
+                        self.world_objects[enemy_index]["name"]["stats"]["health"] -= CM.player.stats.weapon_damage
 
-                        x["name"]["health"] = (
-                            x["name"]["health"] - CM.player.stats.weapon_damage
-                        )
+                        if self.world_objects[index]["name"]["stats"]["health"] <= 0:
+                            CM.player.level.gain_experience(self.world_objects[index]["name"]["stats"]["xp"])
+                            self.world_objects[index]["name"]["stats"]["status"] = "dead"
+                            self.world_objects[index]["agroved"] = False                            
+                            self.world_objects.pop(index)
+                            print("--------------------------------")
+                            print(self.world_objects)
 
-                        if x["name"]["health"] <= 0:
-                            CM.player.level.gain_experience(x["name"]["xp"])
-                            x["name"]["status"] = "dead"
-                            self.world_objects[index]["agroved"] = False
-                            # del self.world_objects[index]
-
-                    if x["name"]["type"] != "enemy" and x["name"]["status"] != "dead":
+                    if "stats" in self.world_objects[index]["name"] and self.world_objects[index]["name"]["stats"]["type"] != "enemy" and self.world_objects[index]["name"]["stats"]["status"] != "dead":
                         text = self.prompt_font.render(
-                            f"E) {x['name']['name']}", True, (44, 53, 57)
+                            f"E) {self.world_objects[index]['name']['stats']['name']}", True, (44, 53, 57)
                         )
 
                         text_rect = text.get_rect(
@@ -1487,13 +1494,14 @@ class Game:
                                 relative__top - 10,
                             )
                         )
-                        GM.talk_to_name = x["name"]["name"]
+                        
+                        GM.talk_to_name = x["name"]["stats"]["name"]
                         GM.screen.blit(text, text_rect)
                         GM.is_ready_to_talk = True
 
-                    if x["name"]["health"] > 0 and x["name"]["type"] == "enemy":
+                    if "stats" in self.world_objects[index]["name"] and self.world_objects[index]["name"]["stats"]["health"] > 0 and self.world_objects[index]["name"]["stats"]["type"] == "enemy":
                         text = self.prompt_font.render(
-                            str(x["name"]["health"]), True, (200, 0, 0)
+                            str(self.world_objects[index]["name"]["stats"]["health"]), True, (200, 0, 0)
                         )
                         text_rect = text.get_rect(
                             center=(
