@@ -3,6 +3,7 @@ import pygame
 
 from animation import Animation
 from effects import Effects
+from game_date import GameDate
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from inventory import Inventory
@@ -26,6 +27,7 @@ class Player:
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
         self.animation = Animation()
         self.movement_speed = 125
+        GM.game_date = GameDate()
 
         self.player, self.player_rect = self.animation.init_player()
         self.player_rect.center=(600, 500)
@@ -192,6 +194,7 @@ class Player:
             "inventory": CM.inventory.to_dict(),
             "quests": self.quests.to_dict(),
             "animation": self.animation.to_dict(),
+            "game_date": GM.game_date.to_dict(),
             "name": self.name,
             "gold": self.gold,
             "current_world": self.current_world,
@@ -214,6 +217,7 @@ class Player:
         self.active_effects = data["active_effects"]
         self.movement_speed = data["movement_speed"]
         self.equipped_items = data["equipped_items"]
+        GM.game_date.from_dict(data["game_date"])
                            
     def draw(self):
         self.player, new_rect= self.animation.player_anim(self.equipped_items["hand"], self.movement_speed)

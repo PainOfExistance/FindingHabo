@@ -33,8 +33,16 @@ class GameDate:
     def print_date(self):
         # Replace the month number with the custom month name
         custom_month_name = self.custom_month_names[self.current_date.month]
-        # Print the date with the custom month name and year
-        print(f"{self.current_date.day}.{custom_month_name}.{self.current_date.year}   {self.current_date.hour}:{self.current_date.minute}:{self.current_date.second}")
+        weekday_name = self.current_date.strftime("%A")  # Get the full weekday name
+        day_of_month = self.current_date.day  # Get the day of the month
+        hour = self.current_date.hour  # Get the hour
+        minute = self.current_date.minute  # Get the minute
+        custom_month_name = self.custom_month_names[self.current_date.month]  # Get the custom month name
+        year = f"{str(self.current_date.year)[0]}E A{str(self.current_date.year)[1:4]}"  # Get the year
+
+        formatted_str = f"{weekday_name} {hour:02d}.{minute:02d}, {day_of_month}th of {custom_month_name} of {year}"
+
+        return formatted_str
     
     def to_dict(self):
         return {
@@ -45,13 +53,3 @@ class GameDate:
     def from_dict(self, data):
         self.custom_month_names = data["custom_month_names"]
         self.current_date = datetime.fromisoformat(data["current_date"])
-
-
-# Create an instance of the class
-my_date = GameDate()
-
-# Increment seconds
-my_date.increment_seconds()
-
-# Print the date with the custom month name
-my_date.print_date()

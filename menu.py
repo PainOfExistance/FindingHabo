@@ -13,7 +13,6 @@ class Menu:
     def __init__(self):
         self.visible = False
         self.menu_items = ["Continue", "Save and Load", "Options", "Exit"]
-        self.menu_items = ["Continue", "Save and Load", "Options", "Exit"]
         self.selected_item = 0
         self.m_key_held = False
         self.selection_held = False
@@ -120,6 +119,15 @@ class Menu:
                 self.bg_surface_menu.get_rect(),
             )
             GM.screen.blit(self.bg_surface_menu, self.bg_menu)
+            
+            item_render = self.menu_font.render(GM.game_date.print_date(), True, (180, 180, 180))
+            item_rect = item_render.get_rect(
+                        center=(
+                            GM.screen.get_width() // 2,
+                            GM.screen.get_height()-50,
+                        )
+                    )
+            GM.screen.blit(item_render, item_rect)
             
             if self.in_sub_menu == 0:
                 for index, item in enumerate(self.menu_items):

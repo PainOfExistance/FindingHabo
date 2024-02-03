@@ -174,8 +174,8 @@ class Game:
             self.last_frame_time = current_time
             GM.time_diff += GM.delta_time
             GM.counter += GM.delta_time
-
-            self.update()
+            GM.game_date.increment_seconds()
+            self.handle_input()
             self.handle_events()
             self.draw()
             CM.music_player.update()
@@ -219,7 +219,7 @@ class Game:
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-    def update(self):
+    def handle_input(self):
         # na lestvici 1-10 kako bi ocenili Saro Dugi iz ITK?
         if GM.time_diff >= 20:
             GM.time_diff = 5

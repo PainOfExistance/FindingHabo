@@ -31,6 +31,7 @@ class GameManager:
     worlds=None
     ai_package=None
     items=None
+    game_date=None
 
 class ClassManager:
     ai=None
