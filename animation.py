@@ -23,6 +23,19 @@ class Animation:
     def init_player(self):
         return self.action_images["Player_Walk_Up_1"]["image"], self.action_images["Player_Walk_Up_1"]["rect"]
     
+    def to_dict(self):
+        return {
+            "anim_counter": self.anim_counter,
+            "prev_frame": self.prev_frame,
+            "attacking": self.attacking
+        }
+    
+    def from_dict(self, data):
+        self.action_images = data["action_images"]
+        self.anim_counter = data["anim_counter"]
+        self.prev_frame = data["prev_frame"]
+        self.attacking = data["attacking"]
+    
     def player_anim(self, weapon_equiped, speed=200):
         #print(self.prev_frame)
         move=(speed*GM.delta_time)/28

@@ -23,5 +23,11 @@ class Traits:
         for level in self.traits[name]["levels"]:
             if not level["taken"] and self.unused_trait_points > 0 and level["level"] <= lvl:
                 return True
-        return False            
+        return False       
+    
+    def to_dict(self):
+        return {
+            "unused_trait_points": self.unused_trait_points,
+            "traits": self.traits
+        }     
         

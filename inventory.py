@@ -28,6 +28,16 @@ class Inventory:
         elif name in self.items:
             del self.items[name]
             del self.quantity[name]
+    
+    def to_dict(self):
+        return {
+            "items": self.items,
+            "quantity": self.quantity,
+        }
+
+    def from_dict(self, data):
+        self.items = data["items"]
+        self.quantity = data["quantity"]
             
     def draw(self, selected_sub_item, sub_items, left=220, ofset=0):
         scroll_position = (selected_sub_item // 10) * 10

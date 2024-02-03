@@ -9,6 +9,14 @@ class Effects:
     def __init__(self):
         self.effects = CM.assets.load_effects()
         self.effects_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
+    
+    def to_dict(self):
+        return {
+            "effects": self.effects,
+        }
+    
+    def from_dict(self, data):
+        self.effects = data["effects"]
 
     def draw(self, selected_sub_item, sub_items):
         item_spacing = 30

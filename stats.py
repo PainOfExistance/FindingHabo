@@ -50,3 +50,25 @@ class Stats:
     
     def update_weapon_damage(self, value):
         self.weapon_damage+=value
+        
+    def to_dict(self):
+        return {
+            "max_health": self.max_health,
+            "health": self.health,
+            "max_power": self.max_power,
+            "power": self.power,
+            "max_knowledge": self.max_knowledge,
+            "knowledge": self.knowledge,
+            "weapon_damage": self.weapon_damage,
+            "defense": self.defense
+        }
+        
+    def from_dict(self, data):
+        self.max_health = data["max_health"]
+        self.health = data["health"]
+        self.max_power = data["max_power"]
+        self.power = data["power"]
+        self.max_knowledge = data["max_knowledge"]
+        self.knowledge = data["knowledge"]
+        self.weapon_damage = data["weapon_damage"]
+        self.defense = data["defense"]

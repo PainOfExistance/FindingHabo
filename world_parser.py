@@ -138,18 +138,18 @@ def parser(world):
                 world["entities"][x][0]["customFields"]["music"][i]=world["entities"][x][0]["customFields"]["music"][i][3:]       
             metadata=world["entities"][x][0]["customFields"] 
     
-    print("-------------------")
-    print(spawn)
-    print("-------------------")
-    print(portals)
-    print("-------------------")
-    print(enemies)
-    print("-------------------")
-    print(final_items)
-    print("-------------------")
-    print(containers)
-    print("-------------------")
-    print(metadata)
-    print("-------------------")
+    #print("-------------------")
+    #print(spawn)
+    #print("-------------------")
+    #print(portals)
+    #print("-------------------")
+    #print(enemies)
+    #print("-------------------")
+    #print(final_items)
+    #print("-------------------")
+    #print(containers)
+    #print("-------------------")
+    #print(metadata)
+    #print("-------------------")
         
     return spawn, portals, enemies, final_items, containers, metadata

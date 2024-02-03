@@ -29,7 +29,8 @@
 					"type": "default",
 					"unlocked_by": "",
 					"locked": false,
-					"world_to_load": "worlds/simplified/Land_Of_the_Free/data.json"
+					"world_to_load": "worlds/simplified/Land_Of_the_Free/data.json",
+					"world_name": null
 				}
 			},
 			{
@@ -45,7 +46,8 @@
 					"type": "dw_lotf_portal_01",
 					"unlocked_by": "Key to the Land of the Free",
 					"locked": true,
-					"world_to_load": "worlds/simplified/Dream_World/data.json"
+					"world_to_load": "worlds/simplified/Dream_World/data.json",
+					"world_name": "Dream World"
 				}
 			}
 		],
@@ -69,8 +71,8 @@
 						"../sounds/bgm/DOVAHKIIN.mp3",
 						"../sounds/bgm/peace.mp3"
 					],
-					"collision_set": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\Collision-int.png",
-					"background": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\_composite.png"
+					"collision_set": "terrain\\worlds\\simplified\\Land_Of_the_Free\\Collision-int.png",
+					"background": "terrain\\worlds\\simplified\\Land_Of_the_Free\\_composite.png"
 				}
 			}
 		]

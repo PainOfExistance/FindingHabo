@@ -33,6 +33,20 @@ class LevelingSystem:
             base_experience
             + (experience_increment * (increment_multiplier ** (current_level - 2)))
         )
+    
+    def to_dict(self):
+        return {
+            "level": self.level,
+            "experience": self.experience,
+            "required_experience": self.required_experience,
+            "traits": self.traits.to_dict(),
+        }
+
+    def from_dict(self, data):
+        self.level = data["level"]
+        self.experience = data["experience"]
+        self.required_experience = data["required_experience"]
+        self.traits.from_dict(data["traits"])
 
     def draw(self, selected_sub_item, sub_items, trait_selection):
         item_spacing = 30

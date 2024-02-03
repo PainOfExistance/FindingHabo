@@ -34,6 +34,7 @@ class Game:
         CM.inventory.add_item(GM.items["Steel Sword"])
         CM.inventory.add_item(GM.items["Steel Armor"])
         CM.inventory.add_item(GM.items["Divine Armor"])
+        CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         self.world_objects = list()
 
         npcs = self.setup()
@@ -62,7 +63,7 @@ class Game:
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
 
-    def setup(self, path="terrain/worlds/simplified/Dream_World/data.json"):
+    def setup(self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"):
         self.world_objects.clear()
         
         level_data = CM.assets.load_level_data(path)
@@ -78,13 +79,16 @@ class Game:
 
         self.map_height = self.collision_map.shape[0]
         self.map_width = self.collision_map.shape[1]
+        
+        if type != "default":
+            for i, _ in enumerate(portals):
+                if portals[i][0]["type"] == type:
+                    spawn_point = (portals[i][1], portals[i][2])
 
         offset = (
             spawn_point[0] - GM.screen.get_width() // 2,
             spawn_point[1] - GM.screen.get_height() // 2,
         )
-        
-        #todo fix
         
         self.bg_rect.left = -offset[0]
         self.bg_rect.top = -offset[1]
@@ -151,12 +155,13 @@ class Game:
                 }
             )
 
+        #todo tu daj da ti se path do iamga zraun da se lahko zamenja
+        
         temp = {}
         for x in self.world_objects:
             if x["type"] == "npc":
                 temp[x["name"]["name"]] = x["name"]
 
-        print(self.world_objects)
         return temp
 
     def run(self):
@@ -597,15 +602,17 @@ class Game:
                 or CM.inventory.items.get(
                     GM.world_to_travel_to["unlocked_by"], "None"
                 )
-                != "None"
+                != "None" and not
+                GM.selection_held
             ):
+                GM.selection_held = True
                 self.loading()
-                CM.player.current_world = GM.world_to_travel_to["world"]
+                CM.player.current_world = GM.world_to_travel_to["world_name"]
                 self.world_objects[GM.world_to_travel_to["index"]]["name"][
                     "locked"
                 ] = False
 
-                temp = self.setup("terrain/"+GM.world_to_travel_to["world_to_load"])
+                temp = self.setup("terrain/"+GM.world_to_travel_to["world_to_load"], GM.world_to_travel_to["type"])
                 GM.world_to_travel_to = None
                 self.ai.update_npcs(temp)
                 CM.player.quests.dialogue = self.ai.strings
@@ -652,10 +659,10 @@ class Game:
             if (
                 GM.container_menu_selected
                 and self.ai.strings.bartering
-                and len(self.ai.ai_package[GM.talk_to_name]["items"])
+                and len(GM.ai_package[GM.talk_to_name]["items"])
             ):
                 GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
-                    self.ai.ai_package[GM.talk_to_name]["items"]
+                    GM.ai_package[GM.talk_to_name]["items"]
                 )
                 GM.selection_held = True
                 return
@@ -693,10 +700,10 @@ class Game:
             if (
                 GM.container_menu_selected
                 and self.ai.strings.bartering
-                and len(self.ai.ai_package[GM.talk_to_name]["items"])
+                and len(GM.ai_package[GM.talk_to_name]["items"])
             ):
                 GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
-                    self.ai.ai_package[GM.talk_to_name]["items"]
+                    GM.ai_package[GM.talk_to_name]["items"]
                 )
                 GM.selection_held = True
                 return
@@ -773,47 +780,47 @@ class Game:
             if self.ai.strings.bartering:
                 if (
                     GM.container_menu_selected
-                    and len(self.ai.ai_package[GM.talk_to_name]["items"]) > 0
+                    and len(GM.ai_package[GM.talk_to_name]["items"]) > 0
                 ):
                     if (
-                        self.ai.ai_package[GM.talk_to_name]["items"][
+                        GM.ai_package[GM.talk_to_name]["items"][
                             GM.selected_inventory_item
                         ]["quantity"]
                         > 0
                         and CM.player.gold
                         >= GM.items[
-                            self.ai.ai_package[GM.talk_to_name]["items"][
+                            GM.ai_package[GM.talk_to_name]["items"][
                                 GM.selected_inventory_item
                             ]["type"]
                         ]["price"]
                     ):
                         CM.player.gold -= GM.items[
-                            self.ai.ai_package[GM.talk_to_name]["items"][
+                            GM.ai_package[GM.talk_to_name]["items"][
                                 GM.selected_inventory_item
                             ]["type"]
                         ]["price"]
-                        self.ai.ai_package[GM.talk_to_name]["gold"] += GM.items[
-                            self.ai.ai_package[GM.talk_to_name]["items"][
+                        GM.ai_package[GM.talk_to_name]["gold"] += GM.items[
+                            GM.ai_package[GM.talk_to_name]["items"][
                                 GM.selected_inventory_item
                             ]["type"]
                         ]["price"]
-                        self.ai.ai_package[GM.talk_to_name]["items"][
+                        GM.ai_package[GM.talk_to_name]["items"][
                             GM.selected_inventory_item
                         ]["quantity"] -= 1
                         CM.inventory.add_item(
                             GM.items[
-                                self.ai.ai_package[GM.talk_to_name]["items"][
+                                GM.ai_package[GM.talk_to_name]["items"][
                                     GM.selected_inventory_item
                                 ]["type"]
                             ]
                         )
                         if (
-                            self.ai.ai_package[GM.talk_to_name]["items"][
+                            GM.ai_package[GM.talk_to_name]["items"][
                                 GM.selected_inventory_item
                             ]["quantity"]
                             == 0
                         ):
-                            del self.ai.ai_package[GM.talk_to_name]["items"][
+                            del GM.ai_package[GM.talk_to_name]["items"][
                                 GM.selected_inventory_item
                             ]
 
@@ -821,8 +828,8 @@ class Game:
                     not GM.container_menu_selected
                     and len(CM.inventory.items) > 0
                 ):
-                    if self.ai.ai_package[GM.talk_to_name]["gold"] <= 0:
-                        self.ai.ai_package[GM.talk_to_name]["gold"] = 0
+                    if GM.ai_package[GM.talk_to_name]["gold"] <= 0:
+                        GM.ai_package[GM.talk_to_name]["gold"] = 0
                     key = list(CM.inventory.quantity.keys())[
                         GM.selected_inventory_item
                     ]
@@ -830,7 +837,7 @@ class Game:
                         (
                             index
                             for index, item in enumerate(
-                                self.ai.ai_package[GM.talk_to_name]["items"]
+                                GM.ai_package[GM.talk_to_name]["items"]
                             )
                             if item["type"] == key
                         ),
@@ -838,17 +845,17 @@ class Game:
                     )
 
                     if item_index != None:
-                        self.ai.ai_package[GM.talk_to_name]["items"][item_index][
+                        GM.ai_package[GM.talk_to_name]["items"][item_index][
                             "quantity"
                         ] += 1
 
                     else:
-                        self.ai.ai_package[GM.talk_to_name]["items"].append(
+                        GM.ai_package[GM.talk_to_name]["items"].append(
                             {"type": key, "quantity": 1}
                         )
                     CM.inventory.remove_item(key)
                     CM.player.gold += GM.items[key]["price"]
-                    self.ai.ai_package[GM.talk_to_name]["gold"] -= GM.items[key][
+                    GM.ai_package[GM.talk_to_name]["gold"] -= GM.items[key][
                         "price"
                     ]
 
@@ -860,11 +867,11 @@ class Game:
 
                 elif (
                     GM.selected_inventory_item
-                    > len(self.ai.ai_package[GM.talk_to_name]["items"]) - 1
+                    > len(GM.ai_package[GM.talk_to_name]["items"]) - 1
                     and GM.container_menu_selected
                 ):
                     GM.selected_inventory_item = (
-                        len(self.ai.ai_package[GM.talk_to_name]["items"]) - 1
+                        len(GM.ai_package[GM.talk_to_name]["items"]) - 1
                     )
                     if GM.selected_inventory_item < 0:
                         GM.selected_inventory_item = 0
@@ -1185,7 +1192,7 @@ class Game:
             )
 
             scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = list(self.ai.ai_package[GM.talk_to_name]["items"])[
+            visible_items = list(GM.ai_package[GM.talk_to_name]["items"])[
                 scroll_position : scroll_position + 10
             ]
             i = 0
@@ -1206,7 +1213,7 @@ class Game:
             item_render = self.menu_font.render(
                 GM.talk_to_name
                 + "  Gold: "
-                + str(self.ai.ai_package[GM.talk_to_name]["gold"]),
+                + str(GM.ai_package[GM.talk_to_name]["gold"]),
                 True,
                 (44, 53, 57),
             )
@@ -1241,9 +1248,9 @@ class Game:
                     index == GM.selected_inventory_item - scroll_position
                     and GM.container_menu_selected
                 ):
-                    item_text = f"> {data['type']}: {data['quantity']}  {GM.items[self.ai.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
+                    item_text = f"> {data['type']}: {data['quantity']}  {GM.items[GM.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
                 else:
-                    item_text = f"    {data['type']}: {data['quantity']}  {GM.items[self.ai.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
+                    item_text = f"    {data['type']}: {data['quantity']}  {GM.items[GM.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(
                     topleft=(GM.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
@@ -1480,12 +1487,10 @@ class Game:
                             self.world_objects[index]["name"]["stats"]["status"] = "dead"
                             self.world_objects[index]["agroved"] = False                            
                             self.world_objects.pop(index)
-                            print("--------------------------------")
-                            print(self.world_objects)
 
                     if "stats" in self.world_objects[index]["name"] and self.world_objects[index]["name"]["stats"]["type"] != "enemy" and self.world_objects[index]["name"]["stats"]["status"] != "dead":
                         text = self.prompt_font.render(
-                            f"E) {self.world_objects[index]['name']['stats']['name']}", True, (44, 53, 57)
+                            f"E) {self.world_objects[index]['name']['name']}", True, (44, 53, 57)
                         )
 
                         text_rect = text.get_rect(
@@ -1495,7 +1500,7 @@ class Game:
                             )
                         )
                         
-                        GM.talk_to_name = x["name"]["stats"]["name"]
+                        GM.talk_to_name = x["name"]["name"]
                         GM.screen.blit(text, text_rect)
                         GM.is_ready_to_talk = True
 
@@ -1528,11 +1533,11 @@ class Game:
                 ):
                     if x["name"]["locked"]:
                         text = self.prompt_font.render(
-                            f"Key required) {x['name']['world']} ", True, (44, 53, 57)
+                            f"Key required) {x['name']['world_name']} ", True, (44, 53, 57)
                         )
                     else:
                         text = self.prompt_font.render(
-                            f"E) {x['name']['world']} ", True, (44, 53, 57)
+                            f"E) {x['name']['world_name']} ", True, (44, 53, 57)
                         )
                     text_rect = text.get_rect(
                         center=(

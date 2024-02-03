@@ -95,8 +95,19 @@ class Quests:
                     
                     elif "npc" in stage["objectives"] and stage["objectives"]["state"] == 1:
                         self.dialogue.strings[stage["objectives"]["npc"]]["options"][stage["objectives"]["option"]]["used"] = True
-                        
+    
+    def to_dict(self):
+        return {
+            "quests": self.quests,
+            "tics": self.tics,
+            "text_to_draw": self.text_to_draw,
+        }
 
+    def from_dict(self, data):
+        self.quests = data["quests"]
+        self.tics = data["tics"]
+        self.text_to_draw = data["text_to_draw"]
+                        
     def draw(self, selected_sub_item, sub_items):
         item_spacing = 30
         i = 0

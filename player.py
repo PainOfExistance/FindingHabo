@@ -184,6 +184,36 @@ class Player:
                 self.stats.weapon_damage = self.stats.weapon_damage - CM.inventory.items[item]["stats"]["damage"]
             else:
                 self.stats.defense = self.stats.defense - CM.inventory.items[item]["stats"]["damage"]             
+      
+    def to_dict(self):
+        return {
+            "stats": self.stats.to_dict(),
+            "level": self.level.to_dict(),
+            "inventory": CM.inventory.to_dict(),
+            "quests": self.quests.to_dict(),
+            "animation": self.animation.to_dict(),
+            "name": self.name,
+            "gold": self.gold,
+            "current_world": self.current_world,
+            "range": self.range,
+            "active_effects": self.active_effects,
+            "movement_speed": self.movement_speed,
+            "equipped_items": self.equipped_items
+        }
+        
+    def from_dict(self, data):
+        self.stats.from_dict(data["stats"])
+        self.level.from_dict(data["level"])
+        CM.inventory.from_dict(data["inventory"])
+        self.quests.from_dict(data["quests"])
+        self.animation.from_dict(data["animation"])
+        self.name = data["name"]
+        self.gold = data["gold"]
+        self.current_world = data["current_world"]
+        self.range = data["range"]
+        self.active_effects = data["active_effects"]
+        self.movement_speed = data["movement_speed"]
+        self.equipped_items = data["equipped_items"]
                            
     def draw(self):
         self.player, new_rect= self.animation.player_anim(self.equipped_items["hand"], self.movement_speed)
