@@ -1,0 +1,204 @@
+[
+  {
+    "name": {
+      "name": "Dream World",
+      "respawn_timer": 50,
+      "time_passed": "1945-05-09T09:57:25",
+      "music": [
+        "sounds/bgm/It's Time.mp3",
+        "sounds/bgm/DOVAHKIIN.mp3",
+        "sounds/bgm/Angelia.mp3",
+        "sounds/bgm/finding_habo_bgm.mp3",
+        "sounds/bgm/V put.mp3",
+        "sounds/bgm/RadioGaGa.mp3"
+      ],
+      "collision_set": "terrain\\worlds\\simplified\\Dream_World\\Collision-int.png",
+      "background": "terrain\\worlds\\simplified\\Dream_World\\_composite.png"
+    },
+    "type": "metadata"
+  },
+  {
+    "name": "Power Elixir",
+    "type": "item",
+    "left": 3473,
+    "top": 3324
+  },
+  {
+    "name": "Steel Sword",
+    "type": "item",
+    "left": 3032,
+    "top": 3320
+  },
+  {
+    "name": "Minor Health Potion",
+    "type": "item",
+    "left": 3121,
+    "top": 3500
+  },
+  {
+    "name": "Steel Armor",
+    "type": "item",
+    "left": 2184,
+    "top": 2936
+  },
+  {
+    "name": [
+      [
+        {
+          "type": "Steel Sword",
+          "quantity": 5
+        },
+        {
+          "type": "Power Elixir",
+          "quantity": 3
+        },
+        {
+          "type": "Heirloom",
+          "quantity": 1
+        }
+      ],
+      2136,
+      3240,
+      "common chest",
+      "textures/static/chest.jpg",
+      [
+        5,
+        3,
+        1
+      ]
+    ],
+    "type": "container",
+    "left": 2104,
+    "top": 3208
+  },
+  {
+    "name": [
+      [],
+      1880,
+      2840,
+      "chest",
+      "textures/static/chest.jpg",
+      []
+    ],
+    "type": "container",
+    "left": 1848,
+    "top": 2808
+  },
+  {
+    "name": {
+      "name": "Merchant",
+      "detection_range": 200,
+      "talk_range": 250,
+      "talking": false,
+      "attack_speed": 0.7,
+      "movement_behavior": {
+        "type": "stand",
+        "movement_speed": 120,
+        "dirrection": false
+      },
+      "stats": {
+        "health": 150,
+        "type": "ally",
+        "xp": 50,
+        "status": "alive",
+        "damage": 30,
+        "rarity": "always",
+        "group": "Merchant",
+        "mutable": false,
+        "inventory_type": "common",
+        "image": "textures/npc/merchant.png"
+      },
+      "gold": 500,
+      "items": [
+        {
+          "type": "Minor Health Potion",
+          "quantity": 3
+        },
+        {
+          "type": "Steel Armor",
+          "quantity": 1
+        },
+        {
+          "type": "Steel Sword",
+          "quantity": 2
+        },
+        {
+          "type": "Key to the Land of the Free",
+          "quantity": 1
+        }
+      ]
+    },
+    "type": "npc",
+    "left": 840,
+    "top": 3000
+  },
+  {
+    "name": {
+      "name": "Bandit",
+      "detection_range": 350,
+      "talk_range": 150,
+      "talking": false,
+      "attack_speed": 0.6,
+      "movement_behavior": {
+        "type": "patrol",
+        "movement_speed": 100,
+        "dirrection": false
+      },
+      "stats": {
+        "health": 50,
+        "type": "enemy",
+        "xp": 200,
+        "status": "alive",
+        "damage": 20,
+        "rarity": "uncommon",
+        "group": "bandit",
+        "mutable": true,
+        "image": "textures/npc/merchant.png"
+      }
+    },
+    "type": "npc",
+    "left": 2369,
+    "top": 3288
+  },
+  {
+    "name": {
+      "name": "Bandit",
+      "detection_range": 350,
+      "talk_range": 150,
+      "talking": false,
+      "attack_speed": 0.6,
+      "movement_behavior": {
+        "type": "patrol",
+        "movement_speed": 100,
+        "dirrection": false
+      },
+      "stats": {
+        "health": 50,
+        "type": "enemy",
+        "xp": 200,
+        "status": "alive",
+        "damage": 20,
+        "rarity": "uncommon",
+        "group": "bandit",
+        "mutable": true,
+        "image": "textures/npc/merchant.png"
+      }
+    },
+    "type": "npc",
+    "left": 2273,
+    "top": 3352
+  },
+  {
+    "name": {
+      "type": "dw_lotf_portal_01",
+      "unlocked_by": "Key to the Land of the Free",
+      "locked": false,
+      "world_to_load": "worlds/simplified/Land_Of_the_Free/data.json",
+      "world_name": "Land Of the Free",
+      "index": 10
+    },
+    "type": "portal",
+    "left": 3384,
+    "top": 2024
+  }
+]

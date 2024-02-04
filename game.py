@@ -10,6 +10,7 @@ from ai import Ai
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from music_player import MusicPlayer
+from world_manager import SaveManager
 
 
 class Game:
@@ -67,6 +68,10 @@ class Game:
         self.world_objects.clear()
         
         level_data = CM.assets.load_level_data(path)
+        modified_data=CM.assets.get_stored_data(path)
+        if modified_data != None:
+            #todo fixaj to vse pol pa finiširaj 
+            pass
         spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
         CM.music_player = MusicPlayer(metadata["music"])
         
@@ -95,6 +100,13 @@ class Game:
         
         CM.player.player_rect.left = spawn_point[0]-offset[0]
         CM.player.player_rect.top = spawn_point[1]-offset[1]
+        
+        self.world_objects.append(
+                {
+                    "name": metadata,
+                    "type": "metadata",
+                }
+            )
 
         for data in final_items:
             item = GM.items[data[0]]
@@ -611,6 +623,8 @@ class Game:
                 self.world_objects[GM.world_to_travel_to["index"]]["name"][
                     "locked"
                 ] = False
+                
+                CM.assets.world_save(self.world_objects)
 
                 temp = self.setup("terrain/"+GM.world_to_travel_to["world_to_load"], GM.world_to_travel_to["type"])
                 GM.world_to_travel_to = None
@@ -1037,7 +1051,11 @@ class Game:
             GM.attack_button_held = False
 
         if keys[pygame.K_o]:
-            print(GM.worlds)
+            print()
+            print("----------------")
+            print(self.world_objects)
+            print("----------------")
+            print()
 
         if GM.rotation_angle == 90:
             self.weapon_rect = pygame.Rect(
@@ -1286,6 +1304,8 @@ class Game:
 
     def draw_objects(self):
         for index, x in enumerate(self.world_objects):
+            if index==0:
+                continue
             if (
                 "stats" in x['name'] and
                 "status" in x["name"]["stats"]

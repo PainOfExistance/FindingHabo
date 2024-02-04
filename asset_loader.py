@@ -120,5 +120,32 @@ class AssetLoader:
             loaded_data = file.read()
             game = bson.decode_all(loaded_data)
             return game
+        
+    def world_save(self, world):
+        path = os.path.dirname(world[0]["name"]["background"])
+        path = os.path.join(path, "data_modified.json")
+        transformed_data = []
+        for entry in world:
+            if entry["type"] == "metadata":
+                entry["name"]["time_passed"]=GM.game_date.get_date()
+                transformed_entry = {"name": entry["name"], "type": entry["type"]}
+            else:
+                transformed_entry = {"name": entry["name"], "type": entry["type"], "left": entry["rect"].left, "top": entry["rect"].top}
+            transformed_data.append(transformed_entry)
+        
+        with open(path, "w") as file:
+            json_data=json.dumps(transformed_data, indent=2)
+            file.write(json_data)
+        
+
+    def get_stored_data(self, path):
+        path = os.path.dirname(path)
+        path = os.path.join(path, "data_modified.json")
+        if not os.path.isfile(path):
+            return None
+        with open(path, "r") as file:
+            data = json.load(file)
+            return data
+        
 
     # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

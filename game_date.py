@@ -39,10 +39,11 @@ class GameDate:
         minute = self.current_date.minute  # Get the minute
         custom_month_name = self.custom_month_names[self.current_date.month]  # Get the custom month name
         year = f"{str(self.current_date.year)[0]}E A{str(self.current_date.year)[1:4]}"  # Get the year
-
         formatted_str = f"{weekday_name} {hour:02d}.{minute:02d}, {day_of_month}th of {custom_month_name} of {year}"
-
         return formatted_str
+
+    def get_date(self):
+        return self.current_date.isoformat()
     
     def to_dict(self):
         return {
