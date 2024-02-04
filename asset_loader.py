@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import pygame
 
+from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
@@ -123,6 +124,9 @@ class AssetLoader:
         
     def world_save(self, world):
         path = os.path.dirname(world[0]["name"]["background"])
+        path = os.path.join(path, CM.player.hash)
+        if not os.path.exists(path):
+            os.makedirs(path)
         path = os.path.join(path, "data_modified.json")
         transformed_data = []
         for entry in world:
@@ -130,7 +134,7 @@ class AssetLoader:
                 entry["name"]["time_passed"]=GM.game_date.get_date()
                 transformed_entry = {"name": entry["name"], "type": entry["type"]}
             else:
-                transformed_entry = {"name": entry["name"], "type": entry["type"], "left": entry["rect"].left, "top": entry["rect"].top}
+                transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery}
             transformed_data.append(transformed_entry)
         
         with open(path, "w") as file:
@@ -140,7 +144,9 @@ class AssetLoader:
 
     def get_stored_data(self, path):
         path = os.path.dirname(path)
+        path = os.path.join(path, CM.player.hash)
         path = os.path.join(path, "data_modified.json")
+        
         if not os.path.isfile(path):
             return None
         with open(path, "r") as file:

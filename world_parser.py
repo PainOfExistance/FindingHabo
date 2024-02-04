@@ -137,20 +137,59 @@ def parser(world):
                 ][0]["customFields"]["music"][i][3:]
             metadata = world["entities"][x][0]["customFields"]
 
-    # print("-------------------")
-    # print(spawn)
-    # print("-------------------")
-    # print(portals)
-    # print("-------------------")
-    # print(enemies)
-    # print("-------------------")
-    # print(final_items)
-    # print("-------------------")
-    # print(containers)
-    # print("-------------------")
-    # print(metadata)
-    # print("-------------------")
+    #print("-------------------")
+    #print(spawn)
+    #print("-------------------")
+    #print(portals)
+    #print("-------------------")
+    #print(enemies)
+    #print("-------------------")
+    #print(final_items)
+    #print("-------------------")
+    #print(containers)
+    #print("-------------------")
+    #print(metadata)
+    #print("-------------------")
 
+    return spawn, portals, enemies, final_items, containers, metadata
+
+def parse_visited(world):
+    spawn = (0, 0)
+    portals = []
+    enemies = []
+    final_items = []
+    containers = []
+    metadata = []
+    for i in world:
+        if i["type"]=="metadata":
+            metadata=i["name"]
+        elif i["type"]=="item":
+            final_items.append((i["name"], i["x"], i["y"]))
+        elif i["type"]=="container":
+            i["name"][1]=i["x"]
+            i["name"][2]=i["y"]
+            containers.append(i["name"])
+        elif i["type"]=="npc":
+            enemies.append((i["name"], i["x"], i["y"]))
+        elif i["type"]=="portal":
+            portals.append((i["name"], i["x"], i["y"]))
+            
+    
+    #print("-------------------")
+    #print(spawn)
+    #print("-------------------")
+    #print(portals)
+    #print("-------------------")
+    #print(enemies)
+    #print("-------------------")
+    #print(final_items)
+    #print("-------------------")
+    #print(containers)
+    #print("-------------------")
+    #print(metadata)
+    #print("-------------------")
+            
+        
     return spawn, portals, enemies, final_items, containers, metadata
 
         

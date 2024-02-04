@@ -1,3 +1,6 @@
+import random
+import string
+
 import numpy as np
 import pygame
 
@@ -28,6 +31,8 @@ class Player:
         self.animation = Animation()
         self.movement_speed = 125
         GM.game_date = GameDate()
+        #self.hash=''.join(random.choices(string.ascii_uppercase + string.digits+string.ascii_lowercase, k=32))
+        self.hash="Player"
 
         self.player, self.player_rect = self.animation.init_player()
         self.player_rect.center=(600, 500)

@@ -1,5 +1,6 @@
 import copy
 import sys
+from datetime import datetime
 
 import numpy as np
 import pygame
@@ -10,7 +11,6 @@ from ai import Ai
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from music_player import MusicPlayer
-from world_manager import SaveManager
 
 
 class Game:
@@ -63,44 +63,8 @@ class Game:
         self.bg_surface_menu = pygame.Surface(
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
-
-    def setup(self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"):
-        self.world_objects.clear()
         
-        level_data = CM.assets.load_level_data(path)
-        modified_data=CM.assets.get_stored_data(path)
-        if modified_data != None:
-            #todo fixaj to vse pol pa finiširaj 
-            pass
-        spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
-        CM.music_player = MusicPlayer(metadata["music"])
-        
-        self.background, self.bg_rect = CM.assets.load_background(
-            metadata["background"], 
-        )
-        self.collision_map = CM.assets.load_collision(
-            metadata["collision_set"]
-        )
-
-        self.map_height = self.collision_map.shape[0]
-        self.map_width = self.collision_map.shape[1]
-        
-        if type != "default":
-            for i, _ in enumerate(portals):
-                if portals[i][0]["type"] == type:
-                    spawn_point = (portals[i][1], portals[i][2])
-
-        offset = (
-            spawn_point[0] - GM.screen.get_width() // 2,
-            spawn_point[1] - GM.screen.get_height() // 2,
-        )
-        
-        self.bg_rect.left = -offset[0]
-        self.bg_rect.top = -offset[1]
-        
-        CM.player.player_rect.left = spawn_point[0]-offset[0]
-        CM.player.player_rect.top = spawn_point[1]-offset[1]
-        
+    def setup_init(self, portals, npcs, final_items, containers, metadata):
         self.world_objects.append(
                 {
                     "name": metadata,
@@ -166,8 +130,124 @@ class Game:
                     "name": data[0],
                 }
             )
+            
+    def setup_loaded(self, portals, npcs, final_items, containers, metadata):
+        self.world_objects.append(
+                {
+                    "name": metadata,
+                    "type": "metadata",
+                }
+            )
 
-        #todo tu daj da ti se path do iamga zraun da se lahko zamenja
+        for data in final_items:
+            item = GM.items[data[0]]
+            img, img_rect = CM.assets.load_images(
+                item["image"], (0, 0), (data[1], data[2])
+            )
+            self.world_objects.append(
+                {
+                    "name": item["name"],
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "item",
+                }
+            )
+
+        for data in containers:
+            tmp=data
+            img, img_rect = CM.assets.load_images(
+                data[4], (64, 64), (data[1], data[2])
+            )
+            tmp[1]=data[1]
+            tmp[2]=data[2]
+                
+            self.world_objects.append(
+                {
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "container",
+                    "name": tmp
+                }
+            )
+
+        for data in npcs:
+            img, img_rect = CM.assets.load_images(
+                data[0]["stats"]["image"], (64, 64), (data[1], data[2])
+            )
+            self.world_objects.append(
+                {
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "npc",
+                    "name": copy.deepcopy(data[0]),
+                    "attack_diff": 0,
+                    "agroved": False,
+                }
+            )
+
+        for data in portals:
+            img, img_rect = CM.assets.load_images(
+                "textures\static\door.png", (64, 64), (data[1], data[2])
+            )
+            self.world_objects.append(
+                {
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "portal",
+                    "name": data[0],
+                }
+            )
+
+    def setup(self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"):
+        self.world_objects.clear()
+        
+        level_data = CM.assets.load_level_data(path)
+        modified_data=CM.assets.get_stored_data(path)
+        if modified_data != None:
+            date1 = datetime.strptime(GM.game_date.get_date(), "%Y-%m-%dT%H:%M:%S")
+            date2 = datetime.strptime(modified_data[0]["name"]["time_passed"], "%Y-%m-%dT%H:%M:%S")
+            delta=date1-date2
+            if modified_data[0]["name"]["respawn_timer"]>delta.days:
+                print("respawned")
+                spawn_point, portals, npcs, final_items, containers, metadata= wp.parse_visited(modified_data)
+                self.setup_loaded(portals, npcs, final_items, containers, metadata)
+                spawn_point=(3416, 2156)
+            else:
+                print("basic in")
+                spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
+                self.setup_init(portals, npcs, final_items, containers, metadata)
+        else:
+            print("basic out")
+            spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
+            self.setup_init(portals, npcs, final_items, containers, metadata)
+        
+        CM.music_player = MusicPlayer(metadata["music"])
+        
+        self.background, self.bg_rect = CM.assets.load_background(
+            metadata["background"], 
+        )
+        self.collision_map = CM.assets.load_collision(
+            metadata["collision_set"]
+        )
+
+        self.map_height = self.collision_map.shape[0]
+        self.map_width = self.collision_map.shape[1]
+        
+        if type != "default":
+            for i, _ in enumerate(portals):
+                if portals[i][0]["type"] == type:
+                    spawn_point = (portals[i][1], portals[i][2])
+
+        offset = (
+            spawn_point[0] - GM.screen.get_width() // 2,
+            spawn_point[1] - GM.screen.get_height() // 2,
+        )
+        
+        self.bg_rect.left = -offset[0]
+        self.bg_rect.top = -offset[1]
+        
+        CM.player.player_rect.left = spawn_point[0]-offset[0]
+        CM.player.player_rect.top = spawn_point[1]-offset[1]
         
         temp = {}
         for x in self.world_objects:

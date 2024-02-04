@@ -221,6 +221,27 @@
 						"armor"
 					]
 				}
+			},
+			{
+				"id": "Item_field",
+				"iid": "86733b30-b0a0-11ee-9fb5-93d1cb31d21d",
+				"layer": "LeveL_Data",
+				"x": 3352,
+				"y": 2088,
+				"width": 16,
+				"height": 16,
+				"color": 39387,
+				"customFields": {
+					"name": [
+						"Power Elixir"
+					],
+					"chance": [
+						1
+					],
+					"type": [
+						"potion"
+					]
+				}
 			}
 		],
 		"Container_field": [
@@ -275,6 +296,32 @@
 					"type": [],
 					"number_of_items": []
 				}
+			},
+			{
+				"id": "Container_field",
+				"iid": "64b1b8a0-b0a0-11ee-9fb5-9f26f9066b04",
+				"layer": "LeveL_Data",
+				"x": 3480,
+				"y": 2088,
+				"width": 16,
+				"height": 16,
+				"color": 2513986,
+				"customFields": {
+					"name": "chest",
+					"image": "../textures/static/chest.jpg",
+					"items": [
+						"Steel Sword"
+					],
+					"chance": [
+						1
+					],
+					"type": [
+						"weapon"
+					],
+					"number_of_items": [
+						2
+					]
+				}
 			}
 		],
 		"Metadata": [
@@ -299,8 +346,8 @@
 						"../sounds/bgm/finding_habo_bgm.mp3",
 						"../sounds/bgm/Angelia.mp3"
 					],
-					"collision_set": "terrain\\worlds\\simplified\\Dream_World\\Collision-int.png",
-					"background": "terrain\\worlds\\simplified\\Dream_World\\_composite.png"
+					"collision_set": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\Collision-int.png",
+					"background": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\_composite.png"
 				}
 			}
 		]
