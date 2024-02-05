@@ -59,8 +59,8 @@ class Dialougue:
             "selected_item": self.selected_item,
             "selection_held": self.selection_held,
             "name": self.name,
-            "current_talk": self.current_talk,
-            "current_lines": self.current_lines,
+            "current_talk": list(self.current_talk),
+            "current_lines": list(self.current_lines),
             "talk": self.talk,
             "line": self.line,
             "prev_talk": self.prev_talk,
@@ -81,8 +81,8 @@ class Dialougue:
         self.selected_item = data.get("selected_item", 0)
         self.selection_held = data.get("selection_held", False)
         self.name = data.get("name", "")
-        self.current_talk = data.get("current_talk", -1)
-        self.current_lines = data.get("current_lines", -1)
+        self.current_talk = iter(data.get("current_talk", -1))
+        self.current_lines = iter(data.get("current_lines", -1))
         self.talk = data.get("talk", -1)
         self.line = data.get("line", -1)
         self.prev_talk = data.get("prev_talk", -1)

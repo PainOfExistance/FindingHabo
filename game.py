@@ -33,9 +33,8 @@ class Game:
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         GM.world_objects = list()
 
-        npcs = self.setup()
-        self.ai = Ai(npcs)
-        CM.player.quests.dialogue = self.ai.strings
+        tmp=self.setup()
+        CM.player.quests.dialogue = CM.ai.strings
         self.clock = pygame.time.Clock()
         self.target_fps = 60
         self.last_frame_time = pygame.time.get_ticks()
@@ -293,14 +292,14 @@ class Game:
                 and not CM.player_menu.visible
                 and not CM.menu.visible
             ):
-                self.ai.strings.handle_input()
-                if self.ai.strings.starts != 0:
-                    CM.player.quests.start_quest(self.ai.strings.starts)
-                    self.ai.strings.starts = 0
+                CM.ai.strings.handle_input()
+                if CM.ai.strings.starts != 0:
+                    CM.player.quests.start_quest(CM.ai.strings.starts)
+                    CM.ai.strings.starts = 0
 
-                if self.ai.strings.advances != 0:
-                    CM.player.quests.advance_quest(self.ai.strings.advances)
-                    self.ai.strings.advances = 0
+                if CM.ai.strings.advances != 0:
+                    CM.player.quests.advance_quest(CM.ai.strings.advances)
+                    CM.ai.strings.advances = 0
 
             self.clock.tick(self.target_fps)
 
@@ -704,15 +703,14 @@ class Game:
                 
                 CM.assets.world_save(GM.world_objects)
 
-                temp = self.setup("terrain/"+GM.world_to_travel_to["world_to_load"], GM.world_to_travel_to["type"])
+                self.setup("terrain/"+GM.world_to_travel_to["world_to_load"], GM.world_to_travel_to["type"])
                 GM.world_to_travel_to = None
-                self.ai.update_npcs(temp)
-                CM.player.quests.dialogue = self.ai.strings
+                CM.player.quests.dialogue = CM.ai.strings
 
         elif (
             not keys[pygame.K_e]
             and not GM.container_open
-            and not self.ai.strings.bartering
+            and not CM.ai.strings.bartering
         ):
             GM.selection_held = False
 
@@ -725,15 +723,15 @@ class Game:
             GM.tab_pressed = True
             GM.container_open = False
 
-            if self.ai.strings.bartering:
-                self.ai.strings.bartering = False
+            if CM.ai.strings.bartering:
+                CM.ai.strings.bartering = False
                 return
 
             if GM.is_in_dialogue:
                 GM.is_in_dialogue = False
-                self.ai.strings.index = -1
-                self.ai.strings.greeting_played = False
-                self.ai.strings.talking = False
+                CM.ai.strings.index = -1
+                CM.ai.strings.greeting_played = False
+                CM.ai.strings.talking = False
                 CM.music_player.skip_current_line()
 
         elif not keys[pygame.K_TAB] and not GM.container_open and GM.tab_pressed:
@@ -744,13 +742,13 @@ class Game:
         if (
             keys[pygame.K_UP]
             and not GM.selection_held
-            and (GM.container_open or self.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering)
             and not CM.menu.visible
             and not CM.player_menu.visible
         ):
             if (
                 GM.container_menu_selected
-                and self.ai.strings.bartering
+                and CM.ai.strings.bartering
                 and len(GM.ai_package[GM.talk_to_name]["items"])
             ):
                 GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
@@ -759,7 +757,7 @@ class Game:
                 GM.selection_held = True
                 return
 
-            elif len(CM.inventory.items) and self.ai.strings.bartering:
+            elif len(CM.inventory.items) and CM.ai.strings.bartering:
                 GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
                     CM.inventory.items
                 )
@@ -785,13 +783,13 @@ class Game:
         elif (
             keys[pygame.K_DOWN]
             and not GM.selection_held
-            and (GM.container_open or self.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering)
             and not CM.menu.visible
             and not CM.player_menu.visible
         ):
             if (
                 GM.container_menu_selected
-                and self.ai.strings.bartering
+                and CM.ai.strings.bartering
                 and len(GM.ai_package[GM.talk_to_name]["items"])
             ):
                 GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
@@ -800,7 +798,7 @@ class Game:
                 GM.selection_held = True
                 return
 
-            elif len(CM.inventory.items) and self.ai.strings.bartering:
+            elif len(CM.inventory.items) and CM.ai.strings.bartering:
                 GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
                     CM.inventory.items
                 )
@@ -823,7 +821,7 @@ class Game:
         if (
             keys[pygame.K_LEFT]
             and not GM.selection_held
-            and (GM.container_open or self.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering)
             and not CM.menu.visible
             and not CM.player_menu.visible
             and GM.container_menu_selected
@@ -838,7 +836,7 @@ class Game:
         elif (
             keys[pygame.K_RIGHT]
             and not GM.selection_held
-            and (GM.container_open or self.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering)
             and not CM.menu.visible
             and not CM.player_menu.visible
             and not GM.container_menu_selected
@@ -856,7 +854,7 @@ class Game:
             and not keys[pygame.K_DOWN]
             and not keys[pygame.K_RIGHT]
             and not keys[pygame.K_LEFT]
-            and (GM.container_open or self.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering)
         ):
             GM.selection_held = False
 
@@ -865,11 +863,11 @@ class Game:
             and not CM.menu.visible
             and not CM.player_menu.visible
             and not GM.selection_held
-            and (GM.container_open or self.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering)
         ):
             GM.selection_held = True
 
-            if self.ai.strings.bartering:
+            if CM.ai.strings.bartering:
                 if (
                     GM.container_menu_selected
                     and len(GM.ai_package[GM.talk_to_name]["items"]) > 0
@@ -1271,7 +1269,7 @@ class Game:
                 GM.screen.blit(item_render, item_rect)
 
     def draw_barter(self):
-        if self.ai.strings.bartering:
+        if CM.ai.strings.bartering:
             pygame.draw.rect(
                 self.bg_surface_menu,
                 (200, 210, 200, 180),
@@ -1395,7 +1393,7 @@ class Game:
                 and not GM.is_in_dialogue
             ):
                 #print(x)
-                dx, dy, agroved = self.ai.attack(
+                dx, dy, agroved = CM.ai.attack(
                     x["name"]["name"],
                     (
                         (x["rect"].centerx),
@@ -1449,7 +1447,7 @@ class Game:
                 and not CM.player_menu.visible
                 and not GM.is_in_dialogue
             ):
-                dx, dy = self.ai.update(
+                dx, dy = CM.ai.update(
                     x["name"]["name"],
                     self.collision_map,
                     x["rect"].left,
@@ -1461,7 +1459,7 @@ class Game:
                 relative__left = int(self.bg_rect.left + x["rect"].left)
                 relative__top = int(self.bg_rect.top + x["rect"].top)
 
-                line = self.ai.random_line(
+                line = CM.ai.random_line(
                     (
                         (x["rect"].centerx),
                         (x["rect"].centery),
@@ -1673,10 +1671,10 @@ class Game:
         CM.player.quests.draw_quest_info()
 
         if GM.is_in_dialogue:
-            self.ai.strings.draw(GM.talk_to_name)
+            CM.ai.strings.draw(GM.talk_to_name)
             #todo fix
 
-        if self.ai.strings.bartering:
+        if CM.ai.strings.bartering:
             self.draw_barter()
 
         #pygame.draw.rect(GM.screen, (0, 0, 0), self.weapon_rect)

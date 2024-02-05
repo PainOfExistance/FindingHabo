@@ -113,6 +113,9 @@ class AssetLoader:
     def save(self):
         filename=f"{CM.player.name}_{CM.player.current_world}_{GM.game_date.print_date()}".replace(" ", "_")
         data=CM.player.to_dict()
+        #print("---------SAVING DATA---------")
+        #print(data)
+        #print("-----------------------------")
         with open(f"saves/{filename}.habo", "w") as file:
             json_data=json.dumps(data, indent=2)
             file.write(json_data)

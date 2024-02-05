@@ -1,0 +1,219 @@
+[
+  {
+    "name": {
+      "name": "Dream World",
+      "respawn_timer": 50,
+      "time_passed": "1945-05-09T11:30:58",
+      "music": [
+        "sounds/bgm/finding_habo_bgm.mp3",
+        "sounds/bgm/RadioGaGa.mp3",
+        "sounds/bgm/It's Time.mp3",
+        "sounds/bgm/V put.mp3",
+        "sounds/bgm/Angelia.mp3",
+        "sounds/bgm/DOVAHKIIN.mp3"
+      ],
+      "collision_set": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\Collision-int.png",
+      "background": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\_composite.png"
+    },
+    "type": "metadata"
+  },
+  {
+    "name": "Power Elixir",
+    "type": "item",
+    "x": 3480,
+    "y": 3336
+  },
+  {
+    "name": "Steel Sword",
+    "type": "item",
+    "x": 3064,
+    "y": 3352
+  },
+  {
+    "name": "Steel Armor",
+    "type": "item",
+    "x": 2216,
+    "y": 2968
+  },
+  {
+    "name": "Power Elixir",
+    "type": "item",
+    "x": 3352,
+    "y": 2088
+  },
+  {
+    "name": [
+      [
+        {
+          "type": "Steel Sword",
+          "quantity": 7
+        },
+        {
+          "type": "Power Elixir",
+          "quantity": 9
+        }
+      ],
+      2136,
+      3240,
+      "common chest",
+      "textures/static/chest.jpg",
+      [
+        7,
+        9,
+        1
+      ]
+    ],
+    "type": "container",
+    "x": 2136,
+    "y": 3240
+  },
+  {
+    "name": [
+      [],
+      1880,
+      2840,
+      "chest",
+      "textures/static/chest.jpg",
+      []
+    ],
+    "type": "container",
+    "x": 1880,
+    "y": 2840
+  },
+  {
+    "name": [
+      [
+        {
+          "type": "Steel Sword",
+          "quantity": 2
+        }
+      ],
+      3480,
+      2088,
+      "chest",
+      "textures/static/chest.jpg",
+      [
+        2
+      ]
+    ],
+    "type": "container",
+    "x": 3480,
+    "y": 2088
+  },
+  {
+    "name": {
+      "name": "Merchant",
+      "detection_range": 200,
+      "talk_range": 250,
+      "talking": false,
+      "attack_speed": 0.7,
+      "movement_behavior": {
+        "type": "stand",
+        "movement_speed": 120,
+        "dirrection": false
+      },
+      "stats": {
+        "health": 150,
+        "type": "ally",
+        "xp": 50,
+        "status": "alive",
+        "damage": 30,
+        "rarity": "always",
+        "group": "Merchant",
+        "mutable": false,
+        "inventory_type": "common",
+        "image": "textures/npc/merchant.png"
+      },
+      "gold": 500,
+      "items": [
+        {
+          "type": "Minor Health Potion",
+          "quantity": 3
+        },
+        {
+          "type": "Steel Armor",
+          "quantity": 1
+        },
+        {
+          "type": "Steel Sword",
+          "quantity": 2
+        },
+        {
+          "type": "Key to the Land of the Free",
+          "quantity": 1
+        }
+      ]
+    },
+    "type": "npc",
+    "x": 872,
+    "y": 3032
+  },
+  {
+    "name": {
+      "name": "Bandit",
+      "detection_range": 350,
+      "talk_range": 150,
+      "talking": false,
+      "attack_speed": 0.6,
+      "movement_behavior": {
+        "type": "patrol",
+        "movement_speed": 100,
+        "dirrection": false
+      },
+      "stats": {
+        "health": 50,
+        "type": "enemy",
+        "xp": 200,
+        "status": "alive",
+        "damage": 20,
+        "rarity": "uncommon",
+        "group": "bandit",
+        "mutable": true,
+        "image": "textures/npc/merchant.png"
+      }
+    },
+    "type": "npc",
+    "x": 4401,
+    "y": 3537
+  },
+  {
+    "name": {
+      "name": "Bandit",
+      "detection_range": 350,
+      "talk_range": 150,
+      "talking": false,
+      "attack_speed": 0.6,
+      "movement_behavior": {
+        "type": "patrol",
+        "movement_speed": 100,
+        "dirrection": false
+      },
+      "stats": {
+        "health": 50,
+        "type": "enemy",
+        "xp": 200,
+        "status": "alive",
+        "damage": 20,
+        "rarity": "uncommon",
+        "group": "bandit",
+        "mutable": true,
+        "image": "textures/npc/merchant.png"
+      }
+    },
+    "type": "npc",
+    "x": 4368,
+    "y": 3536
+  },
+  {
+    "name": {
+      "type": "dw_lotf_portal_01",
+      "unlocked_by": "Key to the Land of the Free",
+      "locked": true,
+      "world_to_load": "worlds/simplified/Land_Of_the_Free/data.json",
+      "world_name": "Land Of the Free"
+    },
+    "type": "portal",
+    "x": 3416,
+    "y": 2056
+  }
+]

@@ -230,6 +230,7 @@ class Player:
             ],
             "hash": self.hash,
             "rectxy": [self.player_rect.centerx, self.player_rect.centery],
+            "ai": CM.ai.to_dict()
         }
 
     def from_dict(self, data):
@@ -253,6 +254,7 @@ class Player:
         GM.relative_player_bottom = data["xy"][3]
         self.hash = data["hash"]
         GM.game_date.from_dict(data["game_date"])
+        CM.ai.from_dict(data["ai"])
 
     def draw(self):
         self.player, new_rect = self.animation.player_anim(

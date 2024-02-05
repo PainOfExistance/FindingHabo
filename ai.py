@@ -10,17 +10,9 @@ from game_manager import GameManager as GM
 
 
 class Ai:
-    def __init__(self, npcs):
-        self.npcs = npcs
-        GM.delta_time = 0
+    def __init__(self):
         self.npc_movement = {}
         self.strings = Dialougue()
-        
-    def update_npcs(self, npcs):
-        self.npcs = npcs
-        tmp=CM.assets.load_ai_package()
-        for key in npcs:
-            GM.ai_package[key]=tmp[key]
 
     def update(self, name, collision_map, relative__left, relative__top, rect):
         if GM.ai_package[name]["movement_behavior"]["type"] == "patrol":
@@ -186,15 +178,11 @@ class Ai:
 
     def to_dict(self):
         return {
-            "npcs": self.npcs,
-            "delta_time": GM.delta_time,
             "npc_movement": self.npc_movement,
-            "strings": self.strings.to_dict() if self.strings else None
+            "strings": self.strings.to_dict()
         }
 
     def from_dict(self, data):
-        self.npcs = data["npcs"]
         self.npc_movement = data.get("npc_movement", {})
-        GM.delta_time = data.get("delta_time", 0)
         self.strings=Dialougue()
         self.strings.from_dict(data.get("strings", {})) if data.get("strings") else None

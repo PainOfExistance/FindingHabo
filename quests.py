@@ -106,7 +106,7 @@ class Quests:
     def from_dict(self, data):
         fixed={int(key): value for key, value in data["quests"].items()}
         self.quests = fixed
-        self.tics = data["tics"]
+        self.tics = -5000#data["tics"]
         self.text_to_draw = data["text_to_draw"]
                         
     def draw(self, selected_sub_item, sub_items):

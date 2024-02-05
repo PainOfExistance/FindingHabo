@@ -4,6 +4,7 @@ import sys
 
 import pygame
 
+from ai import Ai
 from asset_loader import AssetLoader
 from game import Game
 from game_manager import ClassManager as CM
@@ -77,6 +78,7 @@ class MainMenu:
             CM.player = Player()
             CM.menu = Menu()
             CM.player_menu = PlayerMenu()
+            CM.ai = Ai()
             CM.game = Game()
             
             self.is_menu_visible = False
@@ -99,6 +101,7 @@ class MainMenu:
             #pygame.display.update()
             CM.assets = AssetLoader()
             CM.player = Player()
+            CM.ai = Ai()
             CM.player.from_dict(CM.assets.load(f"saves/{selected_option}.habo"))
             CM.menu = Menu()
             CM.player_menu = PlayerMenu()
