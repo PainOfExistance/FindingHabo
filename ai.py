@@ -183,3 +183,18 @@ class Ai:
             return self.strings.random_line(name)
         
         return None
+
+    def to_dict(self):
+        return {
+            "npcs": self.npcs,
+            "delta_time": GM.delta_time,
+            "npc_movement": self.npc_movement,
+            "strings": self.strings.to_dict() if self.strings else None
+        }
+
+    def from_dict(self, data):
+        self.npcs = data["npcs"]
+        self.npc_movement = data.get("npc_movement", {})
+        GM.delta_time = data.get("delta_time", 0)
+        self.strings=Dialougue()
+        self.strings.from_dict(data.get("strings", {})) if data.get("strings") else None

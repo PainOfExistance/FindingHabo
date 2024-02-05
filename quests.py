@@ -104,7 +104,8 @@ class Quests:
         }
 
     def from_dict(self, data):
-        self.quests = data["quests"]
+        fixed={int(key): value for key, value in data["quests"].items()}
+        self.quests = fixed
         self.tics = data["tics"]
         self.text_to_draw = data["text_to_draw"]
                         

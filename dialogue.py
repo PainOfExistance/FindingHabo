@@ -52,6 +52,50 @@ class Dialougue:
         current_string["file"] = line_file
         return current_string
 
+    def to_dict(self):
+        return {
+            "strings": self.strings,
+            "index": self.index,
+            "selected_item": self.selected_item,
+            "selection_held": self.selection_held,
+            "name": self.name,
+            "current_talk": self.current_talk,
+            "current_lines": self.current_lines,
+            "talk": self.talk,
+            "line": self.line,
+            "prev_talk": self.prev_talk,
+            "enabled": self.enabled,
+            "offset": self.offset,
+            "talking": self.talking,
+            "length": self.length,
+            "greeting_played": self.greeting_played,
+            "bartering": self.bartering,
+            "will_bartering": self.will_bartering,
+            "starts": self.starts,
+            "advances": self.advances
+        }
+    
+    def from_dict(self, data):
+        self.strings = data.get("strings")
+        self.index = data.get("index", -1)
+        self.selected_item = data.get("selected_item", 0)
+        self.selection_held = data.get("selection_held", False)
+        self.name = data.get("name", "")
+        self.current_talk = data.get("current_talk", -1)
+        self.current_lines = data.get("current_lines", -1)
+        self.talk = data.get("talk", -1)
+        self.line = data.get("line", -1)
+        self.prev_talk = data.get("prev_talk", -1)
+        self.enabled = data.get("enabled")
+        self.offset = data.get("offset", 0)
+        self.talking = data.get("talking", False)
+        self.length = data.get("length", 0)
+        self.greeting_played = data.get("greeting_played", False)
+        self.bartering = data.get("bartering", False)
+        self.will_bartering = data.get("will_bartering", False)
+        self.starts = data.get("starts", 0)
+        self.advances = data.get("advances", 0)
+
     def draw(self, name):
         self.name = name
 
