@@ -47,10 +47,8 @@ class GameDate:
     
     def to_dict(self):
         return {
-            "custom_month_names": self.custom_month_names,
             "current_date": self.current_date.isoformat()
         }
 
     def from_dict(self, data):
-        self.custom_month_names = data["custom_month_names"]
         self.current_date = datetime.fromisoformat(data["current_date"])

@@ -103,14 +103,13 @@ class Menu:
             sys.exit()
         elif self.in_sub_menu==1:
             if self.action=="Save":
-                save_name=f"{CM.player.name}_{CM.player.current_world}_{datetime.now().strftime('%d-%m-%Y %H-%M-%S')}"
-                tmp=CM.assets.save(save_name, self.game)
+                CM.assets.world_save(GM.world_objects)
+                tmp=CM.assets.save()
                 if tmp:
                     saves = glob.glob(os.path.join("saves", "*.habo"))
                     self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves]
 
-    def render(self, game):
-        self.game=game
+    def render(self):
         if self.visible:
             
             pygame.draw.rect(

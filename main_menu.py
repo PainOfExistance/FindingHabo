@@ -84,7 +84,6 @@ class MainMenu:
         elif selected_option == "Load" and len(self.saves) > 0:
             print("Opening load menu...")
             self.in_sub_menu = 1
-            # Add your options menu logic here
         elif selected_option == "Options":
             print("Opening options menu...")
             self.in_sub_menu = 2
@@ -93,10 +92,19 @@ class MainMenu:
             pygame.quit()
             sys.exit()
         elif self.in_sub_menu == 1:
-            assets = AssetLoader()
-            game=assets.load(f"saves/{selected_option}.habo")
+            self.loading()
+            GM._scr.blit(GM.screen, (0, 0))
+            GM.screen_width = GM.screen.get_width()
+            GM.screen_height = GM.screen.get_height()
+            #pygame.display.update()
+            CM.assets = AssetLoader()
+            CM.player = Player()
+            CM.player.from_dict(CM.assets.load(f"saves/{selected_option}.habo"))
+            CM.menu = Menu()
+            CM.player_menu = PlayerMenu()
+            CM.game = Game()
             self.is_menu_visible = False
-            game.run()
+            CM.game.run()
 
     def render(self):
         if self.in_sub_menu == 0:

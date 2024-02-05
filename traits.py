@@ -29,5 +29,9 @@ class Traits:
         return {
             "unused_trait_points": self.unused_trait_points,
             "traits": self.traits
-        }     
+        }
+    
+    def from_dict(self, data):
+        self.unused_trait_points = data["unused_trait_points"]
+        self.traits = data["traits"] 
         

@@ -57,8 +57,8 @@ class Stats:
             "health": self.health,
             "max_power": self.max_power,
             "power": self.power,
-            "max_knowledge": self.max_knowledge,
-            "knowledge": self.knowledge,
+            "max_knowledge": self.max_knowlage,
+            "knowledge": self.knowlage,
             "weapon_damage": self.weapon_damage,
             "defense": self.defense
         }
@@ -68,7 +68,7 @@ class Stats:
         self.health = data["health"]
         self.max_power = data["max_power"]
         self.power = data["power"]
-        self.max_knowledge = data["max_knowledge"]
-        self.knowledge = data["knowledge"]
+        self.max_knowlage = data["max_knowledge"]
+        self.knowlage = data["knowledge"]
         self.weapon_damage = data["weapon_damage"]
         self.defense = data["defense"]

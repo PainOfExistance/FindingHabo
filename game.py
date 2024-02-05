@@ -20,11 +20,6 @@ class Game:
         GM.items = CM.assets.load_items()
         GM.ai_package = CM.assets.load_ai_package()
 
-        self.relative_player_top = 0
-        self.relative_player_left = 0
-        self.relative_player_right = 0
-        self.relative_player_bottom = 0
-
         self.prompt_font = pygame.font.Font("fonts/SovngardeBold.ttf", 20)
         self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
@@ -36,7 +31,7 @@ class Game:
         CM.inventory.add_item(GM.items["Steel Armor"])
         CM.inventory.add_item(GM.items["Divine Armor"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
-        self.world_objects = list()
+        GM.world_objects = list()
 
         npcs = self.setup()
         self.ai = Ai(npcs)
@@ -65,7 +60,7 @@ class Game:
         )
         
     def setup_init(self, portals, npcs, final_items, containers, metadata):
-        self.world_objects.append(
+        GM.world_objects.append(
                 {
                     "name": metadata,
                     "type": "metadata",
@@ -77,7 +72,7 @@ class Game:
             img, img_rect = CM.assets.load_images(
                 item["image"], (0, 0), (data[1], data[2])
             )
-            self.world_objects.append(
+            GM.world_objects.append(
                 {
                     "name": item["name"],
                     "image": img,
@@ -94,7 +89,7 @@ class Game:
             for i, _ in enumerate(data[5]):
                 data[0][i]={"type": data[0][i], "quantity": data[5][i]}
                 
-            self.world_objects.append(
+            GM.world_objects.append(
                 {
                     "image": img,
                     "rect": img_rect,
@@ -107,7 +102,7 @@ class Game:
             img, img_rect = CM.assets.load_images(
                 GM.ai_package[data[0]]["stats"]["image"], (64, 64), (data[1], data[2])
             )
-            self.world_objects.append(
+            GM.world_objects.append(
                 {
                     "image": img,
                     "rect": img_rect,
@@ -122,7 +117,7 @@ class Game:
             img, img_rect = CM.assets.load_images(
                 "textures\static\door.png", (64, 64), (data[1], data[2])
             )
-            self.world_objects.append(
+            GM.world_objects.append(
                 {
                     "image": img,
                     "rect": img_rect,
@@ -132,7 +127,7 @@ class Game:
             )
             
     def setup_loaded(self, portals, npcs, final_items, containers, metadata):
-        self.world_objects.append(
+        GM.world_objects.append(
                 {
                     "name": metadata,
                     "type": "metadata",
@@ -144,7 +139,7 @@ class Game:
             img, img_rect = CM.assets.load_images(
                 item["image"], (0, 0), (data[1], data[2])
             )
-            self.world_objects.append(
+            GM.world_objects.append(
                 {
                     "name": item["name"],
                     "image": img,
@@ -161,7 +156,7 @@ class Game:
             tmp[1]=data[1]
             tmp[2]=data[2]
                 
-            self.world_objects.append(
+            GM.world_objects.append(
                 {
                     "image": img,
                     "rect": img_rect,
@@ -174,7 +169,7 @@ class Game:
             img, img_rect = CM.assets.load_images(
                 data[0]["stats"]["image"], (64, 64), (data[1], data[2])
             )
-            self.world_objects.append(
+            GM.world_objects.append(
                 {
                     "image": img,
                     "rect": img_rect,
@@ -189,7 +184,7 @@ class Game:
             img, img_rect = CM.assets.load_images(
                 "textures\static\door.png", (64, 64), (data[1], data[2])
             )
-            self.world_objects.append(
+            GM.world_objects.append(
                 {
                     "image": img,
                     "rect": img_rect,
@@ -199,7 +194,7 @@ class Game:
             )
 
     def setup(self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"):
-        self.world_objects.clear()
+        GM.world_objects.clear()
         
         level_data = CM.assets.load_level_data(path)
         modified_data=CM.assets.get_stored_data(path)
@@ -211,7 +206,7 @@ class Game:
                 print("respawned")
                 spawn_point, portals, npcs, final_items, containers, metadata= wp.parse_visited(modified_data)
                 self.setup_loaded(portals, npcs, final_items, containers, metadata)
-                spawn_point=(3416, 2156)
+                #spawn_point=(3416, 2156)
             else:
                 print("basic in")
                 spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
@@ -237,7 +232,10 @@ class Game:
             for i, _ in enumerate(portals):
                 if portals[i][0]["type"] == type:
                     spawn_point = (portals[i][1], portals[i][2])
-
+        
+        if spawn_point==(0,0):
+            spawn_point=(GM.relative_player_left, GM.relative_player_top)
+        
         offset = (
             spawn_point[0] - GM.screen.get_width() // 2,
             spawn_point[1] - GM.screen.get_height() // 2,
@@ -250,7 +248,7 @@ class Game:
         CM.player.player_rect.top = spawn_point[1]-offset[1]
         
         temp = {}
-        for x in self.world_objects:
+        for x in GM.world_objects:
             if x["type"] == "npc":
                 temp[x["name"]["name"]] = x["name"]
 
@@ -266,10 +264,10 @@ class Game:
             self.last_frame_time = current_time
             GM.time_diff += GM.delta_time
             GM.counter += GM.delta_time
-            GM.game_date.increment_seconds()
             self.handle_input()
             self.handle_events()
             self.draw()
+            GM.game_date.increment_seconds()
             CM.music_player.update()
             CM.player.check_experation(GM.delta_time)
             if (
@@ -316,25 +314,25 @@ class Game:
         if GM.time_diff >= 20:
             GM.time_diff = 5
 
-        self.relative_player_left = int(
+        GM.relative_player_left = int(
             CM.player.player_rect.left - self.bg_rect.left
         )
 
-        self.relative_player_right = int(
+        GM.relative_player_right = int(
             CM.player.player_rect.right - self.bg_rect.left
         )
 
-        self.relative_player_top = int(CM.player.player_rect.top - self.bg_rect.top)
+        GM.relative_player_top = int(CM.player.player_rect.top - self.bg_rect.top)
 
-        self.relative_player_bottom = int(
+        GM.relative_player_bottom = int(
             CM.player.player_rect.bottom - self.bg_rect.top
         )
         movement = int(CM.player.movement_speed * GM.delta_time)
 
         CM.player.quests.check_quest_advancement(
             (
-                self.relative_player_top + CM.player.player_rect.height // 2,
-                self.relative_player_left + CM.player.player_rect.width // 2,
+                GM.relative_player_top + CM.player.player_rect.height // 2,
+                GM.relative_player_left + CM.player.player_rect.width // 2,
             ),
             CM.player.current_world,
         )
@@ -359,8 +357,8 @@ class Game:
             keys[pygame.K_a]
             and np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top : self.relative_player_bottom,
-                    self.relative_player_left - movement,
+                    GM.relative_player_top : GM.relative_player_bottom,
+                    GM.relative_player_left - movement,
                 ]
                 == 1
             )
@@ -387,22 +385,22 @@ class Game:
         ):
             dx = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_bottom,
-                    self.relative_player_left
-                    - movement * 2 : self.relative_player_left,
+                    GM.relative_player_bottom,
+                    GM.relative_player_left
+                    - movement * 2 : GM.relative_player_left,
                 ]
             )
             dt = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top,
-                    self.relative_player_left
-                    - movement * 2 : self.relative_player_left,
+                    GM.relative_player_top,
+                    GM.relative_player_left
+                    - movement * 2 : GM.relative_player_left,
                 ]
             )
             dy = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top : self.relative_player_bottom,
-                    self.relative_player_left - movement * 2,
+                    GM.relative_player_top : GM.relative_player_bottom,
+                    GM.relative_player_left - movement * 2,
                 ]
             )
 
@@ -413,8 +411,8 @@ class Game:
                 np.rad2deg(angle) < 70
                 and np.count_nonzero(
                     self.collision_map[
-                        self.relative_player_left : self.relative_player_right,
-                        self.relative_player_top : self.relative_player_bottom,
+                        GM.relative_player_left : GM.relative_player_right,
+                        GM.relative_player_top : GM.relative_player_bottom,
                     ]
                 )
                 <= 5
@@ -436,8 +434,8 @@ class Game:
             keys[pygame.K_d]
             and np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top : self.relative_player_bottom,
-                    min(self.relative_player_right + movement, self.map_width - 1),
+                    GM.relative_player_top : GM.relative_player_bottom,
+                    min(GM.relative_player_right + movement, self.map_width - 1),
                 ]
                 == 1
             )
@@ -464,22 +462,22 @@ class Game:
         ):
             dx = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_bottom,
-                    self.relative_player_right : self.relative_player_right
+                    GM.relative_player_bottom,
+                    GM.relative_player_right : GM.relative_player_right
                     + movement * 2,
                 ]
             )
             dt = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top,
-                    self.relative_player_right : self.relative_player_right
+                    GM.relative_player_top,
+                    GM.relative_player_right : GM.relative_player_right
                     + movement * 2,
                 ]
             )
             dy = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top : self.relative_player_bottom,
-                    self.relative_player_right + movement * 2,
+                    GM.relative_player_top : GM.relative_player_bottom,
+                    GM.relative_player_right + movement * 2,
                 ]
             )
 
@@ -490,8 +488,8 @@ class Game:
                 np.rad2deg(angle) < 70
                 and np.count_nonzero(
                     self.collision_map[
-                        self.relative_player_left : self.relative_player_right,
-                        self.relative_player_top : self.relative_player_bottom,
+                        GM.relative_player_left : GM.relative_player_right,
+                        GM.relative_player_top : GM.relative_player_bottom,
                     ]
                 )
                 <= 5
@@ -512,8 +510,8 @@ class Game:
             keys[pygame.K_w]
             and np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top - movement,
-                    self.relative_player_left : self.relative_player_right,
+                    GM.relative_player_top - movement,
+                    GM.relative_player_left : GM.relative_player_right,
                 ]
                 == 1
             )
@@ -540,20 +538,20 @@ class Game:
         ):
             dx = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top - movement * 2 : self.relative_player_top,
-                    self.relative_player_right,
+                    GM.relative_player_top - movement * 2 : GM.relative_player_top,
+                    GM.relative_player_right,
                 ]
             )
             dt = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top - movement * 2 : self.relative_player_top,
-                    self.relative_player_left,
+                    GM.relative_player_top - movement * 2 : GM.relative_player_top,
+                    GM.relative_player_left,
                 ]
             )
             dy = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_top - movement * 2,
-                    self.relative_player_left : self.relative_player_right,
+                    GM.relative_player_top - movement * 2,
+                    GM.relative_player_left : GM.relative_player_right,
                 ]
             )
 
@@ -563,8 +561,8 @@ class Game:
                 np.rad2deg(angle) < 70
                 and np.count_nonzero(
                     self.collision_map[
-                        self.relative_player_left : self.relative_player_right,
-                        self.relative_player_top : self.relative_player_bottom,
+                        GM.relative_player_left : GM.relative_player_right,
+                        GM.relative_player_top : GM.relative_player_bottom,
                     ]
                 )
                 <= 5
@@ -586,8 +584,8 @@ class Game:
             keys[pygame.K_s]
             and np.count_nonzero(
                 self.collision_map[
-                    min(self.relative_player_bottom + movement, self.map_height - 1),
-                    self.relative_player_left : self.relative_player_right,
+                    min(GM.relative_player_bottom + movement, self.map_height - 1),
+                    GM.relative_player_left : GM.relative_player_right,
                 ]
                 == 1
             )
@@ -614,22 +612,22 @@ class Game:
         ):
             dx = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_bottom : self.relative_player_bottom
+                    GM.relative_player_bottom : GM.relative_player_bottom
                     + movement * 2,
-                    self.relative_player_right,
+                    GM.relative_player_right,
                 ]
             )
             dt = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_bottom : self.relative_player_bottom
+                    GM.relative_player_bottom : GM.relative_player_bottom
                     + movement * 2,
-                    self.relative_player_left,
+                    GM.relative_player_left,
                 ]
             )
             dy = np.count_nonzero(
                 self.collision_map[
-                    self.relative_player_bottom + movement * 2,
-                    self.relative_player_left : self.relative_player_right,
+                    GM.relative_player_bottom + movement * 2,
+                    GM.relative_player_left : GM.relative_player_right,
                 ]
             )
 
@@ -639,8 +637,8 @@ class Game:
                 np.rad2deg(angle) < 70
                 and np.count_nonzero(
                     self.collision_map[
-                        self.relative_player_left : self.relative_player_right,
-                        self.relative_player_top : self.relative_player_bottom,
+                        GM.relative_player_left : GM.relative_player_right,
+                        GM.relative_player_top : GM.relative_player_bottom,
                     ]
                 )
                 <= 5
@@ -667,19 +665,19 @@ class Game:
             if GM.item_hovered != None:
                 GM.selection_held = True
                 if (
-                    GM.item_hovered < len(self.world_objects)
+                    GM.item_hovered < len(GM.world_objects)
                     and GM.item_hovered >= 0
                 ):
                     CM.player.add_item(
-                        GM.items[self.world_objects[GM.item_hovered]["name"]]
+                        GM.items[GM.world_objects[GM.item_hovered]["name"]]
                     )
-                    del self.world_objects[GM.item_hovered]
+                    del GM.world_objects[GM.item_hovered]
                     GM.item_hovered = None
 
             elif GM.container_hovered != None and not GM.container_open:
                 GM.selection_held = True
                 if (
-                    GM.container_hovered < len(self.world_objects)
+                    GM.container_hovered < len(GM.world_objects)
                     and GM.container_hovered >= 0
                 ):
                     GM.container_open = True
@@ -700,11 +698,11 @@ class Game:
                 GM.selection_held = True
                 self.loading()
                 CM.player.current_world = GM.world_to_travel_to["world_name"]
-                self.world_objects[GM.world_to_travel_to["index"]]["name"][
+                GM.world_objects[GM.world_to_travel_to["index"]]["name"][
                     "locked"
                 ] = False
                 
-                CM.assets.world_save(self.world_objects)
+                CM.assets.world_save(GM.world_objects)
 
                 temp = self.setup("terrain/"+GM.world_to_travel_to["world_to_load"], GM.world_to_travel_to["type"])
                 GM.world_to_travel_to = None
@@ -771,10 +769,10 @@ class Game:
             if (
                 GM.container_menu_selected
                 and GM.container_open
-                and len(self.world_objects[GM.container_hovered]["name"][0])
+                and len(GM.world_objects[GM.container_hovered]["name"][0])
             ):
                 GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
-                    self.world_objects[GM.container_hovered]["name"][0]
+                    GM.world_objects[GM.container_hovered]["name"][0]
                 )
                 GM.selection_held = True
 
@@ -810,10 +808,10 @@ class Game:
                 return
 
             if GM.container_menu_selected and len(
-                self.world_objects[GM.container_hovered]["name"][0]
+                GM.world_objects[GM.container_hovered]["name"][0]
             ):
                 GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
-                    self.world_objects[GM.container_hovered]["name"][0]
+                    GM.world_objects[GM.container_hovered]["name"][0]
                 )
                 GM.selection_held = True
             elif len(CM.inventory.items):
@@ -976,44 +974,44 @@ class Game:
 
             if (
                 GM.container_menu_selected
-                and len(self.world_objects[GM.container_hovered]["name"][0]) > 0
+                and len(GM.world_objects[GM.container_hovered]["name"][0]) > 0
             ):
                 if (
-                    self.world_objects[GM.container_hovered]["name"][0][
+                    GM.world_objects[GM.container_hovered]["name"][0][
                         GM.selected_inventory_item
                     ]["type"]
                     == "Gold"
                 ):
-                    CM.player.gold += self.world_objects[GM.container_hovered][
+                    CM.player.gold += GM.world_objects[GM.container_hovered][
                         "name"
                     ][0][GM.selected_inventory_item]["quantity"]
-                    del self.world_objects[GM.container_hovered]["name"][0][
+                    del GM.world_objects[GM.container_hovered]["name"][0][
                         GM.selected_inventory_item
                     ]
 
                 elif (
-                    self.world_objects[GM.container_hovered]["name"][0][
+                    GM.world_objects[GM.container_hovered]["name"][0][
                         GM.selected_inventory_item
                     ]["quantity"]
                     > 0
                 ):
-                    self.world_objects[GM.container_hovered]["name"][0][
+                    GM.world_objects[GM.container_hovered]["name"][0][
                         GM.selected_inventory_item
                     ]["quantity"] -= 1
                     CM.player.add_item(
                         GM.items[
-                            self.world_objects[GM.container_hovered]["name"][0][
+                            GM.world_objects[GM.container_hovered]["name"][0][
                                 GM.selected_inventory_item
                             ]["type"]
                         ]
                     )
                     if (
-                        self.world_objects[GM.container_hovered]["name"][0][
+                        GM.world_objects[GM.container_hovered]["name"][0][
                             GM.selected_inventory_item
                         ]["quantity"]
                         == 0
                     ):
-                        del self.world_objects[GM.container_hovered]["name"][0][
+                        del GM.world_objects[GM.container_hovered]["name"][0][
                             GM.selected_inventory_item
                         ]
 
@@ -1028,7 +1026,7 @@ class Game:
                     (
                         index
                         for index, item in enumerate(
-                            self.world_objects[GM.container_hovered]["name"][0]
+                            GM.world_objects[GM.container_hovered]["name"][0]
                         )
                         if item["type"] == key
                     ),
@@ -1036,11 +1034,11 @@ class Game:
                 )
 
                 if item_index != None:
-                    self.world_objects[GM.container_hovered]["name"][0][
+                    GM.world_objects[GM.container_hovered]["name"][0][
                         item_index
                     ]["quantity"] += 1
                 else:
-                    self.world_objects[GM.container_hovered]["name"][0].append(
+                    GM.world_objects[GM.container_hovered]["name"][0].append(
                         {"type": key, "quantity": 1}
                     )
                 CM.inventory.remove_item(key)
@@ -1053,11 +1051,11 @@ class Game:
 
             elif (
                 GM.selected_inventory_item
-                > len(self.world_objects[GM.container_hovered]["name"][0]) - 1
+                > len(GM.world_objects[GM.container_hovered]["name"][0]) - 1
                 and GM.container_menu_selected
             ):
                 GM.selected_inventory_item = (
-                    len(self.world_objects[GM.container_hovered]["name"][0]) - 1
+                    len(GM.world_objects[GM.container_hovered]["name"][0]) - 1
                 )
 
             if GM.selected_inventory_item < 0:
@@ -1081,11 +1079,11 @@ class Game:
                     GM.items[key]["image"],
                     (0, 0),
                     (
-                        self.relative_player_left + CM.player.player_rect.width // 2,
-                        self.relative_player_top + CM.player.player_rect.height // 2,
+                        GM.relative_player_left + CM.player.player_rect.width // 2,
+                        GM.relative_player_top + CM.player.player_rect.height // 2,
                     ),
                 )
-                self.world_objects.append(
+                GM.world_objects.append(
                     {
                         "name": key,
                         "image": img,
@@ -1133,7 +1131,7 @@ class Game:
         if keys[pygame.K_o]:
             print()
             print("----------------")
-            print(self.world_objects)
+            print(GM.world_objects)
             print("----------------")
             print()
 
@@ -1184,7 +1182,7 @@ class Game:
             )
 
             scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = self.world_objects[GM.container_hovered]["name"][0][scroll_position : scroll_position + 10]
+            visible_items = GM.world_objects[GM.container_hovered]["name"][0][scroll_position : scroll_position + 10]
             i = 0
 
             item_render = self.menu_font.render(
@@ -1201,7 +1199,7 @@ class Game:
             GM.screen.blit(item_render, item_rect)
 
             item_render = self.menu_font.render(
-                self.world_objects[GM.container_hovered]["name"][3],
+                GM.world_objects[GM.container_hovered]["name"][3],
                 True,
                 (44, 53, 57),
             )
@@ -1383,7 +1381,7 @@ class Game:
                 GM.screen.blit(item_render, item_rect)
 
     def draw_objects(self):
-        for index, x in enumerate(self.world_objects):
+        for index, x in enumerate(GM.world_objects):
             if index==0:
                 continue
             if (
@@ -1404,14 +1402,14 @@ class Game:
                         (x["rect"].centery),
                     ),
                     (
-                        (self.relative_player_left + self.relative_player_right) // 2,
-                        (self.relative_player_top + self.relative_player_bottom) // 2,
+                        (GM.relative_player_left + GM.relative_player_right) // 2,
+                        (GM.relative_player_top + GM.relative_player_bottom) // 2,
                     ),
                     self.collision_map,
                     x["rect"],
                 )
 
-                self.world_objects[index]["agroved"] = agroved
+                GM.world_objects[index]["agroved"] = agroved
                 x["rect"].centerx = dx
                 x["rect"].centery = dy
                 relative__left = int(self.bg_rect.left + x["rect"].left)
@@ -1432,10 +1430,10 @@ class Game:
                             res = 0
 
                         CM.player.update_health(res)
-                        self.world_objects[index]["attack_diff"] = 0
+                        GM.world_objects[index]["attack_diff"] = 0
 
-                if self.world_objects[index]["attack_diff"] < 5:
-                    self.world_objects[index]["attack_diff"] += GM.delta_time
+                if GM.world_objects[index]["attack_diff"] < 5:
+                    GM.world_objects[index]["attack_diff"] += GM.delta_time
 
             else:
                 relative__left = int(self.bg_rect.left + x["rect"].left)
@@ -1469,8 +1467,8 @@ class Game:
                         (x["rect"].centery),
                     ),
                     (
-                        (self.relative_player_left + self.relative_player_right) // 2,
-                        (self.relative_player_top + self.relative_player_bottom) // 2,
+                        (GM.relative_player_left + GM.relative_player_right) // 2,
+                        (GM.relative_player_top + GM.relative_player_bottom) // 2,
                     ),
                     x["name"]["name"],
                 )
@@ -1576,21 +1574,21 @@ class Game:
                 if other_obj_rect.colliderect(self.weapon_rect) and x["type"] == "npc":
                     if GM.attacking:
                         if x["name"]["stats"]["type"] != "enemy":
-                            self.world_objects[index]["name"]["stats"]["type"] = "enemy"
-                            self.world_objects[index]["agroved"] = True
+                            GM.world_objects[index]["name"]["stats"]["type"] = "enemy"
+                            GM.world_objects[index]["agroved"] = True
                             
                         enemy_index = index
-                        self.world_objects[enemy_index]["name"]["stats"]["health"] -= CM.player.stats.weapon_damage
+                        GM.world_objects[enemy_index]["name"]["stats"]["health"] -= CM.player.stats.weapon_damage
 
-                        if self.world_objects[index]["name"]["stats"]["health"] <= 0:
-                            CM.player.level.gain_experience(self.world_objects[index]["name"]["stats"]["xp"])
-                            self.world_objects[index]["name"]["stats"]["status"] = "dead"
-                            self.world_objects[index]["agroved"] = False                            
-                            self.world_objects.pop(index)
+                        if GM.world_objects[index]["name"]["stats"]["health"] <= 0:
+                            CM.player.level.gain_experience(GM.world_objects[index]["name"]["stats"]["xp"])
+                            GM.world_objects[index]["name"]["stats"]["status"] = "dead"
+                            GM.world_objects[index]["agroved"] = False                            
+                            GM.world_objects.pop(index)
 
-                    if "stats" in self.world_objects[index]["name"] and self.world_objects[index]["name"]["stats"]["type"] != "enemy" and self.world_objects[index]["name"]["stats"]["status"] != "dead":
+                    if "stats" in GM.world_objects[index]["name"] and GM.world_objects[index]["name"]["stats"]["type"] != "enemy" and GM.world_objects[index]["name"]["stats"]["status"] != "dead":
                         text = self.prompt_font.render(
-                            f"E) {self.world_objects[index]['name']['name']}", True, (44, 53, 57)
+                            f"E) {GM.world_objects[index]['name']['name']}", True, (44, 53, 57)
                         )
 
                         text_rect = text.get_rect(
@@ -1604,9 +1602,9 @@ class Game:
                         GM.screen.blit(text, text_rect)
                         GM.is_ready_to_talk = True
 
-                    if "stats" in self.world_objects[index]["name"] and self.world_objects[index]["name"]["stats"]["health"] > 0 and self.world_objects[index]["name"]["stats"]["type"] == "enemy":
+                    if "stats" in GM.world_objects[index]["name"] and GM.world_objects[index]["name"]["stats"]["health"] > 0 and GM.world_objects[index]["name"]["stats"]["type"] == "enemy":
                         text = self.prompt_font.render(
-                            str(self.world_objects[index]["name"]["stats"]["health"]), True, (200, 0, 0)
+                            str(GM.world_objects[index]["name"]["stats"]["health"]), True, (200, 0, 0)
                         )
                         text_rect = text.get_rect(
                             center=(
@@ -1669,7 +1667,7 @@ class Game:
         GM.screen.blit(self.background, self.bg_rect.topleft)
         self.draw_objects()
         CM.player.draw()  # .lulekSprulek.123.fafajMi)
-        CM.menu.render(self)
+        CM.menu.render()
         CM.player_menu.render()
         self.draw_container()
         CM.player.quests.draw_quest_info()

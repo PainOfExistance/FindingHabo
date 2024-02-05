@@ -31,7 +31,6 @@ class Animation:
         }
     
     def from_dict(self, data):
-        self.action_images = data["action_images"]
         self.anim_counter = data["anim_counter"]
         self.prev_frame = data["prev_frame"]
         self.attacking = data["attacking"]

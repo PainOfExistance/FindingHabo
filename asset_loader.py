@@ -110,17 +110,18 @@ class AssetLoader:
             quests = {quest["id"]: quest for quest in quest_data["quests"]}
         return quests
 
-    def save(self, filename, game):
-        with open(f"saves/{filename}.habo", "wb") as file:
-            serialized_data = bson.encode(game)
-            file.write(serialized_data)
+    def save(self):
+        filename=f"{CM.player.name}_{CM.player.current_world}_{GM.game_date.print_date()}".replace(" ", "_")
+        data=CM.player.to_dict()
+        with open(f"saves/{filename}.habo", "w") as file:
+            json_data=json.dumps(data, indent=2)
+            file.write(json_data)
             return True
 
     def load(self, filename):
-        with open(filename, "rb") as file:
-            loaded_data = file.read()
-            game = bson.decode_all(loaded_data)
-            return game
+        with open(filename, "r") as file:
+            data = json.load(file)
+            return data
         
     def world_save(self, world):
         path = os.path.dirname(world[0]["name"]["background"])
