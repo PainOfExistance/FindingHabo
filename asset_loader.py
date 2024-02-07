@@ -109,14 +109,28 @@ class AssetLoader:
             quest_data = json.load(quest_file)
             quests = {quest["id"]: quest for quest in quest_data["quests"]}
         return quests
+    
+    def find_substring_index_in_list(self, new_path, substr):
+        for index, string in enumerate(GM.save_world_names):
+            if substr in string:
+                GM.save_world_names[index]=new_path
+        GM.save_world_names.append(new_path)
+    
+    def rename_index_worlds(self, save_name):
+        for item in os.listdir("terrain\worlds\simplified"):
+            item_path=f"terrain\worlds\simplified\{item}\{CM.player.hash}\data_modified.world"
+            if os.path.isfile(item_path):
+                new_path=os.path.join(os.path.dirname(item_path), save_name+".world")
+                os.rename(item_path, os.path.join(os.path.dirname(item_path), save_name+".world"))
+                self.find_substring_index_in_list(new_path, item)
 
     def save(self):
         CM.assets.world_save(GM.world_objects)
-        prev_save="in the beginning"
-        if GM.save_name != "in the beginning":
-            prev_save=GM.save_name
-        GM.save_name=f"{CM.player.name}_{CM.player.current_world}_{GM.game_date.print_date()}".replace(" ", "_")
+        save_name =f"{CM.player.name}_{CM.player.current_world}_{GM.game_date.print_date()}".replace(" ", "_")
+        self.rename_index_worlds(save_name)
         data=CM.player.to_dict()
+        data["save_world_names"]=GM.save_world_names
+        GM.save_name=save_name
         #print("---------SAVING DATA---------")
         #print(data)
         #print("-----------------------------")
@@ -148,16 +162,28 @@ class AssetLoader:
         with open(path, "w") as file:
             json_data=json.dumps(transformed_data, indent=2)
             file.write(json_data)
-        
 
     def get_stored_data(self, path, file_name="data_modified.world"):
         path = os.path.dirname(path)
         path = os.path.join(path, CM.player.hash)
         path = os.path.join(path, file_name)
         
-        if not os.path.isfile(path):
+        if not os.path.exists(os.path.dirname(path)):
             return None
-
+        
+        found_file=None
+        if not os.path.isfile(path):
+            files_in_folder = os.listdir(os.path.dirname(path))
+            print(os.path.dirname(path))
+            for file in files_in_folder:
+                for meow in GM.save_world_names:
+                    if os.path.basename(file) in os.path.basename(meow):
+                        found_file=os.path.join(os.path.dirname(path), file)
+                        path=found_file
+                        break
+            if found_file==None:
+                return found_file
+            
         with open(path, "r") as file:
             data = json.load(file)
             return data

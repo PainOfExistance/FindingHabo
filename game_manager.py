@@ -32,12 +32,13 @@ class GameManager:
     ai_package=None
     items=None
     game_date=None
-    world_objects=None
+    world_objects=[]
     relative_player_top = 0
     relative_player_left = 0
     relative_player_right = 0
     relative_player_bottom = 0
     save_name="in the beginning"
+    save_world_names=[]
 
 class ClassManager:
     ai=None

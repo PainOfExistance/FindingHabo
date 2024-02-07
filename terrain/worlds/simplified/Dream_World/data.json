@@ -221,27 +221,6 @@
 						"armor"
 					]
 				}
-			},
-			{
-				"id": "Item_field",
-				"iid": "86733b30-b0a0-11ee-9fb5-93d1cb31d21d",
-				"layer": "LeveL_Data",
-				"x": 3352,
-				"y": 2088,
-				"width": 16,
-				"height": 16,
-				"color": 39387,
-				"customFields": {
-					"name": [
-						"Power Elixir"
-					],
-					"chance": [
-						1
-					],
-					"type": [
-						"potion"
-					]
-				}
 			}
 		],
 		"Container_field": [
@@ -299,10 +278,10 @@
 			},
 			{
 				"id": "Container_field",
-				"iid": "64b1b8a0-b0a0-11ee-9fb5-9f26f9066b04",
+				"iid": "8954e4e0-b0a0-11ee-8f39-dd2deebda513",
 				"layer": "LeveL_Data",
-				"x": 3480,
-				"y": 2088,
+				"x": 3352,
+				"y": 2072,
 				"width": 16,
 				"height": 16,
 				"color": 2513986,
@@ -319,7 +298,7 @@
 						"weapon"
 					],
 					"number_of_items": [
-						2
+						3
 					]
 				}
 			}

@@ -255,6 +255,7 @@ class Player:
         self.hash = data["hash"]
         GM.game_date.from_dict(data["game_date"])
         CM.ai.from_dict(data["ai"])
+        GM.save_world_names = data["save_world_names"]
 
     def draw(self):
         self.player, new_rect = self.animation.player_anim(

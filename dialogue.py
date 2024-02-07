@@ -53,14 +53,15 @@ class Dialougue:
         return current_string
 
     def to_dict(self):
+            
         return {
             "strings": self.strings,
             "index": self.index,
             "selected_item": self.selected_item,
             "selection_held": self.selection_held,
             "name": self.name,
-            "current_talk": list(self.current_talk),
-            "current_lines": list(self.current_lines),
+            "current_talk": [-1],#list(self.current_talk),
+            "current_lines": [-1],#list(self.current_lines),
             "talk": self.talk,
             "line": self.line,
             "prev_talk": self.prev_talk,
