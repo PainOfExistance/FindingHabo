@@ -2,6 +2,7 @@ import numpy as np
 
 
 class GameManager:
+    enter_held=False
     item_hovered = None
     selection_held = False
     container_hovered = None

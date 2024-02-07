@@ -857,6 +857,7 @@ class Game:
             and (GM.container_open or CM.ai.strings.bartering)
         ):
             GM.selection_held = False
+            GM.enter_held = True
 
         if (
             keys[pygame.K_RETURN]
@@ -864,9 +865,11 @@ class Game:
             and not CM.player_menu.visible
             and not GM.selection_held
             and (GM.container_open or CM.ai.strings.bartering)
+            and GM.enter_held
         ):
             GM.selection_held = True
-
+            GM.enter_held = False
+            
             if CM.ai.strings.bartering:
                 if (
                     GM.container_menu_selected
@@ -1377,7 +1380,10 @@ class Game:
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
                 GM.screen.blit(item_render, item_rect)
-
+            
+        else:
+            GM.enter_held = False
+            
     def draw_objects(self):
         for index, x in enumerate(GM.world_objects):
             if index==0:
@@ -1595,10 +1601,16 @@ class Game:
                                 relative__top - 10,
                             )
                         )
-                        
                         GM.talk_to_name = x["name"]["name"]
                         GM.screen.blit(text, text_rect)
                         GM.is_ready_to_talk = True
+                
+                    elif (
+                    not other_obj_rect.colliderect(self.weapon_rect)
+                    and x["type"] == "npc"
+                ):
+                        GM.talk_to_name = ""
+                        GM.is_ready_to_talk = False
 
                     if "stats" in GM.world_objects[index]["name"] and GM.world_objects[index]["name"]["stats"]["health"] > 0 and GM.world_objects[index]["name"]["stats"]["type"] == "enemy":
                         text = self.prompt_font.render(
@@ -1611,13 +1623,6 @@ class Game:
                             )
                         )
                         GM.screen.blit(text, text_rect)
-
-                elif (
-                    not other_obj_rect.colliderect(self.weapon_rect)
-                    and x["type"] == "npc"
-                ):
-                    GM.talk_to_name = ""
-                    GM.is_ready_to_talk = False
 
                 if (
                     x["type"] == "portal"
@@ -1668,14 +1673,13 @@ class Game:
         CM.menu.render()
         CM.player_menu.render()
         self.draw_container()
+        self.draw_barter()
         CM.player.quests.draw_quest_info()
 
         if GM.is_in_dialogue:
             CM.ai.strings.draw(GM.talk_to_name)
             #todo fix
 
-        if CM.ai.strings.bartering:
-            self.draw_barter()
 
         #pygame.draw.rect(GM.screen, (0, 0, 0), self.weapon_rect)
 
