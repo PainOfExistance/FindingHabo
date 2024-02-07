@@ -103,7 +103,6 @@ class Menu:
             sys.exit()
         elif self.in_sub_menu==1:
             if self.action=="Save":
-                CM.assets.world_save(GM.world_objects)
                 tmp=CM.assets.save()
                 if tmp:
                     saves = glob.glob(os.path.join("saves", "*.habo"))

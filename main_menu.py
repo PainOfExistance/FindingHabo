@@ -102,6 +102,7 @@ class MainMenu:
             CM.assets = AssetLoader()
             CM.player = Player()
             CM.ai = Ai()
+            GM.save_name=f"{selected_option}.habo"
             CM.player.from_dict(CM.assets.load(f"saves/{selected_option}.habo"))
             CM.menu = Menu()
             CM.player_menu = PlayerMenu()

@@ -37,6 +37,7 @@ class GameManager:
     relative_player_left = 0
     relative_player_right = 0
     relative_player_bottom = 0
+    save_name="in the beginning"
 
 class ClassManager:
     ai=None

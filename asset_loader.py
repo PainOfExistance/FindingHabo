@@ -1,7 +1,7 @@
+import glob
 import json
 import os
 
-import bson
 import cv2
 import numpy as np
 import pygame
@@ -111,12 +111,16 @@ class AssetLoader:
         return quests
 
     def save(self):
-        filename=f"{CM.player.name}_{CM.player.current_world}_{GM.game_date.print_date()}".replace(" ", "_")
+        CM.assets.world_save(GM.world_objects)
+        prev_save="in the beginning"
+        if GM.save_name != "in the beginning":
+            prev_save=GM.save_name
+        GM.save_name=f"{CM.player.name}_{CM.player.current_world}_{GM.game_date.print_date()}".replace(" ", "_")
         data=CM.player.to_dict()
         #print("---------SAVING DATA---------")
         #print(data)
         #print("-----------------------------")
-        with open(f"saves/{filename}.habo", "w") as file:
+        with open(f"saves/{GM.save_name}.habo", "w") as file:
             json_data=json.dumps(data, indent=2)
             file.write(json_data)
             return True
@@ -126,12 +130,12 @@ class AssetLoader:
             data = json.load(file)
             return data
         
-    def world_save(self, world):
+    def world_save(self, world, file_name="data_modified.world"):
         path = os.path.dirname(world[0]["name"]["background"])
         path = os.path.join(path, CM.player.hash)
         if not os.path.exists(path):
             os.makedirs(path)
-        path = os.path.join(path, "data_modified.json")
+        path = os.path.join(path, file_name)
         transformed_data = []
         for entry in world:
             if entry["type"] == "metadata":
@@ -146,13 +150,14 @@ class AssetLoader:
             file.write(json_data)
         
 
-    def get_stored_data(self, path):
+    def get_stored_data(self, path, file_name="data_modified.world"):
         path = os.path.dirname(path)
         path = os.path.join(path, CM.player.hash)
-        path = os.path.join(path, "data_modified.json")
+        path = os.path.join(path, file_name)
         
         if not os.path.isfile(path):
             return None
+
         with open(path, "r") as file:
             data = json.load(file)
             return data
