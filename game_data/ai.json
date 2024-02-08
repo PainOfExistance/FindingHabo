@@ -63,7 +63,7 @@
                 "xp": 50,
                 "status": "alive",
                 "damage": 30,
-                "rarity": "always",
+                "rarity": "unique",
                 "group": "Merchant",
                 "mutable": false,
                 "inventory_type": "common",

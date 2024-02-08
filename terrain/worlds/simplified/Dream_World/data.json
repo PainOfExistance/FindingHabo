@@ -109,7 +109,7 @@
 				"customFields": {
 					"chance": 1,
 					"enemy_Type": "Merchant",
-					"rarity": "always"
+					"rarity": "unique"
 				}
 			},
 			{
@@ -325,8 +325,8 @@
 						"../sounds/bgm/finding_habo_bgm.mp3",
 						"../sounds/bgm/Angelia.mp3"
 					],
-					"collision_set": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\Collision-int.png",
-					"background": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\_composite.png"
+					"collision_set": "terrain\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\Collision-int.png",
+					"background": "terrain\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\_composite.png"
 				}
 			}
 		]

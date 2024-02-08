@@ -192,4 +192,39 @@ def parse_visited(world):
         
     return spawn, portals, enemies, final_items, containers, metadata
 
+
+def remove_uniques(original, modified):
+    orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata = parser(original)
+    #mod_spawn, mod_portals, mod_enemies, mod_final_items, mod_containers, mod_metadata = parser(modified)
+    print()
+    print("orig_spawn", orig_spawn)
+    print()
+    print("orig_portals", orig_portals)
+    print()
+    print("orig_enemies", orig_enemies)
+    print()
+    print("orig_final_items", orig_final_items)
+    print()
+    print("orig_containers", orig_containers)
+    print()
+    print("orig_metadata", orig_metadata)
+    print()
+    print()
+    print()
+    #print("mod_spawn", mod_spawn)
+    #print()
+    #print("mod_portals", mod_portals)
+    #print()
+    #print("mod_enemies", mod_enemies)
+    #print()
+    #print("mod_final_items", mod_final_items)
+    #print()
+    #print("mod_containers", mod_containers)
+    #print()
+    #print("mod_metadata", mod_metadata)
+    #print()
+    
+    
+    return original
+
         

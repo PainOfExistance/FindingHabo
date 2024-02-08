@@ -208,11 +208,13 @@ class Game:
                 #spawn_point=(3416, 2156)
             else:
                 print("basic in")
+                level_data=wp.remove_uniques(level_data, modified_data)
                 spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
                 self.setup_init(portals, npcs, final_items, containers, metadata)
         else:
             print("basic out")
             spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
+            level_data=wp.remove_uniques(copy.deepcopy(level_data), modified_data)
             self.setup_init(portals, npcs, final_items, containers, metadata)
         
         CM.music_player = MusicPlayer(metadata["music"])
