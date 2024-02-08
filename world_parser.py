@@ -1,8 +1,11 @@
+import copy
 import json
 import os
 import random
 
 from asset_loader import AssetLoader
+from game_manager import ClassManager as CM
+from game_manager import GameManager as GM
 
 assets = AssetLoader()
 items = assets.load_items()
@@ -194,8 +197,36 @@ def parse_visited(world):
 
 
 def remove_uniques(original, modified):
-    orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata = parser(original)
-    #mod_spawn, mod_portals, mod_enemies, mod_final_items, mod_containers, mod_metadata = parser(modified)
+    orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata = parser(copy.deepcopy(original))
+    mod_spawn, mod_portals, mod_enemies, mod_final_items, mod_containers, mod_metadata = parse_visited(copy.deepcopy(modified))
+    
+    for i in orig_enemies:
+        if GM.ai_package[i[0]]["stats"]["rarity"]=="unique":
+            for j in mod_enemies:
+                if i[0]==j[0]:
+                    orig_enemies.remove(i)
+            
+    for i in orig_final_items:
+        if GM.items[i[0]]["rarity"]=="unique":
+            for j in mod_final_items:
+                if i[0]==j[0]:
+                    orig_final_items.remove(i)
+    
+    for i in orig_containers:
+        for k in mod_containers:
+            for j in i[0]:
+                for l in k[0]:
+                    not_in_mod=True
+                    if GM.items[j]["rarity"]=="unique" and j==l["type"]:
+                        print("j", j)
+                        print("l", l["type"])
+                        not_in_mod=False
+                        print("match")
+                #todo ficx this shit
+            if not_in_mod:
+                orig_containers.remove(i)
+    
+    
     print()
     print("orig_spawn", orig_spawn)
     print()
@@ -224,7 +255,6 @@ def remove_uniques(original, modified):
     #print("mod_metadata", mod_metadata)
     #print()
     
-    
-    return original
+    return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata
 
         

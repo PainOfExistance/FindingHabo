@@ -14,9 +14,7 @@ from music_player import MusicPlayer
 
 
 class Game:
-    def __init__(
-        self
-    ):
+    def __init__(self):
         GM.items = CM.assets.load_items()
         GM.ai_package = CM.assets.load_ai_package()
 
@@ -24,22 +22,24 @@ class Game:
         self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
 
-        #CM.inventory.add_item(GM.items["Minor Health Potion"])
-        #CM.inventory.add_item(GM.items["Knowledge Potion"])
-        #CM.inventory.add_item(GM.items["Power Elixir"])
-        #CM.inventory.add_item(GM.items["Steel Sword"])
-        #CM.inventory.add_item(GM.items["Steel Armor"])
-        #CM.inventory.add_item(GM.items["Divine Armor"])
+        # CM.inventory.add_item(GM.items["Minor Health Potion"])
+        # CM.inventory.add_item(GM.items["Knowledge Potion"])
+        # CM.inventory.add_item(GM.items["Power Elixir"])
+        # CM.inventory.add_item(GM.items["Steel Sword"])
+        # CM.inventory.add_item(GM.items["Steel Armor"])
+        # CM.inventory.add_item(GM.items["Divine Armor"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         GM.world_objects = list()
 
-        tmp=self.setup(f"terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
+        tmp = self.setup(
+            f"terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json"
+        )
         CM.player.quests.dialogue = CM.ai.strings
         self.clock = pygame.time.Clock()
         self.target_fps = 60
         self.last_frame_time = pygame.time.get_ticks()
         self.on_a_diagonal = False
-        
+
         self.weapon_rect = pygame.Rect(
             CM.player.player_rect.left + CM.player.player_rect.width // 4,
             CM.player.player_rect.top - CM.player.range // 2,
@@ -57,14 +57,14 @@ class Game:
         self.bg_surface_menu = pygame.Surface(
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
-        
+
     def setup_init(self, portals, npcs, final_items, containers, metadata):
         GM.world_objects.append(
-                {
-                    "name": metadata,
-                    "type": "metadata",
-                }
-            )
+            {
+                "name": metadata,
+                "type": "metadata",
+            }
+        )
 
         for data in final_items:
             item = GM.items[data[0]]
@@ -81,20 +81,13 @@ class Game:
             )
 
         for data in containers:
-            img, img_rect = CM.assets.load_images(
-                data[4], (64, 64), (data[1], data[2])
-            )
-            
+            img, img_rect = CM.assets.load_images(data[4], (64, 64), (data[1], data[2]))
+
             for i, _ in enumerate(data[5]):
-                data[0][i]={"type": data[0][i], "quantity": data[5][i]}
-                
+                data[0][i] = {"type": data[0][i], "quantity": data[5][i]}
+
             GM.world_objects.append(
-                {
-                    "image": img,
-                    "rect": img_rect,
-                    "type": "container",
-                    "name": data
-                }
+                {"image": img, "rect": img_rect, "type": "container", "name": data}
             )
 
         for data in npcs:
@@ -124,14 +117,14 @@ class Game:
                     "name": data[0],
                 }
             )
-            
+
     def setup_loaded(self, portals, npcs, final_items, containers, metadata):
         GM.world_objects.append(
-                {
-                    "name": metadata,
-                    "type": "metadata",
-                }
-            )
+            {
+                "name": metadata,
+                "type": "metadata",
+            }
+        )
 
         for data in final_items:
             item = GM.items[data[0]]
@@ -148,20 +141,13 @@ class Game:
             )
 
         for data in containers:
-            tmp=data
-            img, img_rect = CM.assets.load_images(
-                data[4], (64, 64), (data[1], data[2])
-            )
-            tmp[1]=data[1]
-            tmp[2]=data[2]
-                
+            tmp = data
+            img, img_rect = CM.assets.load_images(data[4], (64, 64), (data[1], data[2]))
+            tmp[1] = data[1]
+            tmp[2] = data[2]
+
             GM.world_objects.append(
-                {
-                    "image": img,
-                    "rect": img_rect,
-                    "type": "container",
-                    "name": tmp
-                }
+                {"image": img, "rect": img_rect, "type": "container", "name": tmp}
             )
 
         for data in npcs:
@@ -192,62 +178,67 @@ class Game:
                 }
             )
 
-    def setup(self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"):
+    def setup(
+        self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"
+    ):
         GM.world_objects.clear()
-        
+
         level_data = CM.assets.load_level_data(path)
-        modified_data=CM.assets.get_stored_data(path)
+        modified_data = CM.assets.get_stored_data(path)
         if modified_data != None:
             date1 = datetime.strptime(GM.game_date.get_date(), "%Y-%m-%dT%H:%M:%S")
-            date2 = datetime.strptime(modified_data[0]["name"]["time_passed"], "%Y-%m-%dT%H:%M:%S")
-            delta=date1-date2
-            if modified_data[0]["name"]["respawn_timer"]>delta.days:
+            date2 = datetime.strptime(
+                modified_data[0]["name"]["time_passed"], "%Y-%m-%dT%H:%M:%S"
+            )
+            delta = date1 - date2
+            if modified_data[0]["name"]["respawn_timer"] > delta.days:
                 print("respawned")
-                spawn_point, portals, npcs, final_items, containers, metadata= wp.parse_visited(modified_data)
+                spawn_point, portals, npcs, final_items, containers, metadata = (
+                    wp.parse_visited(modified_data)
+                )
                 self.setup_loaded(portals, npcs, final_items, containers, metadata)
-                #spawn_point=(3416, 2156)
             else:
                 print("basic in")
-                level_data=wp.remove_uniques(level_data, modified_data)
-                spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
+                spawn_point, portals, npcs, final_items, containers, metadata = wp.remove_uniques(level_data, modified_data)
+                
+                # spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
                 self.setup_init(portals, npcs, final_items, containers, metadata)
         else:
             print("basic out")
-            spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
-            level_data=wp.remove_uniques(copy.deepcopy(level_data), modified_data)
+            spawn_point, portals, npcs, final_items, containers, metadata = wp.parser(
+                level_data
+            )
             self.setup_init(portals, npcs, final_items, containers, metadata)
-        
+
         CM.music_player = MusicPlayer(metadata["music"])
-        
+
         self.background, self.bg_rect = CM.assets.load_background(
-            metadata["background"], 
+            metadata["background"],
         )
-        self.collision_map = CM.assets.load_collision(
-            metadata["collision_set"]
-        )
+        self.collision_map = CM.assets.load_collision(metadata["collision_set"])
 
         self.map_height = self.collision_map.shape[0]
         self.map_width = self.collision_map.shape[1]
-        
+
         if type != "default":
             for i, _ in enumerate(portals):
                 if portals[i][0]["type"] == type:
                     spawn_point = (portals[i][1], portals[i][2])
-        
-        if spawn_point==(0,0):
-            spawn_point=(GM.relative_player_left, GM.relative_player_top)
-        
+
+        if spawn_point == (0, 0):
+            spawn_point = (GM.relative_player_left, GM.relative_player_top)
+
         offset = (
             spawn_point[0] - GM.screen.get_width() // 2,
             spawn_point[1] - GM.screen.get_height() // 2,
         )
-        
+
         self.bg_rect.left = -offset[0]
         self.bg_rect.top = -offset[1]
-        
-        CM.player.player_rect.left = spawn_point[0]-offset[0]
-        CM.player.player_rect.top = spawn_point[1]-offset[1]
-        
+
+        CM.player.player_rect.left = spawn_point[0] - offset[0]
+        CM.player.player_rect.top = spawn_point[1] - offset[1]
+
         temp = {}
         for x in GM.world_objects:
             if x["type"] == "npc":
@@ -315,19 +306,13 @@ class Game:
         if GM.time_diff >= 20:
             GM.time_diff = 5
 
-        GM.relative_player_left = int(
-            CM.player.player_rect.left - self.bg_rect.left
-        )
+        GM.relative_player_left = int(CM.player.player_rect.left - self.bg_rect.left)
 
-        GM.relative_player_right = int(
-            CM.player.player_rect.right - self.bg_rect.left
-        )
+        GM.relative_player_right = int(CM.player.player_rect.right - self.bg_rect.left)
 
         GM.relative_player_top = int(CM.player.player_rect.top - self.bg_rect.top)
 
-        GM.relative_player_bottom = int(
-            CM.player.player_rect.bottom - self.bg_rect.top
-        )
+        GM.relative_player_bottom = int(CM.player.player_rect.bottom - self.bg_rect.top)
         movement = int(CM.player.movement_speed * GM.delta_time)
 
         CM.player.quests.check_quest_advancement(
@@ -387,15 +372,13 @@ class Game:
             dx = np.count_nonzero(
                 self.collision_map[
                     GM.relative_player_bottom,
-                    GM.relative_player_left
-                    - movement * 2 : GM.relative_player_left,
+                    GM.relative_player_left - movement * 2 : GM.relative_player_left,
                 ]
             )
             dt = np.count_nonzero(
                 self.collision_map[
                     GM.relative_player_top,
-                    GM.relative_player_left
-                    - movement * 2 : GM.relative_player_left,
+                    GM.relative_player_left - movement * 2 : GM.relative_player_left,
                 ]
             )
             dy = np.count_nonzero(
@@ -464,15 +447,13 @@ class Game:
             dx = np.count_nonzero(
                 self.collision_map[
                     GM.relative_player_bottom,
-                    GM.relative_player_right : GM.relative_player_right
-                    + movement * 2,
+                    GM.relative_player_right : GM.relative_player_right + movement * 2,
                 ]
             )
             dt = np.count_nonzero(
                 self.collision_map[
                     GM.relative_player_top,
-                    GM.relative_player_right : GM.relative_player_right
-                    + movement * 2,
+                    GM.relative_player_right : GM.relative_player_right + movement * 2,
                 ]
             )
             dy = np.count_nonzero(
@@ -665,10 +646,7 @@ class Game:
         ):
             if GM.item_hovered != None:
                 GM.selection_held = True
-                if (
-                    GM.item_hovered < len(GM.world_objects)
-                    and GM.item_hovered >= 0
-                ):
+                if GM.item_hovered < len(GM.world_objects) and GM.item_hovered >= 0:
                     CM.player.add_item(
                         GM.items[GM.world_objects[GM.item_hovered]["name"]]
                     )
@@ -690,11 +668,9 @@ class Game:
 
             elif GM.world_to_travel_to != None and (
                 not GM.world_to_travel_to["locked"]
-                or CM.inventory.items.get(
-                    GM.world_to_travel_to["unlocked_by"], "None"
-                )
-                != "None" and not
-                GM.selection_held
+                or CM.inventory.items.get(GM.world_to_travel_to["unlocked_by"], "None")
+                != "None"
+                and not GM.selection_held
             ):
                 GM.selection_held = True
                 self.loading()
@@ -702,10 +678,13 @@ class Game:
                 GM.world_objects[GM.world_to_travel_to["index"]]["name"][
                     "locked"
                 ] = False
-                
+
                 CM.assets.world_save(GM.world_objects)
 
-                self.setup("terrain/"+GM.world_to_travel_to["world_to_load"], GM.world_to_travel_to["type"])
+                self.setup(
+                    "terrain/" + GM.world_to_travel_to["world_to_load"],
+                    GM.world_to_travel_to["type"],
+                )
                 GM.world_to_travel_to = None
                 CM.player.quests.dialogue = CM.ai.strings
 
@@ -724,6 +703,7 @@ class Game:
         ):
             GM.tab_pressed = True
             GM.container_open = False
+            GM.is_ready_to_talk = False
 
             if CM.ai.strings.bartering:
                 CM.ai.strings.bartering = False
@@ -871,7 +851,7 @@ class Game:
         ):
             GM.selection_held = True
             GM.enter_held = False
-            
+
             if CM.ai.strings.bartering:
                 if (
                     GM.container_menu_selected
@@ -919,15 +899,10 @@ class Game:
                                 GM.selected_inventory_item
                             ]
 
-                elif (
-                    not GM.container_menu_selected
-                    and len(CM.inventory.items) > 0
-                ):
+                elif not GM.container_menu_selected and len(CM.inventory.items) > 0:
                     if GM.ai_package[GM.talk_to_name]["gold"] <= 0:
                         GM.ai_package[GM.talk_to_name]["gold"] = 0
-                    key = list(CM.inventory.quantity.keys())[
-                        GM.selected_inventory_item
-                    ]
+                    key = list(CM.inventory.quantity.keys())[GM.selected_inventory_item]
                     item_index = next(
                         (
                             index
@@ -950,9 +925,7 @@ class Game:
                         )
                     CM.inventory.remove_item(key)
                     CM.player.gold += GM.items[key]["price"]
-                    GM.ai_package[GM.talk_to_name]["gold"] -= GM.items[key][
-                        "price"
-                    ]
+                    GM.ai_package[GM.talk_to_name]["gold"] -= GM.items[key]["price"]
 
                 if (
                     GM.selected_inventory_item > len(CM.inventory.items) - 1
@@ -985,9 +958,9 @@ class Game:
                     ]["type"]
                     == "Gold"
                 ):
-                    CM.player.gold += GM.world_objects[GM.container_hovered][
-                        "name"
-                    ][0][GM.selected_inventory_item]["quantity"]
+                    CM.player.gold += GM.world_objects[GM.container_hovered]["name"][0][
+                        GM.selected_inventory_item
+                    ]["quantity"]
                     del GM.world_objects[GM.container_hovered]["name"][0][
                         GM.selected_inventory_item
                     ]
@@ -1018,13 +991,8 @@ class Game:
                             GM.selected_inventory_item
                         ]
 
-            elif (
-                not GM.container_menu_selected
-                and len(CM.inventory.items) > 0
-            ):
-                key = list(CM.inventory.quantity.keys())[
-                    GM.selected_inventory_item
-                ]
+            elif not GM.container_menu_selected and len(CM.inventory.items) > 0:
+                key = list(CM.inventory.quantity.keys())[GM.selected_inventory_item]
                 item_index = next(
                     (
                         index
@@ -1037,9 +1005,9 @@ class Game:
                 )
 
                 if item_index != None:
-                    GM.world_objects[GM.container_hovered]["name"][0][
-                        item_index
-                    ]["quantity"] += 1
+                    GM.world_objects[GM.container_hovered]["name"][0][item_index][
+                        "quantity"
+                    ] += 1
                 else:
                     GM.world_objects[GM.container_hovered]["name"][0].append(
                         {"type": key, "quantity": 1}
@@ -1072,9 +1040,7 @@ class Game:
             and CM.player_menu.visible
         ):
             GM.r_pressed = True
-            key = list(CM.inventory.quantity.keys())[
-                CM.player_menu.selected_sub_item
-            ]
+            key = list(CM.inventory.quantity.keys())[CM.player_menu.selected_sub_item]
             CM.player.unequip_item(key)
             ret = CM.player.remove_item(key)
             if ret:
@@ -1124,11 +1090,7 @@ class Game:
             print("no longer attacking")
             GM.attacking = False
 
-        if (
-            not mouse_buttons[0]
-            and not keys[pygame.K_SPACE]
-            and GM.attack_button_held
-        ):
+        if not mouse_buttons[0] and not keys[pygame.K_SPACE] and GM.attack_button_held:
             GM.attack_button_held = False
 
         if keys[pygame.K_o]:
@@ -1169,6 +1131,7 @@ class Game:
 
     def draw_container(self):
         if GM.container_open:
+            CM.ai.strings.bartering = False
             pygame.draw.rect(
                 self.bg_surface_menu,
                 (200, 210, 200, 180),
@@ -1185,7 +1148,9 @@ class Game:
             )
 
             scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = GM.world_objects[GM.container_hovered]["name"][0][scroll_position : scroll_position + 10]
+            visible_items = GM.world_objects[GM.container_hovered]["name"][0][
+                scroll_position : scroll_position + 10
+            ]
             i = 0
 
             item_render = self.menu_font.render(
@@ -1229,7 +1194,7 @@ class Game:
                     if index == GM.selected_inventory_item - scroll_position
                     else (237, 106, 94)
                 )
-                
+
                 if not GM.container_menu_selected:
                     color = (44, 53, 57)
                 if (
@@ -1239,7 +1204,7 @@ class Game:
                     item_text = f"> {data['type']}: {data['quantity']}"
                 else:
                     item_text = f"    {data['type']}: {data['quantity']}"
-                    
+
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(
                     topleft=(GM.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
@@ -1273,8 +1238,12 @@ class Game:
                 item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
                 GM.screen.blit(item_render, item_rect)
 
+        elif not CM.ai.strings.bartering:
+            GM.enter_held = False
+
     def draw_barter(self):
         if CM.ai.strings.bartering:
+            GM.container_open = False
             pygame.draw.rect(
                 self.bg_surface_menu,
                 (200, 210, 200, 180),
@@ -1382,17 +1351,17 @@ class Game:
                 item_render = self.menu_font.render(item_text, True, color)
                 item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
                 GM.screen.blit(item_render, item_rect)
-            
-        else:
+
+        elif not GM.container_open:
             GM.enter_held = False
-            
+
     def draw_objects(self):
         for index, x in enumerate(GM.world_objects):
-            if index==0:
+            if index == 0:
                 continue
             if (
-                "stats" in x['name'] and
-                "status" in x["name"]["stats"]
+                "stats" in x["name"]
+                and "status" in x["name"]["stats"]
                 and x["name"]["stats"]["status"] == "alive"
                 and x["name"]["stats"]["type"] == "enemy"
                 and not GM.container_open
@@ -1400,7 +1369,7 @@ class Game:
                 and not CM.player_menu.visible
                 and not GM.is_in_dialogue
             ):
-                #print(x)
+                # print(x)
                 dx, dy, agroved = CM.ai.attack(
                     x["name"]["name"],
                     (
@@ -1446,8 +1415,8 @@ class Game:
                 relative__top = int(self.bg_rect.top + x["rect"].top)
 
             if (
-                "stats" in x['name'] and
-                "status" in x["name"]["stats"]
+                "stats" in x["name"]
+                and "status" in x["name"]["stats"]
                 and x["name"]["stats"]["status"] == "alive"
                 and not x["agroved"]
                 and not GM.container_open
@@ -1482,8 +1451,7 @@ class Game:
                 if line != None and GM.line_time < GM.counter:
                     GM.current_line = line
                     GM.line_time = (
-                        CM.music_player.play_line(GM.current_line["file"])
-                        + GM.counter
+                        CM.music_player.play_line(GM.current_line["file"]) + GM.counter
                     )
 
                 if GM.current_line != None and GM.line_time >= GM.counter:
@@ -1509,9 +1477,13 @@ class Game:
                 and relative__top > -80
                 and relative__top < GM.screen_height + 80
             ):
-                if "stats" in x['name'] and "status" in x["name"]["stats"] and x["name"]["stats"]["status"] == "alive":
+                if (
+                    "stats" in x["name"]
+                    and "status" in x["name"]["stats"]
+                    and x["name"]["stats"]["status"] == "alive"
+                ):
                     GM.screen.blit(x["image"], (relative__left, relative__top))
-                elif "stats" not in x['name']:
+                elif "stats" not in x["name"]:
                     GM.screen.blit(x["image"], (relative__left, relative__top))
 
                 if x["type"] == "container":
@@ -1540,7 +1512,7 @@ class Game:
                         )
                     )
                     GM.screen.blit(self.text, self.text_rect)
-                    
+
                     self.text = self.prompt_font.render(x["name"], True, (0, 0, 0))
                     self.text_rect = self.text.get_rect(
                         center=(
@@ -1549,7 +1521,7 @@ class Game:
                         )
                     )
                     GM.screen.blit(self.text, self.text_rect)
-                    
+
                 elif (
                     not other_obj_rect.colliderect(CM.player.player_rect)
                     and x["type"] == "item"
@@ -1582,19 +1554,29 @@ class Game:
                         if x["name"]["stats"]["type"] != "enemy":
                             GM.world_objects[index]["name"]["stats"]["type"] = "enemy"
                             GM.world_objects[index]["agroved"] = True
-                            
+
                         enemy_index = index
-                        GM.world_objects[enemy_index]["name"]["stats"]["health"] -= CM.player.stats.weapon_damage
+                        GM.world_objects[enemy_index]["name"]["stats"][
+                            "health"
+                        ] -= CM.player.stats.weapon_damage
 
                         if GM.world_objects[index]["name"]["stats"]["health"] <= 0:
-                            CM.player.level.gain_experience(GM.world_objects[index]["name"]["stats"]["xp"])
+                            CM.player.level.gain_experience(
+                                GM.world_objects[index]["name"]["stats"]["xp"]
+                            )
                             GM.world_objects[index]["name"]["stats"]["status"] = "dead"
-                            GM.world_objects[index]["agroved"] = False                            
+                            GM.world_objects[index]["agroved"] = False
                             GM.world_objects.pop(index)
 
-                    if "stats" in GM.world_objects[index]["name"] and GM.world_objects[index]["name"]["stats"]["type"] != "enemy" and GM.world_objects[index]["name"]["stats"]["status"] != "dead":
+                    if (
+                        "stats" in GM.world_objects[index]["name"]
+                        and GM.world_objects[index]["name"]["stats"]["type"] != "enemy"
+                        and GM.world_objects[index]["name"]["stats"]["status"] != "dead"
+                    ):
                         text = self.prompt_font.render(
-                            f"E) {GM.world_objects[index]['name']['name']}", True, (44, 53, 57)
+                            f"E) {GM.world_objects[index]['name']['name']}",
+                            True,
+                            (44, 53, 57),
                         )
 
                         text_rect = text.get_rect(
@@ -1606,17 +1588,23 @@ class Game:
                         GM.talk_to_name = x["name"]["name"]
                         GM.screen.blit(text, text_rect)
                         GM.is_ready_to_talk = True
-                
+
                     elif (
-                    not other_obj_rect.colliderect(self.weapon_rect)
-                    and x["type"] == "npc"
-                ):
+                        not other_obj_rect.colliderect(self.weapon_rect)
+                        and x["type"] == "npc"
+                    ):
                         GM.talk_to_name = ""
                         GM.is_ready_to_talk = False
 
-                    if "stats" in GM.world_objects[index]["name"] and GM.world_objects[index]["name"]["stats"]["health"] > 0 and GM.world_objects[index]["name"]["stats"]["type"] == "enemy":
+                    if (
+                        "stats" in GM.world_objects[index]["name"]
+                        and GM.world_objects[index]["name"]["stats"]["health"] > 0
+                        and GM.world_objects[index]["name"]["stats"]["type"] == "enemy"
+                    ):
                         text = self.prompt_font.render(
-                            str(GM.world_objects[index]["name"]["stats"]["health"]), True, (200, 0, 0)
+                            str(GM.world_objects[index]["name"]["stats"]["health"]),
+                            True,
+                            (200, 0, 0),
                         )
                         text_rect = text.get_rect(
                             center=(
@@ -1625,6 +1613,14 @@ class Game:
                             )
                         )
                         GM.screen.blit(text, text_rect)
+                elif (
+                    not other_obj_rect.colliderect(self.weapon_rect)
+                    and x["type"] == "npc"
+                    and "stats" in GM.world_objects[index]["name"]
+                    and GM.world_objects[index]["name"]["stats"]["type"] != "enemy"
+                    and GM.world_objects[index]["name"]["stats"]["status"] != "dead"
+                ):
+                    GM.is_ready_to_talk = False
 
                 if (
                     x["type"] == "portal"
@@ -1636,7 +1632,9 @@ class Game:
                 ):
                     if x["name"]["locked"]:
                         text = self.prompt_font.render(
-                            f"Key required) {x['name']['world_name']} ", True, (44, 53, 57)
+                            f"Key required) {x['name']['world_name']} ",
+                            True,
+                            (44, 53, 57),
                         )
                     else:
                         text = self.prompt_font.render(
@@ -1672,18 +1670,17 @@ class Game:
         GM.screen.blit(self.background, self.bg_rect.topleft)
         self.draw_objects()
         CM.player.draw()  # .lulekSprulek.123.fafajMi)
-        CM.menu.render()
-        CM.player_menu.render()
+        CM.player.quests.draw_quest_info()
         self.draw_container()
         self.draw_barter()
-        CM.player.quests.draw_quest_info()
+        CM.menu.render()
+        CM.player_menu.render()
 
         if GM.is_in_dialogue:
             CM.ai.strings.draw(GM.talk_to_name)
-            #todo fix
+            # todo fix
 
-
-        #pygame.draw.rect(GM.screen, (0, 0, 0), self.weapon_rect)
+        # pygame.draw.rect(GM.screen, (0, 0, 0), self.weapon_rect)
 
         subsurface_rect = pygame.Rect(
             0, 0, GM.screen.get_width(), GM.screen.get_height()

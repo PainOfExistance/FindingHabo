@@ -111,10 +111,14 @@ class AssetLoader:
         return quests
     
     def find_substring_index_in_list(self, new_path, substr):
+        renamed=False
         for index, string in enumerate(GM.save_world_names):
             if substr in string:
+                renamed=True
                 GM.save_world_names[index]=new_path
-        GM.save_world_names.append(new_path)
+                
+        if not renamed:
+            GM.save_world_names.append(new_path)
     
     def rename_index_worlds(self, save_name):
         for item in os.listdir("terrain\worlds\simplified"):
@@ -126,7 +130,7 @@ class AssetLoader:
 
     def save(self):
         CM.assets.world_save(GM.world_objects)
-        save_name =f"{CM.player.name}_{CM.player.current_world}_{GM.game_date.print_date()}".replace(" ", "_")
+        save_name =f"{CM.player.name}_{GM.game_date.print_date()}".replace(" ", "_")
         self.rename_index_worlds(save_name)
         data=CM.player.to_dict()
         data["save_world_names"]=GM.save_world_names
@@ -176,10 +180,13 @@ class AssetLoader:
             files_in_folder = os.listdir(os.path.dirname(path))
             print(os.path.dirname(path))
             for file in files_in_folder:
+                print("file", file)
                 for meow in GM.save_world_names:
+                    print("meow", meow)
                     if os.path.basename(file) in os.path.basename(meow):
                         found_file=os.path.join(os.path.dirname(path), file)
                         path=found_file
+                        #print("bemti path", path)
                         break
             if found_file==None:
                 return found_file

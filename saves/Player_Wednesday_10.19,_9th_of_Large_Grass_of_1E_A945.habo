@@ -1,0 +1,546 @@
+{
+  "stats": {
+    "max_health": 100,
+    "health": 100,
+    "max_power": 100,
+    "power": 100,
+    "max_knowledge": 100,
+    "knowledge": 100,
+    "weapon_damage": 5,
+    "defense": 5
+  },
+  "level": {
+    "level": 1,
+    "experience": 0,
+    "required_experience": 100,
+    "traits": {
+      "unused_trait_points": 0,
+      "traits": {
+        "Health Boost": {
+          "name": "Health Boost",
+          "stat": "max_health",
+          "description": "Increases your max health.",
+          "levels": [
+            {
+              "level": 2,
+              "effect": 10,
+              "taken": false
+            },
+            {
+              "level": 5,
+              "effect": 15,
+              "taken": false
+            },
+            {
+              "level": 10,
+              "effect": 20,
+              "taken": false
+            },
+            {
+              "level": 20,
+              "effect": 25,
+              "taken": false
+            },
+            {
+              "level": 30,
+              "effect": 30,
+              "taken": false
+            },
+            {
+              "level": 50,
+              "effect": 35,
+              "taken": false
+            }
+          ]
+        },
+        "Power Surge": {
+          "name": "Power Surge",
+          "stat": "max_power",
+          "description": "Increases your max power.",
+          "levels": [
+            {
+              "level": 2,
+              "effect": 10,
+              "taken": false
+            },
+            {
+              "level": 5,
+              "effect": 15,
+              "taken": false
+            },
+            {
+              "level": 10,
+              "effect": 20,
+              "taken": false
+            },
+            {
+              "level": 20,
+              "effect": 25,
+              "taken": false
+            },
+            {
+              "level": 30,
+              "effect": 30,
+              "taken": false
+            },
+            {
+              "level": 50,
+              "effect": 35,
+              "taken": false
+            }
+          ]
+        },
+        "Knowledge Boost": {
+          "name": "Knowledge Boost",
+          "stat": "max_knowledge",
+          "description": "Increases your max knowledge.",
+          "levels": [
+            {
+              "level": 2,
+              "effect": 10,
+              "taken": false
+            },
+            {
+              "level": 5,
+              "effect": 15,
+              "taken": false
+            },
+            {
+              "level": 10,
+              "effect": 20,
+              "taken": false
+            },
+            {
+              "level": 20,
+              "effect": 25,
+              "taken": false
+            },
+            {
+              "level": 30,
+              "effect": 30,
+              "taken": false
+            },
+            {
+              "level": 50,
+              "effect": 35,
+              "taken": false
+            }
+          ]
+        },
+        "Weapon Mastery": {
+          "name": "Weapon Mastery",
+          "stat": "weapon_damage",
+          "description": "Increases your weapon damage.",
+          "levels": [
+            {
+              "level": 2,
+              "effect": 10,
+              "taken": false
+            },
+            {
+              "level": 5,
+              "effect": 15,
+              "taken": false
+            },
+            {
+              "level": 10,
+              "effect": 20,
+              "taken": false
+            },
+            {
+              "level": 20,
+              "effect": 25,
+              "taken": false
+            }
+          ]
+        }
+      }
+    }
+  },
+  "inventory": {
+    "items": {
+      "Key to the Land of the Free": {
+        "id": "itmKeytolotf",
+        "name": "Key to the Land of the Free",
+        "type": "key",
+        "description": "Key to the Land of the Free.",
+        "price": 10,
+        "image": "textures/items/heirloom.png",
+        "dropable": true,
+        "rarity": "common"
+      },
+      "Minor Health Potion": {
+        "id": "itmHealing",
+        "name": "Minor Health Potion",
+        "type": "potion",
+        "description": "Restores health.",
+        "price": 20,
+        "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - RED - 0000.png",
+        "dropable": true,
+        "rarity": "common",
+        "effect": {
+          "name": "Healing",
+          "duration": 0,
+          "stat": "health",
+          "value": 25
+        }
+      },
+      "Steel Sword": {
+        "id": "btgSword",
+        "name": "Steel Sword",
+        "type": "weapon",
+        "description": "Steel sword.",
+        "price": 40,
+        "image": "textures/items/steel_sword.jpg",
+        "dropable": true,
+        "rarity": "common",
+        "effect": {
+          "name": "",
+          "duration": 0,
+          "stat": "",
+          "value": 0
+        },
+        "stats": {
+          "damage": 10,
+          "hand": "one",
+          "speed": 0.75,
+          "range": 10,
+          "dropable": "yes",
+          "equiped": false,
+          "slot": "hand"
+        }
+      }
+    },
+    "quantity": {
+      "Key to the Land of the Free": 1,
+      "Minor Health Potion": 2,
+      "Steel Sword": 2
+    }
+  },
+  "quests": {
+    "quests": {
+      "1": {
+        "id": 1,
+        "name": "The Missing Heirloom",
+        "description": "Help a villager find their missing heirloom.",
+        "started": false,
+        "active": false,
+        "stages": [
+          {
+            "description": "Investigate the forest for clues.",
+            "objectives": {
+              "description": "Search the Forest",
+              "state": 0,
+              "world": "Dream World",
+              "possition": [
+                200,
+                200
+              ],
+              "radius": 300
+            }
+          },
+          {
+            "description": "Follow the trail of clues to the abandoned cabin.",
+            "objectives": {
+              "description": "Investigate Cabin",
+              "state": 0,
+              "world": "Dream World",
+              "possition": [
+                50,
+                200
+              ],
+              "inventory": false
+            }
+          },
+          {
+            "description": "Search the cabin for the heirloom.",
+            "objectives": {
+              "description": "Search the cabin",
+              "state": 0,
+              "items": [
+                {
+                  "name": "Steel Sword",
+                  "quantity": 1
+                },
+                {
+                  "name": "Minor Health Potion",
+                  "quantity": 2
+                }
+              ]
+            }
+          },
+          {
+            "description": "Return the missing heirloom to the villager.",
+            "objectives": {
+              "description": "Return Heirloom",
+              "state": 0,
+              "world": "Dream World",
+              "npc": "Merchant",
+              "option": 4,
+              "rmitems": [
+                {
+                  "name": "Steel Sword",
+                  "quantity": 1
+                },
+                {
+                  "name": "Minor Health Potion",
+                  "quantity": 2
+                }
+              ]
+            }
+          }
+        ],
+        "next_quest_id": 2
+      },
+      "2": {
+        "id": 2,
+        "name": "The Curse of the Heirloom",
+        "description": "Uncover the mystery behind the missing heirloom.",
+        "started": false,
+        "active": false,
+        "stages": [
+          {
+            "description": "Examine the heirloom for hidden clues.",
+            "objectives": {
+              "description": "Inspect Heirloom",
+              "state": 0
+            }
+          },
+          {
+            "description": "Question the village historian about the heirloom's history.",
+            "objectives": {
+              "description": "Talk to Village Historian",
+              "state": 0
+            }
+          },
+          {
+            "description": "Visit the old hermit in the mountains for guidance.",
+            "objectives": {
+              "description": "Meet Old Hermit",
+              "state": 0
+            }
+          },
+          {
+            "description": "Retrieve a rare ingredient from the haunted forest.",
+            "objectives": {
+              "description": "Collect Rare Ingredient",
+              "state": 0
+            }
+          },
+          {
+            "description": "Perform a ritual at the ancient shrine to break the curse.",
+            "objectives": {
+              "description": "Perform Ritual",
+              "state": 0
+            }
+          },
+          {
+            "description": "Return to the villager with the cursed heirloom's new power.",
+            "objectives": {
+              "description": "Return Cursed Heirloom",
+              "state": 0
+            }
+          }
+        ]
+      }
+    },
+    "tics": 0,
+    "text_to_draw": []
+  },
+  "animation": {
+    "anim_counter": 3,
+    "prev_frame": 0.05,
+    "attacking": false
+  },
+  "game_date": {
+    "current_date": "1945-05-09T10:19:42"
+  },
+  "name": "Player",
+  "gold": 1000,
+  "current_world": "Dream World",
+  "range": 5,
+  "active_effects": [],
+  "movement_speed": 125,
+  "equipped_items": {
+    "hand": null,
+    "back": null,
+    "chest": null,
+    "helmet": null,
+    "gloves": null,
+    "legs": null
+  },
+  "xy": [
+    3242,
+    2176,
+    3270,
+    2224
+  ],
+  "hash": "Player",
+  "rectxy": [
+    380,
+    504
+  ],
+  "ai": {
+    "npc_movement": {},
+    "strings": {
+      "strings": {
+        "Merchant": {
+          "name": "Merchant",
+          "greeting": "Hello fellow traveller, what brings you today?",
+          "enables": [
+            0,
+            1
+          ],
+          "file": "dialup",
+          "options": [
+            {
+              "text": "What do you have to sell?",
+              "res": "barter_initiated",
+              "used": true
+            },
+            {
+              "text": "Tell me about yourself?",
+              "res": "about_merchant_initial",
+              "used": true
+            },
+            {
+              "text": "What happened?",
+              "res": "about_merchant_advanced_ambush",
+              "used": true
+            },
+            {
+              "text": "Sorry to hear that.",
+              "res": "wrap_to_start_merchant",
+              "used": true
+            },
+            {
+              "text": "Need help gettting it back?",
+              "res": "wrap_to_start_quest",
+              "used": true,
+              "res_after": "wrap_to_end_quest",
+              "text_after": "Here is your heirloom."
+            }
+          ],
+          "responses": {
+            "barter_initiated": {
+              "text": [
+                "Here are my wares"
+              ],
+              "file": [
+                "dialup"
+              ],
+              "barter": true
+            },
+            "about_merchant_initial": {
+              "text": [
+                "Well, i hail from the lands of halal. Atleast i used to before the war. I still have nightmares about that day."
+              ],
+              "file": [
+                "dialup"
+              ],
+              "enables": [
+                2,
+                3
+              ]
+            },
+            "about_merchant_advanced_ambush": {
+              "text": [
+                "Well, it was bloody. We got ambushed, only 5 of us got out alive. We saw our officer stand and fight so we could escape. May his soul rest in peace.",
+                "Next thing i remember i was being healed by a healer.",
+                "I also lost very precius thing to me, family heirloom"
+              ],
+              "file": [
+                "dialup",
+                "neke",
+                "dialup"
+              ],
+              "enables": [
+                3,
+                4
+              ]
+            },
+            "wrap_to_start_merchant": {
+              "text": [
+                "Thanks, but thats in the past, so, do you want to make a purchase?"
+              ],
+              "file": [
+                "dialup"
+              ],
+              "enables": [
+                0,
+                1
+              ]
+            },
+            "wrap_to_start_quest": {
+              "text": [
+                "Thanks, i am very greatfull for your help."
+              ],
+              "file": [
+                "neke"
+              ],
+              "enables": [
+                0,
+                1
+              ],
+              "starts": 1
+            },
+            "wrap_to_end_quest": {
+              "text": [
+                "Thanks, i am very greatfull that you found it.",
+                "There is something wrong with it, it seems cursed, broken.",
+                "Please, go and uncover what happend with it."
+              ],
+              "file": [
+                "neke",
+                "dialup",
+                "neke"
+              ],
+              "enables": [
+                0,
+                1
+              ],
+              "advances": 1,
+              "starts": 2
+            }
+          },
+          "random": [
+            "Finest material around here!",
+            "Want to make a purchase?",
+            "Wares for alll!"
+          ],
+          "random_file": [
+            "clap",
+            "clap",
+            "clap"
+          ]
+        }
+      },
+      "index": -1,
+      "selected_item": 0,
+      "selection_held": false,
+      "name": "",
+      "current_talk": [
+        -1
+      ],
+      "current_lines": [
+        -1
+      ],
+      "talk": -1,
+      "line": -1,
+      "prev_talk": -1,
+      "enabled": null,
+      "offset": 0,
+      "talking": false,
+      "length": 0,
+      "greeting_played": false,
+      "bartering": false,
+      "will_bartering": false,
+      "starts": 0,
+      "advances": 0
+    }
+  },
+  "save_world_names": [
+    "terrain\\worlds\\simplified\\Dream_World\\Player\\Player_Wednesday_10.19,_9th_of_Large_Grass_of_1E_A945.world",
+    "terrain\\worlds\\simplified\\Land_Of_the_Free\\Player\\Player_Wednesday_10.19,_9th_of_Large_Grass_of_1E_A945.world"
+  ]
+}
