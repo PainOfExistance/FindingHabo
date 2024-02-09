@@ -99,10 +99,6 @@ class Menu:
         elif selected_option == "Options":
             self.in_sub_menu=2
         elif selected_option == "Exit":
-            for item in os.listdir("terrain\worlds\simplified"):
-                item_path=f"terrain\worlds\simplified\{item}\{CM.player.hash}\data_modified.world"
-                if os.path.isfile(item_path):
-                    os.remove(item_path)
             pygame.quit()
             sys.exit()
         elif self.in_sub_menu==1:

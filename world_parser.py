@@ -110,7 +110,7 @@ def parser(world):
             for y in world["entities"][x]:
                 tmp = setEnemies(y["customFields"])
                 if tmp:
-                    enemies.append((tmp, y["x"], y["y"]))
+                    enemies.append((GM.ai_package[tmp], y["x"], y["y"]))
 
         elif x == "Item_field":
             for y in world["entities"][x]:
@@ -121,10 +121,13 @@ def parser(world):
         elif x == "Container_field":
             for y in world["entities"][x]:
                 tmp, nums = setContainer(y["customFields"])
+                neke=[]
+                for i, _ in enumerate(tmp):
+                    neke.append({"type":tmp[i], "quantity":nums[i]})
                 file_name = os.path.basename(y["customFields"]["image"]).split("/")[-1]
                 containers.append(
                     (
-                        tmp,
+                        neke,
                         y["x"],
                         y["y"],
                         y["customFields"]["name"],
@@ -199,49 +202,22 @@ def parse_visited(world):
 def remove_uniques(original, modified):
     orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata = parser(copy.deepcopy(original))
     mod_spawn, mod_portals, mod_enemies, mod_final_items, mod_containers, mod_metadata = parse_visited(copy.deepcopy(modified))
-    
-    for i in orig_enemies:
-        if GM.ai_package[i[0]]["stats"]["rarity"]=="unique":
-            for j in mod_enemies:
-                if i[0]==j[0]:
-                    orig_enemies.remove(i)
-            
-    for i in orig_final_items:
-        if GM.items[i[0]]["rarity"]=="unique":
-            for j in mod_final_items:
-                if i[0]==j[0]:
-                    orig_final_items.remove(i)
-    
-    for i in orig_containers:
-        for k in mod_containers:
-            for j in i[0]:
-                for l in k[0]:
-                    not_in_mod=True
-                    if GM.items[j]["rarity"]=="unique" and j==l["type"]:
-                        print("j", j)
-                        print("l", l["type"])
-                        not_in_mod=False
-                        print("match")
-                #todo ficx this shit
-            if not_in_mod:
-                orig_containers.remove(i)
-    
-    
-    print()
-    print("orig_spawn", orig_spawn)
-    print()
-    print("orig_portals", orig_portals)
-    print()
-    print("orig_enemies", orig_enemies)
-    print()
-    print("orig_final_items", orig_final_items)
-    print()
-    print("orig_containers", orig_containers)
-    print()
-    print("orig_metadata", orig_metadata)
-    print()
-    print()
-    print()
+
+    #print()
+    #print("orig_spawn", orig_spawn)
+    #print()
+    #print("orig_portals", orig_portals)
+    #print()
+    #print("orig_enemies", orig_enemies)
+    #print()
+    #print("orig_final_items", orig_final_items)
+    #print()
+    #print("orig_containers", orig_containers)
+    #print()
+    #print("orig_metadata", orig_metadata)
+    #print()
+    #print()
+    #print()
     #print("mod_spawn", mod_spawn)
     #print()
     #print("mod_portals", mod_portals)
@@ -255,6 +231,37 @@ def remove_uniques(original, modified):
     #print("mod_metadata", mod_metadata)
     #print()
     
+    
+    for i, _ in enumerate(orig_enemies):
+        if orig_enemies[i][0]["stats"]["rarity"]=="unique":
+            in_mod=False
+            for j in mod_enemies:
+                if orig_enemies[i][0]["name"]==j[0]["name"]:
+                    in_mod=True
+                    
+            if not in_mod and orig_enemies[i][0]["stats"]["rarity"]=="unique":
+                orig_enemies.pop(i)
+            
+    for i, _ in enumerate(orig_final_items):
+        if GM.items[orig_final_items[i][0]]["rarity"]=="unique":
+            in_mod=False
+            for j in mod_final_items:
+                if orig_final_items[i][0]==j[0]:
+                    in_mod=True
+                    
+            if not in_mod and GM.items[orig_final_items[i][0]]["rarity"]=="unique":
+                orig_final_items.pop(i)
+                    
+    for i, _ in enumerate(orig_containers):
+        for index, j in enumerate(orig_containers[i][0]):
+            in_mod=False
+            if GM.items[j["type"]]["rarity"]=="unique":
+                for k in mod_containers[i][0]:
+                    if j["type"]==k["type"]:
+                        in_mod=True
+                    
+            if not in_mod and GM.items[j["type"]]["rarity"]=="unique":
+                print(j)
+                orig_containers[i][0].pop(index)
+    
     return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata
-
-        

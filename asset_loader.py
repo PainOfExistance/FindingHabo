@@ -180,9 +180,7 @@ class AssetLoader:
             files_in_folder = os.listdir(os.path.dirname(path))
             print(os.path.dirname(path))
             for file in files_in_folder:
-                print("file", file)
                 for meow in GM.save_world_names:
-                    print("meow", meow)
                     if os.path.basename(file) in os.path.basename(meow):
                         found_file=os.path.join(os.path.dirname(path), file)
                         path=found_file

@@ -1,4 +1,5 @@
 import copy
+import os
 import sys
 from datetime import datetime
 
@@ -15,6 +16,12 @@ from music_player import MusicPlayer
 
 class Game:
     def __init__(self):
+        
+        for item in os.listdir("terrain\worlds\simplified"):
+            item_path=f"terrain\worlds\simplified\{item}\{CM.player.hash}\data_modified.world"
+            if os.path.isfile(item_path):
+                os.remove(item_path)
+        
         GM.items = CM.assets.load_items()
         GM.ai_package = CM.assets.load_ai_package()
 
@@ -58,66 +65,6 @@ class Game:
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
 
-    def setup_init(self, portals, npcs, final_items, containers, metadata):
-        GM.world_objects.append(
-            {
-                "name": metadata,
-                "type": "metadata",
-            }
-        )
-
-        for data in final_items:
-            item = GM.items[data[0]]
-            img, img_rect = CM.assets.load_images(
-                item["image"], (0, 0), (data[1], data[2])
-            )
-            GM.world_objects.append(
-                {
-                    "name": item["name"],
-                    "image": img,
-                    "rect": img_rect,
-                    "type": "item",
-                }
-            )
-
-        for data in containers:
-            img, img_rect = CM.assets.load_images(data[4], (64, 64), (data[1], data[2]))
-
-            for i, _ in enumerate(data[5]):
-                data[0][i] = {"type": data[0][i], "quantity": data[5][i]}
-
-            GM.world_objects.append(
-                {"image": img, "rect": img_rect, "type": "container", "name": data}
-            )
-
-        for data in npcs:
-            img, img_rect = CM.assets.load_images(
-                GM.ai_package[data[0]]["stats"]["image"], (64, 64), (data[1], data[2])
-            )
-            GM.world_objects.append(
-                {
-                    "image": img,
-                    "rect": img_rect,
-                    "type": "npc",
-                    "name": copy.deepcopy(GM.ai_package[data[0]]),
-                    "attack_diff": 0,
-                    "agroved": False,
-                }
-            )
-
-        for data in portals:
-            img, img_rect = CM.assets.load_images(
-                "textures\static\door.png", (64, 64), (data[1], data[2])
-            )
-            GM.world_objects.append(
-                {
-                    "image": img,
-                    "rect": img_rect,
-                    "type": "portal",
-                    "name": data[0],
-                }
-            )
-
     def setup_loaded(self, portals, npcs, final_items, containers, metadata):
         GM.world_objects.append(
             {
@@ -143,9 +90,6 @@ class Game:
         for data in containers:
             tmp = data
             img, img_rect = CM.assets.load_images(data[4], (64, 64), (data[1], data[2]))
-            tmp[1] = data[1]
-            tmp[2] = data[2]
-
             GM.world_objects.append(
                 {"image": img, "rect": img_rect, "type": "container", "name": tmp}
             )
@@ -202,13 +146,13 @@ class Game:
                 spawn_point, portals, npcs, final_items, containers, metadata = wp.remove_uniques(level_data, modified_data)
                 
                 # spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
-                self.setup_init(portals, npcs, final_items, containers, metadata)
+                self.setup_loaded(portals, npcs, final_items, containers, metadata)
         else:
             print("basic out")
             spawn_point, portals, npcs, final_items, containers, metadata = wp.parser(
                 level_data
             )
-            self.setup_init(portals, npcs, final_items, containers, metadata)
+            self.setup_loaded(portals, npcs, final_items, containers, metadata)
 
         CM.music_player = MusicPlayer(metadata["music"])
 
