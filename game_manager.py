@@ -40,6 +40,14 @@ class GameManager:
     relative_player_bottom = 0
     save_name="in the beginning"
     save_world_names=[]
+    bg_surface_menu=None
+    bg_menu=None
+    weapon_rect=None
+    collision_map=None
+    map_height=None
+    map_width=None
+    bg_rect=None
+    background=None
 
 class ClassManager:
     ai=None

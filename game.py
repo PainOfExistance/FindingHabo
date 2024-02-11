@@ -7,6 +7,7 @@ import numpy as np
 import pygame
 from pygame.locals import *
 
+import renderer as R
 import world_parser as wp
 from ai import Ai
 from game_manager import ClassManager as CM
@@ -47,22 +48,22 @@ class Game:
         self.last_frame_time = pygame.time.get_ticks()
         self.on_a_diagonal = False
 
-        self.weapon_rect = pygame.Rect(
+        GM.weapon_rect = pygame.Rect(
             CM.player.player_rect.left + CM.player.player_rect.width // 4,
             CM.player.player_rect.top - CM.player.range // 2,
             16,
             CM.player.range,
         )
 
-        self.bg_menu = pygame.Rect(
+        GM.bg_menu = pygame.Rect(
             0,
             0,
             GM.screen.get_width(),
             GM.screen.get_height(),
         )
 
-        self.bg_surface_menu = pygame.Surface(
-            (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
+        GM.bg_surface_menu = pygame.Surface(
+            (GM.bg_menu.width, GM.bg_menu.height), pygame.SRCALPHA
         )
 
     def setup_loaded(self, portals, npcs, final_items, containers, metadata):
@@ -150,13 +151,13 @@ class Game:
 
         CM.music_player = MusicPlayer(metadata["music"])
 
-        self.background, self.bg_rect = CM.assets.load_background(
+        GM.background, GM.bg_rect = CM.assets.load_background(
             metadata["background"],
         )
-        self.collision_map = CM.assets.load_collision(metadata["collision_set"])
+        GM.collision_map = CM.assets.load_collision(metadata["collision_set"])
 
-        self.map_height = self.collision_map.shape[0]
-        self.map_width = self.collision_map.shape[1]
+        GM.map_height = GM.collision_map.shape[0]
+        GM.map_width = GM.collision_map.shape[1]
 
         if type != "default":
             for i, _ in enumerate(portals):
@@ -171,8 +172,8 @@ class Game:
             spawn_point[1] - GM.screen.get_height() // 2,
         )
 
-        self.bg_rect.left = -offset[0]
-        self.bg_rect.top = -offset[1]
+        GM.bg_rect.left = -offset[0]
+        GM.bg_rect.top = -offset[1]
 
         CM.player.player_rect.left = spawn_point[0] - offset[0]
         CM.player.player_rect.top = spawn_point[1] - offset[1]
@@ -244,13 +245,13 @@ class Game:
         if GM.time_diff >= 20:
             GM.time_diff = 5
 
-        GM.relative_player_left = int(CM.player.player_rect.left - self.bg_rect.left)
+        GM.relative_player_left = int(CM.player.player_rect.left - GM.bg_rect.left)
 
-        GM.relative_player_right = int(CM.player.player_rect.right - self.bg_rect.left)
+        GM.relative_player_right = int(CM.player.player_rect.right - GM.bg_rect.left)
 
-        GM.relative_player_top = int(CM.player.player_rect.top - self.bg_rect.top)
+        GM.relative_player_top = int(CM.player.player_rect.top - GM.bg_rect.top)
 
-        GM.relative_player_bottom = int(CM.player.player_rect.bottom - self.bg_rect.top)
+        GM.relative_player_bottom = int(CM.player.player_rect.bottom - GM.bg_rect.top)
         movement = int(CM.player.movement_speed * GM.delta_time)
 
         CM.player.quests.check_quest_advancement(
@@ -263,24 +264,24 @@ class Game:
 
         keys = pygame.key.get_pressed()
         if CM.player.player_rect.left <= 10:
-            self.bg_rect.move_ip(movement, 0)
+            GM.bg_rect.move_ip(movement, 0)
             CM.player.player_rect.move_ip(movement, 0)
 
         if CM.player.player_rect.right >= GM.screen_width - 10:
-            self.bg_rect.move_ip(-movement, 0)
+            GM.bg_rect.move_ip(-movement, 0)
             CM.player.player_rect.move_ip(-movement, 0)
         if CM.player.player_rect.top <= 10:
-            self.bg_rect.move_ip(0, movement)
+            GM.bg_rect.move_ip(0, movement)
             CM.player.player_rect.move_ip(0, movement)
         if CM.player.player_rect.bottom >= GM.screen_height - 10:
-            self.bg_rect.move_ip(0, -movement)
+            GM.bg_rect.move_ip(0, -movement)
             CM.player.player_rect.move_ip(0, -movement)
 
         GM.moving = False
         if (
             keys[pygame.K_a]
             and np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_top : GM.relative_player_bottom,
                     GM.relative_player_left - movement,
                 ]
@@ -308,19 +309,19 @@ class Game:
             and not GM.is_in_dialogue
         ):
             dx = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_bottom,
                     GM.relative_player_left - movement * 2 : GM.relative_player_left,
                 ]
             )
             dt = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_top,
                     GM.relative_player_left - movement * 2 : GM.relative_player_left,
                 ]
             )
             dy = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_top : GM.relative_player_bottom,
                     GM.relative_player_left - movement * 2,
                 ]
@@ -332,7 +333,7 @@ class Game:
             if (
                 np.rad2deg(angle) < 70
                 and np.count_nonzero(
-                    self.collision_map[
+                    GM.collision_map[
                         GM.relative_player_left : GM.relative_player_right,
                         GM.relative_player_top : GM.relative_player_bottom,
                     ]
@@ -355,9 +356,9 @@ class Game:
         if (
             keys[pygame.K_d]
             and np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_top : GM.relative_player_bottom,
-                    min(GM.relative_player_right + movement, self.map_width - 1),
+                    min(GM.relative_player_right + movement, GM.map_width - 1),
                 ]
                 == 1
             )
@@ -383,19 +384,19 @@ class Game:
             and not GM.is_in_dialogue
         ):
             dx = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_bottom,
                     GM.relative_player_right : GM.relative_player_right + movement * 2,
                 ]
             )
             dt = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_top,
                     GM.relative_player_right : GM.relative_player_right + movement * 2,
                 ]
             )
             dy = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_top : GM.relative_player_bottom,
                     GM.relative_player_right + movement * 2,
                 ]
@@ -407,7 +408,7 @@ class Game:
             if (
                 np.rad2deg(angle) < 70
                 and np.count_nonzero(
-                    self.collision_map[
+                    GM.collision_map[
                         GM.relative_player_left : GM.relative_player_right,
                         GM.relative_player_top : GM.relative_player_bottom,
                     ]
@@ -429,7 +430,7 @@ class Game:
         if (
             keys[pygame.K_w]
             and np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_top - movement,
                     GM.relative_player_left : GM.relative_player_right,
                 ]
@@ -457,19 +458,19 @@ class Game:
             and not GM.is_in_dialogue
         ):
             dx = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_top - movement * 2 : GM.relative_player_top,
                     GM.relative_player_right,
                 ]
             )
             dt = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_top - movement * 2 : GM.relative_player_top,
                     GM.relative_player_left,
                 ]
             )
             dy = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_top - movement * 2,
                     GM.relative_player_left : GM.relative_player_right,
                 ]
@@ -480,7 +481,7 @@ class Game:
             if (
                 np.rad2deg(angle) < 70
                 and np.count_nonzero(
-                    self.collision_map[
+                    GM.collision_map[
                         GM.relative_player_left : GM.relative_player_right,
                         GM.relative_player_top : GM.relative_player_bottom,
                     ]
@@ -503,8 +504,8 @@ class Game:
         if (
             keys[pygame.K_s]
             and np.count_nonzero(
-                self.collision_map[
-                    min(GM.relative_player_bottom + movement, self.map_height - 1),
+                GM.collision_map[
+                    min(GM.relative_player_bottom + movement, GM.map_height - 1),
                     GM.relative_player_left : GM.relative_player_right,
                 ]
                 == 1
@@ -531,21 +532,21 @@ class Game:
             and not GM.is_in_dialogue
         ):
             dx = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_bottom : GM.relative_player_bottom
                     + movement * 2,
                     GM.relative_player_right,
                 ]
             )
             dt = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_bottom : GM.relative_player_bottom
                     + movement * 2,
                     GM.relative_player_left,
                 ]
             )
             dy = np.count_nonzero(
-                self.collision_map[
+                GM.collision_map[
                     GM.relative_player_bottom + movement * 2,
                     GM.relative_player_left : GM.relative_player_right,
                 ]
@@ -556,7 +557,7 @@ class Game:
             if (
                 np.rad2deg(angle) < 70
                 and np.count_nonzero(
-                    self.collision_map[
+                    GM.collision_map[
                         GM.relative_player_left : GM.relative_player_right,
                         GM.relative_player_top : GM.relative_player_bottom,
                     ]
@@ -1039,560 +1040,34 @@ class Game:
             print()
 
         if GM.rotation_angle == 90:
-            self.weapon_rect = pygame.Rect(
+            GM.weapon_rect = pygame.Rect(
                 CM.player.player_rect.left - CM.player.range // 2,
                 CM.player.player_rect.top + CM.player.player_rect.height // 2,
                 CM.player.range,
                 CM.player.player_rect.height // 4,
             )
         elif GM.rotation_angle == 0:
-            self.weapon_rect = pygame.Rect(
+            GM.weapon_rect = pygame.Rect(
                 CM.player.player_rect.left + CM.player.player_rect.width // 4,
                 CM.player.player_rect.top - CM.player.range // 2,
                 16,
                 CM.player.range,
             )
         elif GM.rotation_angle == 180:
-            self.weapon_rect = pygame.Rect(
+            GM.weapon_rect = pygame.Rect(
                 CM.player.player_rect.left + CM.player.player_rect.width // 4,
                 CM.player.player_rect.bottom - CM.player.range // 2,
                 16,
                 CM.player.range,
             )
         elif GM.rotation_angle == 270:
-            self.weapon_rect = pygame.Rect(
+            GM.weapon_rect = pygame.Rect(
                 CM.player.player_rect.right - CM.player.range // 2,
                 CM.player.player_rect.top + CM.player.player_rect.height // 2,
                 CM.player.range,
                 CM.player.player_rect.height // 4,
             )
 
-    def draw_container(self):
-        if GM.container_open:
-            CM.ai.strings.bartering = False
-            pygame.draw.rect(
-                self.bg_surface_menu,
-                (200, 210, 200, 180),
-                self.bg_surface_menu.get_rect(),
-            )
-            GM.screen.blit(self.bg_surface_menu, self.bg_menu)
-
-            pygame.draw.line(
-                GM.screen,
-                (22, 22, 22),
-                (GM.screen.get_width() // 2, 0),
-                (GM.screen.get_width() // 2, GM.screen.get_height()),
-                4,
-            )
-
-            scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = GM.world_objects[GM.container_hovered]["name"][0][
-                scroll_position : scroll_position + 10
-            ]
-            i = 0
-
-            item_render = self.menu_font.render(
-                CM.player.name,
-                True,
-                (44, 53, 57),
-            )
-            item_rect = item_render.get_rect(
-                topleft=(
-                    GM.screen.get_width() // 2 - GM.screen.get_width() // 3,
-                    20 + i * 50,
-                )
-            )
-            GM.screen.blit(item_render, item_rect)
-
-            item_render = self.menu_font.render(
-                GM.world_objects[GM.container_hovered]["name"][3],
-                True,
-                (44, 53, 57),
-            )
-            item_rect = item_render.get_rect(
-                topleft=(
-                    GM.screen.get_width() // 2 + GM.screen.get_width() // 5,
-                    20 + i * 50,
-                )
-            )
-            GM.screen.blit(item_render, item_rect)
-            i += 1
-
-            pygame.draw.line(
-                GM.screen,
-                (22, 22, 22),
-                (0, 20 + i * 50),
-                (GM.screen.get_width(), 20 + i * 50),
-                4,
-            )
-
-            for index, (data) in enumerate(visible_items):
-                color = (
-                    (157, 157, 210)
-                    if index == GM.selected_inventory_item - scroll_position
-                    else (237, 106, 94)
-                )
-
-                if not GM.container_menu_selected:
-                    color = (44, 53, 57)
-                if (
-                    index == GM.selected_inventory_item - scroll_position
-                    and GM.container_menu_selected
-                ):
-                    item_text = f"> {data['type']}: {data['quantity']}"
-                else:
-                    item_text = f"    {data['type']}: {data['quantity']}"
-
-                item_render = self.menu_font.render(item_text, True, color)
-                item_rect = item_render.get_rect(
-                    topleft=(GM.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
-                )
-                GM.screen.blit(item_render, item_rect)
-
-            scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = list(CM.inventory.quantity.items())[
-                scroll_position : scroll_position + 10
-            ]
-
-            for index, (item_name, item_quantity) in enumerate(visible_items):
-                color = (
-                    (157, 157, 210)
-                    if index == GM.selected_inventory_item - scroll_position
-                    else (237, 106, 94)
-                )
-
-                if GM.container_menu_selected:
-                    color = (44, 53, 57)
-
-                if (
-                    index == GM.selected_inventory_item - scroll_position
-                    and not GM.container_menu_selected
-                ):
-                    item_text = f"> {item_name}: {item_quantity}"
-                else:
-                    item_text = f"    {item_name}: {item_quantity}"
-
-                item_render = self.menu_font.render(item_text, True, color)
-                item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
-                GM.screen.blit(item_render, item_rect)
-
-        elif not CM.ai.strings.bartering:
-            GM.enter_held = False
-
-    def draw_barter(self):
-        if CM.ai.strings.bartering:
-            GM.container_open = False
-            pygame.draw.rect(
-                self.bg_surface_menu,
-                (200, 210, 200, 180),
-                self.bg_surface_menu.get_rect(),
-            )
-            GM.screen.blit(self.bg_surface_menu, self.bg_menu)
-
-            pygame.draw.line(
-                GM.screen,
-                (22, 22, 22),
-                (GM.screen.get_width() // 2, 0),
-                (GM.screen.get_width() // 2, GM.screen.get_height()),
-                4,
-            )
-
-            scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = list(GM.ai_package[GM.talk_to_name]["items"])[
-                scroll_position : scroll_position + 10
-            ]
-            i = 0
-
-            item_render = self.menu_font.render(
-                CM.player.name + "  Gold: " + str(CM.player.gold),
-                True,
-                (44, 53, 57),
-            )
-            item_rect = item_render.get_rect(
-                topleft=(
-                    GM.screen.get_width() // 2 - GM.screen.get_width() // 2.5,
-                    20 + i * 50,
-                )
-            )
-            GM.screen.blit(item_render, item_rect)
-
-            item_render = self.menu_font.render(
-                GM.talk_to_name
-                + "  Gold: "
-                + str(GM.ai_package[GM.talk_to_name]["gold"]),
-                True,
-                (44, 53, 57),
-            )
-            item_rect = item_render.get_rect(
-                topleft=(
-                    GM.screen.get_width() // 2 + GM.screen.get_width() // 9,
-                    20 + i * 50,
-                )
-            )
-            GM.screen.blit(item_render, item_rect)
-            i += 1
-
-            pygame.draw.line(
-                GM.screen,
-                (22, 22, 22),
-                (0, 20 + i * 50),
-                (GM.screen.get_width(), 20 + i * 50),
-                4,
-            )
-
-            for index, (data) in enumerate(visible_items):
-                color = (
-                    (157, 157, 210)
-                    if index == GM.selected_inventory_item - scroll_position
-                    else (237, 106, 94)
-                )
-
-                if not GM.container_menu_selected:
-                    color = (44, 53, 57)
-
-                if (
-                    index == GM.selected_inventory_item - scroll_position
-                    and GM.container_menu_selected
-                ):
-                    item_text = f"> {data['type']}: {data['quantity']}  {GM.items[GM.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
-                else:
-                    item_text = f"    {data['type']}: {data['quantity']}  {GM.items[GM.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
-                item_render = self.menu_font.render(item_text, True, color)
-                item_rect = item_render.get_rect(
-                    topleft=(GM.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
-                )
-                GM.screen.blit(item_render, item_rect)
-
-            scroll_position = (GM.selected_inventory_item // 10) * 10
-            visible_items = list(CM.inventory.quantity.items())[
-                scroll_position : scroll_position + 10
-            ]
-
-            for index, (item_name, item_quantity) in enumerate(visible_items):
-                color = (
-                    (157, 157, 210)
-                    if index == GM.selected_inventory_item - scroll_position
-                    else (237, 106, 94)
-                )
-
-                if GM.container_menu_selected:
-                    color = (44, 53, 57)
-
-                if (
-                    index == GM.selected_inventory_item - scroll_position
-                    and not GM.container_menu_selected
-                ):
-                    item_text = f"> {item_name}: {item_quantity}  {GM.items[item_name]['price']}"
-                else:
-                    item_text = f"    {item_name}: {item_quantity}  {GM.items[item_name]['price']}"
-
-                item_render = self.menu_font.render(item_text, True, color)
-                item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
-                GM.screen.blit(item_render, item_rect)
-
-        elif not GM.container_open:
-            GM.enter_held = False
-
-    def draw_objects(self):
-        for index, x in enumerate(GM.world_objects):
-            if index == 0:
-                continue
-            if (
-                "stats" in x["name"]
-                and "status" in x["name"]["stats"]
-                and x["name"]["stats"]["status"] == "alive"
-                and x["name"]["stats"]["type"] == "enemy"
-                and not GM.container_open
-                and not CM.menu.visible
-                and not CM.player_menu.visible
-                and not GM.is_in_dialogue
-            ):
-                # print(x)
-                dx, dy, agroved = CM.ai.attack(
-                    x["name"]["name"],
-                    (
-                        (x["rect"].centerx),
-                        (x["rect"].centery),
-                    ),
-                    (
-                        (GM.relative_player_left + GM.relative_player_right) // 2,
-                        (GM.relative_player_top + GM.relative_player_bottom) // 2,
-                    ),
-                    self.collision_map,
-                    x["rect"],
-                )
-
-                GM.world_objects[index]["agroved"] = agroved
-                x["rect"].centerx = dx
-                x["rect"].centery = dy
-                relative__left = int(self.bg_rect.left + x["rect"].left)
-                relative__top = int(self.bg_rect.top + x["rect"].top)
-
-                other_obj_rect = pygame.Rect(
-                    relative__left,
-                    relative__top,
-                    x["rect"].width,
-                    x["rect"].height,
-                )
-
-                if CM.player.player_rect.colliderect(other_obj_rect):
-                    if x["attack_diff"] > x["name"]["attack_speed"]:
-                        res = CM.player.stats.defense - x["name"]["stats"]["damage"]
-
-                        if res > 0:
-                            res = 0
-
-                        CM.player.update_health(res)
-                        GM.world_objects[index]["attack_diff"] = 0
-
-                if GM.world_objects[index]["attack_diff"] < 5:
-                    GM.world_objects[index]["attack_diff"] += GM.delta_time
-
-            else:
-                relative__left = int(self.bg_rect.left + x["rect"].left)
-                relative__top = int(self.bg_rect.top + x["rect"].top)
-
-            if (
-                "stats" in x["name"]
-                and "status" in x["name"]["stats"]
-                and x["name"]["stats"]["status"] == "alive"
-                and not x["agroved"]
-                and not GM.container_open
-                and not CM.menu.visible
-                and not CM.player_menu.visible
-                and not GM.is_in_dialogue
-            ):
-                dx, dy = CM.ai.update(
-                    x["name"]["name"],
-                    self.collision_map,
-                    x["rect"].left,
-                    x["rect"].top,
-                    x["rect"],
-                )
-                x["rect"].centerx = dx
-                x["rect"].centery = dy
-                relative__left = int(self.bg_rect.left + x["rect"].left)
-                relative__top = int(self.bg_rect.top + x["rect"].top)
-
-                line = CM.ai.random_line(
-                    (
-                        (x["rect"].centerx),
-                        (x["rect"].centery),
-                    ),
-                    (
-                        (GM.relative_player_left + GM.relative_player_right) // 2,
-                        (GM.relative_player_top + GM.relative_player_bottom) // 2,
-                    ),
-                    x["name"]["name"],
-                )
-
-                if line != None and GM.line_time < GM.counter:
-                    GM.current_line = line
-                    GM.line_time = (
-                        CM.music_player.play_line(GM.current_line["file"]) + GM.counter
-                    )
-
-                if GM.current_line != None and GM.line_time >= GM.counter:
-                    text = self.subtitle_font.render(
-                        GM.current_line["text"], True, (44, 53, 57)
-                    )
-
-                    text_rect = text.get_rect(
-                        center=(
-                            GM.screen.get_width() // 2,
-                            GM.screen.get_height() - 50,
-                        )
-                    )
-
-                    GM.screen.blit(text, text_rect)
-
-                else:
-                    GM.current_line = None
-
-            if (
-                relative__left > -80
-                and relative__left < GM.screen_width + 80
-                and relative__top > -80
-                and relative__top < GM.screen_height + 80
-            ):
-                if (
-                    "stats" in x["name"]
-                    and "status" in x["name"]["stats"]
-                    and x["name"]["stats"]["status"] == "alive"
-                ):
-                    GM.screen.blit(x["image"], (relative__left, relative__top))
-                elif "stats" not in x["name"]:
-                    GM.screen.blit(x["image"], (relative__left, relative__top))
-
-                if x["type"] == "container":
-                    self.collision_map[
-                        x["rect"].top + 10 : x["rect"].bottom - 9,
-                        x["rect"].left + 10 : x["rect"].right - 9,
-                    ] = 1
-
-                other_obj_rect = pygame.Rect(
-                    relative__left,
-                    relative__top,
-                    x["rect"].width,
-                    x["rect"].height,
-                )
-
-                if (
-                    other_obj_rect.colliderect(CM.player.player_rect)
-                    and x["type"] == "item"
-                ):
-                    GM.item_hovered = index
-                    self.text = self.prompt_font.render(f"E) Pick up", True, (0, 0, 0))
-                    self.text_rect = self.text.get_rect(
-                        center=(
-                            relative__left + x["rect"].width // 2,
-                            relative__top + x["rect"].height + 10,
-                        )
-                    )
-                    GM.screen.blit(self.text, self.text_rect)
-
-                    self.text = self.prompt_font.render(x["name"], True, (0, 0, 0))
-                    self.text_rect = self.text.get_rect(
-                        center=(
-                            relative__left + x["rect"].width // 2,
-                            relative__top + x["rect"].height + 25,
-                        )
-                    )
-                    GM.screen.blit(self.text, self.text_rect)
-
-                elif (
-                    not other_obj_rect.colliderect(CM.player.player_rect)
-                    and x["type"] == "item"
-                    and index == GM.item_hovered
-                ):
-                    GM.item_hovered = None
-
-                if (
-                    other_obj_rect.colliderect(CM.player.player_rect)
-                    and x["type"] == "container"
-                ):
-                    GM.container_hovered = index
-                    self.text = self.prompt_font.render(f"E) Access", True, (0, 0, 0))
-                    self.text_rect = self.text.get_rect(
-                        center=(
-                            relative__left + x["rect"].width // 2,
-                            relative__top + x["rect"].height + 10,
-                        )
-                    )
-                    GM.screen.blit(self.text, self.text_rect)
-                elif (
-                    not other_obj_rect.colliderect(CM.player.player_rect)
-                    and x["type"] == "container"
-                    and index == GM.container_hovered
-                ):
-                    GM.container_hovered = None
-
-                if other_obj_rect.colliderect(self.weapon_rect) and x["type"] == "npc":
-                    if GM.attacking:
-                        if x["name"]["stats"]["type"] != "enemy":
-                            GM.world_objects[index]["name"]["stats"]["type"] = "enemy"
-                            GM.world_objects[index]["agroved"] = True
-
-                        enemy_index = index
-                        GM.world_objects[enemy_index]["name"]["stats"][
-                            "health"
-                        ] -= CM.player.stats.weapon_damage
-
-                        if GM.world_objects[index]["name"]["stats"]["health"] <= 0:
-                            CM.player.level.gain_experience(
-                                GM.world_objects[index]["name"]["stats"]["xp"]
-                            )
-                            GM.world_objects[index]["name"]["stats"]["status"] = "dead"
-                            GM.world_objects[index]["agroved"] = False
-                            GM.world_objects.pop(index)
-
-                    if (
-                        "stats" in GM.world_objects[index]["name"]
-                        and GM.world_objects[index]["name"]["stats"]["type"] != "enemy"
-                        and GM.world_objects[index]["name"]["stats"]["status"] != "dead"
-                    ):
-                        text = self.prompt_font.render(
-                            f"E) {GM.world_objects[index]['name']['name']}",
-                            True,
-                            (44, 53, 57),
-                        )
-
-                        text_rect = text.get_rect(
-                            center=(
-                                relative__left + x["rect"].width // 2,
-                                relative__top - 10,
-                            )
-                        )
-                        GM.talk_to_name = x["name"]["name"]
-                        GM.screen.blit(text, text_rect)
-                        GM.is_ready_to_talk = True
-
-                    elif (
-                        not other_obj_rect.colliderect(self.weapon_rect)
-                        and x["type"] == "npc"
-                    ):
-                        GM.talk_to_name = ""
-                        GM.is_ready_to_talk = False
-
-                    if (
-                        "stats" in GM.world_objects[index]["name"]
-                        and GM.world_objects[index]["name"]["stats"]["health"] > 0
-                        and GM.world_objects[index]["name"]["stats"]["type"] == "enemy"
-                    ):
-                        text = self.prompt_font.render(
-                            str(GM.world_objects[index]["name"]["stats"]["health"]),
-                            True,
-                            (200, 0, 0),
-                        )
-                        text_rect = text.get_rect(
-                            center=(
-                                relative__left + x["rect"].width // 2,
-                                relative__top + x["rect"].height + 10,
-                            )
-                        )
-                        GM.screen.blit(text, text_rect)
-                elif (
-                    not other_obj_rect.colliderect(self.weapon_rect)
-                    and x["type"] == "npc"
-                    and "stats" in GM.world_objects[index]["name"]
-                    and GM.world_objects[index]["name"]["stats"]["type"] != "enemy"
-                    and GM.world_objects[index]["name"]["stats"]["status"] != "dead"
-                ):
-                    GM.is_ready_to_talk = False
-
-                if (
-                    x["type"] == "portal"
-                    and not GM.container_open
-                    and not CM.menu.visible
-                    and not CM.player_menu.visible
-                    and not GM.is_in_dialogue
-                    and other_obj_rect.colliderect(CM.player.player_rect)
-                ):
-                    if x["name"]["locked"]:
-                        text = self.prompt_font.render(
-                            f"Key required) {x['name']['world_name']} ",
-                            True,
-                            (44, 53, 57),
-                        )
-                    else:
-                        text = self.prompt_font.render(
-                            f"E) {x['name']['world_name']} ", True, (44, 53, 57)
-                        )
-                    text_rect = text.get_rect(
-                        center=(
-                            relative__left + x["rect"].width // 2,
-                            relative__top + x["rect"].height + 10,
-                        )
-                    )
-                    GM.world_to_travel_to = x["name"]
-                    GM.world_to_travel_to["index"] = index
-                    GM.screen.blit(text, text_rect)
-
-                elif (
-                    not other_obj_rect.colliderect(CM.player.player_rect)
-                    and x["type"] == "portal"
-                ):
-                    GM.world_to_travel_to = None
 
     def loading(self):
         font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
@@ -1605,12 +1080,12 @@ class Game:
 
     def draw(self):
         GM.screen.fill((230, 60, 20))
-        GM.screen.blit(self.background, self.bg_rect.topleft)
-        self.draw_objects()
+        GM.screen.blit(GM.background, GM.bg_rect.topleft)
+        R.draw_objects(self.subtitle_font, self.prompt_font)
         CM.player.draw()  # .lulekSprulek.123.fafajMi)
         CM.player.quests.draw_quest_info()
-        self.draw_container()
-        self.draw_barter()
+        R.draw_container(self.menu_font)
+        R.draw_barter(self.menu_font)
         CM.menu.render()
         CM.player_menu.render()
 
@@ -1618,7 +1093,7 @@ class Game:
             CM.ai.strings.draw(GM.talk_to_name)
             # todo fix
 
-        # pygame.draw.rect(GM.screen, (0, 0, 0), self.weapon_rect)
+        # pygame.draw.rect(GM.screen, (0, 0, 0), GM.weapon_rect)
 
         subsurface_rect = pygame.Rect(
             0, 0, GM.screen.get_width(), GM.screen.get_height()
