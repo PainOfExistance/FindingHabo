@@ -137,21 +137,15 @@ class Game:
             delta = date1 - date2
             if modified_data[0]["name"]["respawn_timer"] > delta.days:
                 print("respawned")
-                spawn_point, portals, npcs, final_items, containers, metadata = (
-                    wp.parse_visited(modified_data)
-                )
+                spawn_point, portals, npcs, final_items, containers, metadata = wp.parse_visited(modified_data)
                 self.setup_loaded(portals, npcs, final_items, containers, metadata)
             else:
                 print("basic in")
                 spawn_point, portals, npcs, final_items, containers, metadata = wp.remove_uniques(level_data, modified_data)
-                
-                # spawn_point, portals, npcs, final_items, containers, metadata= wp.parser(level_data)
                 self.setup_loaded(portals, npcs, final_items, containers, metadata)
         else:
             print("basic out")
-            spawn_point, portals, npcs, final_items, containers, metadata = wp.parser(
-                level_data
-            )
+            spawn_point, portals, npcs, final_items, containers, metadata = wp.parser(level_data)
             self.setup_loaded(portals, npcs, final_items, containers, metadata)
 
         CM.music_player = MusicPlayer(metadata["music"])
