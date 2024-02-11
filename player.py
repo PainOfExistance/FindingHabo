@@ -117,6 +117,9 @@ class Player:
             self.quests.quests[item["quest"][0]]["stages"][item["quest"][1]][
                 "objectives"
             ]["inventory"] = True
+        
+        if "starts_quest" in item:
+            self.quests.start_quest(item["starts_quest"])
 
         if item["name"] == "Gold":
             self.gold += 1
