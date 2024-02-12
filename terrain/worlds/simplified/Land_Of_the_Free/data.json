@@ -71,59 +71,8 @@
 						"../sounds/bgm/DOVAHKIIN.mp3",
 						"../sounds/bgm/peace.mp3"
 					],
-					"collision_set": "terrain\\\\worlds\\\\simplified\\\\Land_Of_the_Free\\\\Collision-int.png",
-					"background": "terrain\\\\worlds\\\\simplified\\\\Land_Of_the_Free\\\\_composite.png"
-				}
-			}
-		],
-		"Item_field": [
-			{
-				"id": "Item_field",
-				"iid": "0f0391f0-b0a0-11ee-8f39-d782996f86e5",
-				"layer": "LeveL_Data",
-				"x": 1080,
-				"y": 2328,
-				"width": 16,
-				"height": 16,
-				"color": 39387,
-				"customFields": {
-					"name": [
-						"Minor Health Potion"
-					],
-					"chance": [
-						1
-					],
-					"type": [
-						"potion"
-					]
-				}
-			}
-		],
-		"Container_field": [
-			{
-				"id": "Container_field",
-				"iid": "24914d00-b0a0-11ee-8f39-c5013d47c3d1",
-				"layer": "LeveL_Data",
-				"x": 1144,
-				"y": 2328,
-				"width": 16,
-				"height": 16,
-				"color": 2513986,
-				"customFields": {
-					"name": "chest",
-					"image": "../textures/static/chest.jpg",
-					"items": [
-						"Divine Armor"
-					],
-					"chance": [
-						1
-					],
-					"type": [
-						"armor"
-					],
-					"number_of_items": [
-						3
-					]
+					"collision_set": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Land_Of_the_Free\\\\\\\\Collision-int.png",
+					"background": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Land_Of_the_Free\\\\\\\\_composite.png"
 				}
 			}
 		]

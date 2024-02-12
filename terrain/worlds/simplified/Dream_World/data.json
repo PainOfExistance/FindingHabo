@@ -30,7 +30,7 @@
 					"unlocked_by": "Key to the Land of the Free",
 					"locked": true,
 					"world_to_load": "worlds/simplified/Land_Of_the_Free/data.json",
-					"world_name": "Land Of the Free"
+					"world_name": "Land of the Free"
 				}
 			},
 			{
@@ -101,15 +101,15 @@
 				"id": "Enemy_Random_Spawn",
 				"iid": "d9ee4550-b0a0-11ee-8a46-ddc674d0e8da",
 				"layer": "LeveL_Data",
-				"x": 3000,
-				"y": 3432,
+				"x": 872,
+				"y": 3032,
 				"width": 16,
 				"height": 16,
 				"color": 12470831,
 				"customFields": {
 					"chance": 1,
 					"enemy_Type": "Merchant",
-					"rarity": "unique"
+					"rarity": "always"
 				}
 			},
 			{
@@ -275,32 +275,6 @@
 					"type": [],
 					"number_of_items": []
 				}
-			},
-			{
-				"id": "Container_field",
-				"iid": "8954e4e0-b0a0-11ee-8f39-dd2deebda513",
-				"layer": "LeveL_Data",
-				"x": 3352,
-				"y": 2072,
-				"width": 16,
-				"height": 16,
-				"color": 2513986,
-				"customFields": {
-					"name": "chest",
-					"image": "../textures/static/chest.jpg",
-					"items": [
-						"Steel Sword"
-					],
-					"chance": [
-						1
-					],
-					"type": [
-						"weapon"
-					],
-					"number_of_items": [
-						3
-					]
-				}
 			}
 		],
 		"Metadata": [
@@ -323,10 +297,11 @@
 						"../sounds/bgm/DOVAHKIIN.mp3",
 						"../sounds/bgm/RadioGaGa.mp3",
 						"../sounds/bgm/finding_habo_bgm.mp3",
-						"../sounds/bgm/Angelia.mp3"
+						"../sounds/bgm/Angelia.mp3",
+						"../sounds/bgm/Sladka kot med.mp3"
 					],
-					"collision_set": "terrain\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\Collision-int.png",
-					"background": "terrain\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\_composite.png"
+					"collision_set": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\Collision-int.png",
+					"background": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\_composite.png"
 				}
 			}
 		]
