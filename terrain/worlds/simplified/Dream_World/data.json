@@ -300,8 +300,147 @@
 						"../sounds/bgm/Angelia.mp3",
 						"../sounds/bgm/Sladka kot med.mp3"
 					],
-					"collision_set": "terrain\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\Collision-int.png",
-					"background": "terrain\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\_composite.png"
+					"collision_set": "terrain\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Collision-int.png",
+					"background": "terrain\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\_composite.png"
+				}
+			}
+		],
+		"Activator": [
+			{
+				"id": "Activator",
+				"iid": "67410b20-b0a0-11ee-9a43-eb737be4ec9f",
+				"layer": "LeveL_Data",
+				"x": 3320,
+				"y": 3272,
+				"width": 48,
+				"height": 16,
+				"color": 11320532,
+				"customFields": {
+					"quest": -1,
+					"trap": "",
+					"pedistal": [
+						"Knowledge Potion"
+					]
+				}
+			},
+			{
+				"id": "Activator",
+				"iid": "40a75720-b0a0-11ee-9a43-6f233c20f82e",
+				"layer": "LeveL_Data",
+				"x": 3336,
+				"y": 3112,
+				"width": 64,
+				"height": 64,
+				"color": 11320532,
+				"customFields": {
+					"quest": 2,
+					"trap": "",
+					"pedistal": []
+				}
+			},
+			{
+				"id": "Activator",
+				"iid": "5c9303d0-b0a0-11ee-9a43-2dbee7c150dd",
+				"layer": "LeveL_Data",
+				"x": 3208,
+				"y": 3160,
+				"width": 48,
+				"height": 48,
+				"color": 11320532,
+				"customFields": {
+					"quest": -1,
+					"trap": "spikes",
+					"pedistal": []
+				}
+			}
+		],
+		"Npc_nav_tile": [
+			{
+				"id": "Npc_nav_tile",
+				"iid": "6cef6660-b0a0-11ee-9a43-8f58a5dce41a",
+				"layer": "LeveL_Data",
+				"x": 3512,
+				"y": 3208,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"bandit"
+					],
+					"pause_time": 1,
+					"path_ref": {
+						"entityIid": "6e4f92a0-b0a0-11ee-9a43-a79af409a696",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "6e4f92a0-b0a0-11ee-9a43-a79af409a696",
+				"layer": "LeveL_Data",
+				"x": 3512,
+				"y": 3032,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"bandit"
+					],
+					"pause_time": 1,
+					"path_ref": {
+						"entityIid": "6eed5940-b0a0-11ee-9a43-3dfe52b75072",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "6eed5940-b0a0-11ee-9a43-3dfe52b75072",
+				"layer": "LeveL_Data",
+				"x": 3736,
+				"y": 3032,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"bandit"
+					],
+					"pause_time": 1,
+					"path_ref": {
+						"entityIid": "7034f470-b0a0-11ee-9a43-1fe60e8eb287",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "7034f470-b0a0-11ee-9a43-1fe60e8eb287",
+				"layer": "LeveL_Data",
+				"x": 3736,
+				"y": 3208,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"bandit"
+					],
+					"pause_time": 1,
+					"path_ref": {
+						"entityIid": "6cef6660-b0a0-11ee-9a43-8f58a5dce41a",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
 				}
 			}
 		]

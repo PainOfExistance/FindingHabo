@@ -66,7 +66,7 @@ class Game:
             (GM.bg_menu.width, GM.bg_menu.height), pygame.SRCALPHA
         )
 
-    def setup_loaded(self, portals, npcs, final_items, containers, metadata):
+    def setup_loaded(self, portals, npcs, final_items, containers, metadata, activators, nav_tiles):
         GM.world_objects.append(
             {
                 "name": metadata,
@@ -122,6 +122,33 @@ class Game:
                     "name": data[0],
                 }
             )
+            
+
+        for data in activators:
+            img, img_rect = CM.assets.load_images(
+                "textures\static\door.png", (data[3], data[4]), (data[1], data[2])
+            )
+            GM.world_objects.append(
+                {
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "activator",
+                    "name": data[0],
+                }
+            )
+
+        for data in nav_tiles:
+            img, img_rect = CM.assets.load_images(
+                "textures\static\door.png", (16, 16), (data[1], data[2])
+            )
+            GM.world_objects.append(
+                {
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "nav_tile",
+                    "name": data[0],
+                }
+            )
 
     def setup(
         self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"
@@ -138,16 +165,16 @@ class Game:
             delta = date1 - date2
             if modified_data[0]["name"]["respawn_timer"] > delta.days:
                 print("respawned")
-                spawn_point, portals, npcs, final_items, containers, metadata = wp.parse_visited(modified_data)
-                self.setup_loaded(portals, npcs, final_items, containers, metadata)
+                spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles = wp.parse_visited(modified_data)
+                self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles)
             else:
                 print("basic in")
-                spawn_point, portals, npcs, final_items, containers, metadata = wp.remove_uniques(level_data, modified_data)
-                self.setup_loaded(portals, npcs, final_items, containers, metadata)
+                spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles = wp.remove_uniques(level_data, modified_data)
+                self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles)
         else:
             print("basic out")
-            spawn_point, portals, npcs, final_items, containers, metadata = wp.parser(level_data)
-            self.setup_loaded(portals, npcs, final_items, containers, metadata)
+            spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles = wp.parser(level_data)
+            self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles)
 
         CM.music_player = MusicPlayer(metadata["music"])
 

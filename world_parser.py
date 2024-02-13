@@ -89,7 +89,17 @@ def setContainer(item):
 
     return tmp, num_of_items
 
+def setActivators(activators):
+    if activators["quest"] != -1:
+        return {"quest": activators["quest"], "type": "quest"}
+    elif activators["trap"] != "":
+        return {"trap": activators["trap"], "type": "trap"}
+    elif len(activators["pedistal"]) != 0:
+        return {"pedistal": activators["pedistal"], "type": "pedistal"}
 
+def setNavTiles(nav_tiles):
+    return {"group": nav_tiles["group"], "pause_time": nav_tiles["pause_time"], "next_tile": nav_tiles["path_ref"]["entityIid"]}
+    
 def parser(world):
     spawn = (0, 0)
     portals = []
@@ -97,6 +107,8 @@ def parser(world):
     final_items = []
     containers = []
     metadata = []
+    activators = []
+    nav_tiles=[]
 
     for x in world["entities"]:
         if x == "Player_spawn":
@@ -142,6 +154,14 @@ def parser(world):
                     x
                 ][0]["customFields"]["music"][i][3:]
             metadata = world["entities"][x][0]["customFields"]
+            
+        elif x == "Activator":
+            for y in world["entities"][x]:
+                activators.append((setActivators(y["customFields"]), y["x"], y["y"], y["width"], y["height"]))
+                
+        elif x == "Npc_nav_tile":
+            for y in world["entities"][x]:
+                nav_tiles.append((setNavTiles(y["customFields"]), y["x"], y["y"]))
 
     #print("-------------------")
     #print(spawn)
@@ -157,7 +177,7 @@ def parser(world):
     #print(metadata)
     #print("-------------------")
 
-    return spawn, portals, enemies, final_items, containers, metadata
+    return spawn, portals, enemies, final_items, containers, metadata, activators, nav_tiles
 
 def parse_visited(world):
     spawn = (0, 0)
@@ -166,6 +186,9 @@ def parse_visited(world):
     final_items = []
     containers = []
     metadata = []
+    activators = []
+    nav_tiles=[]
+    
     for i in world:
         if i["type"]=="metadata":
             metadata=i["name"]
@@ -179,8 +202,11 @@ def parse_visited(world):
             enemies.append((i["name"], i["x"], i["y"]))
         elif i["type"]=="portal":
             portals.append((i["name"], i["x"], i["y"]))
+        elif i["type"]=="activator":
+            activators.append((i["name"], i["x"], i["y"]))
+        elif i["type"]=="nav_tile":
+            nav_tiles.append((i["name"], i["x"], i["y"]))
             
-    
     #print("-------------------")
     #print(spawn)
     #print("-------------------")
@@ -194,14 +220,13 @@ def parse_visited(world):
     #print("-------------------")
     #print(metadata)
     #print("-------------------")
-            
         
-    return spawn, portals, enemies, final_items, containers, metadata
+    return spawn, portals, enemies, final_items, containers, metadata, activators, nav_tiles
 
 
 def remove_uniques(original, modified):
-    orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata = parser(copy.deepcopy(original))
-    mod_spawn, mod_portals, mod_enemies, mod_final_items, mod_containers, mod_metadata = parse_visited(copy.deepcopy(modified))
+    orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles = parser(copy.deepcopy(original))
+    mod_spawn, mod_portals, mod_enemies, mod_final_items, mod_containers, mod_metadata, mod_activators, mod_tiles = parse_visited(copy.deepcopy(modified))
 
     #print()
     #print("orig_spawn", orig_spawn)
@@ -230,7 +255,6 @@ def remove_uniques(original, modified):
     #print()
     #print("mod_metadata", mod_metadata)
     #print()
-    
     
     for i, _ in enumerate(orig_enemies):
         if orig_enemies[i][0]["stats"]["rarity"]=="unique":
@@ -264,4 +288,4 @@ def remove_uniques(original, modified):
                 print(j)
                 orig_containers[i][0].pop(index)
     
-    return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata
+    return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles
