@@ -130,7 +130,7 @@ class AssetLoader:
 
     def save(self):
         CM.assets.world_save(GM.world_objects)
-        save_name =f"{CM.player.name}_{GM.game_date.print_date()}".replace(" ", "_")
+        save_name =f"{CM.player.name}_{GM.game_date.print_date()}".replace(" ", "_").replace(",", "")
         self.rename_index_worlds(save_name)
         data=CM.player.to_dict()
         data["save_world_names"]=GM.save_world_names
@@ -138,6 +138,8 @@ class AssetLoader:
         #print("---------SAVING DATA---------")
         #print(data)
         #print("-----------------------------")
+        if not os.path.exists("saves"):
+            os.makedirs("saves")
         with open(f"saves/{GM.save_name}.habo", "w") as file:
             json_data=json.dumps(data, indent=2)
             file.write(json_data)
@@ -160,7 +162,9 @@ class AssetLoader:
                 entry["name"]["time_passed"]=GM.game_date.get_date()
                 transformed_entry = {"name": entry["name"], "type": entry["type"]}
             elif entry["type"]=="activator":
-                transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery, "width": entry["rect"].width, "height": entry["rect"].height}
+                transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery, "width": entry["rect"].width, "height": entry["rect"].height, "iid": entry["iid"]}
+            elif entry["type"]=="nav_tile":
+                transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery, "iid": entry["iid"]}
             else:
                 transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery}
             transformed_data.append(transformed_entry)

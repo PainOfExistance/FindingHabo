@@ -157,11 +157,11 @@ def parser(world):
             
         elif x == "Activator":
             for y in world["entities"][x]:
-                activators.append((setActivators(y["customFields"]), y["x"], y["y"], y["width"], y["height"]))
+                activators.append((setActivators(y["customFields"]), y["x"], y["y"], y["width"], y["height"], y["iid"]))
                 
         elif x == "Npc_nav_tile":
             for y in world["entities"][x]:
-                nav_tiles.append((setNavTiles(y["customFields"]), y["x"], y["y"]))
+                nav_tiles.append((setNavTiles(y["customFields"]), y["x"], y["y"], y["iid"]))
 
     #print("-------------------")
     #print(spawn)
@@ -203,9 +203,9 @@ def parse_visited(world):
         elif i["type"]=="portal":
             portals.append((i["name"], i["x"], i["y"]))
         elif i["type"]=="activator":
-            activators.append((i["name"], i["x"], i["y"], i["width"], i["height"]))
+            activators.append((i["name"], i["x"], i["y"], i["width"], i["height"], i["iid"]))
         elif i["type"]=="nav_tile":
-            nav_tiles.append((i["name"], i["x"], i["y"]))
+            nav_tiles.append((i["name"], i["x"], i["y"], i["iid"]))
             
     #print("-------------------")
     #print(spawn)
@@ -283,9 +283,9 @@ def remove_uniques(original, modified):
                 for k in mod_containers[i][0]:
                     if j["type"]==k["type"]:
                         in_mod=True
-                    
             if not in_mod and GM.items[j["type"]]["rarity"]=="unique":
-                print(j)
                 orig_containers[i][0].pop(index)
+    
+    
     
     return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles

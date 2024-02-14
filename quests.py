@@ -53,6 +53,14 @@ class Quests:
         self.text_to_draw.clear()
         self.text_to_draw.append("Completed: " + self.quests[id]["name"])
         self.tics = pygame.time.get_ticks()
+        
+    def check_quest_state(self, id):
+        if self.quests[id]["started"] == "finished":
+            return "finished"
+        elif self.quests[id]["started"]:
+            return "started"
+        else:
+            return "not started"
 
     def draw_quest_info(self):
         if pygame.time.get_ticks() - self.tics <= 5000:

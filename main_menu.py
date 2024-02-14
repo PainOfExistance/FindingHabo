@@ -44,7 +44,7 @@ class MainMenu:
                 self.selected_item = (self.selected_item + 1) % len(self.saves)
             self.selection_held = True
 
-        elif keys[pygame.K_RETURN] and not self.selection_held and len(self.saves) > 0:
+        elif keys[pygame.K_RETURN] and not self.selection_held:
             self.select_option()
             self.selection_held = True
 
@@ -71,7 +71,7 @@ class MainMenu:
     def select_option(self):
         if self.in_sub_menu == 0:
             selected_option = self.menu_items[self.selected_item]
-        elif self.in_sub_menu == 1:
+        elif self.in_sub_menu == 1 and len(self.saves) > 0:
             selected_option = self.saves[self.selected_item]
 
         if selected_option == "Start":

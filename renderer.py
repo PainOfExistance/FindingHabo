@@ -331,7 +331,7 @@ def draw_objects(subtitle_font, prompt_font):
                 and x["name"]["stats"]["status"] == "alive"
             ):
                 GM.screen.blit(x["image"], (relative__left, relative__top))
-            elif "stats" not in x["name"]:
+            elif "stats" not in x["name"] and "image" in x:
                 GM.screen.blit(x["image"], (relative__left, relative__top))
 
             if x["type"] == "container":
@@ -503,3 +503,9 @@ def draw_objects(subtitle_font, prompt_font):
                 and x["type"] == "portal"
             ):
                 GM.world_to_travel_to = None
+        
+            if (other_obj_rect.colliderect(CM.player.player_rect) and x["type"]=="activator" and x["name"]["type"]=="quest"):
+                if CM.player.quests.check_quest_state(x["name"]["quest"])=="not started":
+                    CM.player.quests.start_quest(x["name"]["quest"])
+                    CM.ai.strings.starts = 0
+                

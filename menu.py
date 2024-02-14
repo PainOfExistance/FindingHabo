@@ -90,7 +90,7 @@ class Menu:
         selected_option = ""
         if self.in_sub_menu == 0:
             selected_option = self.menu_items[self.selected_item]
-        elif self.in_sub_menu == 1 and self.action!="Save":
+        elif self.in_sub_menu == 1 and self.action != "Save" and len(self.saves)>0:
             selected_option = self.saves[self.selected_item]
             
         if selected_option == "Continue":
@@ -108,7 +108,7 @@ class Menu:
                 if tmp:
                     saves = glob.glob(os.path.join("saves", "*.habo"))
                     self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves[::-1]]
-            elif self.action=="Load":
+            elif self.action=="Load" and len(self.saves)>0:
                 self.loading()
                 GM._scr.blit(GM.screen, (0, 0))
                 GM.screen_width = GM.screen.get_width()
@@ -123,7 +123,7 @@ class Menu:
                 CM.game.__init__()
                 self.visible = False
                 CM.game.run()
-            elif self.action=="Overwrite":
+            elif self.action=="Overwrite" and len(self.saves)>0:
                 os.remove(f"saves/{selected_option}.habo")
                 CM.assets.save()
                 saves = glob.glob(os.path.join("saves", "*.habo"))

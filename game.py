@@ -125,30 +125,36 @@ class Game:
             
 
         for data in activators:
-            img, img_rect = CM.assets.load_images(
-                "textures\static\door.png", (data[3], data[4]), (data[1], data[2])
+            img_rect = pygame.Rect(
+                0,0, data[3], data[4]
             )
+            img_rect.center=(data[1], data[2])
+            
             GM.world_objects.append(
                 {
-                    "image": img,
                     "rect": img_rect,
                     "type": "activator",
                     "name": data[0],
+                    "iid": data[5],
                 }
             )
 
         for data in nav_tiles:
-            img, img_rect = CM.assets.load_images(
-                "textures\static\door.png", (16, 16), (data[1], data[2])
+            img_rect = pygame.Rect(
+                0, 0, 16, 16
             )
+            img_rect.center=(data[1], data[2])
+            
             GM.world_objects.append(
                 {
-                    "image": img,
                     "rect": img_rect,
                     "type": "nav_tile",
                     "name": data[0],
+                    "iid": data[3]
                 }
             )
+        
+        print (GM.world_objects)
 
     def setup(
         self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"
