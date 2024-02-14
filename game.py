@@ -1097,12 +1097,13 @@ class Game:
 
 
     def loading(self):
+        GM._scr.fill((255,255,255))
         font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
         text = font.render("Loading...", True, (180, 180, 180))
         text_rect = text.get_rect(
             center=(GM.screen.get_width() // 2, GM.screen.get_height() // 2.5)
         )
-        GM.screen.blit(text, text_rect)
+        GM._scr.blit(text, text_rect)
         pygame.display.flip()
 
     def draw(self):

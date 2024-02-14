@@ -24,7 +24,7 @@ class MainMenu:
         self.is_menu_visible = True
         self.in_sub_menu = 0
         saves = glob.glob(os.path.join("saves", "*.habo"))
-        self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves]
+        self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves[::-1]]
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 40)  
 
     def handle_input(self):
@@ -44,12 +44,19 @@ class MainMenu:
                 self.selected_item = (self.selected_item + 1) % len(self.saves)
             self.selection_held = True
 
-        elif keys[pygame.K_RETURN] and not self.selection_held:
+        elif keys[pygame.K_RETURN] and not self.selection_held and len(self.saves) > 0:
             self.select_option()
             self.selection_held = True
 
         elif keys[pygame.K_TAB] and not self.selection_held:
             self.in_sub_menu = 0
+            self.selection_held = True
+        
+        elif keys[pygame.K_r] and not self.selection_held and len(self.saves) > 0:
+            selected_option = self.saves[self.selected_item]
+            os.remove(f"saves/{selected_option}.habo")
+            saves = glob.glob(os.path.join("saves", "*.habo"))
+            self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves[::-1]]
             self.selection_held = True
 
         elif (
@@ -57,6 +64,7 @@ class MainMenu:
             and not keys[pygame.K_DOWN]
             and not keys[pygame.K_RETURN]
             and not keys[pygame.K_TAB]
+            and not keys[pygame.K_r]
         ):
             self.selection_held = False
 
@@ -132,6 +140,16 @@ class MainMenu:
                 GM._scr.blit(text, text_rect)
 
         elif self.in_sub_menu == 1:
+            
+            item_render = self.font.render(f"ENTER) Load     R) Delete", True, (0, 0, 0))
+            item_rect = item_render.get_rect(
+                    center=(
+                        GM.screen.get_width() // 2,
+                        50,
+                    )
+                )
+            GM._scr.blit(item_render, item_rect)
+        
             scroll_position = (self.selected_item // 6) * 6
             visible_saves = list(self.saves)[scroll_position : scroll_position + 6]
             
@@ -161,6 +179,7 @@ class MainMenu:
             center=(GM._scr.get_width() // 2, GM._scr.get_height() // 2.5)
         )
         GM._scr.blit(text, text_rect)
+        pygame.display.flip()
 
     def run(self):
         while self.is_menu_visible:

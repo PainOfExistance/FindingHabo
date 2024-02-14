@@ -18,7 +18,7 @@ class Menu:
         self.selection_held = False
         self.in_sub_menu = 0
         saves = glob.glob(os.path.join("saves", "*.habo"))
-        self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves]
+        self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves[::-1]]
         self.action="Save"
         self.game=None
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 40)   
@@ -36,7 +36,7 @@ class Menu:
     def toggle_visibility(self):
         self.visible = not self.visible
         saves = glob.glob(os.path.join("saves", "*.habo"))
-        self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves]
+        self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves[::-1]]
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
@@ -51,14 +51,14 @@ class Menu:
             if keys[pygame.K_UP] and not self.selection_held:
                 if self.in_sub_menu == 0:
                     self.selected_item = (self.selected_item - 1) % len(self.menu_items)
-                elif self.in_sub_menu == 1:
+                elif self.in_sub_menu == 1 and len(self.saves)>0:
                     self.selected_item = (self.selected_item - 1) % len(self.saves)
                 self.selection_held = True
 
             elif keys[pygame.K_DOWN] and not self.selection_held:
                 if self.in_sub_menu == 0:
                     self.selected_item = (self.selected_item + 1) % len(self.menu_items)
-                elif self.in_sub_menu == 1:
+                elif self.in_sub_menu == 1 and len(self.saves)>0:
                     self.selected_item = (self.selected_item + 1) % len(self.saves)
                 self.selection_held = True
 
@@ -87,9 +87,10 @@ class Menu:
             self.selection_held = False
 
     def select_option(self):
+        selected_option = ""
         if self.in_sub_menu == 0:
             selected_option = self.menu_items[self.selected_item]
-        elif self.in_sub_menu == 1:
+        elif self.in_sub_menu == 1 and self.action!="Save":
             selected_option = self.saves[self.selected_item]
             
         if selected_option == "Continue":
@@ -106,7 +107,37 @@ class Menu:
                 tmp=CM.assets.save()
                 if tmp:
                     saves = glob.glob(os.path.join("saves", "*.habo"))
-                    self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves]
+                    self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves[::-1]]
+            elif self.action=="Load":
+                self.loading()
+                GM._scr.blit(GM.screen, (0, 0))
+                GM.screen_width = GM.screen.get_width()
+                GM.screen_height = GM.screen.get_height()
+                #pygame.display.update()
+                CM.player.__init__()
+                CM.ai.__init__()
+                GM.save_name=f"{selected_option}.habo"
+                CM.player.from_dict(CM.assets.load(f"saves/{selected_option}.habo"))
+                CM.menu.__init__()
+                CM.player_menu.__init__()
+                CM.game.__init__()
+                self.visible = False
+                CM.game.run()
+            elif self.action=="Overwrite":
+                os.remove(f"saves/{selected_option}.habo")
+                CM.assets.save()
+                saves = glob.glob(os.path.join("saves", "*.habo"))
+                self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves[::-1]]
+                
+    def loading(self):
+        GM._scr.fill((255,255,255))
+        font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
+        text = font.render("Loading...", True, (180, 180, 180))
+        text_rect = text.get_rect(
+            center=(GM.screen.get_width() // 2, GM.screen.get_height() // 2.5)
+        )
+        GM._scr.blit(text, text_rect)
+        pygame.display.flip()
 
     def render(self):
         if self.visible:
@@ -135,6 +166,16 @@ class Menu:
                     GM.screen.blit(text, text_rect)
             
             if self.in_sub_menu==1:
+                
+                item_render = self.menu_font.render(f"ENTER) Save     E) Load     T) Overwrite", True, (0, 0, 0))
+                item_rect = item_render.get_rect(
+                        center=(
+                            GM.screen.get_width() // 2,
+                            50,
+                        )
+                    )
+                GM.screen.blit(item_render, item_rect)
+                
                 scroll_position = (self.selected_item // 6) * 6
                 visible_saves = list(self.saves)[scroll_position : scroll_position + 6]
 

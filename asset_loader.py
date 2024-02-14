@@ -159,6 +159,8 @@ class AssetLoader:
             if entry["type"] == "metadata":
                 entry["name"]["time_passed"]=GM.game_date.get_date()
                 transformed_entry = {"name": entry["name"], "type": entry["type"]}
+            elif entry["type"]=="activator":
+                transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery, "width": entry["rect"].width, "height": entry["rect"].height}
             else:
                 transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery}
             transformed_data.append(transformed_entry)

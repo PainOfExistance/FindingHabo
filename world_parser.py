@@ -203,7 +203,7 @@ def parse_visited(world):
         elif i["type"]=="portal":
             portals.append((i["name"], i["x"], i["y"]))
         elif i["type"]=="activator":
-            activators.append((i["name"], i["x"], i["y"]))
+            activators.append((i["name"], i["x"], i["y"], i["width"], i["height"]))
         elif i["type"]=="nav_tile":
             nav_tiles.append((i["name"], i["x"], i["y"]))
             
