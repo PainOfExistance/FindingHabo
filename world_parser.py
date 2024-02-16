@@ -145,6 +145,7 @@ def parser(world):
                         y["customFields"]["name"],
                         "textures/static/" + file_name,
                         nums,
+                        y["customFields"]["pedistal"]
                     )
                 )
 

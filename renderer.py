@@ -508,4 +508,3 @@ def draw_objects(subtitle_font, prompt_font):
                 if CM.player.quests.check_quest_state(x["name"]["quest"])=="not started":
                     CM.player.quests.start_quest(x["name"]["quest"])
                     CM.ai.strings.starts = 0
-                
