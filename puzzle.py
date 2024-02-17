@@ -1,16 +1,22 @@
+import random
+
 import numpy as np
 import pygame
 
+from game_manager import GameManager as GM
 
-class Puzzle:
-    def __init__(self, puzzle_data):
-        self.type = puzzle_data['type']
-        self.x = puzzle_data['x']
-        self.y = puzzle_data['y']
-        self.width = puzzle_data['width']
-        self.height = puzzle_data['height']
-        self.buttons = puzzle_data.get('buttons', [])
-        self.solution = puzzle_data.get('solution', [])
 
-    def check_solution(self, pressed_buttons):
-        return sorted(pressed_buttons) == sorted(self.solution)
+def check_pedistal(current_items, required_items):
+    list=[x["type"] for x in current_items]
+    current_items=list
+    if len(current_items) == len(required_items) and set(current_items) == set(required_items):
+        return True
+    elif len(current_items) == len(required_items):
+        return False
+
+def find_ref(iid):
+    for x in GM.world_objects:
+        if x["type"]=="activator" and x["name"]["type"]=="pedistal":
+            if x["iid"]==iid:
+                return x
+    return -1

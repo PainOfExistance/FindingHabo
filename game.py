@@ -1,5 +1,6 @@
 import copy
 import os
+import re
 import sys
 from datetime import datetime
 
@@ -67,6 +68,8 @@ class Game:
         )
 
     def setup_loaded(self, portals, npcs, final_items, containers, metadata, activators, nav_tiles):
+        metadata["collision_set"] = re.sub(r'\\+', r'\\', metadata["collision_set"])
+        metadata["background"] = re.sub(r'\\+', r'\\', metadata["background"])
         GM.world_objects.append(
             {
                 "name": metadata,
@@ -85,6 +88,7 @@ class Game:
                     "image": img,
                     "rect": img_rect,
                     "type": "item",
+                    "iid": data[3]
                 }
             )
 
@@ -92,7 +96,7 @@ class Game:
             tmp = data
             img, img_rect = CM.assets.load_images(data[4], (64, 64), (data[1], data[2]))
             GM.world_objects.append(
-                {"image": img, "rect": img_rect, "type": "container", "name": tmp}
+                {"image": img, "rect": img_rect, "type": "container", "name": tmp, "pedistal": data[6], "iid": data[7]}
             )
 
         for data in npcs:
@@ -107,6 +111,7 @@ class Game:
                     "name": copy.deepcopy(data[0]),
                     "attack_diff": 0,
                     "agroved": False,
+                    "iid": data[3]
                 }
             )
 
@@ -120,6 +125,7 @@ class Game:
                     "rect": img_rect,
                     "type": "portal",
                     "name": data[0],
+                    "iid": data[3],
                 }
             )
             

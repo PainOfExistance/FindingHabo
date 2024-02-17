@@ -163,10 +163,10 @@ class AssetLoader:
                 transformed_entry = {"name": entry["name"], "type": entry["type"]}
             elif entry["type"]=="activator":
                 transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery, "width": entry["rect"].width, "height": entry["rect"].height, "iid": entry["iid"]}
-            elif entry["type"]=="nav_tile":
-                transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery, "iid": entry["iid"]}
+            elif entry["type"]=="container":
+                transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery, "pedistal": entry["pedistal"], "iid": entry["iid"]}
             else:
-                transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery}
+                transformed_entry = {"name": entry["name"], "type": entry["type"], "x": entry["rect"].centerx, "y": entry["rect"].centery, "iid": entry["iid"]}
             transformed_data.append(transformed_entry)
         
         with open(path, "w") as file:

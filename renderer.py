@@ -1,11 +1,20 @@
 import pygame
 
+import puzzle
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 def draw_container(menu_font):
     if GM.container_open:
+        if GM.world_objects[GM.container_hovered]["pedistal"] != None:
+            ref=puzzle.find_ref(GM.world_objects[GM.container_hovered]["pedistal"]["entityIid"])
+            if puzzle.check_pedistal(GM.world_objects[GM.container_hovered]["name"][0], ref["name"]["pedistal"]):
+                print("brehsuhsuhsuhsuh")
+                GM.container_open=False
+                GM.container_hovered=None
+                return
+            
         CM.ai.strings.bartering = False
         pygame.draw.rect(
             GM.bg_surface_menu,
@@ -13,6 +22,7 @@ def draw_container(menu_font):
             GM.bg_surface_menu.get_rect(),
         )
         GM.screen.blit(GM.bg_surface_menu, GM.bg_menu)
+        
         pygame.draw.line(
             GM.screen,
             (22, 22, 22),
@@ -20,10 +30,12 @@ def draw_container(menu_font):
             (GM.screen.get_width() // 2, GM.screen.get_height()),
             4,
         )
+        
         scroll_position = (GM.selected_inventory_item // 10) * 10
         visible_items = GM.world_objects[GM.container_hovered]["name"][0][
             scroll_position : scroll_position + 10
         ]
+        
         i = 0
         item_render = menu_font.render(
             CM.player.name,
@@ -37,6 +49,7 @@ def draw_container(menu_font):
             )
         )
         GM.screen.blit(item_render, item_rect)
+        
         item_render = menu_font.render(
             GM.world_objects[GM.container_hovered]["name"][3],
             True,
@@ -49,6 +62,7 @@ def draw_container(menu_font):
             )
         )
         GM.screen.blit(item_render, item_rect)
+        
         i += 1
         pygame.draw.line(
             GM.screen,
@@ -57,6 +71,7 @@ def draw_container(menu_font):
             (GM.screen.get_width(), 20 + i * 50),
             4,
         )
+        
         for index, (data) in enumerate(visible_items):
             color = (
                 (157, 157, 210)
@@ -77,6 +92,7 @@ def draw_container(menu_font):
                 topleft=(GM.screen.get_width() // 2 + 20, 20 + (index + 2) * 40)
             )
             GM.screen.blit(item_render, item_rect)
+            
         scroll_position = (GM.selected_inventory_item // 10) * 10
         visible_items = list(CM.inventory.quantity.items())[
             scroll_position : scroll_position + 10
@@ -96,9 +112,11 @@ def draw_container(menu_font):
                 item_text = f"> {item_name}: {item_quantity}"
             else:
                 item_text = f"    {item_name}: {item_quantity}"
+                
             item_render = menu_font.render(item_text, True, color)
             item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
             GM.screen.blit(item_render, item_rect)
+            
     elif not CM.ai.strings.bartering:
         GM.enter_held = False
         
@@ -201,7 +219,6 @@ def draw_barter(menu_font):
             GM.screen.blit(item_render, item_rect)
     elif not GM.container_open:
         GM.enter_held = False
-
 
 def draw_objects(subtitle_font, prompt_font):
     for index, x in enumerate(GM.world_objects):

@@ -116,19 +116,19 @@ def parser(world):
                 if y["customFields"]["type"] == "default":
                     spawn = (y["x"], y["y"])
                 else:
-                    portals.append((y["customFields"], y["x"], y["y"]))
+                    portals.append((y["customFields"], y["x"], y["y"], y["iid"]))
 
         elif x == "Enemy_Random_Spawn":
             for y in world["entities"][x]:
                 tmp = setEnemies(y["customFields"])
                 if tmp:
-                    enemies.append((GM.ai_package[tmp], y["x"], y["y"]))
+                    enemies.append((GM.ai_package[tmp], y["x"], y["y"], y["iid"]))
 
         elif x == "Item_field":
             for y in world["entities"][x]:
                 tmp = setItems(y["customFields"])
                 if tmp:
-                    final_items.append((tmp, y["x"], y["y"]))
+                    final_items.append((tmp, y["x"], y["y"], y["iid"]))
 
         elif x == "Container_field":
             for y in world["entities"][x]:
@@ -145,7 +145,9 @@ def parser(world):
                         y["customFields"]["name"],
                         "textures/static/" + file_name,
                         nums,
-                        y["customFields"]["pedistal"]
+                        y["customFields"]["pedistal"],
+                        y["iid"],
+                        y["customFields"]["reset"],
                     )
                 )
 
@@ -194,15 +196,15 @@ def parse_visited(world):
         if i["type"]=="metadata":
             metadata=i["name"]
         elif i["type"]=="item":
-            final_items.append((i["name"], i["x"], i["y"]))
+            final_items.append((i["name"], i["x"], i["y"], i["iid"]))
         elif i["type"]=="container":
             i["name"][1]=i["x"]
             i["name"][2]=i["y"]
             containers.append(i["name"])
         elif i["type"]=="npc":
-            enemies.append((i["name"], i["x"], i["y"]))
+            enemies.append((i["name"], i["x"], i["y"], i["iid"]))
         elif i["type"]=="portal":
-            portals.append((i["name"], i["x"], i["y"]))
+            portals.append((i["name"], i["x"], i["y"], i["iid"]))
         elif i["type"]=="activator":
             activators.append((i["name"], i["x"], i["y"], i["width"], i["height"], i["iid"]))
         elif i["type"]=="nav_tile":
@@ -278,15 +280,17 @@ def remove_uniques(original, modified):
                 orig_final_items.pop(i)
                     
     for i, _ in enumerate(orig_containers):
-        for index, j in enumerate(orig_containers[i][0]):
-            in_mod=False
-            if GM.items[j["type"]]["rarity"]=="unique":
-                for k in mod_containers[i][0]:
-                    if j["type"]==k["type"]:
-                        in_mod=True
-            if not in_mod and GM.items[j["type"]]["rarity"]=="unique":
-                orig_containers[i][0].pop(index)
-    
+        if orig_containers[i][8]:
+            for index, j in enumerate(orig_containers[i][0]):
+                in_mod=False
+                if GM.items[j["type"]]["rarity"]=="unique":
+                    for k in mod_containers[i][0]:
+                        if j["type"]==k["type"]:
+                            in_mod=True
+                if not in_mod and GM.items[j["type"]]["rarity"]=="unique":
+                    orig_containers[i][0].pop(index)
+        else:
+            orig_containers[i]=copy.deepcopy(mod_containers[i])
     
     
     return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles
