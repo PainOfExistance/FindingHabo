@@ -6,14 +6,20 @@ from game_manager import GameManager as GM
 
 
 def draw_container(menu_font):
-    if GM.container_open:
+    if GM.container_open and GM.container_hovered != None:
         if GM.world_objects[GM.container_hovered]["pedistal"] != None:
-            ref=puzzle.find_ref(GM.world_objects[GM.container_hovered]["pedistal"]["entityIid"])
+            _, ref=puzzle.find_ref(GM.world_objects[GM.container_hovered]["pedistal"]["entityIid"], "pedistal")
+            index, _=puzzle.find_ref(ref["name"]["ref"]["entityIid"], "trap")
+            GM.world_objects[index]["name"]["trap"]="ref"
             if puzzle.check_pedistal(GM.world_objects[GM.container_hovered]["name"][0], ref["name"]["pedistal"]):
-                print("brehsuhsuhsuhsuh")
+                print("true")
                 GM.container_open=False
                 GM.container_hovered=None
                 return
+            elif puzzle.check_pedistal(GM.world_objects[GM.container_hovered]["name"][0], ref["name"]["pedistal"])==False:
+                print("false")
+                index, ref=puzzle.find_ref(ref["name"]["ref"]["entityIid"], "trap")
+                GM.world_objects[index]["name"]["trap"]="spikes"
             
         CM.ai.strings.bartering = False
         pygame.draw.rect(
@@ -525,3 +531,8 @@ def draw_objects(subtitle_font, prompt_font):
                 if CM.player.quests.check_quest_state(x["name"]["quest"])=="not started":
                     CM.player.quests.start_quest(x["name"]["quest"])
                     CM.ai.strings.starts = 0
+            elif (other_obj_rect.colliderect(CM.player.player_rect) and x["type"]=="activator" and x["name"]["type"]=="trap" and not GM.container_open):
+                if x["name"]["trap"]!="ref" and "activated" not in x["name"]["trap"]:
+                    #todo play anim depending on trap type
+                    CM.player.update_health(-50)
+                    GM.world_objects[index]["name"]["trap"]+=" activated"

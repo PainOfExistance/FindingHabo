@@ -91,11 +91,11 @@ def setContainer(item):
 
 def setActivators(activators):
     if activators["quest"] != -1:
-        return {"quest": activators["quest"], "type": "quest"}
+        return {"quest": activators["quest"], "type": "quest", "ref": activators["action_ref"]}
     elif activators["trap"] != "":
-        return {"trap": activators["trap"], "type": "trap"}
+        return {"trap": activators["trap"], "type": "trap", "ref": activators["action_ref"]}
     elif len(activators["pedistal"]) != 0:
-        return {"pedistal": activators["pedistal"], "type": "pedistal"}
+        return {"pedistal": activators["pedistal"], "type": "pedistal", "ref": activators["action_ref"]}
 
 def setNavTiles(nav_tiles):
     return {"group": nav_tiles["group"], "pause_time": nav_tiles["pause_time"], "next_tile": nav_tiles["path_ref"]["entityIid"]}

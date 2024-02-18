@@ -14,9 +14,8 @@ def check_pedistal(current_items, required_items):
     elif len(current_items) == len(required_items):
         return False
 
-def find_ref(iid):
-    for x in GM.world_objects:
-        if x["type"]=="activator" and x["name"]["type"]=="pedistal":
-            if x["iid"]==iid:
-                return x
+def find_ref(iid, type):
+    for i, x in enumerate(GM.world_objects):
+        if x["type"]=="activator" and x["name"]["type"]==type and x["iid"]==iid:
+            return i, x
     return -1

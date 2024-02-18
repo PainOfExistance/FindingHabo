@@ -94,9 +94,11 @@ class MainMenu:
         elif selected_option == "Load" and len(self.saves) > 0:
             print("Opening load menu...")
             self.in_sub_menu = 1
+            self.selected_item = 0
         elif selected_option == "Options":
             print("Opening options menu...")
             self.in_sub_menu = 2
+            self.selected_item = 0
             # Add your options menu logic here
         elif selected_option == "Exit":
             pygame.quit()
