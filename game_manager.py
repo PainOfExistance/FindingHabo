@@ -48,6 +48,7 @@ class GameManager:
     map_width=None
     bg_rect=None
     background=None
+    npc_list=[]
 
 class ClassManager:
     ai=None

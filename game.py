@@ -8,6 +8,7 @@ import numpy as np
 import pygame
 from pygame.locals import *
 
+import npc as N
 import renderer as R
 import world_parser as wp
 from ai import Ai
@@ -103,7 +104,7 @@ class Game:
             img, img_rect = CM.assets.load_images(
                 data[0]["stats"]["image"], (64, 64), (data[1], data[2])
             )
-            GM.world_objects.append(
+            GM.npc_list.append(
                 {
                     "image": img,
                     "rect": img_rect,
@@ -166,7 +167,8 @@ class Game:
         self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"
     ):
         GM.world_objects.clear()
-
+        GM.npc_list.clear()
+        
         level_data = CM.assets.load_level_data(path)
         modified_data = CM.assets.get_stored_data(path)
         if modified_data != None:
@@ -1050,6 +1052,7 @@ class Game:
             and not GM.attacking
             and not GM.attack_button_held
             and not GM.is_in_dialogue
+            and not GM.container_open
         ):
             timedif = 0
             if CM.player.equipped_items["hand"] != None:
@@ -1121,7 +1124,8 @@ class Game:
     def draw(self):
         GM.screen.fill((230, 60, 20))
         GM.screen.blit(GM.background, GM.bg_rect.topleft)
-        R.draw_objects(self.subtitle_font, self.prompt_font)
+        R.draw_objects(self.prompt_font)
+        N.update_npc(self.subtitle_font, self.prompt_font)
         CM.player.draw()  # .lulekSprulek.123.fafajMi)
         CM.player.quests.draw_quest_info()
         R.draw_container(self.menu_font)
