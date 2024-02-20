@@ -117,20 +117,33 @@ class Game:
             )
 
         for data in portals:
-            img, img_rect = CM.assets.load_images(
-                "textures\static\door.png", (64, 64), (data[1], data[2])
-            )
-            GM.world_objects.append(
-                {
-                    "image": img,
-                    "rect": img_rect,
-                    "type": "portal",
-                    "name": data[0],
-                    "iid": data[3],
-                }
-            )
+            if "unlocked_by" in data[0]:
+                img, img_rect = CM.assets.load_images(
+                    "textures\static\door.png", (64, 64), (data[1], data[2])
+                )
+                GM.world_objects.append(
+                    {
+                        "image": img,
+                        "rect": img_rect,
+                        "type": "portal",
+                        "name": data[0],
+                        "iid": data[3],
+                    }
+                )
+            else:
+                img, img_rect = CM.assets.load_images(
+                    "textures\\static\\barrier.png", (data[4], data[5]), (data[1], data[2])
+                )
+                GM.world_objects.append(
+                    {
+                        "image": img,
+                        "rect": img_rect,
+                        "type": "walk_in_portal",
+                        "name": data[0],
+                        "iid": data[3],
+                    }
+                )
             
-
         for data in activators:
             img_rect = pygame.Rect(
                 0,0, data[3], data[4]
@@ -161,7 +174,7 @@ class Game:
                 }
             )
         
-        print (GM.world_objects)
+        print(GM.world_objects)
 
     def setup(
         self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"

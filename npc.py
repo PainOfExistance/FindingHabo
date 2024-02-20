@@ -7,6 +7,10 @@ from game_manager import GameManager as GM
 
 def update_npc(subtitle_font, prompt_font):
     for index, x in enumerate(GM.npc_list):
+        if GM.npc_list[index]["name"]["stats"]["status"] == "dead":
+            GM.npc_list.pop(index)
+        
+    for index, x in enumerate(GM.npc_list):
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
         if (
@@ -215,6 +219,3 @@ def update_npc(subtitle_font, prompt_font):
                 and GM.npc_list[index]["name"]["stats"]["status"] != "dead"
             ):
                 GM.is_ready_to_talk = False
-        
-        if GM.npc_list[index]["name"]["stats"]["status"] == "dead":
-            GM.npc_list.pop(index)

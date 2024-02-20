@@ -11,7 +11,6 @@ assets = AssetLoader()
 items = assets.load_items()
 ai = assets.load_ai_package()
 
-
 def setEnemies(enemy):
     for x in ai:
         if (
@@ -89,16 +88,19 @@ def setContainer(item):
 
     return tmp, num_of_items
 
+
 def setActivators(activators):
     if activators["quest"] != -1:
         return {"quest": activators["quest"], "type": "quest", "ref": activators["action_ref"]}
     elif activators["trap"] != "":
         return {"trap": activators["trap"], "type": "trap", "ref": activators["action_ref"]}
     elif len(activators["pedistal"]) != 0:
-        return {"pedistal": activators["pedistal"], "type": "pedistal", "ref": activators["action_ref"]}
+        return {"pedistal": activators["pedistal"], "type": "pedistal", "ref": activators["action_ref"], "door_ref": activators["door_ref"]}
+
 
 def setNavTiles(nav_tiles):
     return {"group": nav_tiles["group"], "pause_time": nav_tiles["pause_time"], "next_tile": nav_tiles["path_ref"]["entityIid"]}
+    
     
 def parser(world):
     spawn = (0, 0)
@@ -150,6 +152,10 @@ def parser(world):
                         y["customFields"]["reset"],
                     )
                 )
+                
+        elif x == "Portal_walk_in":
+            for y in world["entities"][x]:
+                portals.append((y["customFields"], y["x"], y["y"], y["iid"], y["width"], y["height"]))
 
         elif x == "Metadata":
             for i, _ in enumerate(world["entities"][x][0]["customFields"]["music"]):
@@ -209,6 +215,8 @@ def parse_visited(world):
             activators.append((i["name"], i["x"], i["y"], i["width"], i["height"], i["iid"]))
         elif i["type"]=="nav_tile":
             nav_tiles.append((i["name"], i["x"], i["y"], i["iid"]))
+        elif i["type"]=="portal_walk_in":
+            portals.append((i["name"], i["x"], i["y"], i["iid"], i["width"], i["height"]))
             
     #print("-------------------")
     #print(spawn)

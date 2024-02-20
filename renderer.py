@@ -11,14 +11,19 @@ def draw_container(menu_font):
             _, ref=puzzle.find_ref(GM.world_objects[GM.container_hovered]["pedistal"]["entityIid"], "pedistal")
             index, _=puzzle.find_ref(ref["name"]["ref"]["entityIid"], "trap")
             GM.world_objects[index]["name"]["trap"]="ref"
+            
             if puzzle.check_pedistal(GM.world_objects[GM.container_hovered]["name"][0], ref["name"]["pedistal"]):
                 GM.container_open=False
                 GM.container_hovered=None
+                for i, x in enumerate(GM.world_objects):
+                    if x["type"]=="walk_in_portal" and x["iid"]==ref["name"]["door_ref"]["entityIid"]:
+                        GM.world_objects[i]["name"]["locked"]=False
+                        break
                 return
             elif puzzle.check_pedistal(GM.world_objects[GM.container_hovered]["name"][0], ref["name"]["pedistal"])==False:
                 index, ref=puzzle.find_ref(ref["name"]["ref"]["entityIid"], "trap")
                 GM.world_objects[index]["name"]["trap"]="spikes"
-            
+                      
         CM.ai.strings.bartering = False
         pygame.draw.rect(
             GM.bg_surface_menu,
@@ -238,6 +243,20 @@ def draw_objects(prompt_font):
             and relative__top > -80
             and relative__top < GM.screen_height + 80
         ):
+            if (
+                x["type"] == "walk_in_portal"
+            ):
+                if x["name"]["locked"]:
+                    GM.collision_map[
+                        x["rect"].top : x["rect"].bottom,
+                        x["rect"].left : x["rect"].right,
+                    ] = 1
+                    GM.screen.blit(x["image"], (relative__left, relative__top))
+                else:
+                    GM.collision_map[
+                        x["rect"].top : x["rect"].bottom,
+                        x["rect"].left : x["rect"].right,
+                    ] = 0
 
             if "stats" not in x["name"] and "image" in x:
                 GM.screen.blit(x["image"], (relative__left, relative__top))
@@ -351,14 +370,47 @@ def draw_objects(prompt_font):
                     rect = pygame.Rect(relative__left, relative__top, tx["rect"].width, tx["rect"].height)
                     
                     if other_obj_rect.colliderect(rect):
-                        print(tx)
                         GM.npc_list[ti]["name"]["stats"]["health"]-=50
                         if GM.npc_list[ti]["name"]["stats"]["health"]<=0:
                             GM.npc_list[ti]["name"]["stats"]["status"] = "dead"
                             GM.npc_list[ti]["agroved"] = False
                         GM.world_objects[index]["name"]["trap"]+=" activated"
                             
-                    
                 if other_obj_rect.colliderect(CM.player.player_rect):
                     CM.player.update_health(-50)
                     GM.world_objects[index]["name"]["trap"]+=" activated"
+            
+            if (
+                x["type"] == "walk_in_portal"
+                and not GM.container_open
+                and not CM.menu.visible
+                and not CM.player_menu.visible
+                and not GM.is_in_dialogue
+                and other_obj_rect.colliderect(CM.player.player_rect)
+            ):
+                if not x["name"]["locked"]:
+                    GM.collision_map[
+                        x["rect"].top : x["rect"].bottom,
+                        x["rect"].left : x["rect"].right,
+                    ] = 0
+                    
+                    text = prompt_font.render(
+                        f"E) {x['name']['world_name']} ", True, (44, 53, 57)
+                    )
+                    text_rect = text.get_rect(
+                        center=(
+                        relative__left + x["rect"].width // 2,
+                        relative__top + x["rect"].height + 10,
+                        )
+                    )
+                    
+                    GM.screen.blit(text, text_rect)
+                
+                    GM.world_to_travel_to = x["name"]
+                    GM.world_to_travel_to["index"] = index
+                            
+            elif (
+                not other_obj_rect.colliderect(CM.player.player_rect)
+                and x["type"] == "walk_in_portal"
+            ):
+                GM.world_to_travel_to = None

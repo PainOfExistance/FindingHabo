@@ -16,6 +16,6 @@ def check_pedistal(current_items, required_items):
 
 def find_ref(iid, type):
     for i, x in enumerate(GM.world_objects):
-        if x["type"]=="activator" and x["name"]["type"]==type and x["iid"]==iid:
+        if (x["type"]=="activator" or x["type"]=="walk_in_portal") and x["name"]["type"]==type and x["iid"]==iid:
             return i, x
     return -1
