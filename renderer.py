@@ -258,7 +258,7 @@ def draw_objects(prompt_font):
                         x["rect"].left : x["rect"].right,
                     ] = 0
 
-            if "stats" not in x["name"] and "image" in x:
+            elif "stats" not in x["name"] and "image" in x:
                 GM.screen.blit(x["image"], (relative__left, relative__top))
 
             if x["type"] == "container":
