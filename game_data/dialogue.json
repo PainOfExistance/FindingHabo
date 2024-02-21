@@ -3,7 +3,7 @@
     {
       "name": "Merchant",
       "greeting": "Hello fellow traveller, what brings you today?",
-      "enables": [0, 1],
+      "enables": [0, 1, 5],
       "file": "dialup",
       "options": [
         {
@@ -30,10 +30,14 @@
           "text": "Need help gettting it back?",
           "res": "wrap_to_start_quest",
           "used": true,
-          "res_after": "wrap_to_end_quest",
-          "text_after": "Here is your heirloom."
+          "disables": [4]
+        },
+        {
+          "text": "Here is your heirloom.",
+          "res": "wrap_to_end_quest",
+          "used": false,
+          "disables": [5]
         }
-
       ],
       "responses":
         {
@@ -55,12 +59,12 @@
           "wrap_to_start_merchant":{
             "text": ["Thanks, but thats in the past, so, do you want to make a purchase?"],
             "file": ["dialup"],
-            "enables": [0, 1]
+            "enables": [0, 1, 5]
           },
           "wrap_to_start_quest":{
             "text": ["Thanks, i am very greatfull for your help."],
             "file": ["neke"],
-            "enables": [0, 1],
+            "enables": [0, 1, 5],
             "starts": 1
           },
           "wrap_to_end_quest":{

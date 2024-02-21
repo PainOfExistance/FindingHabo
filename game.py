@@ -32,18 +32,17 @@ class Game:
         self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
 
-        # CM.inventory.add_item(GM.items["Minor Health Potion"])
+        CM.inventory.add_item(GM.items["Minor Health Potion"])
+        CM.inventory.add_item(GM.items["Steel Sword"])
+        CM.inventory.add_item(GM.items["Minor Health Potion"])
         # CM.inventory.add_item(GM.items["Knowledge Potion"])
         # CM.inventory.add_item(GM.items["Power Elixir"])
-        # CM.inventory.add_item(GM.items["Steel Sword"])
         # CM.inventory.add_item(GM.items["Steel Armor"])
         # CM.inventory.add_item(GM.items["Divine Armor"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         GM.world_objects = list()
 
-        tmp = self.setup(
-            f"terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json"
-        )
+        self.setup(f"terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
         CM.player.quests.dialogue = CM.ai.strings
         self.clock = pygame.time.Clock()
         self.target_fps = 60

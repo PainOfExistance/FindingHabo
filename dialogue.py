@@ -19,8 +19,8 @@ class Dialougue:
         self.talk = -1
         self.line = -1
         self.prev_talk = -1
-        self.enabled = None
-        self.offset = 0
+        self.enabled = []
+        self.indexed = []
         self.talking = False
         self.length = 0
         self.greeting_played = False
@@ -66,14 +66,14 @@ class Dialougue:
             "line": self.line,
             "prev_talk": self.prev_talk,
             "enabled": self.enabled,
-            "offset": self.offset,
             "talking": self.talking,
             "length": self.length,
             "greeting_played": self.greeting_played,
             "bartering": self.bartering,
             "will_bartering": self.will_bartering,
             "starts": self.starts,
-            "advances": self.advances
+            "advances": self.advances,
+            "indexed": self.indexed
         }
     
     def from_dict(self, data):
@@ -88,7 +88,6 @@ class Dialougue:
         self.line = data.get("line", -1)
         self.prev_talk = data.get("prev_talk", -1)
         self.enabled = data.get("enabled")
-        self.offset = data.get("offset", 0)
         self.talking = data.get("talking", False)
         self.length = data.get("length", 0)
         self.greeting_played = data.get("greeting_played", False)
@@ -96,6 +95,7 @@ class Dialougue:
         self.will_bartering = data.get("will_bartering", False)
         self.starts = data.get("starts", 0)
         self.advances = data.get("advances", 0)
+        self.indexed = data.get("indexed", [])
 
     def draw(self, name):
         self.name = name
@@ -119,10 +119,13 @@ class Dialougue:
 
         if self.index == -1 and not self.bartering:
             scroll_position = (self.selected_item // 4) * 4
-            self.enabled = self.strings[name]["options"][
-                self.strings[name]["enables"][0] : self.strings[name]["enables"][1] + 1
-            ]
-            self.offset = self.strings[name]["enables"][0]
+            self.enabled.clear()
+            self.indexed.clear()
+            for value in self.strings[name]["enables"]:
+                if(self.strings[name]["options"][value]["used"]):
+                    self.enabled.append(self.strings[name]["options"][value])
+                    self.indexed.append(value)
+
             visible_options = list(self.enabled)[scroll_position : scroll_position + 4]
 
             for i, value in enumerate(visible_options):
@@ -140,7 +143,6 @@ class Dialougue:
                     txt = f"    {value['text']}"
 
                 text = self.option_font.render(txt, True, color)
-
                 text_rect = text.get_rect(
                     center=(
                         GM.screen.get_width() // 2,
@@ -169,7 +171,6 @@ class Dialougue:
 
         elif not self.bartering:
             scroll_position = (self.selected_item // 3) * 3
-
             visible_options = list(self.enabled)[scroll_position : scroll_position + 3]
 
             for i, value in enumerate(visible_options):
@@ -252,6 +253,9 @@ class Dialougue:
     def handle_input(self):
         keys = pygame.key.get_pressed()
         if not self.selection_held:
+            if keys[pygame.K_l]:
+                print(self.strings[self.name])
+                
             if (
                 keys[pygame.K_UP]
                 and not self.selection_held
@@ -300,14 +304,13 @@ class Dialougue:
                     not self.talking
                     and self.talk == -1
                     and self.strings[self.name]["options"][
-                        self.selected_item + self.offset
+                        self.indexed[self.selected_item]
                     ]["used"]
                 ):
                     responce_id = self.strings[self.name]["options"][
-                        self.selected_item + self.offset
+                        self.indexed[self.selected_item]
                     ]
-                    
-                    selected=self.selected_item + self.offset
+                    selected=self.indexed[self.selected_item]
 
                     if (
                         "starts"
@@ -317,7 +320,7 @@ class Dialougue:
                             responce_id["res"]
                         ]["starts"]
                         self.strings[self.name]["options"][
-                            self.selected_item + self.offset
+                            self.indexed[self.selected_item]
                         ]["used"] = False
 
                     if (
@@ -328,13 +331,13 @@ class Dialougue:
                             responce_id["res"]
                         ]["advances"]
                         self.strings[self.name]["options"][
-                            self.selected_item + self.offset
+                            self.indexed[self.selected_item]
                         ]["used"] = False
 
                     self.current_talk = iter(
                         self.strings[self.name]["responses"][responce_id["res"]]["text"]
                     )
-
+                    
                     self.current_lines = iter(
                         self.strings[self.name]["responses"][responce_id["res"]]["file"]
                     )
@@ -351,45 +354,14 @@ class Dialougue:
                                 "enables"
                             ]
                         )
-                        > 1
+                        >= 1
                     ):
-                        self.enabled = self.strings[self.name]["options"][
-                            self.strings[self.name]["responses"][responce_id["res"]][
-                                "enables"
-                            ][0] : self.strings[self.name]["responses"][
-                                responce_id["res"]
-                            ][
-                                "enables"
-                            ][
-                                1
-                            ]
-                            + 1
-                        ]
-                        self.offset = self.strings[self.name]["responses"][
-                            responce_id["res"]
-                        ]["enables"][0]
-
-                    elif (
-                        "enables"
-                        in self.strings[self.name]["responses"][responce_id["res"]]
-                        and len(
-                            self.strings[self.name]["responses"][responce_id["res"]][
-                                "enables"
-                            ]
-                        )
-                        == 1
-                    ):
-                        self.enabled = [
-                            self.strings[self.name]["options"][
-                                self.strings[self.name]["responses"][
-                                    responce_id["res"]
-                                ]["enables"][0]
-                            ]
-                        ]
-
-                        self.offset = self.strings[self.name]["responses"][
-                            responce_id["res"]
-                        ]["enables"][0]
+                        self.enabled.clear()
+                        self.indexed.clear()
+                        for value in self.strings[self.name]["responses"][responce_id["res"]]["enables"]:
+                            if(self.strings[self.name]["options"][value]["used"]):
+                                self.enabled.append(self.strings[self.name]["options"][value])
+                                self.indexed.append(value)
 
                     elif (
                         "barter"
@@ -398,33 +370,20 @@ class Dialougue:
                         self.will_bartering = True
 
                     if (
-                        "res_after"
+                        "enables"
                         in self.strings[self.name]["options"][
                             selected
-                        ]
-                        and self.strings[self.name]["options"][
-                            selected
-                        ]["res"]
-                        != self.strings[self.name]["options"][
-                            selected
-                        ]["res_after"]
+                        ] 
                     ):
-                        self.strings[self.name]["options"][
-                            selected
-                        ]["res"] = self.strings[self.name]["options"][
-                            selected
-                        ][
-                            "res_after"
-                        ]
-                        self.strings[self.name]["options"][
-                            selected
-                        ]["text"] = self.strings[self.name]["options"][
-                            selected
-                        ][
-                            "text_after"
-                        ]
+                        for value in self.strings[self.name]["options"][selected]["enables"]:
+                            self.strings[self.name]["options"][value]["used"] = True
                         
-
+                    if "disables" in self.strings[self.name]["options"][
+                            selected
+                        ]:
+                            for value in self.strings[self.name]["options"][selected]["disables"]:
+                                self.strings[self.name]["options"][value]["used"] = False
+                           
                     self.talking = True
                 self.selected_item = 0
 
