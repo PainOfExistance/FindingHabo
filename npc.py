@@ -129,18 +129,13 @@ def update_npc(subtitle_font, prompt_font):
                 GM.current_line = None
 
         if (
-                "stats" in x["name"]
-                and "status" in x["name"]["stats"]
-                and x["name"]["stats"]["status"] == "alive"
-            ):
-                GM.screen.blit(x["image"], (relative__left, relative__top))
-        
-        if (
             relative__left > -80
             and relative__left < GM.screen_width + 80
             and relative__top > -80
             and relative__top < GM.screen_height + 80
         ):      
+            GM.screen.blit(x["image"], (relative__left, relative__top))
+            
             other_obj_rect = pygame.Rect(
                 relative__left,
                 relative__top,
