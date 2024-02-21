@@ -263,8 +263,8 @@ def draw_objects(prompt_font):
 
             if x["type"] == "container":
                 GM.collision_map[
-                    x["rect"].top + 10 : x["rect"].bottom - 9,
-                    x["rect"].left + 10 : x["rect"].right - 9,
+                    x["rect"].top + 10 : x["rect"].bottom - 10,
+                    x["rect"].left + 10 : x["rect"].right - 10,
                 ] = 1
 
             other_obj_rect = pygame.Rect(
