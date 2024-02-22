@@ -379,6 +379,13 @@ def draw_objects(prompt_font):
                 if other_obj_rect.colliderect(CM.player.player_rect):
                     CM.player.update_health(-50)
                     GM.world_objects[index]["name"]["trap"]+=" activated"
+                    
+            other_rect = pygame.Rect(
+                relative__left-50,
+                relative__top-50,
+                x["rect"].width+100,
+                x["rect"].height+100,
+            )
             
             if (
                 x["type"] == "walk_in_portal"
@@ -386,7 +393,7 @@ def draw_objects(prompt_font):
                 and not CM.menu.visible
                 and not CM.player_menu.visible
                 and not GM.is_in_dialogue
-                and other_obj_rect.colliderect(CM.player.player_rect)
+                and other_rect.colliderect(CM.player.player_rect)
             ):
                 if not x["name"]["locked"]:
                     GM.collision_map[
@@ -395,7 +402,7 @@ def draw_objects(prompt_font):
                     ] = 0
                     
                     text = prompt_font.render(
-                        f"E) {x['name']['world_name']} ", True, (44, 53, 57)
+                        f"{x['name']['world_name']} ", True, (44, 53, 57)
                     )
                     text_rect = text.get_rect(
                         center=(
@@ -405,9 +412,11 @@ def draw_objects(prompt_font):
                     )
                     
                     GM.screen.blit(text, text_rect)
-                
-                    GM.world_to_travel_to = x["name"]
-                    GM.world_to_travel_to["index"] = index
+                    
+                    if other_obj_rect.colliderect(CM.player.player_rect):
+                        GM.world_to_travel_to = x["name"]
+                        GM.world_to_travel_to["index"] = index
+                        GM.load = True
                             
             elif (
                 not other_obj_rect.colliderect(CM.player.player_rect)

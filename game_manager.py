@@ -49,6 +49,7 @@ class GameManager:
     bg_rect=None
     background=None
     npc_list=[]
+    load=False
 
 class ClassManager:
     ai=None

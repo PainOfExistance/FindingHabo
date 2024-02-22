@@ -78,14 +78,20 @@
           "description": "Examine the heirloom for hidden clues.",
           "objectives": {
             "description": "Inspect Heirloom",
-            "state": 0
+            "state": 0,
+            "world": "Dream World",
+            "enemy": "Wolf",
+            "option": 1
           }
         },
         {
           "description": "Question the village historian about the heirloom's history.",
           "objectives": {
             "description": "Talk to Village Historian",
-            "state": 0
+            "state": 0,
+            "world": "Dream World",
+            "clear": false,
+            "option": 1
           }
         },
         {

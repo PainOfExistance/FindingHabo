@@ -173,7 +173,7 @@ class Game:
                 }
             )
         
-        print(GM.world_objects)
+        #print(GM.world_objects)
 
     def setup(
         self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"
@@ -201,21 +201,19 @@ class Game:
             print("basic out")
             spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles = wp.parser(level_data)
             self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles)
-
+        
         CM.music_player = MusicPlayer(metadata["music"])
-
         GM.background, GM.bg_rect = CM.assets.load_background(
             metadata["background"],
         )
         GM.collision_map = CM.assets.load_collision(metadata["collision_set"])
-
         GM.map_height = GM.collision_map.shape[0]
         GM.map_width = GM.collision_map.shape[1]
 
         if type != "default":
             for i, _ in enumerate(portals):
                 if portals[i][0]["type"] == type:
-                    spawn_point = (portals[i][1], portals[i][2])
+                    spawn_point = (portals[i][0]["spawn_point"]["cx"]*16, portals[i][0]["spawn_point"]["cy"]*16)
 
         if spawn_point == (0, 0):
             spawn_point = (GM.relative_player_left, GM.relative_player_top)
@@ -231,12 +229,19 @@ class Game:
         CM.player.player_rect.left = spawn_point[0] - offset[0]
         CM.player.player_rect.top = spawn_point[1] - offset[1]
 
-        temp = {}
-        for x in GM.world_objects:
-            if x["type"] == "npc":
-                temp[x["name"]["name"]] = x["name"]
 
-        return temp
+    def travel(self):
+        self.loading()
+        CM.player.current_world = GM.world_to_travel_to["world_name"]
+        GM.world_objects[GM.world_to_travel_to["index"]]["name"]["locked"] = False
+        CM.assets.world_save(GM.world_objects)
+        self.setup(
+                    "terrain/" + GM.world_to_travel_to["world_to_load"],
+                    GM.world_to_travel_to["type"],
+                )
+        GM.world_to_travel_to = None
+        CM.player.quests.dialogue = CM.ai.strings
+    
 
     def run(self):
         while True:
@@ -248,6 +253,11 @@ class Game:
             self.last_frame_time = current_time
             GM.time_diff += GM.delta_time
             GM.counter += GM.delta_time
+            
+            if GM.load:
+                GM.load = False
+                self.travel()
+                
             self.handle_input()
             self.handle_events()
             self.draw()
@@ -665,20 +675,7 @@ class Game:
                 and not GM.selection_held
             ):
                 GM.selection_held = True
-                self.loading()
-                CM.player.current_world = GM.world_to_travel_to["world_name"]
-                GM.world_objects[GM.world_to_travel_to["index"]]["name"][
-                    "locked"
-                ] = False
-
-                CM.assets.world_save(GM.world_objects)
-
-                self.setup(
-                    "terrain/" + GM.world_to_travel_to["world_to_load"],
-                    GM.world_to_travel_to["type"],
-                )
-                GM.world_to_travel_to = None
-                CM.player.quests.dialogue = CM.ai.strings
+                self.travel()
 
         elif (
             not keys[pygame.K_e]

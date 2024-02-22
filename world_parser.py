@@ -198,7 +198,7 @@ def parse_visited(world):
     activators = []
     nav_tiles=[]
     
-    for i in world:
+    for i in world:      
         if i["type"]=="metadata":
             metadata=i["name"]
         elif i["type"]=="item":
@@ -215,7 +215,7 @@ def parse_visited(world):
             activators.append((i["name"], i["x"], i["y"], i["width"], i["height"], i["iid"]))
         elif i["type"]=="nav_tile":
             nav_tiles.append((i["name"], i["x"], i["y"], i["iid"]))
-        elif i["type"]=="portal_walk_in":
+        elif i["type"]=="walk_in_portal":
             portals.append((i["name"], i["x"], i["y"], i["iid"], i["width"], i["height"]))
             
     #print("-------------------")
