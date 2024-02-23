@@ -168,8 +168,8 @@ class PlayerMenu:
                     ):
                         self.trait_selection = self.selected_sub_item
                 elif self.selected_item == 3 and num_started_quests>0:
-                    keys_list = list(CM.player.quests.quests.keys())
-                    CM.player.quests.quests[keys_list[self.selected_sub_item]]["active"] = not CM.player.quests.quests[keys_list[self.selected_sub_item]]["active"]
+                    print(CM.player.quests.name)
+                    CM.player.quests.quests[CM.player.quests.name]["active"] = not CM.player.quests.quests[CM.player.quests.name]["active"]
                     
                 self.selection_held = True
 

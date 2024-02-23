@@ -81,7 +81,8 @@
             "state": 0,
             "world": "Dream World",
             "enemy": "Wolf",
-            "option": 1
+            "option": 1,
+            "npc": "Merchant"
           }
         },
         {
@@ -89,9 +90,10 @@
           "objectives": {
             "description": "Talk to Village Historian",
             "state": 0,
-            "world": "Dream World",
+            "world": "Land Of the Free",
             "clear": false,
-            "option": 1
+            "option": 1,
+            "npc": "Merchant"
           }
         },
         {

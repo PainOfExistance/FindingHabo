@@ -12,19 +12,20 @@ class Quests:
         self.quests = CM.assets.load_quests()
         self.tics = 0
         self.text_to_draw = []
-        self.dialogue=None
+        self.dialogue = None
         self.quests_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
         self.quest_start_font = pygame.font.Font("fonts/SovngardeBold.ttf", 36)
+        self.name=""
 
     def advance_quest(self, id):
         for index, stages in enumerate(self.quests[id]["stages"]):
             if stages["objectives"]["state"] == 1:
                 if "rmitems" in stages["objectives"]:
                     for items in stages["objectives"]["rmitems"]:
-                        CM.inventory.items[items["name"]]["dropable"]=True
+                        CM.inventory.items[items["name"]]["dropable"] = True
                         for x in range(items["quantity"]):
                             CM.inventory.remove_item(items["name"])
-                            
+
                 self.quests[id]["stages"][index]["objectives"]["state"] = 2
                 if index < len(self.quests[id]["stages"]) - 1:
                     self.quests[id]["stages"][index + 1]["objectives"]["state"] = 1
@@ -53,7 +54,7 @@ class Quests:
         self.text_to_draw.clear()
         self.text_to_draw.append("Completed: " + self.quests[id]["name"])
         self.tics = pygame.time.get_ticks()
-        
+
     def check_quest_state(self, id):
         if self.quests[id]["started"] == "finished":
             return "finished"
@@ -75,7 +76,10 @@ class Quests:
         for index, (kv, quest) in enumerate(self.quests.items()):
             if quest["started"]:
                 for stage in quest["stages"]:
-                    if "radius" in stage["objectives"] and stage["objectives"]["state"] == 1:
+                    if (
+                        "radius" in stage["objectives"]
+                        and stage["objectives"]["state"] == 1
+                    ):
                         if stage["objectives"]["world"] == world:
                             distance = math.dist(
                                 tuple(stage["objectives"]["possition"]), quest_objective
@@ -85,25 +89,63 @@ class Quests:
                                 and stage["objectives"]["state"] == 1
                             ):
                                 self.advance_quest(kv)
-                                
-                    elif "inventory" in stage["objectives"] and stage["objectives"]["state"] == 1 and stage["objectives"]["inventory"]:
+
+                    elif (
+                        "inventory" in stage["objectives"]
+                        and stage["objectives"]["state"] == 1
+                        and stage["objectives"]["inventory"]
+                    ):
                         self.advance_quest(kv)
-                            
-                    elif "items" in stage["objectives"] and stage["objectives"]["state"] == 1:
-                        tmp=list()
+
+                    elif (
+                        "items" in stage["objectives"]
+                        and stage["objectives"]["state"] == 1
+                    ):
+                        tmp = list()
                         for items in stage["objectives"]["items"]:
                             for key in CM.inventory.quantity:
-                                if key == items["name"] and CM.inventory.quantity[key] >= items["quantity"]:
+                                if (
+                                    key == items["name"]
+                                    and CM.inventory.quantity[key] >= items["quantity"]
+                                ):
                                     tmp.append(key)
-                        
+
                         if len(tmp) == len(stage["objectives"]["items"]):
                             for key in tmp:
-                                CM.inventory.items[key]["dropable"]=False
-                            self.advance_quest(kv)     
-                    
-                    elif "npc" in stage["objectives"] and stage["objectives"]["state"] == 1:
-                        self.dialogue.strings[stage["objectives"]["npc"]]["options"][stage["objectives"]["option"]]["used"] = True
-    
+                                CM.inventory.items[key]["dropable"] = False
+                            self.advance_quest(kv)
+
+                    elif (
+                        "npc" in stage["objectives"]
+                        and stage["objectives"]["state"] == 1
+                    ):
+                        self.dialogue.strings[stage["objectives"]["npc"]]["options"][
+                            stage["objectives"]["option"]
+                        ]["used"] = True
+
+                    elif (
+                        "enemy" in stage["objectives"]
+                        and stage["objectives"]["state"] == 1
+                    ):
+                        if CM.player.current_world == stage["objectives"]["world"]:
+                            in_list = True
+                            for index, x in enumerate(GM.npc_list):
+                                if x["name"]["name"] == stage["objectives"]["enemy"]:
+                                    if x["name"]["stats"]["status"] != "dead":
+                                        in_list = False
+                                        
+                            print(in_list)
+                            if in_list:
+                                self.advance_quest(kv)
+
+                    elif (
+                        "clear" in stage["objectives"]
+                        and stage["objectives"]["state"] == 1
+                    ):
+                        if CM.player.current_world == stage["objectives"]["world"]:
+                            if len(GM.npc_list) == 0:
+                                self.advance_quest(kv)
+
     def to_dict(self):
         return {
             "quests": self.quests,
@@ -112,11 +154,11 @@ class Quests:
         }
 
     def from_dict(self, data):
-        fixed={int(key): value for key, value in data["quests"].items()}
+        fixed = {int(key): value for key, value in data["quests"].items()}
         self.quests = fixed
-        self.tics = -5000#data["tics"]
+        self.tics = -5000  # data["tics"]
         self.text_to_draw = data["text_to_draw"]
-                        
+
     def draw(self, selected_sub_item, sub_items):
         item_spacing = 30
         i = 0
@@ -126,22 +168,23 @@ class Quests:
         visible_quests = list(self.quests.items())[
             scroll_position : scroll_position + 5
         ]
+        counter=0
         for index, (quest_index, quest_data) in enumerate(visible_quests):
             if quest_data["started"]:
                 color = (
                     (157, 157, 210)
-                    if index == selected_sub_item - scroll_position
-                    else (237, 106, 94)
-                    if sub_items
-                    else (120, 120, 120)
+                    if counter == selected_sub_item - scroll_position
+                    else (237, 106, 94) if sub_items else (120, 120, 120)
                 )
-
+                if counter == selected_sub_item - scroll_position:
+                    self.name=quest_index
+                    
                 quest_text = f"{quest_data['name']}"
                 item_render = self.quests_font.render(quest_text, True, color)
                 item_rect = item_render.get_rect(center=(coords, 20 + index * 40 + i))
                 GM.screen.blit(item_render, item_rect)
 
-                if index == selected_sub_item - scroll_position:
+                if counter == selected_sub_item - scroll_position:
                     i += item_spacing
                     line_render = self.quests_font.render(
                         quest_data["description"], True, color
@@ -162,9 +205,13 @@ class Quests:
                             elif stage["objectives"]["state"] == 1:
                                 stage_text = f"◇{stage['description']}"
 
-                            stage_render = self.quests_font.render(stage_text, True, color)
+                            stage_render = self.quests_font.render(
+                                stage_text, True, color
+                            )
                             stage_rect = stage_render.get_rect(
                                 center=(coords, 20 + index * 40 + i)
                             )
                             GM.screen.blit(stage_render, stage_rect)
                             i += item_spacing
+                counter+=1
+            

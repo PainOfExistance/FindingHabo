@@ -309,11 +309,8 @@ class Game:
             GM.time_diff = 5
 
         GM.relative_player_left = int(CM.player.player_rect.left - GM.bg_rect.left)
-
         GM.relative_player_right = int(CM.player.player_rect.right - GM.bg_rect.left)
-
         GM.relative_player_top = int(CM.player.player_rect.top - GM.bg_rect.top)
-
         GM.relative_player_bottom = int(CM.player.player_rect.bottom - GM.bg_rect.top)
         movement = int(CM.player.movement_speed * GM.delta_time)
 

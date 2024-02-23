@@ -100,7 +100,7 @@
 				"height": 16,
 				"color": 12470831,
 				"customFields": {
-					"chance": 0.8,
+					"chance": 0,
 					"enemy_Type": "wolf",
 					"rarity": "common"
 				}
@@ -337,8 +337,8 @@
 						"../sounds/bgm/Angelia.mp3",
 						"../sounds/bgm/Sladka kot med.mp3"
 					],
-					"collision_set": "terrain\\worlds\\simplified\\Dream_World\\Collision-int.png",
-					"background": "terrain\\worlds\\simplified\\Dream_World\\_composite.png"
+					"collision_set": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\Collision-int.png",
+					"background": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\_composite.png"
 				}
 			}
 		],
