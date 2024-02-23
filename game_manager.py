@@ -50,6 +50,8 @@ class GameManager:
     background=None
     npc_list=[]
     load=False
+    map_shown=False
+    map_m_held=False
 
 class ClassManager:
     ai=None

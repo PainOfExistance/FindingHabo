@@ -14,6 +14,7 @@ import world_parser as wp
 from ai import Ai
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
+from map import Map
 from music_player import MusicPlayer
 
 
@@ -48,6 +49,7 @@ class Game:
         self.target_fps = 60
         self.last_frame_time = pygame.time.get_ticks()
         self.on_a_diagonal = False
+        self.map=Map()
 
         GM.weapon_rect = pygame.Rect(
             CM.player.player_rect.left + CM.player.player_rect.width // 4,
@@ -229,7 +231,6 @@ class Game:
         CM.player.player_rect.left = spawn_point[0] - offset[0]
         CM.player.player_rect.top = spawn_point[1] - offset[1]
 
-
     def travel(self):
         self.loading()
         CM.player.current_world = GM.world_to_travel_to["world_name"]
@@ -242,7 +243,6 @@ class Game:
         GM.world_to_travel_to = None
         CM.player.quests.dialogue = CM.ai.strings
     
-
     def run(self):
         while True:
             # Calculate delta time (time since last frame)
@@ -269,6 +269,7 @@ class Game:
                 and not GM.tab_pressed
                 and not GM.container_open
                 and not GM.is_in_dialogue
+                and not GM.map_shown
             ):
                 CM.menu.handle_input()
 
@@ -277,6 +278,7 @@ class Game:
                 and not GM.tab_pressed
                 and not GM.container_open
                 and not GM.is_in_dialogue
+                and not GM.map_shown
             ):
                 CM.player_menu.handle_input()
 
@@ -286,6 +288,7 @@ class Game:
                 and not GM.container_open
                 and not CM.player_menu.visible
                 and not CM.menu.visible
+                and not GM.map_shown
             ):
                 CM.ai.strings.handle_input()
                 if CM.ai.strings.starts != 0:
@@ -295,6 +298,9 @@ class Game:
                 if CM.ai.strings.advances != 0:
                     CM.player.quests.advance_quest(CM.ai.strings.advances)
                     CM.ai.strings.advances = 0
+            
+            if GM.map_shown:
+                self.map.handle_input()
 
             self.clock.tick(self.target_fps)
 
@@ -352,6 +358,7 @@ class Game:
             and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
+            and not GM.map_shown
         ):
             if CM.player.player_rect.left > 10:
                 CM.player.player_rect.move_ip(-movement, 0)
@@ -367,6 +374,7 @@ class Game:
             and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
+            and not GM.map_shown
         ):
             dx = np.count_nonzero(
                 GM.collision_map[
@@ -427,6 +435,7 @@ class Game:
             and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
+            and not GM.map_shown
         ):
             if CM.player.player_rect.right < GM.screen_width - 10:
                 CM.player.player_rect.move_ip(movement, 0)
@@ -442,6 +451,7 @@ class Game:
             and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
+            and not GM.map_shown
         ):
             dx = np.count_nonzero(
                 GM.collision_map[
@@ -501,6 +511,7 @@ class Game:
             and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
+            and not GM.map_shown
         ):
             if CM.player.player_rect.top > 10:
                 CM.player.player_rect.move_ip(0, -movement)
@@ -516,6 +527,7 @@ class Game:
             and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
+            and not GM.map_shown
         ):
             dx = np.count_nonzero(
                 GM.collision_map[
@@ -575,6 +587,7 @@ class Game:
             and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
+            and not GM.map_shown
         ):
             if CM.player.player_rect.bottom < GM.screen_height - 10:
                 CM.player.player_rect.move_ip(0, movement)
@@ -590,6 +603,7 @@ class Game:
             and not CM.player_menu.visible
             and not GM.container_open
             and not GM.is_in_dialogue
+            and not GM.map_shown
         ):
             dx = np.count_nonzero(
                 GM.collision_map[
@@ -642,6 +656,7 @@ class Game:
             and not CM.menu.visible
             and not CM.player_menu.visible
             and not GM.selection_held
+            and not GM.map_shown
         ):
             if GM.item_hovered != None:
                 GM.selection_held = True
@@ -686,6 +701,7 @@ class Game:
             and not CM.menu.visible
             and not CM.player_menu.visible
             and not GM.tab_pressed
+            and not GM.map_shown
         ):
             GM.tab_pressed = True
             GM.container_open = False
@@ -713,6 +729,7 @@ class Game:
             and (GM.container_open or CM.ai.strings.bartering)
             and not CM.menu.visible
             and not CM.player_menu.visible
+            and not GM.map_shown
         ):
             if (
                 GM.container_menu_selected
@@ -754,6 +771,7 @@ class Game:
             and (GM.container_open or CM.ai.strings.bartering)
             and not CM.menu.visible
             and not CM.player_menu.visible
+            and not GM.map_shown
         ):
             if (
                 GM.container_menu_selected
@@ -793,6 +811,7 @@ class Game:
             and not CM.menu.visible
             and not CM.player_menu.visible
             and GM.container_menu_selected
+            and not GM.map_shown
         ):
             GM.container_menu_selected = False
             GM.selection_held = True
@@ -808,6 +827,7 @@ class Game:
             and not CM.menu.visible
             and not CM.player_menu.visible
             and not GM.container_menu_selected
+            and not GM.map_shown
         ):
             GM.container_menu_selected = True
             GM.selection_held = True
@@ -834,6 +854,7 @@ class Game:
             and not GM.selection_held
             and (GM.container_open or CM.ai.strings.bartering)
             and GM.enter_held
+            and not GM.map_shown
         ):
             GM.selection_held = True
             GM.enter_held = False
@@ -1024,6 +1045,7 @@ class Game:
             and not GM.r_pressed
             and not GM.selection_held
             and CM.player_menu.visible
+            and not GM.map_shown
         ):
             GM.r_pressed = True
             key = list(CM.inventory.quantity.keys())[CM.player_menu.selected_sub_item]
@@ -1059,6 +1081,7 @@ class Game:
             and not GM.attack_button_held
             and not GM.is_in_dialogue
             and not GM.container_open
+            and not GM.map_shown
         ):
             timedif = 0
             if CM.player.equipped_items["hand"] != None:
@@ -1073,10 +1096,24 @@ class Game:
                 print(f"attacked with a: {CM.player.equipped_items['hand']}")
                 GM.time_diff = 0
                 self.diff = pygame.time.get_ticks()
+                
         elif GM.attacking:
             print("no longer attacking")
             GM.attacking = False
-
+        
+        if (
+            keys[pygame.K_m]
+            and not GM.map_m_held
+            and not GM.container_open
+            and not CM.ai.strings.bartering
+            and not CM.menu.visible
+            and not CM.player_menu.visible
+        ):
+            GM.map_m_held = True
+            GM.map_shown = not GM.map_shown
+        elif not keys[pygame.K_m] and GM.map_m_held:
+            GM.map_m_held = False
+            
         if not mouse_buttons[0] and not keys[pygame.K_SPACE] and GM.attack_button_held:
             GM.attack_button_held = False
 
@@ -1131,29 +1168,37 @@ class Game:
         GM.screen.fill((230, 60, 20))
         GM.screen.blit(GM.background, GM.bg_rect.topleft)
         R.draw_objects(self.prompt_font)
-        N.update_npc(self.subtitle_font, self.prompt_font)
-        CM.player.draw()  # .lulekSprulek.123.fafajMi)
-        CM.player.quests.draw_quest_info()
-        R.draw_container(self.menu_font)
-        R.draw_barter(self.menu_font)
-        CM.menu.render()
-        CM.player_menu.render()
+        
+        if not GM.map_shown:
+            self.map.set_map(GM.background)
+            N.update_npc(self.subtitle_font, self.prompt_font)
+            CM.player.draw()  # .lulekSprulek.123.fafajMi)
+            CM.player.quests.draw_quest_info()
+            R.draw_container(self.menu_font)
+            R.draw_barter(self.menu_font)
+            CM.menu.render()
+            CM.player_menu.render()
 
-        if GM.is_in_dialogue:
-            CM.ai.strings.draw(GM.talk_to_name)
-            # todo fix
+            if GM.is_in_dialogue:
+                CM.ai.strings.draw(GM.talk_to_name)
+                # todo fix
+            
+            # https://www.youtube.com/watch?v=RXkeWnbJlOE&list=RD_u8CpQdZLMA&index=3
+            # pygame.draw.rect(GM.screen, (0, 0, 0), GM.weapon_rect)
 
-        # pygame.draw.rect(GM.screen, (0, 0, 0), GM.weapon_rect)
+            subsurface_rect = pygame.Rect(
+                0, 0, GM.screen.get_width(), GM.screen.get_height()
+            )
 
-        subsurface_rect = pygame.Rect(
-            0, 0, GM.screen.get_width(), GM.screen.get_height()
-        )
+            subsurface = GM.screen.subsurface(subsurface_rect)
+            
+            streched = pygame.transform.scale(
+                subsurface, (GM._scr.get_width(), GM._scr.get_height())
+            )
 
-        subsurface = GM.screen.subsurface(subsurface_rect)
+            GM._scr.blit(streched, (0, 0))
+            pygame.display.flip()
 
-        streched = pygame.transform.scale(
-            subsurface, (GM._scr.get_width(), GM._scr.get_height())
-        )
-
-        GM._scr.blit(streched, (0, 0))
-        pygame.display.flip()
+        else:
+            self.map.draw()
+        
