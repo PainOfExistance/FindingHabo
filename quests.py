@@ -123,19 +123,18 @@ class Quests:
                             stage["objectives"]["option"]
                         ]["used"] = True
 
-                    elif (
+                    if (
                         "enemy" in stage["objectives"]
                         and stage["objectives"]["state"] == 1
                     ):
                         if CM.player.current_world == stage["objectives"]["world"]:
-                            in_list = True
+                            not_in_list = True
                             for index, x in enumerate(GM.npc_list):
                                 if x["name"]["name"] == stage["objectives"]["enemy"]:
                                     if x["name"]["stats"]["status"] != "dead":
-                                        in_list = False
+                                        not_in_list = False
                                         
-                            print(in_list)
-                            if in_list:
+                            if not_in_list:
                                 self.advance_quest(kv)
 
                     elif (
@@ -145,6 +144,7 @@ class Quests:
                         if CM.player.current_world == stage["objectives"]["world"]:
                             if len(GM.npc_list) == 0:
                                 self.advance_quest(kv)
+
 
     def to_dict(self):
         return {
