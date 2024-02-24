@@ -1182,23 +1182,21 @@ class Game:
             if GM.is_in_dialogue:
                 CM.ai.strings.draw(GM.talk_to_name)
                 # todo fix
-            
-            # https://www.youtube.com/watch?v=RXkeWnbJlOE&list=RD_u8CpQdZLMA&index=3
-            # pygame.draw.rect(GM.screen, (0, 0, 0), GM.weapon_rect)
-
-            subsurface_rect = pygame.Rect(
-                0, 0, GM.screen.get_width(), GM.screen.get_height()
-            )
-
-            subsurface = GM.screen.subsurface(subsurface_rect)
-            
-            streched = pygame.transform.scale(
-                subsurface, (GM._scr.get_width(), GM._scr.get_height())
-            )
-
-            GM._scr.blit(streched, (0, 0))
-            pygame.display.flip()
 
         else:
             self.map.draw()
+        
+        # https://www.youtube.com/watch?v=RXkeWnbJlOE&list=RD_u8CpQdZLMA&index=3
+        # pygame.draw.rect(GM.screen, (0, 0, 0), GM.weapon_rect)
+        
+        subsurface_rect = pygame.Rect(
+            0, 0, GM.screen.get_width(), GM.screen.get_height()
+        )
+        subsurface = GM.screen.subsurface(subsurface_rect)
+        
+        streched = pygame.transform.scale(
+            subsurface, (GM._scr.get_width(), GM._scr.get_height())
+        )
+        GM._scr.blit(streched, (0, 0))
+        pygame.display.flip()
         

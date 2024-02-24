@@ -22,9 +22,9 @@ else:
 
 
 screen_width, screen_height = display[0].width, display[0].height
-screen = pygame.display.set_mode((1080, 720), pygame.RESIZABLE)
+screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
 GM._scr=screen
-GM.screen=pygame.Surface((1080, 720))
+GM.screen=pygame.Surface((1280, 720))
 pygame.display.set_caption("Finding Habo")
 if __name__ == "__main__":
     menu=MainMenu()
