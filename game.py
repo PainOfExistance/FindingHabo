@@ -314,7 +314,6 @@ class Game:
             if GM.map_shown:
                 CM.map.handle_events(event)
 
-
     def handle_input(self):
         # na lestvici 1-10 kako bi ocenili Saro Dugi iz ITK?
         if GM.time_diff >= 20:
@@ -1161,7 +1160,6 @@ class Game:
                 CM.player.player_rect.height // 4,
             )
 
-
     def loading(self):
         GM._scr.fill((255,255,255))
         font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
@@ -1207,4 +1205,3 @@ class Game:
         )
         GM._scr.blit(streched, (0, 0))
         pygame.display.flip()
-        

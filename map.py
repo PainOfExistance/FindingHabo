@@ -43,7 +43,6 @@ class Map:
         self.map_rect = self.map.get_rect()
         self.map_rect.topleft = (-self.offset[0], -self.offset[1])
 
-
     def handle_input(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
@@ -90,27 +89,43 @@ class Map:
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 5:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                old_zoom = self.zoom
                 self.zoom = max(0.5, self.zoom - 0.01)
-                self.map = pygame.transform.scale(
-                self.full_map,
-                (
-                    (self.width // 2)*self.zoom,
-                    (self.height // 2)*self.zoom,
-                ))  
-        
+                if abs(old_zoom - self.zoom) >= 0.01:
+                    old_center = self.map_rect.center
+                    self.map = pygame.transform.scale(
+                        self.full_map,
+                        (
+                            int((self.width // 2) * self.zoom),
+                            int((self.height // 2) * self.zoom),
+                        )
+                    )
+                    self.map_rect = self.map.get_rect()
+                    self.map_rect.center = old_center
+                    offset_x = (self.map_rect.centerx - mouse_x) * (1 - 1 / (old_zoom / self.zoom))
+                    offset_y = (self.map_rect.centery - mouse_y) * (1 - 1 / (old_zoom / self.zoom))
+                    self.map_rect.move_ip(-offset_x, -offset_y)
+
             elif event.button == 4:
-                self.zoom = min(2.0, self.zoom + 0.01)
-                self.map = pygame.transform.scale(
-                self.full_map,
-                (
-                    (self.width // 2)*self.zoom,
-                    (self.height // 2)*self.zoom,
-                ))
-                
-            tmp = self.map.get_rect()
-            self.map_rect = tmp
-            #todo fix left adn top relatives
-    
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                old_zoom = self.zoom
+                self.zoom = min(1.8, self.zoom + 0.01)
+                if abs(old_zoom - self.zoom) >= 0.01:
+                    old_center = self.map_rect.center
+                    self.map = pygame.transform.scale(
+                        self.full_map,
+                        (
+                            int((self.width // 2) * self.zoom),
+                            int((self.height // 2) * self.zoom),
+                        )
+                    )
+                    self.map_rect = self.map.get_rect()
+                    self.map_rect.center = old_center
+                    offset_x = (self.map_rect.centerx - mouse_x) * (1 - 1 / (old_zoom / self.zoom))
+                    offset_y = (self.map_rect.centery - mouse_y) * (1 - 1 / (old_zoom / self.zoom))
+                    self.map_rect.move_ip(-offset_x, -offset_y)
+
     def move_image(self, dx, dy):
         magnitude = (dx ** 2 + dy ** 2) ** 0.5
         if magnitude != 0:
@@ -118,9 +133,6 @@ class Map:
             dy /= magnitude
         
         self.map_rect.move_ip(dx * 20, dy * 20)
-        print(self.map_rect.topleft[0], self.map_rect.topleft[1])
-        print(self.map.get_width(), self.map.get_height())
-
 
     def draw(self):
         GM.screen.fill((0, 0, 0))
@@ -129,3 +141,4 @@ class Map:
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_top_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_left_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_right_rect)
+        print(self.zoom)
