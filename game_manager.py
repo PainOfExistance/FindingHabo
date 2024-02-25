@@ -70,4 +70,4 @@ class ClassManager:
     quests=None
     stats=None
     traits=None
-    
+    map=None

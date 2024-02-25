@@ -26,9 +26,7 @@ class MusicPlayer:
         pygame.mixer.music.play()
 
     def update(self):
-        for event in pygame.event.get():
-            if event.type == pygame.USEREVENT:  # Track ended event
-                self.play_next_track()
+        self.play_next_track()
                 
     def set_tracks(self, music_tracks):
         self.music_tracks = music_tracks

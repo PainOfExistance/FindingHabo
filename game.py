@@ -49,7 +49,7 @@ class Game:
         self.target_fps = 60
         self.last_frame_time = pygame.time.get_ticks()
         self.on_a_diagonal = False
-        self.map=Map()
+        CM.map=Map()
 
         GM.weapon_rect = pygame.Rect(
             CM.player.player_rect.left + CM.player.player_rect.width // 4,
@@ -262,7 +262,6 @@ class Game:
             self.handle_events()
             self.draw()
             GM.game_date.increment_seconds()
-            CM.music_player.update()
             CM.player.check_experation(GM.delta_time)
             if (
                 not CM.player_menu.visible
@@ -300,7 +299,7 @@ class Game:
                     CM.ai.strings.advances = 0
             
             if GM.map_shown:
-                self.map.handle_input()
+                CM.map.handle_input()
 
             self.clock.tick(self.target_fps)
 
@@ -308,6 +307,13 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                
+            if event.type == pygame.USEREVENT:  # Track ended event
+                CM.music_player.update()
+            
+            if GM.map_shown:
+                CM.map.handle_events(event)
+
 
     def handle_input(self):
         # na lestvici 1-10 kako bi ocenili Saro Dugi iz ITK?
@@ -1111,6 +1117,8 @@ class Game:
         ):
             GM.map_m_held = True
             GM.map_shown = not GM.map_shown
+            CM.map.update_offset()
+            CM.map.zoom=1
         elif not keys[pygame.K_m] and GM.map_m_held:
             GM.map_m_held = False
             
@@ -1170,7 +1178,7 @@ class Game:
         R.draw_objects(self.prompt_font)
         
         if not GM.map_shown:
-            self.map.set_map(GM.background)
+            CM.map.set_map(GM.background)
             N.update_npc(self.subtitle_font, self.prompt_font)
             CM.player.draw()  # .lulekSprulek.123.fafajMi)
             CM.player.quests.draw_quest_info()
@@ -1184,7 +1192,7 @@ class Game:
                 # todo fix
 
         else:
-            self.map.draw()
+            CM.map.draw()
         
         # https://www.youtube.com/watch?v=RXkeWnbJlOE&list=RD_u8CpQdZLMA&index=3
         # pygame.draw.rect(GM.screen, (0, 0, 0), GM.weapon_rect)
