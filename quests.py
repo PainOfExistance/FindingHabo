@@ -141,7 +141,7 @@ class Quests:
                         "clear" in stage["objectives"]
                         and stage["objectives"]["state"] == 1
                     ):
-                        if CM.player.current_world == stage["objectives"]["world"]:
+                        if CM.player.current_world.capitalize() == stage["objectives"]["world"].capitalize():
                             if len(GM.npc_list) == 0:
                                 self.advance_quest(kv)
 
