@@ -68,6 +68,8 @@ class Game:
         GM.bg_surface_menu = pygame.Surface(
             (GM.bg_menu.width, GM.bg_menu.height), pygame.SRCALPHA
         )
+        
+        self.prev=(0,0)
 
     def setup_loaded(self, portals, npcs, final_items, containers, metadata, activators, nav_tiles):
         metadata["collision_set"] = re.sub(r'\\+', r'\\', metadata["collision_set"])
@@ -332,8 +334,11 @@ class Game:
             ),
             CM.player.current_world,
         )
-
+        
+        self.prev=CM.player.player_rect.center
+        
         keys = pygame.key.get_pressed()
+
         if CM.player.player_rect.left <= 10:
             GM.bg_rect.move_ip(movement, 0)
             CM.player.player_rect.move_ip(movement, 0)
@@ -341,9 +346,11 @@ class Game:
         if CM.player.player_rect.right >= GM.screen_width - 10:
             GM.bg_rect.move_ip(-movement, 0)
             CM.player.player_rect.move_ip(-movement, 0)
+            
         if CM.player.player_rect.top <= 10:
             GM.bg_rect.move_ip(0, movement)
             CM.player.player_rect.move_ip(0, movement)
+            
         if CM.player.player_rect.bottom >= GM.screen_height - 10:
             GM.bg_rect.move_ip(0, -movement)
             CM.player.player_rect.move_ip(0, -movement)
@@ -1158,7 +1165,7 @@ class Game:
                 CM.player.player_rect.top + CM.player.player_rect.height // 2,
                 CM.player.range,
                 CM.player.player_rect.height // 4,
-            )
+            )  
 
     def loading(self):
         GM._scr.fill((255,255,255))

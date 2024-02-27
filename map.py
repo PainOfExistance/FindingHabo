@@ -46,35 +46,32 @@ class Map:
     def handle_input(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
-        # Define regions with multiple rectangles
         top_rect = pygame.Rect(0, 0, GM.screen_width, 100)
         bottom_rect = pygame.Rect(0, GM.screen_height - 100, GM.screen_width, 100)
         left_rect = pygame.Rect(0, 0, 100, GM.screen_height)
         right_rect = pygame.Rect(GM.screen_width - 100, 0, 100, GM.screen_height)
 
-        # Define corner quadrants
         top_left_rect = pygame.Rect(0, 0, 100, 100)
         top_right_rect = pygame.Rect(GM.screen_width - 100, 0, 100, 100)
         bottom_left_rect = pygame.Rect(0, GM.screen_height - 100, 100, 100)
         bottom_right_rect = pygame.Rect(GM.screen_width - 100, GM.screen_height - 100, 100, 100)
 
-        # Check if the mouse intersects with any of the rectangles
         if top_left_rect.collidepoint(mouse_x, mouse_y):
-            self.move_image(1, 1)  # Move image towards top-left
+            self.move_image(1, 1) 
         elif top_right_rect.collidepoint(mouse_x, mouse_y):
-            self.move_image(-1, 1)  # Move image towards top-right
+            self.move_image(-1, 1)  
         elif bottom_left_rect.collidepoint(mouse_x, mouse_y):
-            self.move_image(1, -1)  # Move image towards bottom-left
+            self.move_image(1, -1)  
         elif bottom_right_rect.collidepoint(mouse_x, mouse_y):
-            self.move_image(-1, -1)  # Move image towards bottom-right
+            self.move_image(-1, -1)  
         elif top_rect.collidepoint(mouse_x, mouse_y):
-            self.move_image(0, 1)  # Move image towards top
+            self.move_image(0, 1)  
         elif bottom_rect.collidepoint(mouse_x, mouse_y):
-            self.move_image(0, -1)  # Move image towards bottom
+            self.move_image(0, -1)  
         elif left_rect.collidepoint(mouse_x, mouse_y):
-            self.move_image(1, 0)  # Move image towards left
+            self.move_image(1, 0)  
         elif right_rect.collidepoint(mouse_x, mouse_y):
-            self.move_image(-1, 0)  # Move image towards right
+            self.move_image(-1, 0)  
         
         if self.map_rect.topleft[0] > 0:
             self.map_rect.topleft = (0, self.map_rect.topleft[1])
