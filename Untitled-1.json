@@ -1,0 +1,540 @@
+{
+	"identifier": "Dream_World",
+	"uniqueIdentifer": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+	"x": 0,
+	"y": 0,
+	"width": 6416,
+	"height": 6416,
+	"bgColor": "#CB410E",
+	"neighbourLevels": [],
+	"customFields" : {},
+	"layers": [
+		"Collision.png",
+		"BG.png",
+		"Houses.png",
+		"Portals.png"
+	],
+	"entities": {
+		"Player_spawn": [
+			{
+				"id": "Player_spawn",
+				"iid": "c32e9910-b0a0-11ee-b02a-19bd021af181",
+				"layer": "LeveL_Data",
+				"x": 3416,
+				"y": 2056,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "dw_lotf_portal_01",
+					"unlocked_by": "Key to the Land of the Free",
+					"locked": true,
+					"world_to_load": "worlds/simplified/Land_Of_the_Free/data.json",
+					"world_name": "Land of the Free",
+					"spawn_point": {
+						"cx": 213,
+						"cy": 132
+					}
+				}
+			},
+			{
+				"id": "Player_spawn",
+				"iid": "d47e0e30-b0a0-11ee-b02a-f332dd1d2863",
+				"layer": "LeveL_Data",
+				"x": 3624,
+				"y": 3688,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "default",
+					"unlocked_by": "",
+					"locked": false,
+					"world_to_load": "worlds/simplified/Dream_World/data.json",
+					"world_name": null,
+					"spawn_point": {
+						"cx": 226,
+						"cy": 228
+					}
+				}
+			}
+		],
+		"Enemy_Random_Spawn": [
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "a4ef42f0-b0a0-11ee-b02a-2f33a30b0e15",
+				"layer": "LeveL_Data",
+				"x": 512,
+				"y": 3168,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 0.5,
+					"enemy_Type": "bandit",
+					"rarity": "uncommon"
+				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "bb2f8520-b0a0-11ee-b02a-d383876d63fd",
+				"layer": "LeveL_Data",
+				"x": 1312,
+				"y": 2944,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 0.6,
+					"enemy_Type": "goblin",
+					"rarity": "common"
+				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "c0e43e70-b0a0-11ee-b02a-6583af3deefd",
+				"layer": "LeveL_Data",
+				"x": 1248,
+				"y": 3200,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 1,
+					"enemy_Type": "wolf",
+					"rarity": "common"
+				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "d9ee4550-b0a0-11ee-8a46-ddc674d0e8da",
+				"layer": "LeveL_Data",
+				"x": 3144,
+				"y": 3592,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 1,
+					"enemy_Type": "Merchant",
+					"rarity": "unique"
+				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "a7a02530-b0a0-11ee-b847-0be54bd7a963",
+				"layer": "LeveL_Data",
+				"x": 3288,
+				"y": 3320,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 0.8,
+					"enemy_Type": "bandit",
+					"rarity": "uncommon"
+				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "ae5dc300-b0a0-11ee-b847-2559a52a68f0",
+				"layer": "LeveL_Data",
+				"x": 3192,
+				"y": 3384,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 1,
+					"enemy_Type": "bandit",
+					"rarity": "uncommon"
+				}
+			}
+		],
+		"Item_field": [
+			{
+				"id": "Item_field",
+				"iid": "905ee1f0-b0a0-11ee-a869-c77111c9f3d8",
+				"layer": "LeveL_Data",
+				"x": 3480,
+				"y": 3336,
+				"width": 16,
+				"height": 16,
+				"color": 39387,
+				"customFields": {
+					"name": [
+						"Power Elixir"
+					],
+					"chance": [
+						0.8
+					],
+					"type": []
+				}
+			},
+			{
+				"id": "Item_field",
+				"iid": "911d4ff0-b0a0-11ee-a869-adbe292779af",
+				"layer": "LeveL_Data",
+				"x": 3064,
+				"y": 3352,
+				"width": 16,
+				"height": 16,
+				"color": 39387,
+				"customFields": {
+					"name": [
+						"Steel Sword"
+					],
+					"chance": [
+						0.9
+					],
+					"type": []
+				}
+			},
+			{
+				"id": "Item_field",
+				"iid": "91b83060-b0a0-11ee-a869-8f71127cb5aa",
+				"layer": "LeveL_Data",
+				"x": 3128,
+				"y": 3512,
+				"width": 16,
+				"height": 16,
+				"color": 39387,
+				"customFields": {
+					"name": [
+						"Minor Health Potion"
+					],
+					"chance": [
+						1
+					],
+					"type": []
+				}
+			},
+			{
+				"id": "Item_field",
+				"iid": "aa352280-b0a0-11ee-a869-47cc6d623350",
+				"layer": "LeveL_Data",
+				"x": 2216,
+				"y": 2968,
+				"width": 16,
+				"height": 16,
+				"color": 39387,
+				"customFields": {
+					"name": [
+						"rare"
+					],
+					"chance": [
+						0.9
+					],
+					"type": [
+						"armor"
+					]
+				}
+			}
+		],
+		"Container_field": [
+			{
+				"id": "Container_field",
+				"iid": "d8fcfed0-b0a0-11ee-a869-d112b8c4abe7",
+				"layer": "LeveL_Data",
+				"x": 2136,
+				"y": 3240,
+				"width": 16,
+				"height": 16,
+				"color": 2513986,
+				"customFields": {
+					"name": "common chest",
+					"image": "../textures/static/chest.jpg",
+					"items": [
+						"common",
+						"uncommon",
+						"Heirloom"
+					],
+					"chance": [
+						0.9,
+						0.6,
+						1
+					],
+					"type": [
+						"weapon",
+						"potion",
+						"unique"
+					],
+					"number_of_items": [
+						0,
+						0,
+						1
+					],
+					"pedistal": null,
+					"reset": true
+				}
+			},
+			{
+				"id": "Container_field",
+				"iid": "59ae2300-b0a0-11ee-a333-d91b3f0968a7",
+				"layer": "LeveL_Data",
+				"x": 1880,
+				"y": 2840,
+				"width": 16,
+				"height": 16,
+				"color": 2513986,
+				"customFields": {
+					"name": "chest",
+					"image": "../textures/static/chest.jpg",
+					"items": [],
+					"chance": [],
+					"type": [],
+					"number_of_items": [],
+					"pedistal": null,
+					"reset": true
+				}
+			},
+			{
+				"id": "Container_field",
+				"iid": "f7de4360-b0a0-11ee-8b18-6f6d4cc95e86",
+				"layer": "LeveL_Data",
+				"x": 3320,
+				"y": 3272,
+				"width": 16,
+				"height": 16,
+				"color": 2513986,
+				"customFields": {
+					"name": "pedistal",
+					"image": "../textures/static/chest.jpg",
+					"items": [],
+					"chance": [],
+					"type": [],
+					"number_of_items": [],
+					"pedistal": {
+						"entityIid": "67410b20-b0a0-11ee-9a43-eb737be4ec9f",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					},
+					"reset": false
+				}
+			}
+		],
+		"Metadata": [
+			{
+				"id": "Metadata",
+				"iid": "80ec7850-b0a0-11ee-aff9-f32c022415c1",
+				"layer": "LeveL_Data",
+				"x": 136,
+				"y": 104,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"name": "Dream World",
+					"respawn_timer": 50,
+					"time_passed": 0,
+					"music": [
+						"../sounds/bgm/V put.mp3",
+						"../sounds/bgm/It's Time.mp3",
+						"../sounds/bgm/DOVAHKIIN.mp3",
+						"../sounds/bgm/RadioGaGa.mp3",
+						"../sounds/bgm/finding_habo_bgm.mp3",
+						"../sounds/bgm/Angelia.mp3",
+						"../sounds/bgm/Sladka kot med.mp3"
+					],
+					"collision_set": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\Collision-int.png",
+					"background": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\_composite.png"
+				}
+			}
+		],
+		"Activator": [
+			{
+				"id": "Activator",
+				"iid": "67410b20-b0a0-11ee-9a43-eb737be4ec9f",
+				"layer": "LeveL_Data",
+				"x": 3320,
+				"y": 3240,
+				"width": 48,
+				"height": 16,
+				"color": 11320532,
+				"customFields": {
+					"quest": -1,
+					"trap": "",
+					"pedistal": [
+						"Minor Health Potion"
+					],
+					"action_ref": {
+						"entityIid": "28972de0-b0a0-11ee-9a28-ffb635d6c5c4",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					},
+					"door_ref": {
+						"entityIid": "1b6f1000-b0a0-11ee-8f57-af39218e1601",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Activator",
+				"iid": "40a75720-b0a0-11ee-9a43-6f233c20f82e",
+				"layer": "LeveL_Data",
+				"x": 3336,
+				"y": 3112,
+				"width": 64,
+				"height": 64,
+				"color": 11320532,
+				"customFields": {
+					"quest": 2,
+					"trap": "",
+					"pedistal": [],
+					"action_ref": null,
+					"door_ref": null
+				}
+			},
+			{
+				"id": "Activator",
+				"iid": "5c9303d0-b0a0-11ee-9a43-2dbee7c150dd",
+				"layer": "LeveL_Data",
+				"x": 3208,
+				"y": 3160,
+				"width": 48,
+				"height": 48,
+				"color": 11320532,
+				"customFields": {
+					"quest": -1,
+					"trap": "spikes",
+					"pedistal": [],
+					"action_ref": null,
+					"door_ref": null
+				}
+			},
+			{
+				"id": "Activator",
+				"iid": "28972de0-b0a0-11ee-9a28-ffb635d6c5c4",
+				"layer": "LeveL_Data",
+				"x": 3320,
+				"y": 3288,
+				"width": 64,
+				"height": 48,
+				"color": 11320532,
+				"customFields": {
+					"quest": -1,
+					"trap": "ref",
+					"pedistal": [],
+					"action_ref": null,
+					"door_ref": null
+				}
+			}
+		],
+		"Npc_nav_tile": [
+			{
+				"id": "Npc_nav_tile",
+				"iid": "6cef6660-b0a0-11ee-9a43-8f58a5dce41a",
+				"layer": "LeveL_Data",
+				"x": 3512,
+				"y": 3208,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"bandit"
+					],
+					"pause_time": 1,
+					"path_ref": {
+						"entityIid": "6e4f92a0-b0a0-11ee-9a43-a79af409a696",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "6e4f92a0-b0a0-11ee-9a43-a79af409a696",
+				"layer": "LeveL_Data",
+				"x": 3512,
+				"y": 3032,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"bandit"
+					],
+					"pause_time": 1,
+					"path_ref": {
+						"entityIid": "6eed5940-b0a0-11ee-9a43-3dfe52b75072",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "6eed5940-b0a0-11ee-9a43-3dfe52b75072",
+				"layer": "LeveL_Data",
+				"x": 3736,
+				"y": 3032,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"bandit"
+					],
+					"pause_time": 1,
+					"path_ref": {
+						"entityIid": "7034f470-b0a0-11ee-9a43-1fe60e8eb287",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "7034f470-b0a0-11ee-9a43-1fe60e8eb287",
+				"layer": "LeveL_Data",
+				"x": 3736,
+				"y": 3208,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"bandit"
+					],
+					"pause_time": 1,
+					"path_ref": {
+						"entityIid": "6cef6660-b0a0-11ee-9a43-8f58a5dce41a",
+						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
+						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			}
+		],
+		"Portal_walk_in": [
+			{
+				"id": "Portal_walk_in",
+				"iid": "1b6f1000-b0a0-11ee-8f57-af39218e1601",
+				"layer": "LeveL_Data",
+				"x": 3400,
+				"y": 3224,
+				"width": 48,
+				"height": 16,
+				"color": 2960428,
+				"customFields": {
+					"type": "dw_lotf_portal_01",
+					"locked": true,
+					"world_to_load": "worlds/simplified/Land_Of_the_Free/data.json",
+					"world_name": "Land of the Free",
+					"spawn_point": {
+						"cx": 212,
+						"cy": 198
+					}
+				}
+			}
+		]
+	}
+}

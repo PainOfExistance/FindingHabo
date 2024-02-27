@@ -100,7 +100,7 @@
 				"height": 16,
 				"color": 12470831,
 				"customFields": {
-					"chance": 1,
+					"chance": 0.8,
 					"enemy_Type": "wolf",
 					"rarity": "common"
 				}
