@@ -15,6 +15,8 @@ class AssetLoader:
         pass
 
     def load_images(self, path, size, center):
+        if path==None:
+            path = "textures/Emblema_KGB.svg.png"
         # Load and return images as needed
         img = pygame.image.load(path)
         if size!=(0,0):

@@ -1,3 +1,5 @@
+import math
+
 import pygame
 
 import puzzle
@@ -423,3 +425,19 @@ def draw_objects(prompt_font):
                 and x["type"] == "walk_in_portal"
             ):
                 GM.world_to_travel_to = None
+                
+def check_notes():
+    for index, x in enumerate(GM.notes):
+        if not GM.notes[index]["name"]["discovered"] and math.dist((x["x"], x["y"]), (GM.relative_player_left+CM.player.player_rect.width//2, GM.relative_player_top+CM.player.player_rect.height//2))<x["name"]["radius"]:
+            GM.notes[index]["name"]["discovered"]=True
+            CM.player.quests.text_to_draw.append("Discovered: " + x["name"]["name"])
+            CM.player.quests.tics = pygame.time.get_ticks()
+            return
+
+def draw_notes(rect):
+    for x in GM.notes:
+        if x["name"]["discovered"]:
+            relative__left = int(rect.left + x["rect"].left)
+            relative__top = int(rect.top + x["rect"].top)
+            GM.screen.blit(x["image"], (relative__left, relative__top))
+            #todo fix

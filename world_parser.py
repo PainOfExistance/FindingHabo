@@ -99,8 +99,7 @@ def setActivators(activators):
 
 
 def setNavTiles(nav_tiles):
-    return {"group": nav_tiles["group"], "pause_time": nav_tiles["pause_time"], "next_tile": nav_tiles["path_ref"]["entityIid"]}
-    
+    return {"group": nav_tiles["group"], "pause_time": nav_tiles["pause_time"], "next_tile": nav_tiles["path_ref"]["entityIid"]} 
     
 def parser(world):
     spawn = (0, 0)
@@ -111,6 +110,7 @@ def parser(world):
     metadata = []
     activators = []
     nav_tiles=[]
+    notes=[]
 
     for x in world["entities"]:
         if x == "Player_spawn":
@@ -171,6 +171,10 @@ def parser(world):
         elif x == "Npc_nav_tile":
             for y in world["entities"][x]:
                 nav_tiles.append((setNavTiles(y["customFields"]), y["x"], y["y"], y["iid"]))
+        
+        elif x=="Note_marker":
+            for y in world["entities"][x]:
+                notes.append((y["customFields"], y["x"], y["y"], y["iid"]))
 
     #print("-------------------")
     #print(spawn)
@@ -186,7 +190,7 @@ def parser(world):
     #print(metadata)
     #print("-------------------")
 
-    return spawn, portals, enemies, final_items, containers, metadata, activators, nav_tiles
+    return spawn, portals, enemies, final_items, containers, metadata, activators, nav_tiles, notes
 
 def parse_visited(world):
     spawn = (0, 0)
@@ -197,6 +201,7 @@ def parse_visited(world):
     metadata = []
     activators = []
     nav_tiles=[]
+    notes=[]
     
     for i in world:      
         if i["type"]=="metadata":
@@ -217,6 +222,8 @@ def parse_visited(world):
             nav_tiles.append((i["name"], i["x"], i["y"], i["iid"]))
         elif i["type"]=="walk_in_portal":
             portals.append((i["name"], i["x"], i["y"], i["iid"], i["width"], i["height"]))
+        elif i["type"]=="note":
+            notes.append((i["name"], i["x"], i["y"], i["iid"]))
             
     #print("-------------------")
     #print(spawn)
@@ -232,12 +239,12 @@ def parse_visited(world):
     #print(metadata)
     #print("-------------------")
         
-    return spawn, portals, enemies, final_items, containers, metadata, activators, nav_tiles
+    return spawn, portals, enemies, final_items, containers, metadata, activators, nav_tiles, notes
 
 
 def remove_uniques(original, modified):
-    orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles = parser(copy.deepcopy(original))
-    mod_spawn, mod_portals, mod_enemies, mod_final_items, mod_containers, mod_metadata, mod_activators, mod_tiles = parse_visited(copy.deepcopy(modified))
+    orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles, _ = parser(copy.deepcopy(original))
+    mod_spawn, mod_portals, mod_enemies, mod_final_items, mod_containers, mod_metadata, mod_activators, mod_tiles, notes = parse_visited(copy.deepcopy(modified))
 
     #print()
     #print("orig_spawn", orig_spawn)
@@ -301,4 +308,4 @@ def remove_uniques(original, modified):
             orig_containers[i]=copy.deepcopy(mod_containers[i])
     
     
-    return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles
+    return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles, notes

@@ -337,8 +337,8 @@
 						"../sounds/bgm/Angelia.mp3",
 						"../sounds/bgm/Sladka kot med.mp3"
 					],
-					"collision_set": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\Collision-int.png",
-					"background": "terrain\\\\worlds\\\\simplified\\\\Dream_World\\\\_composite.png"
+					"collision_set": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\Collision-int.png",
+					"background": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\_composite.png"
 				}
 			}
 		],
@@ -533,6 +533,59 @@
 						"cx": 212,
 						"cy": 198
 					}
+				}
+			}
+		],
+		"Note_marker": [
+			{
+				"id": "Note_marker",
+				"iid": "487abbb0-b0a0-11ee-b81e-87f7c7bbfe00",
+				"layer": "LeveL_Data",
+				"x": 440,
+				"y": 264,
+				"width": 16,
+				"height": 16,
+				"color": 1199753,
+				"customFields": {
+					"name": "Top Corner",
+					"radius": 500,
+					"discovered": false,
+					"xp": 10,
+					"marker_file": "../textures/Emblema_KGB.svg.png"
+				}
+			},
+			{
+				"id": "Note_marker",
+				"iid": "6447e3e0-b0a0-11ee-b81e-2112a9787978",
+				"layer": "LeveL_Data",
+				"x": 3448,
+				"y": 2056,
+				"width": 16,
+				"height": 16,
+				"color": 1199753,
+				"customFields": {
+					"name": "Some Mine",
+					"radius": 400,
+					"discovered": false,
+					"xp": 50,
+					"marker_file": "../textures/sketch1702329631689.png"
+				}
+			},
+			{
+				"id": "Note_marker",
+				"iid": "71f441a0-b0a0-11ee-b81e-a527b03b241b",
+				"layer": "LeveL_Data",
+				"x": 3240,
+				"y": 3032,
+				"width": 16,
+				"height": 16,
+				"color": 1199753,
+				"customFields": {
+					"name": "Back House",
+					"radius": 500,
+					"discovered": false,
+					"xp": 60,
+					"marker_file": "../textures/Emblema_KGB.svg.png"
 				}
 			}
 		]

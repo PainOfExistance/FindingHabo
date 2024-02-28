@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 
+import renderer as R
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -134,6 +135,7 @@ class Map:
     def draw(self):
         GM.screen.fill((0, 0, 0))
         GM.screen.blit(self.map, self.map_rect.topleft)
+        R.draw_notes(self.map_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_border_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_top_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_left_rect)

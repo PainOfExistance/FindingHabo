@@ -52,6 +52,7 @@ class GameManager:
     load=False
     map_shown=False
     map_m_held=False
+    notes=[]
 
 class ClassManager:
     ai=None

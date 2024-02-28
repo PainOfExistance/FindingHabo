@@ -20,7 +20,6 @@ from music_player import MusicPlayer
 
 class Game:
     def __init__(self):
-        
         for item in os.listdir("terrain\worlds\simplified"):
             item_path=f"terrain\worlds\simplified\{item}\{CM.player.hash}\data_modified.world"
             if os.path.isfile(item_path):
@@ -71,7 +70,7 @@ class Game:
         
         self.prev=(0,0)
 
-    def setup_loaded(self, portals, npcs, final_items, containers, metadata, activators, nav_tiles):
+    def setup_loaded(self, portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes):
         metadata["collision_set"] = re.sub(r'\\+', r'\\', metadata["collision_set"])
         metadata["background"] = re.sub(r'\\+', r'\\', metadata["background"])
         GM.world_objects.append(
@@ -177,6 +176,24 @@ class Game:
                 }
             )
         
+        for data in notes:
+            
+            img, img_rect = CM.assets.load_images(
+                data[0]["marker_file"][3:], (16, 16), (data[1], data[2])
+            )
+            
+            GM.notes.append(
+                {
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "note",
+                    "name": data[0],
+                    "iid": data[3],
+                    "x": data[1],
+                    "y": data[2]
+                }
+            )
+        
         #print(GM.world_objects)
 
     def setup(
@@ -195,16 +212,16 @@ class Game:
             delta = date1 - date2
             if modified_data[0]["name"]["respawn_timer"] > delta.days:
                 print("respawned")
-                spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles = wp.parse_visited(modified_data)
-                self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles)
+                spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes = wp.parse_visited(modified_data)
+                self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
             else:
                 print("basic in")
-                spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles = wp.remove_uniques(level_data, modified_data)
-                self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles)
+                spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes = wp.remove_uniques(level_data, modified_data)
+                self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
         else:
             print("basic out")
-            spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles = wp.parser(level_data)
-            self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles)
+            spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes = wp.parser(level_data)
+            self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
         
         CM.music_player = MusicPlayer(metadata["music"])
         GM.background, GM.bg_rect = CM.assets.load_background(
@@ -262,6 +279,7 @@ class Game:
                 
             self.handle_input()
             self.handle_events()
+            R.check_notes()
             self.draw()
             GM.game_date.increment_seconds()
             CM.player.check_experation(GM.delta_time)
