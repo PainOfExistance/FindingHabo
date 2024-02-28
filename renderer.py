@@ -435,9 +435,15 @@ def check_notes():
             return
 
 def draw_notes(rect):
-    for x in GM.notes:
-        if x["name"]["discovered"]:
-            relative__left = int(rect.left + x["rect"].left)
-            relative__top = int(rect.top + x["rect"].top)
-            GM.screen.blit(x["image"], (relative__left, relative__top))
-            #todo fix
+    for note in GM.notes:
+        if note["name"]["discovered"]:
+            relative_left = int(rect.left + (note["rect"].left//2)*CM.map.zoom)
+            relative_top = int(rect.top + (note["rect"].top//2)*CM.map.zoom)
+            GM.screen.blit(note["image"], (relative_left, relative_top))
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            rect = pygame.Rect(relative_left, relative_top, note["rect"].width, note["rect"].height)
+            if note["rect"].collidepoint(mouse_x, mouse_y):
+                pass
+                #todo, selecting notes etc
+                
+        
