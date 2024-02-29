@@ -190,7 +190,8 @@ class Game:
                     "name": data[0],
                     "iid": data[3],
                     "x": data[1],
-                    "y": data[2]
+                    "y": data[2],
+                    "moved": False
                 }
             )
         

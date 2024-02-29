@@ -140,4 +140,3 @@ class Map:
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_top_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_left_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_right_rect)
-        print(self.zoom)

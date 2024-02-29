@@ -1,3 +1,4 @@
+import copy
 import math
 
 import pygame
@@ -432,18 +433,36 @@ def check_notes():
             GM.notes[index]["name"]["discovered"]=True
             CM.player.quests.text_to_draw.append("Discovered: " + x["name"]["name"])
             CM.player.quests.tics = pygame.time.get_ticks()
+            CM.player.level.gain_experience(x["name"]["xp"])
             return
 
 def draw_notes(rect):
-    for note in GM.notes:
+    hover={"name":None,"x":None,"y":None, "index":None}
+    for i, note in enumerate(GM.notes):
+        
         if note["name"]["discovered"]:
             relative_left = int(rect.left + (note["rect"].left//2)*CM.map.zoom)
             relative_top = int(rect.top + (note["rect"].top//2)*CM.map.zoom)
             GM.screen.blit(note["image"], (relative_left, relative_top))
             mouse_x, mouse_y = pygame.mouse.get_pos()
             rect = pygame.Rect(relative_left, relative_top, note["rect"].width, note["rect"].height)
-            if note["rect"].collidepoint(mouse_x, mouse_y):
-                pass
-                #todo, selecting notes etc
+            if rect.collidepoint(mouse_x, mouse_y):
+                hover={"name":note["name"]["name"],"x":note["x"],"y":note["y"], "index":i}
+                if not note["moved"]:
+                    note["rect"].left -= 16
+                    note["rect"].top -= 16
+                    note["rect"].width += 16
+                    note["rect"].height += 16
+                    note["image"]=pygame.transform.scale(note["image"], (32,32))
+                note["moved"]=True
                 
-        
+    if GM.location_hovered["name"] != hover["name"]:
+        if GM.location_hovered["name"] != None and GM.notes[GM.location_hovered["index"]]["moved"]:
+            GM.notes[GM.location_hovered["index"]]["rect"].left += 16
+            GM.notes[GM.location_hovered["index"]]["rect"].top += 16
+            GM.notes[GM.location_hovered["index"]]["rect"].width -= 16
+            GM.notes[GM.location_hovered["index"]]["rect"].height -= 16
+            GM.notes[GM.location_hovered["index"]]["image"]=pygame.transform.scale(note["image"], (16,16))
+            GM.notes[GM.location_hovered["index"]]["moved"]=False
+            
+        GM.location_hovered={"name":hover["name"],"x":hover["x"],"y":hover["y"], "index":hover["index"]}

@@ -53,6 +53,7 @@ class GameManager:
     map_shown=False
     map_m_held=False
     notes=[]
+    location_hovered={"name":None,"x":None,"y":None, "index":None}
 
 class ClassManager:
     ai=None
