@@ -54,6 +54,9 @@ class GameManager:
     map_m_held=False
     notes=[]
     location_hovered={"name":None,"x":None,"y":None, "index":None}
+    screen_width_scr=0
+    screen_height_scr=0
+    ratio=(0,0)
 
 class ClassManager:
     ai=None

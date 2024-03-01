@@ -1,6 +1,7 @@
 import copy
 import math
 
+import numpy as np
 import pygame
 
 import puzzle
@@ -439,14 +440,13 @@ def check_notes():
 def draw_notes(rect):
     hover={"name":None,"x":None,"y":None, "index":None}
     for i, note in enumerate(GM.notes):
-        
         if note["name"]["discovered"]:
             relative_left = int(rect.left + (note["rect"].left//2)*CM.map.zoom)
             relative_top = int(rect.top + (note["rect"].top//2)*CM.map.zoom)
             GM.screen.blit(note["image"], (relative_left, relative_top))
             mouse_x, mouse_y = pygame.mouse.get_pos()
             rect = pygame.Rect(relative_left, relative_top, note["rect"].width, note["rect"].height)
-            if rect.collidepoint(mouse_x, mouse_y):
+            if rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])):
                 hover={"name":note["name"]["name"],"x":note["x"],"y":note["y"], "index":i}
                 if not note["moved"]:
                     note["rect"].left -= 16

@@ -20,7 +20,8 @@ if os.path.isfile(file_path):
 else:
     print(f"No file '{file_path}' found.")
 
-
+pygame.mouse.set_visible(False) 
+pygame.event.set_grab(True)
 screen_width, screen_height = display[0].width, display[0].height
 screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
 GM._scr=screen

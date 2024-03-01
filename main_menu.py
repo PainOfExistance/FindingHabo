@@ -105,6 +105,7 @@ class MainMenu:
             sys.exit()
         elif self.in_sub_menu == 1:
             self.loading()
+            
             GM._scr.blit(GM.screen, (0, 0))
             GM.screen_width = GM.screen.get_width()
             GM.screen_height = GM.screen.get_height()
@@ -117,6 +118,7 @@ class MainMenu:
             CM.menu = Menu()
             CM.player_menu = PlayerMenu()
             CM.game = Game()
+            
             self.is_menu_visible = False
             CM.game.run()
 

@@ -177,11 +177,9 @@ class Game:
             )
         
         for data in notes:
-            
             img, img_rect = CM.assets.load_images(
                 data[0]["marker_file"][3:], (16, 16), (data[1], data[2])
             )
-            
             GM.notes.append(
                 {
                     "image": img,
@@ -1140,8 +1138,12 @@ class Game:
             and not CM.menu.visible
             and not CM.player_menu.visible
         ):
+            GM.screen_width_scr = GM._scr.get_width()
+            GM.screen_height_scr = GM._scr.get_height()
+            GM.ratio=((GM.screen_width/GM.screen_width_scr),(GM.screen_height/GM.screen_height_scr))
             GM.map_m_held = True
             GM.map_shown = not GM.map_shown
+            pygame.mouse.set_visible(GM.map_shown) 
             CM.map.update_offset()
             CM.map.zoom=1
         elif not keys[pygame.K_m] and GM.map_m_held:

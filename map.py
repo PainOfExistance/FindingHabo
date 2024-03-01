@@ -46,16 +46,16 @@ class Map:
 
     def handle_input(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
+        
+        top_rect = pygame.Rect(0, 0, GM.screen_width_scr, GM.screen_height_scr//6)
+        bottom_rect = pygame.Rect(0, GM.screen_height_scr - GM.screen_height_scr//6, GM.screen_width_scr, GM.screen_height_scr//6)
+        left_rect = pygame.Rect(0, 0, GM.screen_width_scr//6, GM.screen_height_scr)
+        right_rect = pygame.Rect(GM.screen_width_scr - GM.screen_width_scr//6, 0, GM.screen_width_scr//6, GM.screen_height_scr)
 
-        top_rect = pygame.Rect(0, 0, GM.screen_width, 100)
-        bottom_rect = pygame.Rect(0, GM.screen_height - 100, GM.screen_width, 100)
-        left_rect = pygame.Rect(0, 0, 100, GM.screen_height)
-        right_rect = pygame.Rect(GM.screen_width - 100, 0, 100, GM.screen_height)
-
-        top_left_rect = pygame.Rect(0, 0, 100, 100)
-        top_right_rect = pygame.Rect(GM.screen_width - 100, 0, 100, 100)
-        bottom_left_rect = pygame.Rect(0, GM.screen_height - 100, 100, 100)
-        bottom_right_rect = pygame.Rect(GM.screen_width - 100, GM.screen_height - 100, 100, 100)
+        top_left_rect = pygame.Rect(0, 0, GM.screen_width_scr//6, GM.screen_height_scr//6)
+        top_right_rect = pygame.Rect(GM.screen_width_scr - GM.screen_width_scr//6, 0, GM.screen_width_scr//6, GM.screen_height_scr//6)
+        bottom_left_rect = pygame.Rect(0, GM.screen_height_scr - GM.screen_height_scr//6, GM.screen_width_scr//6, GM.screen_height_scr//6)
+        bottom_right_rect = pygame.Rect(GM.screen_width_scr - GM.screen_width_scr//6, GM.screen_height_scr - GM.screen_height_scr//6, GM.screen_width_scr//6, GM.screen_height_scr//6)
 
         if top_left_rect.collidepoint(mouse_x, mouse_y):
             self.move_image(1, 1) 
@@ -129,7 +129,6 @@ class Map:
         if magnitude != 0:
             dx /= magnitude
             dy /= magnitude
-        
         self.map_rect.move_ip(dx * 20, dy * 20)
 
     def draw(self):
