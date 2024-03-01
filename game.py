@@ -278,7 +278,6 @@ class Game:
                 
             self.handle_input()
             self.handle_events()
-            R.check_notes()
             self.draw()
             GM.game_date.increment_seconds()
             CM.player.check_experation(GM.delta_time)
@@ -319,6 +318,8 @@ class Game:
             
             if GM.map_shown:
                 CM.map.handle_input()
+            else:
+                R.check_notes()
 
             self.clock.tick(self.target_fps)
 
