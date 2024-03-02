@@ -57,6 +57,8 @@ class GameManager:
     screen_width_scr=0
     screen_height_scr=0
     ratio=(0,0)
+    can_fast_travel=True
+    prev_mouse=0
 
 class ClassManager:
     ai=None

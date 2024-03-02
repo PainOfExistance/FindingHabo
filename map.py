@@ -130,6 +130,9 @@ class Map:
             dx /= magnitude
             dy /= magnitude
         self.map_rect.move_ip(dx * 20, dy * 20)
+    
+    def fast_travel(self):
+        print("fast travel")
 
     def draw(self):
         GM.screen.fill((0, 0, 0))

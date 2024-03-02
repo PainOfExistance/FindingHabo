@@ -456,6 +456,14 @@ def draw_notes(rect):
                     note["image"]=pygame.transform.scale(note["image"], (32,32))
                 note["moved"]=True
                 
+            mouse_buttons = pygame.mouse.get_pressed()
+            if rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])) and mouse_buttons[0] and GM.prev_mouse>=20 and GM.can_fast_travel:
+                CM.map.fast_travel()
+            elif rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])) and mouse_buttons[0] and GM.prev_mouse<=20 and GM.can_fast_travel:
+                GM.prev_mouse+=1
+            else:
+                GM.prev_mouse=0
+                
     if GM.location_hovered["name"] != hover["name"]:
         if GM.location_hovered["name"] != None and GM.notes[GM.location_hovered["index"]]["moved"]:
             GM.notes[GM.location_hovered["index"]]["rect"].left += 16
