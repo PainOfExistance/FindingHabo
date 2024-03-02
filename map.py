@@ -132,6 +132,21 @@ class Map:
         self.map_rect.move_ip(dx * 20, dy * 20)
     
     def fast_travel(self):
+        CM.game.loading()
+        offset = (
+            GM.location_hovered["x"] - GM.screen.get_width() // 2,
+            GM.location_hovered["y"] - GM.screen.get_height() // 2,
+        )
+
+        GM.bg_rect.left = -offset[0]
+        GM.bg_rect.top = -offset[1]
+
+        CM.player.player_rect.left = GM.location_hovered["x"] - offset[0]
+        CM.player.player_rect.top = GM.location_hovered["y"] - offset[1]
+        
+        GM.map_shown = not GM.map_shown
+        pygame.mouse.set_visible(GM.map_shown)
+        
         print("fast travel")
 
     def draw(self):
