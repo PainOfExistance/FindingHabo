@@ -253,7 +253,7 @@ class Game:
         self.loading()
         CM.player.current_world = GM.world_to_travel_to["world_name"]
         GM.world_objects[GM.world_to_travel_to["index"]]["name"]["locked"] = False
-        CM.assets.world_save(GM.world_objects)
+        CM.assets.world_save()
         self.setup(
                     "terrain/" + GM.world_to_travel_to["world_to_load"],
                     GM.world_to_travel_to["type"],

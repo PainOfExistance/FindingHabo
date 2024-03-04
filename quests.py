@@ -32,7 +32,7 @@ class Quests:
                     self.text_to_draw.clear()
                     self.text_to_draw.append(self.quests[id]["name"])
                     self.text_to_draw.append(
-                        "◇" + self.quests[id]["stages"][index + 1]["description"]
+                        "[" + self.quests[id]["stages"][index + 1]["description"]
                     )
                     self.tics = pygame.time.get_ticks()
                     return
@@ -46,7 +46,7 @@ class Quests:
         self.quests[id]["stages"][0]["objectives"]["state"] = 1
         self.text_to_draw.clear()
         self.text_to_draw.append("Started: " + self.quests[id]["name"])
-        self.text_to_draw.append("◇" + self.quests[id]["stages"][0]["description"])
+        self.text_to_draw.append("[" + self.quests[id]["stages"][0]["description"])
         self.tics = pygame.time.get_ticks()
 
     def end_quest(self, id):
@@ -127,12 +127,15 @@ class Quests:
                         "enemy" in stage["objectives"]
                         and stage["objectives"]["state"] == 1
                     ):
-                        if CM.player.current_world == stage["objectives"]["world"]:
+                        if CM.player.current_world.capitalize() == stage["objectives"]["world"].capitalize():
                             not_in_list = True
+                            print(GM.npc_list)
+                            print(GM.world_objects)
                             for index, x in enumerate(GM.npc_list):
                                 if x["name"]["name"] == stage["objectives"]["enemy"]:
                                     if x["name"]["stats"]["status"] != "dead":
                                         not_in_list = False
+                                        break
                                         
                             if not_in_list:
                                 self.advance_quest(kv)
@@ -144,7 +147,6 @@ class Quests:
                         if CM.player.current_world.capitalize() == stage["objectives"]["world"].capitalize():
                             if len(GM.npc_list) == 0:
                                 self.advance_quest(kv)
-
 
     def to_dict(self):
         return {
@@ -201,9 +203,9 @@ class Quests:
                             and quest_data["active"]
                         ):
                             if stage["objectives"]["state"] == 2:
-                                stage_text = f"◆{stage['description']}"
+                                stage_text = f"[]{stage['description']}"
                             elif stage["objectives"]["state"] == 1:
-                                stage_text = f"◇{stage['description']}"
+                                stage_text = f"[{stage['description']}"
 
                             stage_render = self.quests_font.render(
                                 stage_text, True, color

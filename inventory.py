@@ -52,13 +52,13 @@ class Inventory:
                 else (120, 120, 120)
             )
             if index == selected_sub_item - scroll_position:
-                item_text = f"> {item_name}: {item_quantity} desc: {self.items[item_name]['description']}"
+                item_text = "}"+f" {item_name}: {item_quantity} desc: {self.items[item_name]['description']}"
                 if "stats" in self.items[item_name] and self.items[item_name]['stats']["equiped"]:
-                    item_text = f"> {item_name}: {item_quantity} desc: {self.items[item_name]['description']} ◄"
+                    item_text = "}"+f" {item_name}: {item_quantity} desc: {self.items[item_name]['description']} <"
             else:
                 item_text = f"    {item_name}: {item_quantity} desc: {self.items[item_name]['description']}"
                 if "stats" in self.items[item_name] and self.items[item_name]['stats']["equiped"]:
-                    item_text = f"    {item_name}: {item_quantity} desc: {self.items[item_name]['description']} ◄"
+                    item_text = f"    {item_name}: {item_quantity} desc: {self.items[item_name]['description']} <"
 
             item_render = self.inventory_font.render(item_text, True, color)
             item_rect = item_render.get_rect(topleft=(left, ofset + 20 + index * 40))

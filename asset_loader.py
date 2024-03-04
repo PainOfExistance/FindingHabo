@@ -131,7 +131,7 @@ class AssetLoader:
                 self.find_substring_index_in_list(new_path, item)
 
     def save(self):
-        CM.assets.world_save(GM.world_objects)
+        self.world_save()
         save_name =f"{CM.player.name}_{GM.game_date.print_date()}".replace(" ", "_").replace(",", "")
         self.rename_index_worlds(save_name)
         data=CM.player.to_dict()
@@ -152,7 +152,8 @@ class AssetLoader:
             data = json.load(file)
             return data
         
-    def world_save(self, world, file_name="data_modified.world"):
+    def world_save(self, file_name="data_modified.world"):
+        world=GM.world_objects+GM.npc_list
         path = os.path.dirname(world[0]["name"]["background"])
         path = os.path.join(path, CM.player.hash)
         if not os.path.exists(path):

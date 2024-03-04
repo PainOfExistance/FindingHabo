@@ -437,16 +437,23 @@ def check_notes():
             CM.player.level.gain_experience(x["name"]["xp"])
             return
 
-def draw_notes(rect):
+def draw_notes(rect, prompt_font):
     hover={"name":None,"x":None,"y":None, "index":None}
     for i, note in enumerate(GM.notes):
         if note["name"]["discovered"]:
             relative_left = int(rect.left + (note["rect"].left//2)*CM.map.zoom)
             relative_top = int(rect.top + (note["rect"].top//2)*CM.map.zoom)
             GM.screen.blit(note["image"], (relative_left, relative_top))
+            
             mouse_x, mouse_y = pygame.mouse.get_pos()
             rect = pygame.Rect(relative_left, relative_top, note["rect"].width, note["rect"].height)
             if rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])):
+                text = prompt_font.render(f"{note['name']['name']}", True, (44, 53, 57))
+                text_rect = text.get_rect(
+                    center=(relative_left+note["rect"].width//2, relative_top-35)
+                )
+                GM.screen.blit(text, text_rect)
+                
                 hover={"name":note["name"]["name"],"x":note["x"],"y":note["y"], "index":i}
                 if not note["moved"]:
                     note["rect"].left -= 16
@@ -472,5 +479,4 @@ def draw_notes(rect):
             GM.notes[GM.location_hovered["index"]]["rect"].height -= 16
             GM.notes[GM.location_hovered["index"]]["image"]=pygame.transform.scale(note["image"], (16,16))
             GM.notes[GM.location_hovered["index"]]["moved"]=False
-            
         GM.location_hovered={"name":hover["name"],"x":hover["x"],"y":hover["y"], "index":hover["index"]}

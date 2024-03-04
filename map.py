@@ -22,6 +22,7 @@ class Map:
         self.bottom_right_rect = pygame.Rect(GM.screen_width-20, 20, 20, GM.screen_height-20)
         self.map_rect=None
         self.zoom=1
+        self.prompt_font = pygame.font.Font("fonts/SovngardeBold.ttf", 20)
         
     def set_map(self, map):
         self.full_map = map
@@ -51,7 +52,6 @@ class Map:
         bottom_rect = pygame.Rect(0, GM.screen_height_scr - GM.screen_height_scr//6, GM.screen_width_scr, GM.screen_height_scr//6)
         left_rect = pygame.Rect(0, 0, GM.screen_width_scr//6, GM.screen_height_scr)
         right_rect = pygame.Rect(GM.screen_width_scr - GM.screen_width_scr//6, 0, GM.screen_width_scr//6, GM.screen_height_scr)
-
         top_left_rect = pygame.Rect(0, 0, GM.screen_width_scr//6, GM.screen_height_scr//6)
         top_right_rect = pygame.Rect(GM.screen_width_scr - GM.screen_width_scr//6, 0, GM.screen_width_scr//6, GM.screen_height_scr//6)
         bottom_left_rect = pygame.Rect(0, GM.screen_height_scr - GM.screen_height_scr//6, GM.screen_width_scr//6, GM.screen_height_scr//6)
@@ -147,13 +147,14 @@ class Map:
         GM.map_shown = not GM.map_shown
         pygame.mouse.set_visible(GM.map_shown)
         
-        print("fast travel")
-
     def draw(self):
         GM.screen.fill((0, 0, 0))
         GM.screen.blit(self.map, self.map_rect.topleft)
-        R.draw_notes(self.map_rect)
+        R.draw_notes(self.map_rect, self.prompt_font)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_border_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_top_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_left_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_right_rect)
+        text = self.prompt_font.render(f"(Hold the icon to fast travel)", True, (255,255,255))
+        text_rect = text.get_rect(center=(GM.screen.get_width()//2, GM.screen.get_height()-11))
+        GM.screen.blit(text, text_rect)
