@@ -337,8 +337,8 @@
 						"../sounds/bgm/Angelia.mp3",
 						"../sounds/bgm/Sladka kot med.mp3"
 					],
-					"collision_set": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\Collision-int.png",
-					"background": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Dream_World\\\\\\\\_composite.png"
+					"collision_set": "terrain\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\Collision-int.png",
+					"background": "terrain\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\_composite.png"
 				}
 			}
 		],
@@ -418,6 +418,23 @@
 				"customFields": {
 					"quest": -1,
 					"trap": "ref",
+					"pedistal": [],
+					"action_ref": null,
+					"door_ref": null
+				}
+			},
+			{
+				"id": "Activator",
+				"iid": "b62a6820-d7b0-11ee-8c2e-7ddff887624c",
+				"layer": "LeveL_Data",
+				"x": 3192,
+				"y": 3272,
+				"width": 80,
+				"height": 32,
+				"color": 11320532,
+				"customFields": {
+					"quest": -1,
+					"trap": "",
 					"pedistal": [],
 					"action_ref": null,
 					"door_ref": null

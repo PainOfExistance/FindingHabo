@@ -96,6 +96,8 @@ def setActivators(activators):
         return {"trap": activators["trap"], "type": "trap", "ref": activators["action_ref"]}
     elif len(activators["pedistal"]) != 0:
         return {"pedistal": activators["pedistal"], "type": "pedistal", "ref": activators["action_ref"], "door_ref": activators["door_ref"]}
+    else:
+        return {"type": "board", "ref": activators["action_ref"]}
 
 
 def setNavTiles(nav_tiles):

@@ -155,6 +155,7 @@ class Map:
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_top_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_left_rect)
         pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_right_rect)
-        text = self.prompt_font.render(f"(Hold the icon to fast travel)", True, (255,255,255))
-        text_rect = text.get_rect(center=(GM.screen.get_width()//2, GM.screen.get_height()-11))
-        GM.screen.blit(text, text_rect)
+        if GM.can_fast_travel:
+            text = self.prompt_font.render(f"(Hold the icon to fast travel)", True, (255,255,255))
+            text_rect = text.get_rect(center=(GM.screen.get_width()//2, GM.screen.get_height()-11))
+            GM.screen.blit(text, text_rect)

@@ -234,6 +234,7 @@ def draw_barter(menu_font):
         GM.enter_held = False
 
 def draw_objects(prompt_font):
+    can_travel = False
     for index, x in enumerate(GM.world_objects):
         if index == 0:
             continue
@@ -384,6 +385,11 @@ def draw_objects(prompt_font):
                     CM.player.update_health(-50)
                     GM.world_objects[index]["name"]["trap"]+=" activated"
                     
+            if (other_obj_rect.colliderect(CM.player.player_rect) and x["type"]=="activator" and x["name"]["type"]=="board"):
+                can_travel = True
+            else:
+                GM.can_fast_travel = False
+                    
             other_rect = pygame.Rect(
                 relative__left-50,
                 relative__top-50,
@@ -427,6 +433,9 @@ def draw_objects(prompt_font):
                 and x["type"] == "walk_in_portal"
             ):
                 GM.world_to_travel_to = None
+            
+            if can_travel:
+                GM.can_fast_travel = True
                 
 def check_notes():
     for index, x in enumerate(GM.notes):
