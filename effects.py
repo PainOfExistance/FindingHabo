@@ -1,13 +1,14 @@
 import numpy as np
 import pygame
 
+import asset_loader as assets
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 class Effects:
     def __init__(self):
-        self.effects = CM.assets.load_effects()
+        self.effects = assets.load_effects()
         self.effects_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
     
     def to_dict(self):

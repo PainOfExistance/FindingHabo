@@ -3,13 +3,14 @@ import json
 import numpy as np
 import pygame
 
+import asset_loader as assets
 from game_manager import ClassManager as CM
 
 
 class Traits:
     def __init__(self):
         self.unused_trait_points = 0
-        self.traits = CM.assets.load_traits()
+        self.traits = assets.load_traits()
         
     def add_trait(self, name, lvl):
         for level in self.traits[name]["levels"]:

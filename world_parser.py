@@ -3,11 +3,10 @@ import json
 import os
 import random
 
-from asset_loader import AssetLoader
+import asset_loader as assets
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
-assets = AssetLoader()
 items = assets.load_items()
 ai = assets.load_ai_package()
 

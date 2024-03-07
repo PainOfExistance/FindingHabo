@@ -3,13 +3,14 @@ import math
 import numpy as np
 import pygame
 
+import asset_loader as assets
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 class Quests:
     def __init__(self):
-        self.quests = CM.assets.load_quests()
+        self.quests = assets.load_quests()
         self.tics = 0
         self.text_to_draw = []
         self.dialogue = None

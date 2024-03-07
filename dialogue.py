@@ -3,13 +3,14 @@ import random
 import numpy as np
 import pygame
 
+import asset_loader as assets
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
 class Dialougue:
     def __init__(self):
-        self.strings = CM.assets.load_dialogue()
+        self.strings = assets.load_dialogue()
         self.index = -1
         self.selected_item = 0
         self.selection_held = False

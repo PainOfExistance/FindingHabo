@@ -5,6 +5,7 @@ from datetime import datetime
 
 import pygame
 
+import asset_loader as assets
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -117,7 +118,7 @@ class Menu:
             sys.exit()
         elif self.in_sub_menu == 1:
             if self.action == "Save":
-                tmp = CM.assets.save()
+                tmp = assets.save()
                 if tmp:
                     saves = glob.glob(os.path.join("saves", "*.habo"))
                     self.saves = [
@@ -133,7 +134,7 @@ class Menu:
                 CM.player.__init__()
                 CM.ai.__init__()
                 GM.save_name = f"{selected_option}.habo"
-                CM.player.from_dict(CM.assets.load(f"saves/{selected_option}.habo"))
+                CM.player.from_dict(assets.load(f"saves/{selected_option}.habo"))
                 CM.menu.__init__()
                 CM.player_menu.__init__()
                 CM.game.__init__()
@@ -141,7 +142,7 @@ class Menu:
                 CM.game.run()
             elif self.action == "Overwrite" and len(self.saves) > 0:
                 os.remove(f"saves/{selected_option}.habo")
-                CM.assets.save()
+                assets.save()
                 saves = glob.glob(os.path.join("saves", "*.habo"))
                 self.saves = [
                     os.path.splitext(os.path.basename(filename))[0]

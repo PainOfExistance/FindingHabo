@@ -5,7 +5,6 @@ import sys
 import pygame
 
 from ai import Ai
-from asset_loader import AssetLoader
 from game import Game
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
@@ -82,7 +81,7 @@ class MainMenu:
             GM.screen_width = GM.screen.get_width()
             GM.screen_height = GM.screen.get_height()
             #pygame.display.update()
-            CM.assets = AssetLoader()
+            
             CM.player = Player()
             CM.menu = Menu()
             CM.player_menu = PlayerMenu()
@@ -110,7 +109,7 @@ class MainMenu:
             GM.screen_width = GM.screen.get_width()
             GM.screen_height = GM.screen.get_height()
             #pygame.display.update()
-            CM.assets = AssetLoader()
+            
             CM.player = Player()
             CM.ai = Ai()
             GM.save_name=f"{selected_option}.habo"

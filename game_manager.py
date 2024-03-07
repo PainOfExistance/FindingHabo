@@ -1,5 +1,7 @@
 import numpy as np
 
+from script_loader import ScriptLoader
+
 
 class GameManager:
     enter_held=False
@@ -59,11 +61,11 @@ class GameManager:
     ratio=(0,0)
     can_fast_travel=True
     prev_mouse=0
+    can_move=True
 
 class ClassManager:
     ai=None
     animation=None
-    assets=None
     dialogue=None
     effects=None
     game=None
@@ -78,3 +80,4 @@ class ClassManager:
     stats=None
     traits=None
     map=None
+    script_loader=ScriptLoader()

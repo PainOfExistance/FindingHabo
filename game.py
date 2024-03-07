@@ -8,6 +8,7 @@ import numpy as np
 import pygame
 from pygame.locals import *
 
+import asset_loader as assets
 import npc as N
 import renderer as R
 import world_parser as wp
@@ -25,8 +26,8 @@ class Game:
             if os.path.isfile(item_path):
                 os.remove(item_path)
         
-        GM.items = CM.assets.load_items()
-        GM.ai_package = CM.assets.load_ai_package()
+        GM.items = assets.load_items()
+        GM.ai_package = assets.load_ai_package()
 
         self.prompt_font = pygame.font.Font("fonts/SovngardeBold.ttf", 20)
         self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
@@ -82,7 +83,7 @@ class Game:
 
         for data in final_items:
             item = GM.items[data[0]]
-            img, img_rect = CM.assets.load_images(
+            img, img_rect = assets.load_images(
                 item["image"], (0, 0), (data[1], data[2])
             )
             GM.world_objects.append(
@@ -97,13 +98,13 @@ class Game:
 
         for data in containers:
             tmp = data
-            img, img_rect = CM.assets.load_images(data[4], (64, 64), (data[1], data[2]))
+            img, img_rect = assets.load_images(data[4], (64, 64), (data[1], data[2]))
             GM.world_objects.append(
                 {"image": img, "rect": img_rect, "type": "container", "name": tmp, "pedistal": data[6], "iid": data[7]}
             )
 
         for data in npcs:
-            img, img_rect = CM.assets.load_images(
+            img, img_rect = assets.load_images(
                 data[0]["stats"]["image"], (64, 64), (data[1], data[2])
             )
             GM.npc_list.append(
@@ -120,7 +121,7 @@ class Game:
 
         for data in portals:
             if "unlocked_by" in data[0]:
-                img, img_rect = CM.assets.load_images(
+                img, img_rect = assets.load_images(
                     "textures\static\door.png", (64, 64), (data[1], data[2])
                 )
                 GM.world_objects.append(
@@ -133,7 +134,7 @@ class Game:
                     }
                 )
             else:
-                img, img_rect = CM.assets.load_images(
+                img, img_rect = assets.load_images(
                     "textures\\static\\barrier.png", (data[4], data[5]), (data[1], data[2])
                 )
                 GM.world_objects.append(
@@ -177,7 +178,7 @@ class Game:
             )
         
         for data in notes:
-            img, img_rect = CM.assets.load_images(
+            img, img_rect = assets.load_images(
                 data[0]["marker_file"][3:], (16, 16), (data[1], data[2])
             )
             GM.notes.append(
@@ -201,8 +202,8 @@ class Game:
         GM.world_objects.clear()
         GM.npc_list.clear()
         
-        level_data = CM.assets.load_level_data(path)
-        modified_data = CM.assets.get_stored_data(path)
+        level_data = assets.load_level_data(path)
+        modified_data = assets.get_stored_data(path)
         if modified_data != None:
             date1 = datetime.strptime(GM.game_date.get_date(), "%Y-%m-%dT%H:%M:%S")
             date2 = datetime.strptime(
@@ -223,10 +224,10 @@ class Game:
             self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
         
         CM.music_player = MusicPlayer(metadata["music"])
-        GM.background, GM.bg_rect = CM.assets.load_background(
+        GM.background, GM.bg_rect = assets.load_background(
             metadata["background"],
         )
-        GM.collision_map = CM.assets.load_collision(metadata["collision_set"])
+        GM.collision_map = assets.load_collision(metadata["collision_set"])
         GM.map_height = GM.collision_map.shape[0]
         GM.map_width = GM.collision_map.shape[1]
 
@@ -253,7 +254,7 @@ class Game:
         self.loading()
         CM.player.current_world = GM.world_to_travel_to["world_name"]
         GM.world_objects[GM.world_to_travel_to["index"]]["name"]["locked"] = False
-        CM.assets.world_save()
+        assets.world_save()
         self.setup(
                     "terrain/" + GM.world_to_travel_to["world_to_load"],
                     GM.world_to_travel_to["type"],
@@ -275,8 +276,10 @@ class Game:
             if GM.load:
                 GM.load = False
                 self.travel()
+            
+            if GM.can_move:
+                self.handle_input()
                 
-            self.handle_input()
             self.handle_events()
             self.draw()
             GM.game_date.increment_seconds()
@@ -287,6 +290,7 @@ class Game:
                 and not GM.container_open
                 and not GM.is_in_dialogue
                 and not GM.map_shown
+                and GM.can_move
             ):
                 CM.menu.handle_input()
 
@@ -296,6 +300,7 @@ class Game:
                 and not GM.container_open
                 and not GM.is_in_dialogue
                 and not GM.map_shown
+                and GM.can_move
             ):
                 CM.player_menu.handle_input()
 
@@ -306,6 +311,7 @@ class Game:
                 and not CM.player_menu.visible
                 and not CM.menu.visible
                 and not GM.map_shown
+                and GM.can_move
             ):
                 CM.ai.strings.handle_input()
                 if CM.ai.strings.starts != 0:
@@ -1082,7 +1088,7 @@ class Game:
             CM.player.unequip_item(key)
             ret = CM.player.remove_item(key)
             if ret:
-                img, img_rect = CM.assets.load_images(
+                img, img_rect = assets.load_images(
                     GM.items[key]["image"],
                     (0, 0),
                     (
