@@ -17,6 +17,7 @@ from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from map import Map
 from music_player import MusicPlayer
+from script_loader import ScriptLoader
 
 
 class Game:
@@ -28,7 +29,7 @@ class Game:
         
         GM.items = assets.load_items()
         GM.ai_package = assets.load_ai_package()
-
+        self.loader = ScriptLoader()
         self.prompt_font = pygame.font.Font("fonts/SovngardeBold.ttf", 20)
         self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
@@ -1132,6 +1133,9 @@ class Game:
                 print(f"attacked with a: {CM.player.equipped_items['hand']}")
                 GM.time_diff = 0
                 self.diff = pygame.time.get_ticks()
+                print(GM.line_time)
+                result = self.loader.run_script("neke", "meow", meow="Hello, World!")
+                print(GM.line_time)
                 
         elif GM.attacking:
             print("no longer attacking")
