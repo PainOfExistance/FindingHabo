@@ -461,7 +461,7 @@
 					"action_ref": null,
 					"door_ref": null,
 					"script_runner": [
-						"{\n  \"script_name\": \"player_dialogue_tubolca\",\n  \"function\": \"player_dialogue_tubolca\",\n  \"respawns\": true,\n  \"args\": [\"Minor Health Potion\", 3]\n}"
+						"{\n  \"script_name\": \"player_dialogue_tubolca\",\n  \"function\": \"player_dialogue_tubolca\",\n  \"respawns\": true,\n  \"used\": false,\n  \"args\": [\"Minor Health Potion\", 3]\n}"
 					]
 				}
 			}

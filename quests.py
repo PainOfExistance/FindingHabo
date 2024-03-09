@@ -130,8 +130,6 @@ class Quests:
                     ):
                         if CM.player.current_world.capitalize() == stage["objectives"]["world"].capitalize():
                             not_in_list = True
-                            print(GM.npc_list)
-                            print(GM.world_objects)
                             for index, x in enumerate(GM.npc_list):
                                 if x["name"]["name"] == stage["objectives"]["enemy"]:
                                     if x["name"]["stats"]["status"] != "dead":

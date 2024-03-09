@@ -389,6 +389,14 @@ def draw_objects(prompt_font):
                 can_travel = True
             else:
                 GM.can_fast_travel = False
+                
+            if (other_obj_rect.colliderect(CM.player.player_rect) and x["type"]=="activator" and x["name"]["type"]=="script_runner"):
+                for index, script in enumerate(x["name"]["script_runner"]):
+                    if not script["used"]:
+                        CM.script_loader.run_script(script["script_name"], script["function"], script["args"])
+                        x["name"]["script_runner"][index]["used"]=True
+                    
+                    
                     
             other_rect = pygame.Rect(
                 relative__left-50,
