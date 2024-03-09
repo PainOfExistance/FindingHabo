@@ -95,6 +95,11 @@ def setActivators(activators):
         return {"trap": activators["trap"], "type": "trap", "ref": activators["action_ref"]}
     elif len(activators["pedistal"]) != 0:
         return {"pedistal": activators["pedistal"], "type": "pedistal", "ref": activators["action_ref"], "door_ref": activators["door_ref"]}
+    elif len(activators["script_runner"]) != 0:
+        arr=[]
+        for i, x in activators["script_runner"]:
+            arr.append(json.loads(x))
+        return {"script_runner": arr, "type": "script_runner", "ref": activators["action_ref"]}
     else:
         return {"type": "board", "ref": activators["action_ref"]}
 
@@ -274,7 +279,7 @@ def remove_uniques(original, modified):
     #print()
     #print("mod_metadata", mod_metadata)
     #print()
-    
+    tmp=[]
     for i, _ in enumerate(orig_enemies):
         if orig_enemies[i][0]["stats"]["rarity"]=="unique":
             in_mod=False
@@ -307,6 +312,12 @@ def remove_uniques(original, modified):
                     orig_containers[i][0].pop(index)
         else:
             orig_containers[i]=copy.deepcopy(mod_containers[i])
+        
+    for i, x in enumerate(orig_activators):
+        if orig_activators[i][0]["type"]=="board":
+            for j in mod_activators:
+                if orig_activators[i][0]["ref"]==j[0]["ref"]:
+                    orig_activators[i]=copy.deepcopy(j)
     
     
     return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles, notes

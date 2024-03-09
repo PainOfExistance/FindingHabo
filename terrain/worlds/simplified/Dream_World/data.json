@@ -369,7 +369,8 @@
 						"layerIid": "17249f90-b0a0-11ee-8092-67dd653964d2",
 						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"script_runner": []
 				}
 			},
 			{
@@ -386,7 +387,8 @@
 					"trap": "",
 					"pedistal": [],
 					"action_ref": null,
-					"door_ref": null
+					"door_ref": null,
+					"script_runner": []
 				}
 			},
 			{
@@ -403,7 +405,8 @@
 					"trap": "spikes",
 					"pedistal": [],
 					"action_ref": null,
-					"door_ref": null
+					"door_ref": null,
+					"script_runner": []
 				}
 			},
 			{
@@ -420,24 +423,46 @@
 					"trap": "ref",
 					"pedistal": [],
 					"action_ref": null,
-					"door_ref": null
+					"door_ref": null,
+					"script_runner": []
 				}
 			},
 			{
 				"id": "Activator",
-				"iid": "b62a6820-d7b0-11ee-8c2e-7ddff887624c",
+				"iid": "abd8cf10-d7b0-11ee-b3a3-c55bf25c7c95",
 				"layer": "LeveL_Data",
 				"x": 3192,
 				"y": 3272,
 				"width": 80,
-				"height": 32,
+				"height": 48,
 				"color": 11320532,
 				"customFields": {
 					"quest": -1,
 					"trap": "",
 					"pedistal": [],
 					"action_ref": null,
-					"door_ref": null
+					"door_ref": null,
+					"script_runner": []
+				}
+			},
+			{
+				"id": "Activator",
+				"iid": "803dfa50-d7b0-11ee-b3a3-db33961e28fc",
+				"layer": "LeveL_Data",
+				"x": 3192,
+				"y": 2968,
+				"width": 80,
+				"height": 64,
+				"color": 11320532,
+				"customFields": {
+					"quest": -1,
+					"trap": "",
+					"pedistal": [],
+					"action_ref": null,
+					"door_ref": null,
+					"script_runner": [
+						"{\n  \"script_name\": \"player_dialogue_tubolca\",\n  \"function\": \"player_dialogue_tubolca\",\n  \"respawns\": true,\n  \"args\": [\"Minor Health Potion\", 3]\n}"
+					]
 				}
 			}
 		],

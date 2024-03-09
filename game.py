@@ -1133,9 +1133,6 @@ class Game:
                 print(f"attacked with a: {CM.player.equipped_items['hand']}")
                 GM.time_diff = 0
                 self.diff = pygame.time.get_ticks()
-                print(GM.line_time)
-                result = self.loader.run_script("neke", "meow", meow="Hello, World!")
-                print(GM.line_time)
                 
         elif GM.attacking:
             print("no longer attacking")
