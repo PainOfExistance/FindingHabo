@@ -385,6 +385,9 @@ class Dialougue:
                             for value in self.strings[self.name]["options"][selected]["disables"]:
                                 self.strings[self.name]["options"][value]["used"] = False
                            
+                    if "script" in self.strings[self.name]["options"][selected] and not self.strings[self.name]["options"][selected]["func_used"]:
+                        CM.script_loader.run_script(self.strings[self.name]["options"][selected]["script"], self.strings[self.name]["options"][selected]["function"], self.strings[self.name]["options"][selected]["args"])
+                        self.strings[self.name]["options"][selected]["func_used"] = True
                     self.talking = True
                 self.selected_item = 0
 

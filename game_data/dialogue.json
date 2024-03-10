@@ -19,7 +19,11 @@
         {
           "text": "What happened?",
           "res": "about_merchant_advanced_ambush",
-          "used": true
+          "used": true,
+          "script": "player_dialogue_tubolca",
+          "function": "player_dialogue_tubolca",
+          "func_used": false,
+          "args": ["Minor Health Potion", 3]
         },
         {
           "text": "Sorry to hear that.",
