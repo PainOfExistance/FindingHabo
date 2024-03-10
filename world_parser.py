@@ -314,11 +314,12 @@ def remove_uniques(original, modified):
             orig_containers[i]=copy.deepcopy(mod_containers[i])
         
     for i, x in enumerate(orig_activators):
-        if x["type"]=="script_runner":
+        if x[0]["type"]=="script_runner":
             arr=[]
-            for index, y in enumerate(x["script_runner"]):
-                if y["respawn"]:
+            for index, y in enumerate(x[0]["script_runner"]):
+                print(y)
+                if y["respawns"]:
                     arr.append(y)
-            orig_activators[i]["script_runner"]=copy.deepcopy(arr)
+            orig_activators[i][0]["script_runner"]=copy.deepcopy(arr)
 
     return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles, notes

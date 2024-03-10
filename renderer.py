@@ -467,7 +467,7 @@ def draw_notes(rect, prompt_font):
             if rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])):
                 text = prompt_font.render(f"{note['name']['name']}", True, (44, 53, 57))
                 text_rect = text.get_rect(
-                    center=(relative_left+note["rect"].width//2, relative_top-35)
+                    center=(relative_left+note["rect"].width//2, relative_top-8)
                 )
                 GM.screen.blit(text, text_rect)
                 
