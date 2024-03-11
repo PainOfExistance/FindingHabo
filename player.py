@@ -5,6 +5,7 @@ import numpy as np
 import pygame
 
 from animation import Animation
+from colors import Colors
 from effects import Effects
 from game_date import GameDate
 from game_manager import ClassManager as CM
@@ -53,7 +54,7 @@ class Player:
         self.depleted_rect.center = (GM.screen_width // 2, GM.screen_height - 10)
         self.border_rect.center = (GM.screen_width // 2, GM.screen_height - 10)
 
-        self.text = self.font.render("Health", True, (255, 255, 255))
+        self.text = self.font.render("Health", True, Colors.active_item)
         self.text_rect = self.text.get_rect(
             center=(GM.screen_width // 2, GM.screen_height - 12)
         )
@@ -266,6 +267,6 @@ class Player:
         )
         new_rect.center = self.player_rect.center
         GM.screen.blit(self.player, new_rect.topleft)
-        pygame.draw.rect(GM.screen, (0, 0, 0), self.border_rect, border_radius=10)
-        pygame.draw.rect(GM.screen, (255, 0, 0), self.depleted_rect, border_radius=10)
+        pygame.draw.rect(GM.screen, Colors.dark_black, self.border_rect, border_radius=10)
+        pygame.draw.rect(GM.screen, Colors.communist_red, self.depleted_rect, border_radius=10)
         GM.screen.blit(self.text, self.text_rect)

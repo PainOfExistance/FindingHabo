@@ -3,6 +3,7 @@ import sys
 
 import pygame
 
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -184,18 +185,18 @@ class PlayerMenu:
     def render(self):
         if self.visible:
             pygame.draw.rect(
-                self.bg_surface, (200, 210, 200, 180), self.bg_surface.get_rect()
+                self.bg_surface, Colors.bg_color, self.bg_surface.get_rect()
             )
             GM.screen.blit(self.bg_surface, self.bg)
 
             pygame.draw.rect(
-                self.bg_surface_menu, (44, 44, 44, 200), self.bg_surface_menu.get_rect()
+                self.bg_surface_menu, Colors.bg_color, self.bg_surface_menu.get_rect()
             )
             GM.screen.blit(self.bg_surface_menu, self.bg_menu)
 
             pygame.draw.line(
                 GM.screen,
-                (22, 22, 22),
+                Colors.edge_color,
                 (GM.screen.get_width() // 4, 0),
                 (GM.screen.get_width() // 4, GM.screen.get_height()),
                 4,
@@ -203,11 +204,11 @@ class PlayerMenu:
 
             for index, item in enumerate(self.menu_items):
                 color = (
-                    (44, 53, 57)
+                    Colors.active_item
                     if index == self.selected_item
-                    else (237, 106, 94)
+                    else Colors.inactive_item
                     if not self.sub_items
-                    else (160, 160, 160)
+                    else Colors.unselected_item
                 )
 
                 text = self.menu_font.render(item, True, color)
@@ -216,13 +217,13 @@ class PlayerMenu:
                 text_y = GM.screen.get_height() - 140
 
                 for stat in self.stats:
-                    stat_render = self.stats_font.render(stat, True, (44, 53, 57))
+                    stat_render = self.stats_font.render(stat, True, Colors.active_item)
                     stat_rect = stat_render.get_rect(bottomleft=(20, text_y))
                     GM.screen.blit(stat_render, stat_rect)
                     text_y += stat_rect.height + 5
 
                 level = self.stats_font.render(
-                    f"Level: {str(CM.player.level.level)}", True, (44, 53, 57)
+                    f"Level: {str(CM.player.level.level)}", True, Colors.active_item
                 )
                 level_rect = level.get_rect(bottomleft=(20, text_y))
                 GM.screen.blit(level, level_rect)
@@ -231,7 +232,7 @@ class PlayerMenu:
                 level = self.stats_font.render(
                     f"Unused points: {str(CM.player.level.traits.unused_trait_points)}",
                     True,
-                    (44, 53, 57),
+                    Colors.active_item
                 )
                 level_rect = level.get_rect(bottomleft=(20, text_y))
                 GM.screen.blit(level, level_rect)
@@ -240,7 +241,7 @@ class PlayerMenu:
                 level = self.stats_font.render(
                     f"Gold: {str(CM.player.gold)}",
                     True,
-                    (44, 53, 57),
+                    Colors.active_item
                 )
                 level_rect = level.get_rect(bottomleft=(20, text_y))
                 GM.screen.blit(level, level_rect)

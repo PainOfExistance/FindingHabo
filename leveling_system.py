@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from traits import Traits
@@ -60,11 +61,11 @@ class LevelingSystem:
         ]
         for index, (trait_name, trait_data) in enumerate(visible_traits):
             color = (
-                (157, 157, 210)
+                Colors.active_item
                 if index == selected_sub_item - scroll_position
-                else (237, 106, 94)
+                else Colors.inactive_item
                 if sub_items
-                else (120, 120, 120)
+                else Colors.unselected_item
             )
 
             trait_text = f"{trait_name}"
@@ -85,9 +86,9 @@ class LevelingSystem:
             for level_info in trait_data["levels"]:
                 if not level_info["taken"]:
                     if level_info["level"] <= self.level:
-                        clr = (90, 180, 90)
+                        clr = Colors.green
                     else:
-                        clr = (240, 90, 90)
+                        clr = Colors.red
 
                     if trait_selection - selected == index and trait_selection != -1:
                         level_text = f"Unlock this level?"
@@ -95,7 +96,7 @@ class LevelingSystem:
                         level_text = f"Next unlock at: {level_info['level']}  Gain: {level_info['effect']}"
                     break
 
-                clr = (120, 120, 200)
+                clr = Colors.active_item#(120, 120, 200)
                 level_text = f"Next unlock at: MAX  Value amount: MAX"
 
             taken_text = "Taken:"

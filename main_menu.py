@@ -5,6 +5,7 @@ import sys
 import pygame
 
 from ai import Ai
+from colors import Colors
 from game import Game
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
@@ -124,14 +125,14 @@ class MainMenu:
     def render(self):
         if self.in_sub_menu == 0:
             for index, item in enumerate(self.menu_items):
-                color = (0, 0, 0) if index == self.selected_item else (180, 180, 180)
+                color = Colors.active_item if index == self.selected_item else Colors.inactive_item
                 
                 if (
                     self.selected_item == 1
                     and len(self.saves) == 0
                     and index == self.selected_item
                 ):
-                    color = (100, 100, 100)
+                    color = Colors.unselected_item
                     
                 text = self.font.render(item, True, color)
                 text_rect = text.get_rect(
@@ -144,7 +145,7 @@ class MainMenu:
 
         elif self.in_sub_menu == 1:
             
-            item_render = self.font.render(f"ENTER) Load     R) Delete", True, (0, 0, 0))
+            item_render = self.font.render(f"ENTER) Load     R) Delete", True, Colors.active_item)
             item_rect = item_render.get_rect(
                     center=(
                         GM.screen.get_width() // 2,
@@ -158,9 +159,9 @@ class MainMenu:
             
             for index, save in enumerate(visible_saves):
                 color = (
-                    (0, 0, 0)
+                    Colors.active_item
                     if index == self.selected_item - scroll_position
-                    else (180, 180, 180)
+                    else Colors.inactive_item
                 )
 
                 if index == self.selected_item - scroll_position:
@@ -177,7 +178,7 @@ class MainMenu:
                 GM._scr.blit(item_render, item_rect)
 
     def loading(self):
-        text = self.font.render("Loading...", True, (180, 180, 180))
+        text = self.font.render("Loading...", True, Colors.edge_color)
         text_rect = text.get_rect(
             center=(GM._scr.get_width() // 2, GM._scr.get_height() // 2.5)
         )
@@ -190,7 +191,7 @@ class MainMenu:
                 if event.type == pygame.QUIT:
                     self.is_menu_visible = False
 
-            GM._scr.fill((255, 255, 255))
+            GM._scr.fill(Colors.dark_black)
             self.handle_input()
             self.render()
             pygame.display.flip()

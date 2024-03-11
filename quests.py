@@ -4,6 +4,7 @@ import numpy as np
 import pygame
 
 import asset_loader as assets
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -67,7 +68,7 @@ class Quests:
     def draw_quest_info(self):
         if pygame.time.get_ticks() - self.tics <= 5000:
             for index, v in enumerate(self.text_to_draw):
-                item_render = self.quest_start_font.render(v, True, (44, 53, 57))
+                item_render = self.quest_start_font.render(v, True, Colors.prompt_color)
                 item_rect = item_render.get_rect(
                     center=(GM.screen.get_width() // 2, 200 + index * 40)
                 )
@@ -169,13 +170,14 @@ class Quests:
         visible_quests = list(self.quests.items())[
             scroll_position : scroll_position + 5
         ]
+        visible_quests = sorted(visible_quests, key=lambda x: x[1]["started"], reverse=True)
         counter=0
         for index, (quest_index, quest_data) in enumerate(visible_quests):
             if quest_data["started"]:
                 color = (
-                    (157, 157, 210)
+                    Colors.active_item
                     if counter == selected_sub_item - scroll_position
-                    else (237, 106, 94) if sub_items else (120, 120, 120)
+                    else Colors.inactive_item if sub_items else Colors.unselected_item
                 )
                 if counter == selected_sub_item - scroll_position:
                     self.name=quest_index

@@ -4,6 +4,7 @@ import string
 import numpy as np
 import pygame
 
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -45,11 +46,11 @@ class Inventory:
 
         for index, (item_name, item_quantity) in enumerate(visible_items):
             color = (
-                (157, 157, 210)
+                Colors.active_item
                 if index == selected_sub_item - scroll_position
-                else (237, 106, 94)
+                else Colors.inactive_item
                 if sub_items
-                else (120, 120, 120)
+                else Colors.unselected_item
             )
             if index == selected_sub_item - scroll_position:
                 item_text = "}"+f" {item_name}: {item_quantity} desc: {self.items[item_name]['description']}"

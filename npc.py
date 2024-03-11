@@ -1,6 +1,7 @@
 import pygame
 
 import puzzle
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -113,7 +114,7 @@ def update_npc(subtitle_font, prompt_font):
 
             if GM.current_line != None and GM.line_time >= GM.counter:
                 text = subtitle_font.render(
-                    GM.current_line["text"], True, (44, 53, 57)
+                    GM.current_line["text"], True, Colors.mid_black
                 )
 
                 text_rect = text.get_rect(
@@ -169,7 +170,7 @@ def update_npc(subtitle_font, prompt_font):
                     text = prompt_font.render(
                         f"E) {GM.npc_list[index]['name']['name']}",
                         True,
-                        (44, 53, 57),
+                        Colors.mid_black
                     )
 
                     text_rect = text.get_rect(
@@ -197,7 +198,7 @@ def update_npc(subtitle_font, prompt_font):
                     text = prompt_font.render(
                         str(GM.npc_list[index]["name"]["stats"]["health"]),
                         True,
-                        (200, 0, 0),
+                        Colors.red
                     )
                     text_rect = text.get_rect(
                         center=(

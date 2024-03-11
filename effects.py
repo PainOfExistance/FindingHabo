@@ -2,6 +2,7 @@ import numpy as np
 import pygame
 
 import asset_loader as assets
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -31,11 +32,11 @@ class Effects:
         for index, (effect_name, effect_data) in enumerate(visible_effects):
             if effect_data["amount"] >= 0:
                 color = (
-                    (157, 157, 210)
+                    Colors.active_item
                     if index == selected_sub_item - scroll_position
-                    else (237, 106, 94)
+                    else Colors.inactive_item
                     if sub_items
-                    else (120, 120, 120)
+                    else Colors.unselected_item
                 )
                 
                 effect_text = f"{effect_data['name']}"

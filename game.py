@@ -13,6 +13,7 @@ import npc as N
 import renderer as R
 import world_parser as wp
 from ai import Ai
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from map import Map
@@ -754,6 +755,7 @@ class Game:
                 CM.ai.strings.greeting_played = False
                 CM.ai.strings.talking = False
                 CM.music_player.skip_current_line()
+                CM.ai.strings.reset()
 
         elif not keys[pygame.K_TAB] and not GM.container_open and GM.tab_pressed:
             GM.tab_pressed = False
@@ -1199,7 +1201,7 @@ class Game:
     def loading(self):
         GM._scr.fill((255,255,255))
         font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
-        text = font.render("Loading...", True, (180, 180, 180))
+        text = font.render("Loading...", True, Colors.edge_color)
         text_rect = text.get_rect(
             center=(GM.screen.get_width() // 2, GM.screen.get_height() // 2.5)
         )

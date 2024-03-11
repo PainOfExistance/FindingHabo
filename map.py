@@ -2,6 +2,7 @@ import numpy as np
 import pygame
 
 import renderer as R
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -151,11 +152,11 @@ class Map:
         GM.screen.fill((0, 0, 0))
         GM.screen.blit(self.map, self.map_rect.topleft)
         R.draw_notes(self.map_rect, self.prompt_font)
-        pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_border_rect)
-        pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_top_rect)
-        pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_left_rect)
-        pygame.draw.rect(GM.screen, (11, 11, 11), self.bottom_right_rect)
+        pygame.draw.rect(GM.screen, Colors.dark_black, self.bottom_border_rect)
+        pygame.draw.rect(GM.screen, Colors.dark_black, self.bottom_top_rect)
+        pygame.draw.rect(GM.screen, Colors.dark_black, self.bottom_left_rect)
+        pygame.draw.rect(GM.screen, Colors.dark_black, self.bottom_right_rect)
         if GM.can_fast_travel:
-            text = self.prompt_font.render(f"(Hold the icon to fast travel)", True, (255,255,255))
+            text = self.prompt_font.render(f"(Hold the icon to fast travel)", True, Colors.active_item)
             text_rect = text.get_rect(center=(GM.screen.get_width()//2, GM.screen.get_height()-11))
             GM.screen.blit(text, text_rect)

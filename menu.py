@@ -6,6 +6,7 @@ from datetime import datetime
 import pygame
 
 import asset_loader as assets
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -152,7 +153,7 @@ class Menu:
     def loading(self):
         GM._scr.fill((255, 255, 255))
         font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
-        text = font.render("Loading...", True, (180, 180, 180))
+        text = font.render("Loading...", True, Colors.edge_color)
         text_rect = text.get_rect(
             center=(GM.screen.get_width() // 2, GM.screen.get_height() // 2.5)
         )
@@ -161,16 +162,15 @@ class Menu:
 
     def render(self):
         if self.visible:
-
             pygame.draw.rect(
                 self.bg_surface_menu,
-                (100, 100, 100, 180),
+                Colors.bg_color,
                 self.bg_surface_menu.get_rect(),
             )
             GM.screen.blit(self.bg_surface_menu, self.bg_menu)
 
             item_render = self.menu_font.render(
-                GM.game_date.print_date(), True, (180, 180, 180)
+                GM.game_date.print_date(), True, Colors.active_item
             )
             item_rect = item_render.get_rect(
                 center=(
@@ -183,7 +183,7 @@ class Menu:
             if self.in_sub_menu == 0:
                 for index, item in enumerate(self.menu_items):
                     color = (
-                        (0, 0, 0) if index == self.selected_item else (180, 180, 180)
+                        Colors.active_item if index == self.selected_item else Colors.inactive_item
                     )
                     text = self.menu_font.render(item, True, color)
                     text_rect = text.get_rect(
@@ -197,7 +197,7 @@ class Menu:
             if self.in_sub_menu == 1:
 
                 item_render = self.menu_font.render(
-                    f"ENTER) Save     E) Load     T) Overwrite", True, (0, 0, 0)
+                    f"ENTER) Save     E) Load     T) Overwrite", True, Colors.active_item
                 )
                 item_rect = item_render.get_rect(
                     center=(
@@ -212,9 +212,9 @@ class Menu:
 
                 for index, save in enumerate(visible_saves):
                     color = (
-                        (0, 0, 0)
+                        Colors.active_item
                         if index == self.selected_item - scroll_position
-                        else (180, 180, 180)
+                        else Colors.inactive_item
                     )
 
                     if index == self.selected_item - scroll_position:

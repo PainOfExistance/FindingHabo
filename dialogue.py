@@ -4,6 +4,7 @@ import numpy as np
 import pygame
 
 import asset_loader as assets
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -43,6 +44,26 @@ class Dialougue:
         self.bg_surface_menu = pygame.Surface(
             (self.bg_menu.width, self.bg_menu.height), pygame.SRCALPHA
         )
+    
+    def reset(self):
+        self.index = -1
+        self.selected_item = 0
+        self.selection_held = False
+        self.name = ""
+        self.current_talk = -1
+        self.current_lines = -1
+        self.talk = -1
+        self.line = -1
+        self.prev_talk = -1
+        self.enabled = []
+        self.indexed = []
+        self.talking = False
+        self.length = 0
+        self.greeting_played = False
+        self.bartering = False
+        self.will_bartering = False
+        self.starts = 0
+        self.advances = 0
 
     def random_line(self, name):
         current_string = {"text": "", "dialogue": False, "file": ""}
@@ -104,14 +125,14 @@ class Dialougue:
         if not self.bartering:
             pygame.draw.rect(
                 self.bg_surface_menu,
-                (44, 53, 57),
+                Colors.edge_color,
                 (0, 0, self.bg_menu.width, self.bg_menu.height),
                 border_radius=15,
             )
 
             pygame.draw.rect(
                 self.bg_surface_menu,
-                (200, 210, 200, 150),
+                Colors.bg_color,
                 (5, 5, self.bg_menu.width - 10, self.bg_menu.height - 10),
                 border_radius=10,
             )
@@ -131,11 +152,11 @@ class Dialougue:
 
             for i, value in enumerate(visible_options):
                 color = (
-                    (237, 106, 94)
+                    Colors.inactive_item
                     if i != self.selected_item - scroll_position
-                    else (44, 53, 57)
+                    else Colors.active_item
                     if self.talking == False
-                    else (237, 106, 94)
+                    else Colors.inactive_item
                 )
 
                 if i == self.selected_item - scroll_position:
@@ -158,7 +179,7 @@ class Dialougue:
                 self.greeting_played = True
 
             text = self.subtitle_font.render(
-                f"{name}: {self.strings[name]['greeting']}", True, (44, 53, 57)
+                f"{name}: {self.strings[name]['greeting']}", True, Colors.mid_black
             )
 
             text_rect = text.get_rect(
@@ -176,15 +197,15 @@ class Dialougue:
 
             for i, value in enumerate(visible_options):
                 color = (
-                    (237, 106, 94)
+                    Colors.inactive_item
                     if i != self.selected_item - scroll_position
-                    else (44, 53, 57)
+                    else Colors.active_item
                     if self.talking == False
-                    else (237, 106, 94)
+                    else Colors.inactive_item
                 )
 
                 if not value["used"]:
-                    color = (237, 106, 94)
+                    color = Colors.inactive_item
 
                 if i == self.selected_item - scroll_position:
                     txt = f"> {value['text']}"
@@ -222,10 +243,10 @@ class Dialougue:
             for y, line in enumerate(lines):
                 if y == 0:
                     text = self.subtitle_font.render(
-                        f"{name}: {line}", True, (44, 53, 57)
+                        f"{name}: {line}", True, Colors.mid_black
                     )
                 else:
-                    text = self.subtitle_font.render(f"{line}", True, (44, 53, 57))
+                    text = self.subtitle_font.render(f"{line}", True, Colors.mid_black)
 
                 text_rect = text.get_rect(
                     center=(

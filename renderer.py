@@ -5,6 +5,7 @@ import numpy as np
 import pygame
 
 import puzzle
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -31,14 +32,14 @@ def draw_container(menu_font):
         CM.ai.strings.bartering = False
         pygame.draw.rect(
             GM.bg_surface_menu,
-            (200, 210, 200, 180),
+            Colors.bg_color,
             GM.bg_surface_menu.get_rect(),
         )
         GM.screen.blit(GM.bg_surface_menu, GM.bg_menu)
         
         pygame.draw.line(
             GM.screen,
-            (22, 22, 22),
+            Colors.edge_color,
             (GM.screen.get_width() // 2, 0),
             (GM.screen.get_width() // 2, GM.screen.get_height()),
             4,
@@ -53,7 +54,7 @@ def draw_container(menu_font):
         item_render = menu_font.render(
             CM.player.name,
             True,
-            (44, 53, 57),
+            Colors.active_item,
         )
         item_rect = item_render.get_rect(
             topleft=(
@@ -66,7 +67,7 @@ def draw_container(menu_font):
         item_render = menu_font.render(
             GM.world_objects[GM.container_hovered]["name"][3],
             True,
-            (44, 53, 57),
+            Colors.active_item,
         )
         item_rect = item_render.get_rect(
             topleft=(
@@ -79,7 +80,7 @@ def draw_container(menu_font):
         i += 1
         pygame.draw.line(
             GM.screen,
-            (22, 22, 22),
+            Colors.edge_color,
             (0, 20 + i * 50),
             (GM.screen.get_width(), 20 + i * 50),
             4,
@@ -87,17 +88,17 @@ def draw_container(menu_font):
         
         for index, (data) in enumerate(visible_items):
             color = (
-                (157, 157, 210)
+                Colors.active_item
                 if index == GM.selected_inventory_item - scroll_position
-                else (237, 106, 94)
+                else Colors.inactive_item
             )
             if not GM.container_menu_selected:
-                color = (44, 53, 57)
+                color = Colors.unselected_item
             if (
                 index == GM.selected_inventory_item - scroll_position
                 and GM.container_menu_selected
             ):
-                item_text = f"> {data['type']}: {data['quantity']}"
+                item_text = "}"+f" {data['type']}: {data['quantity']}"
             else:
                 item_text = f"    {data['type']}: {data['quantity']}"
             item_render = menu_font.render(item_text, True, color)
@@ -112,17 +113,17 @@ def draw_container(menu_font):
         ]
         for index, (item_name, item_quantity) in enumerate(visible_items):
             color = (
-                (157, 157, 210)
+                Colors.active_item
                 if index == GM.selected_inventory_item - scroll_position
-                else (237, 106, 94)
+                else Colors.inactive_item
             )
             if GM.container_menu_selected:
-                color = (44, 53, 57)
+                color = Colors.unselected_item
             if (
                 index == GM.selected_inventory_item - scroll_position
                 and not GM.container_menu_selected
             ):
-                item_text = f"> {item_name}: {item_quantity}"
+                item_text = "}"+f" {item_name}: {item_quantity}"
             else:
                 item_text = f"    {item_name}: {item_quantity}"
                 
@@ -138,13 +139,13 @@ def draw_barter(menu_font):
         GM.container_open = False
         pygame.draw.rect(
             GM.bg_surface_menu,
-            (200, 210, 200, 180),
+            Colors.bg_color,
             GM.bg_surface_menu.get_rect(),
         )
         GM.screen.blit(GM.bg_surface_menu, GM.bg_menu)
         pygame.draw.line(
             GM.screen,
-            (22, 22, 22),
+            Colors.edge_color,
             (GM.screen.get_width() // 2, 0),
             (GM.screen.get_width() // 2, GM.screen.get_height()),
             4,
@@ -157,7 +158,7 @@ def draw_barter(menu_font):
         item_render = menu_font.render(
             CM.player.name + "  Gold: " + str(CM.player.gold),
             True,
-            (44, 53, 57),
+            Colors.active_item
         )
         item_rect = item_render.get_rect(
             topleft=(
@@ -171,7 +172,7 @@ def draw_barter(menu_font):
             + "  Gold: "
             + str(GM.ai_package[GM.talk_to_name]["gold"]),
             True,
-            (44, 53, 57),
+            Colors.active_item
         )
         item_rect = item_render.get_rect(
             topleft=(
@@ -183,24 +184,24 @@ def draw_barter(menu_font):
         i += 1
         pygame.draw.line(
             GM.screen,
-            (22, 22, 22),
+            Colors.edge_color,
             (0, 20 + i * 50),
             (GM.screen.get_width(), 20 + i * 50),
             4,
         )
         for index, (data) in enumerate(visible_items):
             color = (
-                (157, 157, 210)
+                Colors.active_item
                 if index == GM.selected_inventory_item - scroll_position
-                else (237, 106, 94)
+                else Colors.inactive_item
             )
             if not GM.container_menu_selected:
-                color = (44, 53, 57)
+                color = Colors.unselected_item
             if (
                 index == GM.selected_inventory_item - scroll_position
                 and GM.container_menu_selected
             ):
-                item_text = f"> {data['type']}: {data['quantity']}  {GM.items[GM.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
+                item_text = "}"+f" {data['type']}: {data['quantity']}  {GM.items[GM.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
             else:
                 item_text = f"    {data['type']}: {data['quantity']}  {GM.items[GM.ai_package[GM.talk_to_name]['items'][index+scroll_position]['type']]['price']}"
             item_render = menu_font.render(item_text, True, color)
@@ -214,17 +215,17 @@ def draw_barter(menu_font):
         ]
         for index, (item_name, item_quantity) in enumerate(visible_items):
             color = (
-                (157, 157, 210)
+                Colors.active_item
                 if index == GM.selected_inventory_item - scroll_position
-                else (237, 106, 94)
+                else Colors.inactive_item
             )
             if GM.container_menu_selected:
-                color = (44, 53, 57)
+                color = Colors.unselected_item
             if (
                 index == GM.selected_inventory_item - scroll_position
                 and not GM.container_menu_selected
             ):
-                item_text = f"> {item_name}: {item_quantity}  {GM.items[item_name]['price']}"
+                item_text = "}"+f" {item_name}: {item_quantity}  {GM.items[item_name]['price']}"
             else:
                 item_text = f"    {item_name}: {item_quantity}  {GM.items[item_name]['price']}"
             item_render = menu_font.render(item_text, True, color)
@@ -284,7 +285,7 @@ def draw_objects(prompt_font):
                 and x["type"] == "item"
             ):
                 GM.item_hovered = index
-                text = prompt_font.render(f"E) Pick up", True, (0, 0, 0))
+                text = prompt_font.render(f"E) Pick up", True, Colors.mid_black)
                 text_rect = text.get_rect(
                     center=(
                         relative__left + x["rect"].width // 2,
@@ -293,7 +294,7 @@ def draw_objects(prompt_font):
                 )
                 GM.screen.blit(text, text_rect)
 
-                text = prompt_font.render(x["name"], True, (0, 0, 0))
+                text = prompt_font.render(x["name"], True, Colors.mid_black)
                 text_rect = text.get_rect(
                     center=(
                         relative__left + x["rect"].width // 2,
@@ -314,7 +315,7 @@ def draw_objects(prompt_font):
                 and x["type"] == "container"
             ):
                 GM.container_hovered = index
-                text = prompt_font.render(f"E) Access", True, (0, 0, 0))
+                text = prompt_font.render(f"E) Access", True, Colors.mid_black)
                 text_rect = text.get_rect(
                     center=(
                         relative__left + x["rect"].width // 2,
@@ -341,11 +342,11 @@ def draw_objects(prompt_font):
                     text = prompt_font.render(
                         f"Key required) {x['name']['world_name']} ",
                         True,
-                        (44, 53, 57),
+                        Colors.mid_black
                     )
                 else:
                     text = prompt_font.render(
-                        f"E) {x['name']['world_name']} ", True, (44, 53, 57)
+                        f"E) {x['name']['world_name']} ", True, Colors.mid_black
                     )
                 text_rect = text.get_rect(
                     center=(
@@ -394,9 +395,7 @@ def draw_objects(prompt_font):
                 for index, script in enumerate(x["name"]["script_runner"]):
                     if not script["used"]:
                         CM.script_loader.run_script(script["script_name"], script["function"], script["args"])
-                        x["name"]["script_runner"][index]["used"]=True
-                    
-                    
+                        x["name"]["script_runner"][index]["used"]=True   
                     
             other_rect = pygame.Rect(
                 relative__left-50,
@@ -420,7 +419,7 @@ def draw_objects(prompt_font):
                     ] = 0
                     
                     text = prompt_font.render(
-                        f"{x['name']['world_name']} ", True, (44, 53, 57)
+                        f"{x['name']['world_name']} ", True, Colors.mid_black
                     )
                     text_rect = text.get_rect(
                         center=(
@@ -449,6 +448,7 @@ def check_notes():
     for index, x in enumerate(GM.notes):
         if not GM.notes[index]["name"]["discovered"] and math.dist((x["x"], x["y"]), (GM.relative_player_left+CM.player.player_rect.width//2, GM.relative_player_top+CM.player.player_rect.height//2))<x["name"]["radius"]:
             GM.notes[index]["name"]["discovered"]=True
+            CM.player.quests.text_to_draw.clear()
             CM.player.quests.text_to_draw.append("Discovered: " + x["name"]["name"])
             CM.player.quests.tics = pygame.time.get_ticks()
             CM.player.level.gain_experience(x["name"]["xp"])
@@ -465,7 +465,7 @@ def draw_notes(rect, prompt_font):
             mouse_x, mouse_y = pygame.mouse.get_pos()
             rect = pygame.Rect(relative_left, relative_top, note["rect"].width, note["rect"].height)
             if rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])):
-                text = prompt_font.render(f"{note['name']['name']}", True, (44, 53, 57))
+                text = prompt_font.render(f"{note['name']['name']}", True, Colors.mid_black)
                 text_rect = text.get_rect(
                     center=(relative_left+note["rect"].width//2, relative_top-8)
                 )
