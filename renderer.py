@@ -388,6 +388,14 @@ def draw_objects(prompt_font):
                     
             if (other_obj_rect.colliderect(CM.player.player_rect) and x["type"]=="activator" and x["name"]["type"]=="board"):
                 can_travel = True
+                text = prompt_font.render(f"Fast Travel Point", True, Colors.mid_black)
+                text_rect = text.get_rect(
+                    center=(
+                        relative__left + x["rect"].width // 2,
+                        relative__top + x["rect"].height + 10,
+                    )
+                )
+                GM.screen.blit(text, text_rect)
             else:
                 GM.can_fast_travel = False
                 
@@ -455,7 +463,7 @@ def check_notes():
             return
 
 def draw_notes(rect, prompt_font):
-    hover={"name":None,"x":None,"y":None, "index":None}
+    mouse_buttons=pygame.mouse.get_pressed()
     for i, note in enumerate(GM.notes):
         if note["name"]["discovered"]:
             relative_left = int(rect.left + (note["rect"].left//2)*CM.map.zoom)
@@ -463,15 +471,14 @@ def draw_notes(rect, prompt_font):
             GM.screen.blit(note["image"], (relative_left, relative_top))
             
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            rect = pygame.Rect(relative_left, relative_top, note["rect"].width, note["rect"].height)
-            if rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])):
+            note_rect = pygame.Rect(relative_left, relative_top, note["rect"].width, note["rect"].height)
+            if note_rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])):
                 text = prompt_font.render(f"{note['name']['name']}", True, Colors.mid_black)
                 text_rect = text.get_rect(
                     center=(relative_left+note["rect"].width//2, relative_top-8)
                 )
                 GM.screen.blit(text, text_rect)
                 
-                hover={"name":note["name"]["name"],"x":note["x"],"y":note["y"], "index":i}
                 if not note["moved"]:
                     note["rect"].left -= 16
                     note["rect"].top -= 16
@@ -480,20 +487,20 @@ def draw_notes(rect, prompt_font):
                     note["image"]=pygame.transform.scale(note["image"], (32,32))
                 note["moved"]=True
                 
-            mouse_buttons = pygame.mouse.get_pressed()
-            if rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])) and mouse_buttons[0] and GM.prev_mouse>=20 and GM.can_fast_travel:
-                CM.map.fast_travel()
-            elif rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])) and mouse_buttons[0] and GM.prev_mouse<=20 and GM.can_fast_travel:
-                GM.prev_mouse+=1
-            else:
-                GM.prev_mouse=0
+                if mouse_buttons[0] and note["counter"]>=20 and GM.can_fast_travel:
+                    GM.location_hovered={"name":note["name"]["name"],"x":note["x"],"y":note["y"], "index":i}
+                    note["counter"]=0
+                    CM.map.fast_travel()
+                elif mouse_buttons[0] and note["counter"]<20 and GM.can_fast_travel:
+                    note["counter"]+=1
+                else:
+                    note["counter"]=0
                 
-    if GM.location_hovered["name"] != hover["name"]:
-        if GM.location_hovered["name"] != None and GM.notes[GM.location_hovered["index"]]["moved"]:
-            GM.notes[GM.location_hovered["index"]]["rect"].left += 16
-            GM.notes[GM.location_hovered["index"]]["rect"].top += 16
-            GM.notes[GM.location_hovered["index"]]["rect"].width -= 16
-            GM.notes[GM.location_hovered["index"]]["rect"].height -= 16
-            GM.notes[GM.location_hovered["index"]]["image"]=pygame.transform.scale(note["image"], (16,16))
-            GM.notes[GM.location_hovered["index"]]["moved"]=False
-        GM.location_hovered={"name":hover["name"],"x":hover["x"],"y":hover["y"], "index":hover["index"]}
+            elif note["moved"]:
+                note["rect"].left += 16
+                note["rect"].top += 16
+                note["rect"].width -= 16
+                note["rect"].height -= 16
+                note["image"]=pygame.transform.scale(note["image"], (16,16))
+                note["moved"]=False
+                note["counter"]=0

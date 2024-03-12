@@ -4,6 +4,7 @@ import sys
 
 import pygame
 
+import asset_loader as assets
 from ai import Ai
 from colors import Colors
 from game import Game
@@ -114,7 +115,7 @@ class MainMenu:
             CM.player = Player()
             CM.ai = Ai()
             GM.save_name=f"{selected_option}.habo"
-            CM.player.from_dict(CM.assets.load(f"saves/{selected_option}.habo"))
+            CM.player.from_dict(assets.load(f"saves/{selected_option}.habo"))
             CM.menu = Menu()
             CM.player_menu = PlayerMenu()
             CM.game = Game()

@@ -192,7 +192,8 @@ class Game:
                     "iid": data[3],
                     "x": data[1],
                     "y": data[2],
-                    "moved": False
+                    "moved": False,
+                    "counter": 0
                 }
             )
         
@@ -1148,6 +1149,7 @@ class Game:
             and not CM.menu.visible
             and not CM.player_menu.visible
         ):
+            GM.prev_mouse=0
             GM.screen_width_scr = GM._scr.get_width()
             GM.screen_height_scr = GM._scr.get_height()
             GM.ratio=((GM.screen_width/GM.screen_width_scr),(GM.screen_height/GM.screen_height_scr))
