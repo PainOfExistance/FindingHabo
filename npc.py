@@ -14,6 +14,7 @@ def update_npc(subtitle_font, prompt_font):
     for index, x in enumerate(GM.npc_list):
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
+        x["name"]["movement_behavior"]["moving"] = False
         if (
             "stats" in x["name"]
             and "status" in x["name"]["stats"]
@@ -44,6 +45,7 @@ def update_npc(subtitle_font, prompt_font):
             x["rect"].centery = dy
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
+            x["name"]["movement_behavior"]["moving"] = True
             
             other_obj_rect = pygame.Rect(
                 relative__left,
@@ -82,10 +84,12 @@ def update_npc(subtitle_font, prompt_font):
                 x["rect"].top,
                 x["rect"],
             )
+            
             x["rect"].centerx = dx
             x["rect"].centery = dy
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
+            x["name"]["movement_behavior"]["moving"] = True
             
             other_obj_rect = pygame.Rect(
                 relative__left,

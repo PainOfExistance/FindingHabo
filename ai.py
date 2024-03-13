@@ -132,7 +132,7 @@ class Ai:
 
         GM.ai_package[name]["movement_behavior"]["dirrection"] == dirrection
         rect.center = prev_center
-        return self.random_patrol(name, collision_map, rect.left, rect.top, rect)
+        return rect.center#self.random_patrol(name, collision_map, rect.left, rect.top, rect)
 
     def attack(self, name, npc, player_possition, collision_map, rect):
         speed = GM.ai_package[name]["movement_behavior"]["movement_speed"]
