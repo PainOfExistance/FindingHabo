@@ -12,6 +12,13 @@ class Animation:
         self.anim_counter=1
         self.prev_frame=0
         self.attacking=False
+        self.enemy_anims={}
+    
+    def load_anims(self, paths, data):
+        self.enemy_anims.clear()
+        for path in paths:
+            images, rects, fps = assets.load_enemy_sprites(path)
+            self.enemy_anims[f"{data["name"]["name"]}_{data["name"]["movement_behavior"]["dirrection"]}_{data["name"]["movement_behavior"]["moving"]}"]={"npc": f"{data["name"]["name"]}_{data["name"]["movement_behavior"]["dirrection"]}_{data["name"]["movement_behavior"]["moving"]}","images": images, "rects": rects, "anim_counter": 0, "fps": fps}
 
     def slice_image(self, images):
         frames = {}
@@ -35,6 +42,14 @@ class Animation:
         self.anim_counter = data["anim_counter"]
         self.prev_frame = data["prev_frame"]
         self.attacking = data["attacking"]
+    
+    def animate_npc(self, data):
+        neke=self.enemy_anims[f"{data["name"]["name"]}_{data["name"]["movement_behavior"]["dirrection"]}_{data["name"]["movement_behavior"]["moving"]}"]
+        frame_index = int(neke["anim_counter"] * neke["fps"] / 60) % len(neke["images"])
+        if neke["anim_counter"]>len(neke["images"]):
+            neke["anim_counter"]=0
+        return neke["images"][frame_index], neke["rects"][frame_index]
+    #https://fixupx.com/francenews24/status/1768349762946838655/en
     
     def player_anim(self, weapon_equiped, speed=200):
         #print(self.prev_frame)

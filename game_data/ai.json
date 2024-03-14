@@ -9,7 +9,7 @@
             "movement_behavior": {
                 "type": "patrol",
                 "movement_speed": 150,
-                "dirrection": false,
+                "dirrection": 0,
                 "moving": false
             },
             "stats":{
@@ -33,7 +33,7 @@
             "movement_behavior": {
                 "type": "stand",
                 "movement_speed": 150,
-                "dirrection": false,
+                "dirrection": 0,
                 "moving": false
             },
             "stats":{
@@ -57,7 +57,7 @@
             "movement_behavior": {
                 "type": "stand",
                 "movement_speed": 120,
-                "dirrection": false,
+                "dirrection": 0,
                 "moving": false
             },
             "stats":{
@@ -101,7 +101,7 @@
             "movement_behavior": {
                 "type": "patrol",
                 "movement_speed": 100,
-                "dirrection": false,
+                "dirrection": 0,
                 "moving": false
             },
             "stats":{
