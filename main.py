@@ -8,10 +8,8 @@ import screeninfo
 from game_manager import GameManager as GM
 from main_menu import MainMenu
 
-m=screeninfo.get_monitors()
-
-display=[x for x in m if x.is_primary==True]
 pygame.init()
+display=pygame.display.get_desktop_sizes()
 
 file_path = "./textures/logo.png"
 if os.path.isfile(file_path):
@@ -22,8 +20,8 @@ else:
 
 pygame.mouse.set_visible(False) 
 pygame.event.set_grab(True)
-screen_width, screen_height = display[0].width, display[0].height
-screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
+screen_width, screen_height = display[0][0], display[0][1]
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
 GM._scr=screen
 GM.screen=pygame.Surface((1280, 720))
 pygame.display.set_caption("Finding Habo")
