@@ -1,3 +1,4 @@
+import copy
 import random
 import string
 
@@ -35,8 +36,9 @@ class Player:
         self.hash=''.join(random.choices(string.ascii_uppercase + string.digits+string.ascii_lowercase, k=32))
         #self.hash = "Player"
 
-        self.player, self.player_rect = self.animation.init_player()
+        self.player, self.player_rect= self.animation.init_player()
         self.player_rect.center = (600, 500)
+        #self.player_rect = pygame.Rect(600, 500, 32, 64)
 
         self.depleted_rect = pygame.Rect(
             GM.screen_width // 2 - 150 // 2,
@@ -234,7 +236,8 @@ class Player:
             ],
             "hash": self.hash,
             "rectxy": [self.player_rect.centerx, self.player_rect.centery],
-            "ai": CM.ai.to_dict()
+            "ai": CM.ai.to_dict(),
+            "tmp" : self.tmp
         }
 
     def from_dict(self, data):
@@ -260,12 +263,18 @@ class Player:
         GM.game_date.from_dict(data["game_date"])
         CM.ai.from_dict(data["ai"])
         GM.save_world_names = data["save_world_names"]
+        self.tmp = data["tmp"]
 
     def draw(self):
-        self.player, new_rect = self.animation.player_anim(
-            self.equipped_items["hand"], self.movement_speed
-        )
+        self.player, new_rect = self.animation.player_anim(self.equipped_items["hand"], self.movement_speed)
+        
         new_rect.center = self.player_rect.center
+        #todo fix this bullshit
+        #self.player_rect.bottom=new_rect.bottom
+        
+        pygame.draw.rect(GM.screen, Colors.red, new_rect, 5, 5)
+        pygame.draw.rect(GM.screen, Colors.dark_black, self.player_rect)
+        
         GM.screen.blit(self.player, new_rect.topleft)
         pygame.draw.rect(GM.screen, Colors.dark_black, self.border_rect, border_radius=10)
         pygame.draw.rect(GM.screen, Colors.communist_red, self.depleted_rect, border_radius=10)

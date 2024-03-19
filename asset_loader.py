@@ -31,16 +31,17 @@ def load_player(path):
 
 def load_player_sprites():
     image_list = {}
+    rects=[]
     for filename in os.listdir("textures/npc/player"):
         if filename.endswith(".gif"):
             path = os.path.join("textures/npc/player", filename)
             key = filename[:-4]
             img, rect, fps=load_enemy_sprites(path)
-            rect.clear()
+            rects.clear()
             for i in range(len(img)):
-                img[i] = pygame.transform.scale(img[i], (img[i].get_width()*2, img[i].get_height()*3))
-                rect.append(img[i].get_rect())
-            image_list[key] = {"image": img, "rect": rect, "fps": fps}
+                img[i] = pygame.transform.scale(img[i], (img[i].get_width()*2, img[i].get_height()*2.5))
+                rects.append(img[i].get_rect())
+            image_list[key] = {"image": img, "rect": rects, "fps": fps}
     return image_list
 
 def load_background(path):
@@ -224,9 +225,4 @@ def load_enemy_sprites(gif_path):
         frames.append(pygameImage)
         rects.append(pygameImage.get_rect())
     return frames, rects, fps
-
-
-
-
-    
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

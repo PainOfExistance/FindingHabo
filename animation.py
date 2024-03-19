@@ -1,6 +1,7 @@
 import pygame
 
 import asset_loader as assets
+from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -13,7 +14,8 @@ class Animation:
         self.attacking=False
         self.enemy_anims={}
         self.prev_action="player_idle_up"
-    
+        self.in_attack=False
+        
     def load_anims(self, paths, data):
         self.enemy_anims.clear()
         for path in paths:
@@ -49,7 +51,8 @@ class Animation:
             action="walk"
         else:
             action="idle"
-        if GM.attacking:
+        if GM.attacking or self.in_attack:
+            self.in_attack=True
             action="attack"
         
         match GM.rotation_angle:
@@ -73,10 +76,11 @@ class Animation:
             self.prev_action=f"player_{action}_{dirrection}"
             
         neke=self.action_images[f"player_{action}_{dirrection}"]
-        self.anim_counter += GM.delta_time*(neke["fps"]/11)
+        self.anim_counter += GM.delta_time*(neke["fps"]/12)
 
-        #todo fix
-        
         if self.anim_counter>len(neke["image"]):
             self.anim_counter=0
+            if action=="attack":
+                self.in_attack=False
+                   
         return self.action_images[f"player_{action}_{dirrection}"]["image"][int(self.anim_counter)], self.action_images[f"player_{action}_{dirrection}"]["rect"][int(self.anim_counter)]
