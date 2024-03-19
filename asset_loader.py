@@ -5,7 +5,7 @@ import os
 import cv2
 import numpy as np
 import pygame
-from moviepy.editor import VideoFileClip
+from PIL import Image, ImageSequence
 
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
@@ -32,10 +32,15 @@ def load_player(path):
 def load_player_sprites():
     image_list = {}
     for filename in os.listdir("textures/npc/player"):
-        if filename.endswith(".png"):
+        if filename.endswith(".gif"):
             path = os.path.join("textures/npc/player", filename)
             key = filename[:-4]
-            image_list[key] = pygame.image.load(path)
+            img, rect, fps=load_enemy_sprites(path)
+            rect.clear()
+            for i in range(len(img)):
+                img[i] = pygame.transform.scale(img[i], (img[i].get_width()*2, img[i].get_height()*3))
+                rect.append(img[i].get_rect())
+            image_list[key] = {"image": img, "rect": rect, "fps": fps}
     return image_list
 
 def load_background(path):
@@ -198,11 +203,29 @@ def get_stored_data(path, file_name="data_modified.world"):
     with open(path, "r") as file:
         data = json.load(file)
         return data
-    
-def load_enemy_sprites(path):
-    clip = VideoFileClip(path)
-    frames = [pygame.image.frombuffer(clip.get_frame(t), clip.size, "RGB") for t in range(0, int(clip.duration*clip.fps))]
-    rects=[frame.get_rect() for frame in frames]
-    return frames, rects, clip.fps
+
+def pilImageToSurface(pilImage):
+    mode, size, data = pilImage.mode, pilImage.size, pilImage.tobytes()
+    return pygame.image.fromstring(data, size, mode).convert_alpha()
+
+def load_enemy_sprites(gif_path):
+    pilImage = Image.open(gif_path)
+    frames = []
+    rects = []
+    fps = pilImage.info.get('duration', 100) # Default to 100ms if duration is not available
+    if pilImage.format == 'GIF' and pilImage.is_animated:
+        for frame in ImageSequence.Iterator(pilImage):
+            pygameImage = pilImageToSurface(frame.convert('RGBA'))
+            frames.append(pygameImage)
+            rects.append(pygameImage.get_rect())
+    else:
+        pygameImage = pilImageToSurface(pilImage)
+        frames.append(pygameImage)
+        rects.append(pygameImage.get_rect())
+    return frames, rects, fps
+
+
+
+
     
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

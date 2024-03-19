@@ -402,7 +402,6 @@ class Game:
             if CM.player.player_rect.left > 10:
                 CM.player.player_rect.move_ip(-movement, 0)
                 if GM.rotation_angle != 90:
-                    GM.rotation_angle = 90 - GM.rotation_angle
                     # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 90
                 GM.moving = True
@@ -454,7 +453,6 @@ class Game:
                 )
                 self.on_a_diagonal = True
                 if GM.rotation_angle != 90:
-                    GM.rotation_angle = 90 - GM.rotation_angle
                     # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 90
                 self.on_a_diagonal = True
@@ -479,7 +477,6 @@ class Game:
             if CM.player.player_rect.right < GM.screen_width - 10:
                 CM.player.player_rect.move_ip(movement, 0)
                 if GM.rotation_angle != 270:
-                    GM.rotation_angle = 270 - GM.rotation_angle
                     # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 270
                 GM.moving = True
@@ -530,7 +527,6 @@ class Game:
                     int(move_direction * movement * np.sin(angle)),
                 )
                 if GM.rotation_angle != 270:
-                    GM.rotation_angle = 270 - GM.rotation_angle
                     # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 270
                 self.on_a_diagonal = True
@@ -555,7 +551,6 @@ class Game:
             if CM.player.player_rect.top > 10:
                 CM.player.player_rect.move_ip(0, -movement)
                 if GM.rotation_angle != 0:
-                    GM.rotation_angle = 0 - GM.rotation_angle
                     # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 0
                 GM.moving = True
@@ -606,7 +601,6 @@ class Game:
                     int(movement * move_direction_Y * np.sin(angle)),
                 )
                 if GM.rotation_angle != 0:
-                    GM.rotation_angle = 0 - GM.rotation_angle
                     # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 0
                 self.on_a_diagonal = True
@@ -631,7 +625,6 @@ class Game:
             if CM.player.player_rect.bottom < GM.screen_height - 10:
                 CM.player.player_rect.move_ip(0, movement)
                 if GM.rotation_angle != 180:
-                    GM.rotation_angle = 180 - GM.rotation_angle
                     # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 180
                 GM.moving = True
@@ -684,7 +677,6 @@ class Game:
                     int(movement * move_direction_Y * np.sin(angle)),
                 )
                 if GM.rotation_angle != 180:
-                    GM.rotation_angle = 180 - GM.rotation_angle
                     # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
                     GM.rotation_angle = 180
                 self.on_a_diagonal = True

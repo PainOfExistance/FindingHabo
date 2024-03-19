@@ -21,7 +21,7 @@ else:
 pygame.mouse.set_visible(False) 
 pygame.event.set_grab(True)
 screen_width, screen_height = display[0][0], display[0][1]
-screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
+screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
 GM._scr=screen
 GM.screen=pygame.Surface((1280, 720))
 pygame.display.set_caption("Finding Habo")
