@@ -213,6 +213,7 @@ def load_enemy_sprites(gif_path):
     frames = []
     rects = []
     fps = pilImage.info.get('duration', 100) # Default to 100ms if duration is not available
+    print(fps)
     if pilImage.format == 'GIF' and pilImage.is_animated:
         for frame in ImageSequence.Iterator(pilImage):
             pygameImage = pilImageToSurface(frame.convert('RGBA'))

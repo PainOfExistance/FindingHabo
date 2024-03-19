@@ -12,6 +12,7 @@ class Animation:
         self.prev_frame=0
         self.attacking=False
         self.enemy_anims={}
+        self.prev_action="player_idle_up"
     
     def load_anims(self, paths, data):
         self.enemy_anims.clear()
@@ -46,14 +47,15 @@ class Animation:
     def player_anim(self, weapon_equiped, speed=200):
         if GM.moving:
             action="walk"
-        if GM.attacking:
-            action="attack"
         else:
             action="idle"
+        if GM.attacking:
+            action="attack"
         
         match GM.rotation_angle:
             case 0:
                 dirrection="up"
+                
             case 90:
                 dirrection="left"
 
@@ -65,13 +67,16 @@ class Animation:
                 
             case _:
                 dirrection="up"
-                
+        
+        if self.prev_action!=f"player_{action}_{dirrection}":
+            self.anim_counter=0
+            self.prev_action=f"player_{action}_{dirrection}"
+            
         neke=self.action_images[f"player_{action}_{dirrection}"]
-        frame_index = int((self.anim_counter * (neke["fps"] / 60)) * speed) % len(neke["image"])
+        self.anim_counter += GM.delta_time*(neke["fps"]/11)
 
         #todo fix
         
-        self.anim_counter+=1
         if self.anim_counter>len(neke["image"]):
             self.anim_counter=0
-        return self.action_images[f"player_{action}_{dirrection}"]["image"][frame_index], self.action_images[f"player_{action}_{dirrection}"]["rect"][frame_index]
+        return self.action_images[f"player_{action}_{dirrection}"]["image"][int(self.anim_counter)], self.action_images[f"player_{action}_{dirrection}"]["rect"][int(self.anim_counter)]
