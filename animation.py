@@ -1,3 +1,5 @@
+import copy
+
 import pygame
 
 import asset_loader as assets
@@ -23,7 +25,7 @@ class Animation:
             self.enemy_anims[f"{data["name"]["name"]}_{data["name"]["movement_behavior"]["dirrection"]}_{data["name"]["movement_behavior"]["moving"]}"]={"npc": f"{data["name"]["name"]}_{data["name"]["movement_behavior"]["dirrection"]}_{data["name"]["movement_behavior"]["moving"]}","images": images, "rects": rects, "anim_counter": 0, "fps": fps}
     
     def init_player(self):
-        return self.action_images["player_walk_up"]["image"][0], self.action_images["player_walk_up"]["rect"][0]
+        return self.action_images["player_walk_up"]["image"][0]
     
     def to_dict(self):
         return {
@@ -78,9 +80,9 @@ class Animation:
         neke=self.action_images[f"player_{action}_{dirrection}"]
         self.anim_counter += GM.delta_time*(neke["fps"]/12)
 
-        if self.anim_counter>len(neke["image"]):
+        if int(self.anim_counter)>=len(neke["image"]):
             self.anim_counter=0
             if action=="attack":
                 self.in_attack=False
-                   
+        
         return self.action_images[f"player_{action}_{dirrection}"]["image"][int(self.anim_counter)], self.action_images[f"player_{action}_{dirrection}"]["rect"][int(self.anim_counter)]
