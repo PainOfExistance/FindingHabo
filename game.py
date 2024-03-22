@@ -106,10 +106,11 @@ class Game:
             )
 
         for data in npcs:
-            img, img_rect = assets.load_images(
+            if "png" in data[0]["stats"]["image"]:
+                img, img_rect = assets.load_images(
                 data[0]["stats"]["image"], (64, 64), (data[1], data[2])
             )
-            GM.npc_list.append(
+                GM.npc_list.append(
                 {
                     "image": img,
                     "rect": img_rect,
@@ -119,7 +120,20 @@ class Game:
                     "agroved": False,
                     "iid": data[3]
                 }
-            )
+                )
+            else:
+                images, rect=assets.load_enemy_sprites(f"textures/npc/{data[0]["stats"]["image"]}/")
+                GM.npc_list.append(
+                {
+                    "image": images,
+                    "rect": rect,
+                    "type": "npc",
+                    "name": copy.deepcopy(data[0]),
+                    "attack_diff": 0,
+                    "agroved": False,
+                    "iid": data[3]
+                }
+                )
 
         for data in portals:
             if "unlocked_by" in data[0]:

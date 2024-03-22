@@ -1,3 +1,4 @@
+import copy
 import glob
 import json
 import os
@@ -36,7 +37,7 @@ def load_player_sprites():
         if filename.endswith(".gif"):
             path = os.path.join("textures/npc/player", filename)
             key = filename[:-4]
-            img, rect, fps=load_enemy_sprites(path)
+            img, rect, fps=load_sprites(path)
             rects.clear()
             for i in range(len(img)):
                 img[i] = pygame.transform.scale(img[i], (img[i].get_width()*2, img[i].get_height()*2.5))
@@ -209,7 +210,17 @@ def pilImageToSurface(pilImage):
     mode, size, data = pilImage.mode, pilImage.size, pilImage.tobytes()
     return pygame.image.fromstring(data, size, mode).convert_alpha()
 
-def load_enemy_sprites(gif_path):
+def load_enemy_sprites(path):
+    files_in_folder = os.listdir(os.path.dirname(path))
+    images={}
+    rect=0
+    for file in files_in_folder:
+        frames, rects, fps=load_sprites(path+file)
+        rect=rects[0]
+        images[os.path.basename(file)]=({"frames": frames, "rects": rects, "fps": fps})
+    return images, copy.deepcopy(rect)
+
+def load_sprites(gif_path):
     pilImage = Image.open(gif_path)
     frames = []
     rects = []

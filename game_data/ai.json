@@ -115,6 +115,30 @@
                 "mutable": true,
                 "image": "textures/npc/merchant.png"
             }
+        },
+        {
+            "name": "Slime",
+            "detection_range": 200,
+            "talk_range": 150,
+            "talking": false,
+            "attack_speed": 0.5,
+            "movement_behavior": {
+                "type": "patrol",
+                "movement_speed": 100,
+                "dirrection": 0,
+                "moving": false
+            },
+            "stats":{
+                "health": 20,
+                "type": "enemy",
+                "xp": 50,
+                "status": "alive",
+                "damage": 10,
+                "rarity": "common",
+                "group": "slime",
+                "mutable": true,
+                "image": "slime"
+            }
         }
     ]
 }

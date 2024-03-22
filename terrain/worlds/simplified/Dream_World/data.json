@@ -149,6 +149,21 @@
 					"enemy_Type": "bandit",
 					"rarity": "uncommon"
 				}
+			},
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "24461130-d7b0-11ee-8f0c-7551969033b9",
+				"layer": "LeveL_Data",
+				"x": 3480,
+				"y": 3368,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 1,
+					"enemy_Type": "slime",
+					"rarity": "common"
+				}
 			}
 		],
 		"Item_field": [
@@ -337,8 +352,8 @@
 						"../sounds/bgm/Angelia.mp3",
 						"../sounds/bgm/Sladka kot med.mp3"
 					],
-					"collision_set": "terrain\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\Collision-int.png",
-					"background": "terrain\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\_composite.png"
+					"collision_set": "terrain\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Collision-int.png",
+					"background": "terrain\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\_composite.png"
 				}
 			}
 		],

@@ -25,6 +25,7 @@ def update_npc(subtitle_font, prompt_font):
             and not CM.player_menu.visible
             and not GM.is_in_dialogue
         ):
+            #todo nareji da se t ianimirajo pol ko se ti bo dalo
             # print(x)
             dx, dy, agroved = CM.ai.attack(
                 x["name"]["name"],
