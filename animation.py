@@ -78,7 +78,7 @@ class Animation:
             self.prev_action=f"player_{action}_{dirrection}"
             
         neke=self.action_images[f"player_{action}_{dirrection}"]
-        self.anim_counter += GM.delta_time*(neke["fps"]/12)
+        self.anim_counter += GM.delta_time*(neke["fps"]/1.5)
 
         if int(self.anim_counter)>=len(neke["image"]):
             self.anim_counter=0

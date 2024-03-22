@@ -214,7 +214,6 @@ def load_enemy_sprites(gif_path):
     frames = []
     rects = []
     fps = pilImage.info.get('duration', 100) # Default to 100ms if duration is not available
-    print(fps)
     if pilImage.format == 'GIF' and pilImage.is_animated:
         for frame in ImageSequence.Iterator(pilImage):
             pygameImage = pilImageToSurface(frame.convert('RGBA'))
@@ -224,5 +223,6 @@ def load_enemy_sprites(gif_path):
         pygameImage = pilImageToSurface(pilImage)
         frames.append(pygameImage)
         rects.append(pygameImage.get_rect())
+    fps=fps/len(frames)
     return frames, rects, fps
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic
