@@ -6,11 +6,28 @@ from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
+def get_movement_direction(prev_x, prev_y, new_x, new_y):
+    delta_x = new_x - prev_x
+    delta_y = new_y - prev_y
+    print()
+    print(delta_x, delta_y)
+    print()
+    if abs(delta_x) > abs(delta_y):
+        if delta_x > 0:
+            return 270
+        elif delta_x < 0:
+            return 90
+    else:
+        if delta_y > 0:
+            return 180
+        elif delta_y < 0:
+            return 0
+    
 def update_npc(subtitle_font, prompt_font):
     for index, x in enumerate(GM.npc_list):
         if GM.npc_list[index]["name"]["stats"]["status"] == "dead":
             GM.npc_list.pop(index)
-        
+
     for index, x in enumerate(GM.npc_list):
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
@@ -25,7 +42,7 @@ def update_npc(subtitle_font, prompt_font):
             and not CM.player_menu.visible
             and not GM.is_in_dialogue
         ):
-            #todo nareji da se t ianimirajo pol ko se ti bo dalo
+            # todo fixni to jutre
             # print(x)
             dx, dy, agroved = CM.ai.attack(
                 x["name"]["name"],
@@ -41,13 +58,15 @@ def update_npc(subtitle_font, prompt_font):
                 x["rect"],
             )
 
+            x["name"]["movement_behavior"]["dirrection"]=get_movement_direction(x["rect"].centerx, x["rect"].centery, dx, dy)
             GM.npc_list[index]["agroved"] = agroved
             x["rect"].centerx = dx
             x["rect"].centery = dy
+            
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = True
-            
+
             other_obj_rect = pygame.Rect(
                 relative__left,
                 relative__top,
@@ -67,7 +86,7 @@ def update_npc(subtitle_font, prompt_font):
 
             if GM.npc_list[index]["attack_diff"] < 5:
                 GM.npc_list[index]["attack_diff"] += GM.delta_time
-                
+
         if (
             "stats" in x["name"]
             and "status" in x["name"]["stats"]
@@ -85,13 +104,15 @@ def update_npc(subtitle_font, prompt_font):
                 x["rect"].top,
                 x["rect"],
             )
-            
+
+            x["name"]["movement_behavior"]["dirrection"]=get_movement_direction(x["rect"].centerx, x["rect"].centery, dx, dy)
             x["rect"].centerx = dx
             x["rect"].centery = dy
+            
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = True
-            
+
             other_obj_rect = pygame.Rect(
                 relative__left,
                 relative__top,
@@ -139,16 +160,20 @@ def update_npc(subtitle_font, prompt_font):
             and relative__left < GM.screen_width + 80
             and relative__top > -80
             and relative__top < GM.screen_height + 80
-        ):      
-            GM.screen.blit(x["image"], (relative__left, relative__top))
-            
+        ):
+            if x["name"]["name"] == "Slime":
+                img, _ = CM.animation.animate_npc(x)
+                GM.screen.blit(img, (relative__left, relative__top))
+            else:
+                GM.screen.blit(x["image"], (relative__left, relative__top))
+
             other_obj_rect = pygame.Rect(
                 relative__left,
                 relative__top,
                 x["rect"].width,
                 x["rect"].height,
             )
-            
+
             if other_obj_rect.colliderect(GM.weapon_rect) and x["type"] == "npc":
                 if GM.attacking:
                     if x["name"]["stats"]["type"] != "enemy":
@@ -175,7 +200,7 @@ def update_npc(subtitle_font, prompt_font):
                     text = prompt_font.render(
                         f"E) {GM.npc_list[index]['name']['name']}",
                         True,
-                        Colors.mid_black
+                        Colors.mid_black,
                     )
 
                     text_rect = text.get_rect(
@@ -203,7 +228,7 @@ def update_npc(subtitle_font, prompt_font):
                     text = prompt_font.render(
                         str(GM.npc_list[index]["name"]["stats"]["health"]),
                         True,
-                        Colors.red
+                        Colors.red,
                     )
                     text_rect = text.get_rect(
                         center=(

@@ -30,13 +30,13 @@ class Player:
         self.range = 5
         self.active_effects = []
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
-        self.animation = Animation()
+        CM.animation = Animation()
         self.movement_speed = 125
         GM.game_date = GameDate()
         self.hash=''.join(random.choices(string.ascii_uppercase + string.digits+string.ascii_lowercase, k=32))
         #self.hash = "Player"
 
-        self.player= self.animation.init_player()
+        self.player= CM.animation.init_player()
         self.player_rect = pygame.Rect(600, 500, 32, 53)
 
         self.depleted_rect = pygame.Rect(
@@ -218,7 +218,7 @@ class Player:
             "level": self.level.to_dict(),
             "inventory": CM.inventory.to_dict(),
             "quests": self.quests.to_dict(),
-            "animation": self.animation.to_dict(),
+            "animation": CM.animation.to_dict(),
             "game_date": GM.game_date.to_dict(),
             "name": self.name,
             "gold": self.gold,
@@ -243,7 +243,7 @@ class Player:
         self.level.from_dict(data["level"])
         CM.inventory.from_dict(data["inventory"])
         self.quests.from_dict(data["quests"])
-        self.animation.from_dict(data["animation"])
+        CM.animation.from_dict(data["animation"])
         self.name = data["name"]
         self.gold = data["gold"]
         self.current_world = data["current_world"]
@@ -263,7 +263,7 @@ class Player:
         GM.save_world_names = data["save_world_names"]
 
     def draw(self):
-        self.player, new_rect = self.animation.player_anim(self.equipped_items["hand"], self.movement_speed)
+        self.player, new_rect = CM.animation.player_anim(self.equipped_items["hand"], self.movement_speed)
         new_rect.center=self.player_rect.center
         new_rect.bottom=self.player_rect.bottom+11
         

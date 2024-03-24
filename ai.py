@@ -1,3 +1,4 @@
+import copy
 import math
 import random
 
@@ -163,10 +164,10 @@ class Ai:
             dx, dy = self.check_collision(
                 collision_map, int(dx), int(dy), rect, move, name, direction
             )
-            return dx, dy, True
+            return copy.deepcopy(dx), copy.deepcopy(dy), True
 
         else:
-            return npc[0], npc[1], False
+            return copy.deepcopy(npc[0]), copy.deepcopy(npc[1]), False
 
     def random_line(self, npc, player_possition, name):
         distance = math.dist((npc), player_possition)

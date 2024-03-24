@@ -104,7 +104,8 @@ class Game:
             GM.world_objects.append(
                 {"image": img, "rect": img_rect, "type": "container", "name": tmp, "pedistal": data[6], "iid": data[7]}
             )
-
+                
+        CM.animation.enemy_anims.clear()
         for data in npcs:
             if "png" in data[0]["stats"]["image"]:
                 img, img_rect = assets.load_images(
@@ -123,6 +124,7 @@ class Game:
                 )
             else:
                 images, rect=assets.load_enemy_sprites(f"textures/npc/{data[0]["stats"]["image"]}/")
+                rect.center=(data[1], data[2])
                 GM.npc_list.append(
                 {
                     "image": images,
@@ -134,6 +136,7 @@ class Game:
                     "iid": data[3]
                 }
                 )
+                CM.animation.load_anims(GM.npc_list[-1])
 
         for data in portals:
             if "unlocked_by" in data[0]:

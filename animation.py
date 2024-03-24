@@ -18,11 +18,8 @@ class Animation:
         self.prev_action="player_idle_up"
         self.in_attack=False
         
-    def load_anims(self, paths, data):
-        self.enemy_anims.clear()
-        for path in paths:
-            images, rects, fps = assets.load_enemy_sprites(path)
-            self.enemy_anims[f"{data["name"]["name"]}_{data["name"]["movement_behavior"]["dirrection"]}_{data["name"]["movement_behavior"]["moving"]}"]={"npc": f"{data["name"]["name"]}_{data["name"]["movement_behavior"]["dirrection"]}_{data["name"]["movement_behavior"]["moving"]}","images": images, "rects": rects, "anim_counter": 0, "fps": fps}
+    def load_anims(self, data):
+        self.enemy_anims[f"{data["name"]["name"].lower()}"]={"anim_counter": 0, "prev_action": f""}
     
     def init_player(self):
         return self.action_images["player_walk_up"]["image"][0]
@@ -31,21 +28,59 @@ class Animation:
         return {
             "anim_counter": self.anim_counter,
             "prev_frame": self.prev_frame,
-            "attacking": self.attacking
+            "attacking": self.attacking,
+            "in_attack": self.in_attack,
+            "prev_action": self.prev_action,
+            "anim_counter": self.anim_counter
         }
     
     def from_dict(self, data):
         self.anim_counter = data["anim_counter"]
         self.prev_frame = data["prev_frame"]
         self.attacking = data["attacking"]
+        self.in_attack = data["in_attack"]
+        self.prev_action = data["prev_action"]
+        self.anim_counter = data["anim_counter"]
     
     def animate_npc(self, data):
-        neke=self.enemy_anims[f"{data["name"]["name"]}_{data["name"]["movement_behavior"]["dirrection"]}_{data["name"]["movement_behavior"]["moving"]}"]
-        frame_index = int(neke["anim_counter"] * neke["fps"] / 60) % len(neke["images"])
-        neke["anim_counter"]+=1
-        if neke["anim_counter"]>len(neke["images"]):
-            neke["anim_counter"]=0
-        return neke["images"][frame_index], neke["rects"][frame_index]
+        if data["name"]["movement_behavior"]["moving"]:
+            action="move"
+        else:
+            action="idle"
+        if data["agroved"]:
+            action="attack"
+        
+        match data["name"]["movement_behavior"]["dirrection"]:
+            case 0:
+                dirrection="up"
+                
+            case 90:
+                dirrection="left"
+
+            case 180:
+                dirrection="down"
+
+            case 270:
+                dirrection="right"
+                
+            case _:
+                dirrection="up"
+        
+        print()
+        print(data["name"]["movement_behavior"]["dirrection"])
+        print()
+                
+        if self.enemy_anims[f"{data["name"]["name"].lower()}"]["prev_action"]!=f"{data["name"]["name"].lower()}_{action}_{dirrection}":
+            self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"]=0
+            self.enemy_anims[f"{data["name"]["name"].lower()}"]["prev_action"]=f"{data["name"]["name"].lower()}_{action}_{dirrection}"
+        
+        self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"] += GM.delta_time*(data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["fps"]/1.5)
+        if int(self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"])>=len(data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["frames"]):
+            self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"]=0
+        
+        tmp=int(self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"])
+        
+        return data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["frames"][tmp], data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["rects"][tmp]
     #https://fixupx.com/francenews24/status/1768349762946838655/en
     
     def player_anim(self, weapon_equiped, speed=200):

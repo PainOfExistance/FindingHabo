@@ -37,7 +37,7 @@ def load_player_sprites():
         if filename.endswith(".gif"):
             path = os.path.join("textures/npc/player", filename)
             key = filename[:-4]
-            img, rect, fps=load_sprites(path)
+            img, _, fps=load_sprites(path)
             rects.clear()
             for i in range(len(img)):
                 img[i] = pygame.transform.scale(img[i], (img[i].get_width()*2, img[i].get_height()*2.5))
@@ -217,7 +217,7 @@ def load_enemy_sprites(path):
     for file in files_in_folder:
         frames, rects, fps=load_sprites(path+file)
         rect=rects[0]
-        images[os.path.basename(file)]=({"frames": frames, "rects": rects, "fps": fps})
+        images[os.path.splitext(os.path.basename(file))[0]]=({"frames": frames, "rects": rects, "fps": fps})
     return images, copy.deepcopy(rect)
 
 def load_sprites(gif_path):
