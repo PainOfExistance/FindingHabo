@@ -22,7 +22,7 @@ class Ai:
                 name, collision_map, relative__left, relative__top, rect
             )
         elif GM.ai_package[name]["movement_behavior"]["type"] == "stand":
-            return (rect.centerx, rect.centery)
+            return rect.centerx, rect.centery, GM.ai_package[name]["movement_behavior"]["dirrection"]
 
     def random_patrol(self, name, collision_map, relative__left, relative__top, rect):
         # Simulate random movement within a patrol area
@@ -30,7 +30,7 @@ class Ai:
 
         if GM.ai_package[name]["movement_behavior"]["dirrection"] == False:
             self.rng(name)
-            return rect.centerx, rect.centery
+            return rect.centerx, rect.centery, GM.ai_package[name]["movement_behavior"]["dirrection"]
 
         elif GM.ai_package[name]["movement_behavior"]["dirrection"] == 1:
             dy = int(-speed * GM.delta_time)
@@ -47,7 +47,7 @@ class Ai:
                 self.rng(name)
             else:
                 rect.centery += dy
-                return rect.centerx, rect.centery
+                return rect.centerx, rect.centery, GM.ai_package[name]["movement_behavior"]["dirrection"]
 
         elif GM.ai_package[name]["movement_behavior"]["dirrection"] == 2:
             dx = int(speed * GM.delta_time)
@@ -64,7 +64,7 @@ class Ai:
                 self.rng(name)
             else:
                 rect.centerx += dx
-                return rect.centerx, rect.centery
+                return rect.centerx, rect.centery, GM.ai_package[name]["movement_behavior"]["dirrection"]
 
         elif GM.ai_package[name]["movement_behavior"]["dirrection"] == 3:
             dy = int(speed * GM.delta_time)
@@ -81,7 +81,7 @@ class Ai:
                 self.rng(name)
             else:
                 rect.centery += dy
-                return rect.centerx, rect.centery
+                return rect.centerx, rect.centery, GM.ai_package[name]["movement_behavior"]["dirrection"]
 
         elif GM.ai_package[name]["movement_behavior"]["dirrection"] == 4:
             dx = int(-speed * GM.delta_time)
@@ -98,23 +98,12 @@ class Ai:
                 self.rng(name)
             else:
                 rect.centerx += dx
-                return rect.centerx, rect.centery
+                return rect.centerx, rect.centery, GM.ai_package[name]["movement_behavior"]["dirrection"]
 
-        return rect.centerx, rect.centery
+        return rect.centerx, rect.centery, GM.ai_package[name]["movement_behavior"]["dirrection"]
 
     def rng(self, name):
-        rng = random.randint(1, 4)
-        if rng == 1:
-            GM.ai_package[name]["movement_behavior"]["dirrection"] = rng
-
-        elif rng == 2:
-            GM.ai_package[name]["movement_behavior"]["dirrection"] = rng
-
-        elif rng == 3:
-            GM.ai_package[name]["movement_behavior"]["dirrection"] = rng
-
-        elif rng == 4:
-            GM.ai_package[name]["movement_behavior"]["dirrection"] = rng
+        GM.ai_package[name]["movement_behavior"]["dirrection"] = random.randint(1, 4)
 
     def check_collision(self, collision_map, x, y, rect, move, name, dirrection):
         prev_center = rect.center
@@ -131,7 +120,7 @@ class Ai:
         ):
             return x, y
 
-        GM.ai_package[name]["movement_behavior"]["dirrection"] == dirrection
+        GM.ai_package[name]["movement_behavior"]["dirrection"] = dirrection
         rect.center = prev_center
         return rect.center#self.random_patrol(name, collision_map, rect.left, rect.top, rect)
 
@@ -164,10 +153,10 @@ class Ai:
             dx, dy = self.check_collision(
                 collision_map, int(dx), int(dy), rect, move, name, direction
             )
-            return copy.deepcopy(dx), copy.deepcopy(dy), True
+            return dx, dy, True, direction
 
         else:
-            return copy.deepcopy(npc[0]), copy.deepcopy(npc[1]), False
+            return npc[0], npc[1], False, GM.ai_package[name]["movement_behavior"]["dirrection"]
 
     def random_line(self, npc, player_possition, name):
         distance = math.dist((npc), player_possition)

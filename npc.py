@@ -6,23 +6,6 @@ from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
-def get_movement_direction(prev_x, prev_y, new_x, new_y):
-    delta_x = new_x - prev_x
-    delta_y = new_y - prev_y
-    print()
-    print(delta_x, delta_y)
-    print()
-    if abs(delta_x) > abs(delta_y):
-        if delta_x > 0:
-            return 270
-        elif delta_x < 0:
-            return 90
-    else:
-        if delta_y > 0:
-            return 180
-        elif delta_y < 0:
-            return 0
-    
 def update_npc(subtitle_font, prompt_font):
     for index, x in enumerate(GM.npc_list):
         if GM.npc_list[index]["name"]["stats"]["status"] == "dead":
@@ -44,7 +27,7 @@ def update_npc(subtitle_font, prompt_font):
         ):
             # todo fixni to jutre
             # print(x)
-            dx, dy, agroved = CM.ai.attack(
+            _, _, agroved, dirrection = CM.ai.attack(
                 x["name"]["name"],
                 (
                     (x["rect"].centerx),
@@ -58,11 +41,8 @@ def update_npc(subtitle_font, prompt_font):
                 x["rect"],
             )
 
-            x["name"]["movement_behavior"]["dirrection"]=get_movement_direction(x["rect"].centerx, x["rect"].centery, dx, dy)
             GM.npc_list[index]["agroved"] = agroved
-            x["rect"].centerx = dx
-            x["rect"].centery = dy
-            
+            x["name"]["movement_behavior"]["dirrection"]=dirrection          
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = True
@@ -97,7 +77,7 @@ def update_npc(subtitle_font, prompt_font):
             and not CM.player_menu.visible
             and not GM.is_in_dialogue
         ):
-            dx, dy = CM.ai.update(
+            _, _, dirrection = CM.ai.update(
                 x["name"]["name"],
                 GM.collision_map,
                 x["rect"].left,
@@ -105,10 +85,7 @@ def update_npc(subtitle_font, prompt_font):
                 x["rect"],
             )
 
-            x["name"]["movement_behavior"]["dirrection"]=get_movement_direction(x["rect"].centerx, x["rect"].centery, dx, dy)
-            x["rect"].centerx = dx
-            x["rect"].centery = dy
-            
+            x["name"]["movement_behavior"]["dirrection"]=dirrection
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = True

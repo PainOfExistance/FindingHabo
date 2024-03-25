@@ -49,26 +49,21 @@ class Animation:
             action="idle"
         if data["agroved"]:
             action="attack"
-        
         match data["name"]["movement_behavior"]["dirrection"]:
-            case 0:
+            case 1:
                 dirrection="up"
                 
-            case 90:
+            case 2:
                 dirrection="left"
 
-            case 180:
+            case 3:
                 dirrection="down"
 
-            case 270:
+            case 4:
                 dirrection="right"
                 
             case _:
                 dirrection="up"
-        
-        print()
-        print(data["name"]["movement_behavior"]["dirrection"])
-        print()
                 
         if self.enemy_anims[f"{data["name"]["name"].lower()}"]["prev_action"]!=f"{data["name"]["name"].lower()}_{action}_{dirrection}":
             self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"]=0
