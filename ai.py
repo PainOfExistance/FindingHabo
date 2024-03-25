@@ -125,6 +125,7 @@ class Ai:
         return rect.center#self.random_patrol(name, collision_map, rect.left, rect.top, rect)
 
     def attack(self, name, npc, player_possition, collision_map, rect):
+        #CM.script_loader.run_script(script["script_name"], script["function"], script["args"])
         speed = GM.ai_package[name]["movement_behavior"]["movement_speed"]
         distance = math.dist((npc), player_possition)
 

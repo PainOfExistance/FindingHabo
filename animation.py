@@ -53,13 +53,13 @@ class Animation:
             case 1:
                 dirrection="up"
                 
-            case 2:
+            case 4:
                 dirrection="left"
 
             case 3:
                 dirrection="down"
 
-            case 4:
+            case 2:
                 dirrection="right"
                 
             case _:

@@ -371,9 +371,9 @@ def draw_objects(prompt_font):
             if x["type"]=="activator" and x["name"]["type"]=="trap" and not GM.container_open and x["name"]["trap"]!="ref" and "activated" not in x["name"]["trap"]:
                 #todo play anim depending on trap type
                 for ti, tx in enumerate(GM.npc_list):
-                    relative__left = int(GM.bg_rect.left + tx["rect"].left)
-                    relative__top = int(GM.bg_rect.top + tx["rect"].top)
-                    rect = pygame.Rect(relative__left, relative__top, tx["rect"].width, tx["rect"].height)
+                    relative__left_other = int(GM.bg_rect.left + tx["rect"].left)
+                    relative__top_other = int(GM.bg_rect.top + tx["rect"].top)
+                    rect = pygame.Rect(relative__left_other, relative__top_other, tx["rect"].width, tx["rect"].height)
                     
                     if other_obj_rect.colliderect(rect):
                         GM.npc_list[ti]["name"]["stats"]["health"]-=50
