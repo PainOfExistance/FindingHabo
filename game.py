@@ -44,6 +44,7 @@ class Game:
         # CM.inventory.add_item(GM.items["Divine Armor"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         GM.world_objects = list()
+        self.layers=list()
 
         self.setup(f"terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
         CM.player.quests.dialogue = CM.ai.strings
@@ -244,9 +245,13 @@ class Game:
             self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
         
         CM.music_player = MusicPlayer(metadata["music"])
-        GM.background, GM.bg_rect = assets.load_background(
-            metadata["background"],
-        )
+        GM.background, GM.bg_rect = assets.load_background(metadata["background"])
+        directory, _ = os.path.split(metadata["background"])
+    
+        for layer in metadata["layers"]:
+            new_filepath = os.path.join(directory, layer)
+            bg, _ =assets.load_background(new_filepath)
+            self.layers.append(bg)
         GM.collision_map = assets.load_collision(metadata["collision_set"])
         GM.map_height = GM.collision_map.shape[0]
         GM.map_width = GM.collision_map.shape[1]
@@ -1228,6 +1233,8 @@ class Game:
             CM.map.set_map(GM.background)
             N.update_npc(self.subtitle_font, self.prompt_font)
             CM.player.draw()  # .lulekSprulek.123.fafajMi)
+            for layer in self.layers:
+                GM.screen.blit(layer, GM.bg_rect.topleft)
             CM.player.quests.draw_quest_info()
             R.draw_container(self.menu_font)
             R.draw_barter(self.menu_font)

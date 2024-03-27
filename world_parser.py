@@ -168,6 +168,7 @@ def parser(world):
                 world["entities"][x][0]["customFields"]["music"][i] = world["entities"][
                     x
                 ][0]["customFields"]["music"][i][3:]
+            world["entities"][x][0]["customFields"]["layers"]=world["layers"][2:]
             metadata = world["entities"][x][0]["customFields"]
             
         elif x == "Activator":
@@ -195,7 +196,6 @@ def parser(world):
     #print("-------------------")
     #print(metadata)
     #print("-------------------")
-
     return spawn, portals, enemies, final_items, containers, metadata, activators, nav_tiles, notes
 
 def parse_visited(world):
