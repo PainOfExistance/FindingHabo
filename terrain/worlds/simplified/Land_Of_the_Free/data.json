@@ -9,7 +9,6 @@
 	"neighbourLevels": [],
 	"customFields" : {},
 	"layers": [
-		"Collision.png",
 		"BG.png",
 		"Top_layer.png"
 	],
@@ -78,8 +77,8 @@
 						"../sounds/bgm/DOVAHKIIN.mp3",
 						"../sounds/bgm/peace.mp3"
 					],
-					"collision_set": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Land_Of_the_Free\\\\\\\\Collision-int.png",
-					"background": "terrain\\\\\\\\worlds\\\\\\\\simplified\\\\\\\\Land_Of_the_Free\\\\\\\\_composite.png"
+					"collision_set": "terrain\\\\worlds\\\\simplified\\\\Land_Of_the_Free\\\\Collision-int.png",
+					"background": "terrain\\\\worlds\\\\simplified\\\\Land_Of_the_Free\\\\_composite.png"
 				}
 			}
 		]

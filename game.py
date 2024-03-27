@@ -137,7 +137,8 @@ class Game:
                     "iid": data[3]
                 }
                 )
-                CM.animation.load_anims(GM.npc_list[-1])
+                if GM.npc_list[-1]["name"]["name"].lower() not in CM.animation.enemy_anims:
+                    CM.animation.load_anims(GM.npc_list[-1])
 
         for data in portals:
             if "unlocked_by" in data[0]:

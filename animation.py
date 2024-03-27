@@ -31,7 +31,8 @@ class Animation:
             "attacking": self.attacking,
             "in_attack": self.in_attack,
             "prev_action": self.prev_action,
-            "anim_counter": self.anim_counter
+            "anim_counter": self.anim_counter,
+            "enemy_anims": self.enemy_anims
         }
     
     def from_dict(self, data):
@@ -41,6 +42,7 @@ class Animation:
         self.in_attack = data["in_attack"]
         self.prev_action = data["prev_action"]
         self.anim_counter = data["anim_counter"]
+        self.enemy_anims = data["enemy_anims"]
     
     def animate_npc(self, data):
         if data["name"]["movement_behavior"]["moving"]:
