@@ -11,8 +11,7 @@
 	"layers": [
 		"Collision.png",
 		"BG.png",
-		"Houses.png",
-		"Portals.png"
+		"Top_layer.png"
 	],
 	"entities": {
 		"Player_spawn": [
