@@ -124,8 +124,6 @@ class Animation:
         for x in GM.anim_tiles:
             relative_left = int(GM.bg_rect.left + x["col"])
             relative_top = int(GM.bg_rect.top + x["row"])
-            print(relative_left, relative_top)
-            
             if (
             relative_left > -80
             and relative_left < GM.screen_width + 80
@@ -134,12 +132,9 @@ class Animation:
             ):   
                 value_data = self.data[x["value"]]
                 value_data["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
+                
                 if int(value_data["counter"]) >= len(value_data["frames"]):
                     value_data["counter"] = 0
-
+                    
                 tmp = int(value_data["counter"])
-
-                # Adjust the animation's position based on the GM.bg_rect position
-
-
                 GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
