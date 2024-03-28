@@ -74,13 +74,13 @@ def load_anim_tiles(path):
     return image
 
 def set_anim_places(path):
-    array=load_anim_tiles(path)
-    skip = 8 
-    non_zero_indices = np.nonzero(array[::skip, ::skip])
-    non_zero_values = array[::skip, ::skip][non_zero_indices]
-    data=[]
-    for i in range(len(non_zero_values)):
-        data.append({'row': non_zero_indices[0][i], 'col': non_zero_indices[1][i], 'value': non_zero_values[i]})
+    array = load_anim_tiles(path)
+    skip = 8
+    smaller_array = array[::skip, ::skip]
+    indices = np.where(smaller_array != 0)
+    actual_rows = indices[0] * skip
+    actual_cols = indices[1] * skip
+    data = [{'row': row*2, 'col': col*2, 'value': value} for row, col, value in zip(actual_rows, actual_cols, smaller_array[indices])]
     return data
 
 def load_items():

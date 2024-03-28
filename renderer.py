@@ -241,13 +241,14 @@ def draw_objects(prompt_font):
             continue
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
+        #print(x["rect"].left, x["rect"].top, relative__left, relative__top)
 
         if (
             relative__left > -80
             and relative__left < GM.screen_width + 80
             and relative__top > -80
             and relative__top < GM.screen_height + 80
-        ):
+        ):            
             if (
                 x["type"] == "walk_in_portal"
             ):

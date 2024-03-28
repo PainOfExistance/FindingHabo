@@ -1229,6 +1229,7 @@ class Game:
     def draw(self):
         GM.screen.fill((230, 60, 20))
         GM.screen.blit(GM.background, GM.bg_rect.topleft)
+        CM.animation.animate_static()
         R.draw_objects(self.prompt_font)
         
         if not GM.map_shown:

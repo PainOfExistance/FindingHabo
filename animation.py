@@ -120,15 +120,26 @@ class Animation:
         
         return self.action_images[f"player_{action}_{dirrection}"]["image"][int(self.anim_counter)], self.action_images[f"player_{action}_{dirrection}"]["rect"][int(self.anim_counter)]
 
-    def animate_static(self, coordinates):
-        rect=pygame.Rect(0, 0, 8, 8)
-        for x in coordinates:
-            self.data[x["value"]] += GM.delta_time*(self.data[x["value"]]["fps"]/1.5)
-            if int(self.data[x["value"]]["counter"])>=len(self.data[x["value"]]["frames"]):
-                self.data[x["value"]]["counter"]=0
+    def animate_static(self):
+        for x in GM.anim_tiles:
+            relative_left = int(GM.bg_rect.left + x["col"])
+            relative_top = int(GM.bg_rect.top + x["row"])
+            print(relative_left, relative_top)
             
-            tmp=int(self.data[x["value"]]["counter"])
-            
-            rect.x=x["x"]
-            rect.y=x["y"]
-            GM.screen.blit(self.data[x["value"]]["frames"][tmp], rect.topleft)
+            if (
+            relative_left > -80
+            and relative_left < GM.screen_width + 80
+            and relative_top > -80
+            and relative_top < GM.screen_height + 80
+            ):   
+                value_data = self.data[x["value"]]
+                value_data["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
+                if int(value_data["counter"]) >= len(value_data["frames"]):
+                    value_data["counter"] = 0
+
+                tmp = int(value_data["counter"])
+
+                # Adjust the animation's position based on the GM.bg_rect position
+
+
+                GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
