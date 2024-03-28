@@ -61,6 +61,7 @@ class GameManager:
     ratio=(0,0)
     can_fast_travel=True
     can_move=True
+    anim_tiles=[[]]
 
 class ClassManager:
     ai=None

@@ -17,6 +17,7 @@ class Animation:
         self.enemy_anims={}
         self.prev_action="player_idle_up"
         self.in_attack=False
+        self.data=assets.load_animations()
         
     def load_anims(self, data):
         self.enemy_anims[f"{data["name"]["name"].lower()}"]={"anim_counter": 0, "prev_action": f""}
@@ -118,3 +119,16 @@ class Animation:
                 self.in_attack=False
         
         return self.action_images[f"player_{action}_{dirrection}"]["image"][int(self.anim_counter)], self.action_images[f"player_{action}_{dirrection}"]["rect"][int(self.anim_counter)]
+
+    def animate_static(self, coordinates):
+        rect=pygame.Rect(0, 0, 8, 8)
+        for x in coordinates:
+            self.data[x["value"]] += GM.delta_time*(self.data[x["value"]]["fps"]/1.5)
+            if int(self.data[x["value"]]["counter"])>=len(self.data[x["value"]]["frames"]):
+                self.data[x["value"]]["counter"]=0
+            
+            tmp=int(self.data[x["value"]]["counter"])
+            
+            rect.x=x["x"]
+            rect.y=x["y"]
+            GM.screen.blit(self.data[x["value"]]["frames"][tmp], rect.topleft)

@@ -239,7 +239,6 @@ def draw_objects(prompt_font):
     for index, x in enumerate(GM.world_objects):
         if index == 0:
             continue
-
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
 

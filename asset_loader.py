@@ -62,8 +62,26 @@ def load_collision(path):
     image = cv2.resize(image, (image.shape[0]*8, image.shape[1]*8), interpolation = cv2.INTER_AREA)
     binary_image = 1 - (image // 255)
     print(binary_image)
+    directory, _ = os.path.split(path)
+    new_filepath = os.path.join(directory, "Animator_layer-int.png")
+    animation_tiles=set_anim_places(new_filepath)
     # np.savetxt('map.txt', binary_image, fmt='%d')
-    return binary_image
+    return binary_image, animation_tiles
+
+def load_anim_tiles(path):
+    image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    image = cv2.resize(image, (image.shape[0]*8, image.shape[1]*8), interpolation = cv2.INTER_AREA)
+    return image
+
+def set_anim_places(path):
+    array=load_anim_tiles(path)
+    skip = 8 
+    non_zero_indices = np.nonzero(array[::skip, ::skip])
+    non_zero_values = array[::skip, ::skip][non_zero_indices]
+    data=[]
+    for i in range(len(non_zero_values)):
+        data.append({'row': non_zero_indices[0][i], 'col': non_zero_indices[1][i], 'value': non_zero_values[i]})
+    return data
 
 def load_items():
     item_list = np.array({})
@@ -236,4 +254,15 @@ def load_sprites(gif_path):
         rects.append(pygameImage.get_rect())
     fps=fps/len(frames)
     return frames, rects, fps
+
+def load_animations():
+    animations = np.array({})
+    with open("game_data/animations.json", "r") as anim_file:
+        animations = json.load(anim_file)
+    animations = {int(k): v for k, v in animations.items()}
+    for key, value in animations.items():
+        frames,_,fps=load_sprites(f"textures\\static\\{value["name"].split("_")[0]}\\{value['name']}.gif")
+        animations[key]["frames"]=frames
+        animations[key]["fps"]=fps
+    return animations
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

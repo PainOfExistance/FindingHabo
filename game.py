@@ -253,7 +253,8 @@ class Game:
             new_filepath = os.path.join(directory, layer)
             bg, _ =assets.load_background(new_filepath)
             self.layers.append(bg)
-        GM.collision_map = assets.load_collision(metadata["collision_set"])
+            
+        GM.collision_map, GM.anim_tiles = assets.load_collision(metadata["collision_set"])
         GM.map_height = GM.collision_map.shape[0]
         GM.map_width = GM.collision_map.shape[1]
 
@@ -376,7 +377,7 @@ class Game:
         GM.relative_player_top = int(CM.player.player_rect.top - GM.bg_rect.top)
         GM.relative_player_bottom = int(CM.player.player_rect.bottom - GM.bg_rect.top)
         movement = int(CM.player.movement_speed * GM.delta_time)
-
+        
         CM.player.quests.check_quest_advancement(
             (
                 GM.relative_player_top + CM.player.player_rect.height // 2,
