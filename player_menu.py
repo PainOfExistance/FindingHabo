@@ -19,6 +19,7 @@ class PlayerMenu:
         self.selection_held = False
         self.inventory_visible = False
         self.trait_selection = -1
+        self.book_open = False
         
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
         self.stats_font = pygame.font.Font("fonts/SovngardeBold.ttf", 22)
@@ -50,7 +51,6 @@ class PlayerMenu:
         self.visible = not self.visible
 
     def handle_input(self):
-        
         num_started_quests = sum(1 for quest in CM.player.quests.quests
                         if CM.player.quests.quests[quest]["started"]
                     )
@@ -172,6 +172,9 @@ class PlayerMenu:
                     CM.player.quests.quests[CM.player.quests.name]["active"] = not CM.player.quests.quests[CM.player.quests.name]["active"]
                     
                 self.selection_held = True
+                
+            elif keys[pygame.K_ESCAPE] and self.sub_items:
+                self.book_open = False
 
         elif (
             not keys[pygame.K_UP]
@@ -245,8 +248,11 @@ class PlayerMenu:
                 )
                 level_rect = level.get_rect(bottomleft=(20, text_y))
                 GM.screen.blit(level, level_rect)
-
-            if self.selected_item == 0:
+            
+            if self.book_open:
+                CM.player.draw_book()
+                
+            elif self.selected_item == 0:
                 CM.inventory.draw(
                     self.selected_sub_item, self.sub_items, GM.screen.get_width() // 4 + 20
                 )

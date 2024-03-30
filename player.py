@@ -5,6 +5,7 @@ import string
 import numpy as np
 import pygame
 
+import asset_loader as assets
 from animation import Animation
 from colors import Colors
 from effects import Effects
@@ -30,13 +31,19 @@ class Player:
         self.range = 5
         self.active_effects = []
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
+        self.title_font = pygame.font.Font("fonts/SovngardeBold.ttf", 30)
+        self.book_font = pygame.font.Font("fonts/SovngardeBold.ttf", 26)
         CM.animation = Animation()
         self.movement_speed = 125
         GM.game_date = GameDate()
-        self.hash=''.join(random.choices(string.ascii_uppercase + string.digits+string.ascii_lowercase, k=32))
-        #self.hash = "Player"
+        self.hash = "".join(
+            random.choices(
+                string.ascii_uppercase + string.digits + string.ascii_lowercase, k=32
+            )
+        )
+        # self.hash = "Player"
 
-        self.player= CM.animation.init_player()
+        self.player = CM.animation.init_player()
         self.player_rect = pygame.Rect(600, 500, 32, 53)
 
         self.depleted_rect = pygame.Rect(
@@ -68,6 +75,9 @@ class Player:
             "gloves": None,
             "legs": None,
         }
+
+        self.words = []
+        self.title = ""
 
     def update_health(self, health):
         self.stats.update_health(health)
@@ -115,11 +125,19 @@ class Player:
             self.stats.update_weapon_damage(amount)
 
     def add_item(self, item):
+        if "script" in item and item["script"]["time"] == "on_pickup":
+            CM.script_loader.run_script(
+                item["script"]["script_name"],
+                item["script"]["function"],
+                item["script"]["args"],
+            )
+            CM.inventory.items[item["name"]]["script"]["used"] = True
+
         if "quest" in item:
             self.quests.quests[item["quest"][0]]["stages"][item["quest"][1]][
                 "objectives"
             ]["inventory"] = True
-        
+
         if "starts_quest" in item:
             self.quests.start_quest(item["starts_quest"])
 
@@ -131,6 +149,17 @@ class Player:
             CM.inventory.add_item(item)
 
     def remove_item(self, key):
+        if (
+            "script" in CM.inventory.items[key]
+            and CM.inventory.items[key]["script"]["time"] == "on_drop"
+        ):
+            CM.script_loader.run_script(
+                CM.inventory.items[key]["script"]["script_name"],
+                CM.inventory.items[key]["script"]["function"],
+                CM.inventory.items[key]["script"]["args"],
+            )
+            CM.inventory.items[key]["script"]["used"] = True
+
         if key in CM.inventory.items and CM.inventory.items[key]["dropable"]:
             CM.inventory.remove_item(key)
             return True
@@ -139,6 +168,18 @@ class Player:
     def use_item(self, index):
         keys = list(CM.inventory.items.keys())
         item = CM.inventory.items[keys[index]]
+
+        if (
+            "script" in CM.inventory.items[keys[index]]
+            and CM.inventory.items[keys[index]]["script"]["time"] == "on_use"
+        ):
+            CM.script_loader.run_script(
+                CM.inventory.items[keys[index]]["script"]["script_name"],
+                CM.inventory.items[keys[index]]["script"]["function"],
+                CM.inventory.items[keys[index]]["script"]["args"],
+            )
+            CM.inventory.items[keys[index]]["script"]["used"] = True
+
         if "stats" in item and "effect" in item:
             if (
                 item["name"]
@@ -154,11 +195,17 @@ class Player:
                     ]
                 )
                 self.equip_item(keys[index])
+
         elif "effect" in item:
             CM.inventory.remove_item(keys[index])
             if item["effect"]["duration"] > 0:
                 self.active_effects.append(item["effect"])
             self.update_stats(item["effect"]["stat"], item["effect"]["value"])
+
+        elif item["type"] == "book":
+            CM.player_menu.book_open = True
+            self.title = item["text"]["title"]
+            self.words = assets.load_text(item["text"]["content"]).split()
 
     def check_experation(self, dt):
         indexes = []
@@ -263,11 +310,53 @@ class Player:
         GM.save_world_names = data["save_world_names"]
 
     def draw(self):
-        self.player, new_rect = CM.animation.player_anim(self.equipped_items["hand"], self.movement_speed)
-        new_rect.center=self.player_rect.center
-        new_rect.bottom=self.player_rect.bottom+11
-        
+        self.player, new_rect = CM.animation.player_anim(
+            self.equipped_items["hand"], self.movement_speed
+        )
+        new_rect.center = self.player_rect.center
+        new_rect.bottom = self.player_rect.bottom + 11
+
         GM.screen.blit(self.player, new_rect.topleft)
-        pygame.draw.rect(GM.screen, Colors.dark_black, self.border_rect, border_radius=10)
-        pygame.draw.rect(GM.screen, Colors.communist_red, self.depleted_rect, border_radius=10)
+        pygame.draw.rect(
+            GM.screen, Colors.dark_black, self.border_rect, border_radius=10
+        )
+        pygame.draw.rect(
+            GM.screen, Colors.communist_red, self.depleted_rect, border_radius=10
+        )
         GM.screen.blit(self.text, self.text_rect)
+
+    def draw_book(self):
+        max_line_width = (GM.screen.get_width() // 4) * 3
+        lines = []
+        current_line = ""
+        left = (GM.screen.get_width() + GM.screen.get_width() // 4) / 2
+
+        for word in self.words:
+            max_chars_per_line = max_line_width // self.book_font.size("J")[0]
+            if len(current_line) + len(word) <= max_chars_per_line:
+                current_line += word + " "
+            else:
+                lines.append(current_line)
+                current_line = word + " "
+                
+        if current_line:
+            lines.append(current_line)
+
+        text = self.title_font.render(f"{self.title}", True, Colors.mid_black)
+        text_rect = text.get_rect(
+            center=(
+                (GM.screen.get_width() // 3) * 2,
+                50,
+            )
+        )
+        GM.screen.blit(text, text_rect)
+
+        for y, line in enumerate(lines):
+            text = self.book_font.render(f"{line}", True, Colors.mid_black)
+            text_rect = text.get_rect(
+                center=(
+                    left,
+                    80 + y * 30,
+                )
+            )
+            GM.screen.blit(text, text_rect)

@@ -42,6 +42,7 @@ class Game:
         # CM.inventory.add_item(GM.items["Power Elixir"])
         # CM.inventory.add_item(GM.items["Steel Armor"])
         # CM.inventory.add_item(GM.items["Divine Armor"])
+        CM.inventory.add_item(GM.items["Book of Knowledge"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         GM.world_objects = list()
         self.layers=list()

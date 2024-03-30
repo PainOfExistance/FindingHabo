@@ -151,6 +151,28 @@
             "image": "textures/items/heirloom.png",
             "dropable": false,
             "rarity": "common"
+        },
+        {
+            "id": "itmBook",
+            "name": "Book of Knowledge",
+            "type": "book",
+            "description": "Book that contains knowledge.",
+            "price": 250,
+            "image": "textures/items/heirloom.png",
+            "dropable": true,
+            "rarity": "epic",
+            "text": {
+                "title": "Book of Knowledge",
+                "content": "game_data/texts/temp1.txt"
+            },
+            "script": {
+                "time": "on_use",
+                "script_name": "player_manager", 
+                "function": "player_stats_adjust", 
+                "respawns": false,
+                "used": false,
+                "args": ["max_knowledge", 10]
+            }
         }
     ]
 }
