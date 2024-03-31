@@ -132,11 +132,12 @@ class PlayerMenu:
                 (keys[pygame.K_RIGHT] or keys[pygame.K_RETURN])
                 and not self.sub_items
                 and self.trait_selection == -1
+                and not CM.player_menu.book_open    
             ):
                 self.sub_items = True
                 self.selection_held = True
 
-            elif keys[pygame.K_LEFT] and self.sub_items and self.trait_selection == -1:
+            elif keys[pygame.K_LEFT] and self.sub_items and self.trait_selection == -1 and not CM.player_menu.book_open:
                 self.sub_items = False
                 self.selected_sub_item = 0
                 self.selection_held = True

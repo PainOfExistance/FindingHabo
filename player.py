@@ -78,6 +78,8 @@ class Player:
 
         self.words = []
         self.title = ""
+        self.current_line=0
+        self.scrolling = False
 
     def update_health(self, health):
         self.stats.update_health(health)
@@ -283,6 +285,10 @@ class Player:
             "hash": self.hash,
             "rectxy": [self.player_rect.centerx, self.player_rect.centery],
             "ai": CM.ai.to_dict(),
+            "words": self.words,
+            "title": self.title,
+            "current_line": self.current_line,
+            "scrolling": self.scrolling
         }
 
     def from_dict(self, data):
@@ -307,8 +313,59 @@ class Player:
         self.hash = data["hash"]
         GM.game_date.from_dict(data["game_date"])
         CM.ai.from_dict(data["ai"])
-        GM.save_world_names = data["save_world_names"]
+        GM.save_world_names = data["save_world_names"]  
+        self.words = data["words"]
+        self.title = data["title"]
+        self.current_line = data["current_line"]
+        self.scrolling = data["scrolling"]
+    
+    def handle_input(self):
+        keys = pygame.key.get_pressed()
 
+        # Calculate the maximum number of lines that can fit on the screen
+        max_lines_on_screen = (GM.screen.get_height() * 3 // 4) // self.book_font.size("J")[1]
+        max_line_width = (GM.screen.get_width() // 4) * 3
+        lines = []
+        current_line = ""
+        
+        for word in self.words:
+            max_chars_per_line = max_line_width // self.book_font.size("J")[0]
+            if len(current_line) + len(word) <= max_chars_per_line:
+                current_line += word + " "
+            else:
+                lines.append(current_line)
+                current_line = word + " "
+
+        if current_line:
+            lines.append(current_line)
+
+        # Scroll up
+        if keys[pygame.K_UP] and not self.scrolling:
+            if self.current_line > 0:
+                self.current_line -= max_lines_on_screen
+                self.current_line = max(0, self.current_line)
+                self.scrolling = True
+
+        # Scroll down
+        elif keys[pygame.K_DOWN] and not self.scrolling:
+            total_lines = len(self.words)
+            max_displayable_lines = total_lines - (total_lines % max_lines_on_screen or max_lines_on_screen)
+            if self.current_line < max_displayable_lines:
+                self.current_line += max_lines_on_screen
+                self.current_line = min(self.current_line, max_displayable_lines)
+                self.scrolling = True
+        
+        if len(lines[self.current_line:self.current_line + max_lines_on_screen])<=0:
+            if self.current_line > 0:
+                self.current_line -= max_lines_on_screen
+                self.current_line = max(0, self.current_line)
+
+        # Reset scrolling flag if no keys are pressed
+        if not keys[pygame.K_UP] and not keys[pygame.K_DOWN]:
+            self.scrolling = False
+        
+        return lines
+    
     def draw(self):
         self.player, new_rect = CM.animation.player_anim(
             self.equipped_items["hand"], self.movement_speed
@@ -326,37 +383,19 @@ class Player:
         GM.screen.blit(self.text, self.text_rect)
 
     def draw_book(self):
-        max_line_width = (GM.screen.get_width() // 4) * 3
-        lines = []
-        current_line = ""
+        lines=self.handle_input()
         left = (GM.screen.get_width() + GM.screen.get_width() // 4) / 2
 
-        for word in self.words:
-            max_chars_per_line = max_line_width // self.book_font.size("J")[0]
-            if len(current_line) + len(word) <= max_chars_per_line:
-                current_line += word + " "
-            else:
-                lines.append(current_line)
-                current_line = word + " "
-                
-        if current_line:
-            lines.append(current_line)
+        # Calculate the maximum number of lines that can fit on the screen
+        max_lines_on_screen = (GM.screen.get_height() * 3 // 4) // self.book_font.size("J")[1]
 
-        text = self.title_font.render(f"{self.title}", True, Colors.mid_black)
-        text_rect = text.get_rect(
-            center=(
-                (GM.screen.get_width() // 3) * 2,
-                50,
-            )
-        )
+        # Render the title
+        text = self.title_font.render(f"{self.title}", True, Colors.active_item)
+        text_rect = text.get_rect(center=(int((GM.screen.get_width() // 3) * 1.9), 50))
         GM.screen.blit(text, text_rect)
 
-        for y, line in enumerate(lines):
-            text = self.book_font.render(f"{line}", True, Colors.mid_black)
-            text_rect = text.get_rect(
-                center=(
-                    left,
-                    80 + y * 30,
-                )
-            )
+        # Render only the visible lines
+        for y, line in enumerate(lines[self.current_line:self.current_line + max_lines_on_screen]):
+            text = self.book_font.render(f"{line}", True, Colors.active_item)
+            text_rect = text.get_rect(centerx=left, y=80 + y * 30)
             GM.screen.blit(text, text_rect)
