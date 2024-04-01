@@ -1,4 +1,6 @@
 {
-    "105": {"name": "grass_1", "counter": 0, "frames": [], "fps": 12},
-    "106": {"name": "grass_2", "counter": 0, "frames": [], "fps": 12}
+    "105": {"name": "grass_1", "folder": "grass", "counter": 0, "frames": [], "fps": 12},
+    "106": {"name": "grass_2", "folder": "grass", "counter": 0, "frames": [], "fps": 12},
+    "1000": {"name": "player_die", "folder": "character", "counter": 0, "frames": [], "fps": 2},
+    "1001": {"name": "slime_die", "folder": "character", "counter": 0, "frames": [], "fps": 2}
 }

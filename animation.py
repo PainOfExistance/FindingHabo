@@ -121,7 +121,8 @@ class Animation:
         return self.action_images[f"player_{action}_{dirrection}"]["image"][int(self.anim_counter)], self.action_images[f"player_{action}_{dirrection}"]["rect"][int(self.anim_counter)]
 
     def animate_static(self):
-        for x in GM.anim_tiles:
+        removing=[]
+        for i, x in enumerate(GM.anim_tiles):
             relative_left = int(GM.bg_rect.left + x["col"])
             relative_top = int(GM.bg_rect.top + x["row"])
             if (
@@ -129,6 +130,7 @@ class Animation:
             and relative_left < GM.screen_width + 80
             and relative_top > -80
             and relative_top < GM.screen_height + 80
+            and "special" not in x
             ):   
                 value_data = self.data[x["value"]]
                 value_data["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
@@ -138,3 +140,26 @@ class Animation:
                     
                 tmp = int(value_data["counter"])
                 GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
+                
+            elif "special" in x:
+                if "hold" in x["special"]:
+                    value_data = self.data[x["value"]]
+                    if int(value_data["counter"]) < len(value_data["frames"])-1:
+                        value_data["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
+                        
+                    tmp = int(value_data["counter"])
+                    GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
+                
+                elif "once" in x["special"]:
+                    value_data = self.data[x["value"]]
+                    value_data["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
+                    
+                    if int(value_data["counter"]) >= len(value_data["frames"]):
+                        removing.append(i)
+                        continue
+                    
+                    tmp = int(value_data["counter"])
+                    GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
+        
+        for i in removing:
+            GM.anim_tiles.pop(i)

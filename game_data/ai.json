@@ -113,7 +113,8 @@
                 "rarity": "uncommon",
                 "group": "bandit",
                 "mutable": true,
-                "image": "textures/npc/merchant.png"
+                "image": "textures/npc/merchant.png",
+                "death_anim": 1000
             }
         },
         {
@@ -137,7 +138,8 @@
                 "rarity": "common",
                 "group": "slime",
                 "mutable": true,
-                "image": "slime"
+                "image": "slime",
+                "death_anim": 1001
             }
         }
     ]

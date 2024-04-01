@@ -9,6 +9,7 @@ from game_manager import GameManager as GM
 def update_npc(subtitle_font, prompt_font):
     for index, x in enumerate(GM.npc_list):
         if GM.npc_list[index]["name"]["stats"]["status"] == "dead":
+            GM.anim_tiles.append({'row': x["rect"].top, 'col': x["rect"].left, 'value': x["name"]["stats"]["death_anim"], "special": "hold"})
             GM.npc_list.pop(index)
 
     for index, x in enumerate(GM.npc_list):

@@ -261,7 +261,7 @@ def load_animations():
         animations = json.load(anim_file)
     animations = {int(k): v for k, v in animations.items()}
     for key, value in animations.items():
-        frames,_,fps=load_sprites(f"textures\\static\\{value["name"].split("_")[0]}\\{value['name']}.gif")
+        frames,_,fps=load_sprites(f"textures\\static\\{value["folder"]}\\{value['name']}.gif")
         animations[key]["frames"]=frames
         animations[key]["fps"]=fps
     return animations
