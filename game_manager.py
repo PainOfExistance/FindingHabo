@@ -1,6 +1,5 @@
 import numpy as np
 
-from crafting import Crafting
 from script_loader import ScriptLoader
 
 
@@ -65,6 +64,7 @@ class GameManager:
     anim_tiles=[[]]
     crafting=False
     can_craft=False
+    up_down_held=False
 
 class ClassManager:
     ai=None
@@ -84,4 +84,4 @@ class ClassManager:
     traits=None
     map=None
     script_loader=ScriptLoader()
-    crafting=Crafting()
+    crafting=None

@@ -11,13 +11,25 @@ class Crafting:
     def __init__(self):
         self.recepies= assets.load_recepies()
         self.active_recepies=[]
+        self.filtered=False
         
     def filter_recepies(self, type):
-        self.active_recepies = filter(lambda x: x['type'] == type, self.recepies)
+        if isinstance(self.recepies, dict) and 'recipes' in self.recepies:
+            self.active_recepies = list(filter(lambda x: x['type'] == type, self.recepies['recipes']))
+            self.filtered = True
     
     def craft(self):
-        pass
-    
+        item = self.active_recepies[GM.selected_inventory_item]
+        for j in range(0, len(item["ingredients"])//2, 2):
+            if item["ingredients"][j+1] > CM.inventory.quantity[item["ingredients"][j]]:
+                return
+                
+        for i in range(0, len(item["ingredients"])//2, 2):
+            for j in range(0, len(item["ingredients"][i+1]), 1):
+                CM.player.remove_item(item["ingredients"][i])
+        
+        CM.player.add_item(item["name"])
+                
     def draw_crafting(self, menu_font):
         pygame.draw.rect(
             GM.bg_surface_menu,
@@ -83,16 +95,18 @@ class Crafting:
             )
             GM.screen.blit(item_render, item_rect)
             
-            #todo make this work
-            
             if (index == GM.selected_inventory_item - scroll_position):
                 for i in range(0, len(data["ingredients"]), 2):
                     color = (
                         Colors.active_item
-                        if data["ingredients"][i + 1] >= GM.player.inventory[data["ingredients"][i]]
+                        if (data["ingredients"][i] in CM.inventory.quantity and data["ingredients"][i + 1] >= CM.inventory.quantity[data["ingredients"][i]])
                         else Colors.inactive_item
                     )
-                    item_text = f"{data['ingredients'][i]}: {GM.player.inventory[data['ingredients'][i]]}/{data['ingredients'][i + 1]}"
+                    if data["ingredients"][i] not in CM.inventory.quantity:
+                        txt=0
+                    else:
+                        txt=CM.inventory.quantity[data['ingredients'][i]]
+                    item_text = f"{data['ingredients'][i]}: {txt}/{data['ingredients'][i + 1]}"
                     item_render = menu_font.render(item_text, True, color)
                     item_rect = item_render.get_rect(topleft=(10, 20 + (i + 2) * 40))
                     GM.screen.blit(item_render, item_rect)

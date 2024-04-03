@@ -336,6 +336,7 @@ def draw_objects(prompt_font):
                 and not CM.menu.visible
                 and not CM.player_menu.visible
                 and not GM.is_in_dialogue
+                and not GM.crafting
                 and other_obj_rect.colliderect(CM.player.player_rect)
             ):
                 if x["name"]["locked"]:
@@ -408,7 +409,21 @@ def draw_objects(prompt_font):
             
             if (other_obj_rect.colliderect(CM.player.player_rect) and x["type"]=="activator" and x["name"]["type"]=="crafting"):
                 GM.can_craft = True
-                CM.crafting.filter_recepies(x["name"]["crafter"])
+                if not CM.crafting.filtered:
+                    CM.crafting.filter_recepies(x["name"]["crafter"])
+                text = prompt_font.render(
+                        f"E) Craft", True, Colors.mid_black
+                    )
+                text_rect = text.get_rect(
+                    center=(
+                        relative__left + x["rect"].width // 2,
+                        relative__top + x["rect"].height + 10,
+                    )
+                )
+                GM.screen.blit(text, text_rect)
+            
+            if (x["type"]=="activator" and x["name"]["type"]=="crafting"):
+                pygame.draw.rect(GM.screen, Colors.dark_black, other_obj_rect)
                     
             other_rect = pygame.Rect(
                 relative__left-50,
@@ -423,6 +438,7 @@ def draw_objects(prompt_font):
                 and not CM.menu.visible
                 and not CM.player_menu.visible
                 and not GM.is_in_dialogue
+                and not GM.crafting
                 and other_rect.colliderect(CM.player.player_rect)
             ):
                 if not x["name"]["locked"]:

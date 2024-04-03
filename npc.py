@@ -25,6 +25,7 @@ def update_npc(subtitle_font, prompt_font):
             and not CM.menu.visible
             and not CM.player_menu.visible
             and not GM.is_in_dialogue
+            and not GM.crafting
         ):
             # print(x)
             _, _, agroved, dirrection = CM.ai.attack(
@@ -76,6 +77,7 @@ def update_npc(subtitle_font, prompt_font):
             and not CM.menu.visible
             and not CM.player_menu.visible
             and not GM.is_in_dialogue
+            and not GM.crafting
         ):
             _, _, dirrection = CM.ai.update(
                 x["name"]["name"],

@@ -1,7 +1,7 @@
 {
   "recipes": [
     {
-      "name": "Sword",
+      "name": "Steel Sword",
       "type": "smithing",
       "ingredients": ["Iron", 2, "Wood", 1],
       "amount": 1

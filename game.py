@@ -14,6 +14,7 @@ import renderer as R
 import world_parser as wp
 from ai import Ai
 from colors import Colors
+from crafting import Crafting
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from map import Map
@@ -34,6 +35,7 @@ class Game:
         self.prompt_font = pygame.font.Font("fonts/SovngardeBold.ttf", 20)
         self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
         self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
+        CM.crafting = Crafting()
 
         CM.inventory.add_item(GM.items["Minor Health Potion"])
         CM.inventory.add_item(GM.items["Steel Sword"])
@@ -319,6 +321,7 @@ class Game:
                 and not GM.is_in_dialogue
                 and not GM.map_shown
                 and GM.can_move
+                and not GM.crafting
             ):
                 CM.menu.handle_input()
 
@@ -329,6 +332,7 @@ class Game:
                 and not GM.is_in_dialogue
                 and not GM.map_shown
                 and GM.can_move
+                and not GM.crafting
             ):
                 CM.player_menu.handle_input()
 
@@ -340,6 +344,7 @@ class Game:
                 and not CM.menu.visible
                 and not GM.map_shown
                 and GM.can_move
+                and not GM.crafting
             ):
                 CM.ai.strings.handle_input()
                 if CM.ai.strings.starts != 0:
@@ -423,6 +428,7 @@ class Game:
             and not GM.container_open
             and not GM.is_in_dialogue
             and not GM.map_shown
+            and not GM.crafting
         ):
             if CM.player.player_rect.left > 10:
                 CM.player.player_rect.move_ip(-movement, 0)
@@ -438,6 +444,7 @@ class Game:
             and not GM.container_open
             and not GM.is_in_dialogue
             and not GM.map_shown
+            and not GM.crafting
         ):
             dx = np.count_nonzero(
                 GM.collision_map[
@@ -498,6 +505,7 @@ class Game:
             and not GM.container_open
             and not GM.is_in_dialogue
             and not GM.map_shown
+            and not GM.crafting
         ):
             if CM.player.player_rect.right < GM.screen_width - 10:
                 CM.player.player_rect.move_ip(movement, 0)
@@ -513,6 +521,7 @@ class Game:
             and not GM.container_open
             and not GM.is_in_dialogue
             and not GM.map_shown
+            and not GM.crafting
         ):
             dx = np.count_nonzero(
                 GM.collision_map[
@@ -572,6 +581,7 @@ class Game:
             and not GM.container_open
             and not GM.is_in_dialogue
             and not GM.map_shown
+            and not GM.crafting
         ):
             if CM.player.player_rect.top > 10:
                 CM.player.player_rect.move_ip(0, -movement)
@@ -587,6 +597,7 @@ class Game:
             and not GM.container_open
             and not GM.is_in_dialogue
             and not GM.map_shown
+            and not GM.crafting
         ):
             dx = np.count_nonzero(
                 GM.collision_map[
@@ -646,6 +657,7 @@ class Game:
             and not GM.container_open
             and not GM.is_in_dialogue
             and not GM.map_shown
+            and not GM.crafting
         ):
             if CM.player.player_rect.bottom < GM.screen_height - 10:
                 CM.player.player_rect.move_ip(0, movement)
@@ -661,6 +673,7 @@ class Game:
             and not GM.container_open
             and not GM.is_in_dialogue
             and not GM.map_shown
+            and not GM.crafting
         ):
             dx = np.count_nonzero(
                 GM.collision_map[
@@ -768,7 +781,11 @@ class Game:
             GM.tab_pressed = True
             GM.container_open = False
             GM.is_ready_to_talk = False
-            GM.crafting = False
+            
+            if GM.crafting:
+                GM.crafting = False
+                CM.crafting.filtered=False
+                return
 
             if CM.ai.strings.bartering:
                 CM.ai.strings.bartering = False
@@ -790,11 +807,19 @@ class Game:
         if (
             keys[pygame.K_UP]
             and not GM.selection_held
-            and (GM.container_open or CM.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering or GM.crafting)
             and not CM.menu.visible
             and not CM.player_menu.visible
             and not GM.map_shown
+            and not GM.up_down_held
         ):
+            if GM.crafting:
+                GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
+                    CM.crafting.active_recepies
+                )
+                GM.up_down_held = True
+                return
+            
             if (
                 GM.container_menu_selected
                 and CM.ai.strings.bartering
@@ -832,11 +857,19 @@ class Game:
         elif (
             keys[pygame.K_DOWN]
             and not GM.selection_held
-            and (GM.container_open or CM.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering or GM.crafting)
             and not CM.menu.visible
             and not CM.player_menu.visible
             and not GM.map_shown
+            and not GM.up_down_held
         ):
+            if GM.crafting:
+                GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
+                    CM.crafting.active_recepies
+                )
+                GM.up_down_held = True
+                return
+            
             if (
                 GM.container_menu_selected
                 and CM.ai.strings.bartering
@@ -871,11 +904,12 @@ class Game:
         if (
             keys[pygame.K_LEFT]
             and not GM.selection_held
-            and (GM.container_open or CM.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering or GM.crafting)
             and not CM.menu.visible
             and not CM.player_menu.visible
             and GM.container_menu_selected
             and not GM.map_shown
+            and not GM.crafting
         ):
             GM.container_menu_selected = False
             GM.selection_held = True
@@ -892,6 +926,7 @@ class Game:
             and not CM.player_menu.visible
             and not GM.container_menu_selected
             and not GM.map_shown
+            and not GM.crafting
         ):
             GM.container_menu_selected = True
             GM.selection_held = True
@@ -906,10 +941,11 @@ class Game:
             and not keys[pygame.K_DOWN]
             and not keys[pygame.K_RIGHT]
             and not keys[pygame.K_LEFT]
-            and (GM.container_open or CM.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering or GM.crafting)
         ):
             GM.selection_held = False
             GM.enter_held = True
+            GM.up_down_held = False
 
         if (
             keys[pygame.K_RETURN]
@@ -925,8 +961,7 @@ class Game:
             
             if GM.crafting:
                 CM.crafting.craft()
-                
-                #todo fix till the end
+                return
 
             if CM.ai.strings.bartering:
                 if (
@@ -1151,6 +1186,7 @@ class Game:
             and not GM.is_in_dialogue
             and not GM.container_open
             and not GM.map_shown
+            and not GM.crafting
         ):
             timedif = 0
             if CM.player.equipped_items["hand"] != None:
@@ -1177,6 +1213,7 @@ class Game:
             and not CM.ai.strings.bartering
             and not CM.menu.visible
             and not CM.player_menu.visible
+            and not GM.crafting
         ):
             GM.prev_mouse=0
             GM.screen_width_scr = GM._scr.get_width()
@@ -1256,6 +1293,9 @@ class Game:
             R.draw_barter(self.menu_font)
             CM.menu.render()
             CM.player_menu.render()
+            
+            if GM.crafting:
+                CM.crafting.draw_crafting(self.menu_font)
 
             if GM.is_in_dialogue:
                 CM.ai.strings.draw()
