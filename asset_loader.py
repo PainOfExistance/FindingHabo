@@ -270,4 +270,9 @@ def load_text(path):
     with open(path, "r") as file:
         data = file.read()
     return data
+
+def load_recepies():
+    with open("game_data/recepies.json", "r") as file:
+        data = json.load(file)
+    return data
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

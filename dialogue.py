@@ -119,8 +119,8 @@ class Dialougue:
         self.advances = data.get("advances", 0)
         self.indexed = data.get("indexed", [])
 
-    def draw(self, name):
-        self.name = name
+    def draw(self):
+        self.name = GM.talk_to_name
 
         if not self.bartering:
             pygame.draw.rect(

@@ -1246,8 +1246,7 @@ class Game:
             CM.player_menu.render()
 
             if GM.is_in_dialogue:
-                CM.ai.strings.draw(GM.talk_to_name)
-                # todo fix
+                CM.ai.strings.draw()
 
         else:
             CM.map.draw()
