@@ -100,6 +100,8 @@ def setActivators(activators):
         for i, x in enumerate(activators["script_runner"]):
             arr.append(json.loads(x))
         return {"script_runner": arr, "type": "script_runner", "ref": activators["action_ref"]}
+    elif activators["type"]!="":
+        return {"crafter": activators["type"], "type": "crafting", "ref": activators["action_ref"]}
     else:
         return {"type": "board", "ref": activators["action_ref"]}
 

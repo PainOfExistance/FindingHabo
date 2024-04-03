@@ -713,7 +713,13 @@ class Game:
             and not CM.player_menu.visible
             and not GM.selection_held
             and not GM.map_shown
+            and not GM.crafting
         ):
+            if GM.can_craft:
+                GM.crafting = True
+                GM.can_craft = False
+                return
+            
             if GM.item_hovered != None:
                 GM.selection_held = True
                 if GM.item_hovered < len(GM.world_objects) and GM.item_hovered >= 0:
@@ -762,6 +768,7 @@ class Game:
             GM.tab_pressed = True
             GM.container_open = False
             GM.is_ready_to_talk = False
+            GM.crafting = False
 
             if CM.ai.strings.bartering:
                 CM.ai.strings.bartering = False
@@ -909,12 +916,17 @@ class Game:
             and not CM.menu.visible
             and not CM.player_menu.visible
             and not GM.selection_held
-            and (GM.container_open or CM.ai.strings.bartering)
+            and (GM.container_open or CM.ai.strings.bartering or GM.crafting)
             and GM.enter_held
             and not GM.map_shown
         ):
             GM.selection_held = True
             GM.enter_held = False
+            
+            if GM.crafting:
+                CM.crafting.craft()
+                
+                #todo fix till the end
 
             if CM.ai.strings.bartering:
                 if (

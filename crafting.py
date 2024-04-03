@@ -15,6 +15,9 @@ class Crafting:
     def filter_recepies(self, type):
         self.active_recepies = filter(lambda x: x['type'] == type, self.recepies)
     
+    def craft(self):
+        pass
+    
     def draw_crafting(self, menu_font):
         pygame.draw.rect(
             GM.bg_surface_menu,
@@ -69,7 +72,6 @@ class Crafting:
             
             if (
                 index == GM.selected_inventory_item - scroll_position
-                and GM.container_menu_selected
             ):
                 item_text = "}"+f" {data['name']} ({data['amount']})"
             else:
@@ -83,25 +85,14 @@ class Crafting:
             
             #todo make this work
             
-        scroll_position = (GM.selected_inventory_item // 10) * 10
-        visible_items = list(CM.inventory.quantity.items())[
-            scroll_position : scroll_position + 10
-        ]
-        for index, (item_name, item_quantity) in enumerate(visible_items):
-            color = (
-                Colors.active_item
-                if index == GM.selected_inventory_item - scroll_position
-                else Colors.inactive_item
-            )
-            if GM.container_menu_selected:
-                color = Colors.unselected_item
-            if (
-                index == GM.selected_inventory_item - scroll_position
-                and not GM.container_menu_selected
-            ):
-                item_text = "}"+f" {item_name}: {item_quantity}"
-            else:
-                item_text = f"    {item_name}: {item_quantity}"
-            item_render = menu_font.render(item_text, True, color)
-            item_rect = item_render.get_rect(topleft=(10, 20 + (index + 2) * 40))
-            GM.screen.blit(item_render, item_rect)
+            if (index == GM.selected_inventory_item - scroll_position):
+                for i in range(0, len(data["ingredients"]), 2):
+                    color = (
+                        Colors.active_item
+                        if data["ingredients"][i + 1] >= GM.player.inventory[data["ingredients"][i]]
+                        else Colors.inactive_item
+                    )
+                    item_text = f"{data['ingredients'][i]}: {GM.player.inventory[data['ingredients'][i]]}/{data['ingredients'][i + 1]}"
+                    item_render = menu_font.render(item_text, True, color)
+                    item_rect = item_render.get_rect(topleft=(10, 20 + (i + 2) * 40))
+                    GM.screen.blit(item_render, item_rect)

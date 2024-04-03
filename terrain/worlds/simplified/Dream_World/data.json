@@ -350,8 +350,8 @@
 						"../sounds/bgm/Angelia.mp3",
 						"../sounds/bgm/Sladka kot med.mp3"
 					],
-					"collision_set": "terrain\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Collision-int.png",
-					"background": "terrain\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\_composite.png"
+					"collision_set": "terrain\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Collision-int.png",
+					"background": "terrain\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\worlds\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\simplified\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Dream_World\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\_composite.png"
 				}
 			}
 		],
@@ -383,7 +383,8 @@
 						"levelIid": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
 					},
-					"script_runner": []
+					"script_runner": [],
+					"type": "smithing"
 				}
 			},
 			{
@@ -401,7 +402,8 @@
 					"pedistal": [],
 					"action_ref": null,
 					"door_ref": null,
-					"script_runner": []
+					"script_runner": [],
+					"type": "smithing"
 				}
 			},
 			{
@@ -419,7 +421,8 @@
 					"pedistal": [],
 					"action_ref": null,
 					"door_ref": null,
-					"script_runner": []
+					"script_runner": [],
+					"type": "smithing"
 				}
 			},
 			{
@@ -437,7 +440,8 @@
 					"pedistal": [],
 					"action_ref": null,
 					"door_ref": null,
-					"script_runner": []
+					"script_runner": [],
+					"type": "smithing"
 				}
 			},
 			{
@@ -455,7 +459,8 @@
 					"pedistal": [],
 					"action_ref": null,
 					"door_ref": null,
-					"script_runner": []
+					"script_runner": [],
+					"type": "smithing"
 				}
 			},
 			{
@@ -475,7 +480,27 @@
 					"door_ref": null,
 					"script_runner": [
 						"{\n  \"script_name\": \"player_dialogue_tubolca\",\n  \"function\": \"player_dialogue_tubolca\",\n  \"respawns\": true,\n  \"used\": false,\n  \"args\": [\"Minor Health Potion\", 3]\n}"
-					]
+					],
+					"type": "smithing"
+				}
+			},
+			{
+				"id": "Activator",
+				"iid": "3b03f530-d7b0-11ee-a06b-3fda0d751452",
+				"layer": "LeveL_Data",
+				"x": 3720,
+				"y": 3528,
+				"width": 48,
+				"height": 32,
+				"color": 11320532,
+				"customFields": {
+					"quest": -1,
+					"trap": "",
+					"pedistal": [],
+					"action_ref": null,
+					"door_ref": null,
+					"script_runner": [],
+					"type": "smithing"
 				}
 			}
 		],

@@ -81,6 +81,7 @@ def set_anim_places(path):
     actual_rows = indices[0] * skip
     actual_cols = indices[1] * skip
     data = [{'row': row*2, 'col': col*2, 'value': value} for row, col, value in zip(actual_rows, actual_cols, smaller_array[indices])]
+    print(data)
     return data
 
 def load_items():

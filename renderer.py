@@ -405,6 +405,10 @@ def draw_objects(prompt_font):
                     if not script["used"]:
                         CM.script_loader.run_script(script["script_name"], script["function"], script["args"])
                         x["name"]["script_runner"][index]["used"]=True   
+            
+            if (other_obj_rect.colliderect(CM.player.player_rect) and x["type"]=="activator" and x["name"]["type"]=="crafting"):
+                GM.can_craft = True
+                CM.crafting.filter_recepies(x["name"]["crafter"])
                     
             other_rect = pygame.Rect(
                 relative__left-50,
