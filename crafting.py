@@ -20,11 +20,11 @@ class Crafting:
     
     def craft(self):
         item = self.active_recepies[GM.selected_inventory_item]
-        for j in range(0, len(item["ingredients"])//2, 2):
+        for j in range(0, len(item["ingredients"]), 2):
             if item["ingredients"][j+1] > CM.inventory.quantity[item["ingredients"][j]]:
                 return
                 
-        for i in range(0, len(item["ingredients"])//2, 2):
+        for i in range(0, len(item["ingredients"]), 2):
             for j in range(0, len(item["ingredients"][i+1]), 1):
                 CM.player.remove_item(item["ingredients"][i])
         
@@ -108,5 +108,5 @@ class Crafting:
                         txt=CM.inventory.quantity[data['ingredients'][i]]
                     item_text = f"{data['ingredients'][i]}: {txt}/{data['ingredients'][i + 1]}"
                     item_render = menu_font.render(item_text, True, color)
-                    item_rect = item_render.get_rect(topleft=(10, 20 + (i + 2) * 40))
+                    item_rect = item_render.get_rect(topleft=(10, 53 + (i + 2) * 20))
                     GM.screen.blit(item_render, item_rect)
