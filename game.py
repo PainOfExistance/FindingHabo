@@ -39,12 +39,12 @@ class Game:
 
         CM.inventory.add_item(GM.items["Minor Health Potion"])
         CM.inventory.add_item(GM.items["Steel Sword"])
-        CM.inventory.add_item(GM.items["Minor Health Potion"])
         # CM.inventory.add_item(GM.items["Knowledge Potion"])
         # CM.inventory.add_item(GM.items["Power Elixir"])
         # CM.inventory.add_item(GM.items["Steel Armor"])
         # CM.inventory.add_item(GM.items["Divine Armor"])
-        CM.inventory.add_item(GM.items["Book of Knowledge"])
+        CM.inventory.add_item(GM.items["Leather"])
+        CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         GM.world_objects = list()
         self.layers=list()
@@ -731,7 +731,6 @@ class Game:
             if GM.can_craft:
                 GM.crafting = True
                 GM.can_craft = False
-                return
             
             if GM.item_hovered != None:
                 GM.selection_held = True
@@ -904,7 +903,7 @@ class Game:
         if (
             keys[pygame.K_LEFT]
             and not GM.selection_held
-            and (GM.container_open or CM.ai.strings.bartering or GM.crafting)
+            and (GM.container_open or CM.ai.strings.bartering)
             and not CM.menu.visible
             and not CM.player_menu.visible
             and GM.container_menu_selected
@@ -946,7 +945,15 @@ class Game:
             GM.selection_held = False
             GM.enter_held = True
             GM.up_down_held = False
-
+        
+        if (keys[pygame.K_RETURN] 
+            and GM.crafting
+            and not CM.crafting.held):
+            CM.crafting.held=True
+            CM.crafting.craft()
+        else:
+            CM.crafting.held=False
+            
         if (
             keys[pygame.K_RETURN]
             and not CM.menu.visible
@@ -958,10 +965,6 @@ class Game:
         ):
             GM.selection_held = True
             GM.enter_held = False
-            
-            if GM.crafting:
-                CM.crafting.craft()
-                return
 
             if CM.ai.strings.bartering:
                 if (
@@ -1295,7 +1298,10 @@ class Game:
             CM.player_menu.render()
             
             if GM.crafting:
-                CM.crafting.draw_crafting(self.menu_font)
+                if CM.crafting.type != "upgrade":
+                    CM.crafting.draw_crafting(self.menu_font)
+                else:
+                    CM.crafting.draw_upgrade(self.menu_font)
 
             if GM.is_in_dialogue:
                 CM.ai.strings.draw()
@@ -1305,7 +1311,6 @@ class Game:
         
         # https://www.youtube.com/watch?v=RXkeWnbJlOE&list=RD_u8CpQdZLMA&index=3
         # pygame.draw.rect(GM.screen, (0, 0, 0), GM.weapon_rect)
-        
         subsurface_rect = pygame.Rect(
             0, 0, GM.screen.get_width(), GM.screen.get_height()
         )

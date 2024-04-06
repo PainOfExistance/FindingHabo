@@ -232,13 +232,9 @@ class Player:
             print(f"Cannot equip {item} in {slot}")
         if slot == "hand":
             self.range = CM.inventory.items[item]["stats"]["range"]
-            self.stats.weapon_damage = (
-                self.stats.weapon_damage + CM.inventory.items[item]["stats"]["damage"]
-            )
+            self.stats.update_weapon_damage(CM.inventory.items[item]["stats"]["damage"])
         else:
-            self.stats.defense = (
-                self.stats.defense + CM.inventory.items[item]["stats"]["damage"]
-            )
+            self.stats.update_defense(CM.inventory.items[item]["stats"]["defense"])
 
     def unequip_item(self, item):
         if item != None and "stats" in CM.inventory.items[item]:
@@ -252,14 +248,9 @@ class Player:
                 print(f"No item equipped in {slot}")
             if slot == "hand":
                 self.range = 5
-                self.stats.weapon_damage = (
-                    self.stats.weapon_damage
-                    - CM.inventory.items[item]["stats"]["damage"]
-                )
+                self.stats.update_weapon_damage(-CM.inventory.items[item]["stats"]["damage"])
             else:
-                self.stats.defense = (
-                    self.stats.defense - CM.inventory.items[item]["stats"]["damage"]
-                )
+                self.stats.update_weapon_damage(-CM.inventory.items[item]["stats"]["defense"])
 
     def to_dict(self):
         return {

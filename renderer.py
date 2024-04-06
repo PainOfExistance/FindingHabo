@@ -421,6 +421,8 @@ def draw_objects(prompt_font):
                     )
                 )
                 GM.screen.blit(text, text_rect)
+            else:
+                CM.crafting.filtered=False
             
             if (x["type"]=="activator" and x["name"]["type"]=="crafting"):
                 pygame.draw.rect(GM.screen, Colors.dark_black, other_obj_rect)

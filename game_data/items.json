@@ -3,6 +3,7 @@
         {
             "id": "itmHealing",
             "name": "Minor Health Potion",
+            "base_name": "Health Potion",
             "type": "potion",
             "description": "Restores health.",
             "price": 20,
@@ -19,6 +20,7 @@
         {
             "id": "itmKnowledge",
             "name": "Knowledge Potion",
+            "base_name": "Knowledge Potion",
             "type": "potion",
             "description": "Increases knowledge temporarily.",
             "price": 30,
@@ -35,6 +37,7 @@
         {
             "id": "itmPower",
             "name": "Power Elixir",
+            "base_name": "Power Elixir",
             "type": "potion",
             "description": "Temporarily boosts power.",
             "price": 25,
@@ -51,6 +54,7 @@
         {
             "id": "btgSword",
             "name": "Steel Sword",
+            "base_name": "Steel Sword",
             "type": "weapon",
             "description": "Steel sword.",
             "price": 40,
@@ -76,6 +80,7 @@
         {
             "id": "btgSteelArmor",
             "name": "Steel Armor",
+            "base_name": "Steel Armor",
             "type": "armor",
             "description": "Steel armor.",
             "price": 80,
@@ -100,6 +105,7 @@
         {
             "id": "btgDivineArmor",
             "name": "Divine Armor",
+            "base_name": "Divine Armor",
             "type": "armor",
             "description": "Divine armor.",
             "price": 150,
@@ -124,6 +130,7 @@
         {
             "id": "itmHeirloom",
             "name": "Heirloom",
+            "base_name": "Heirloom",
             "type": "item",
             "description": "Family heirloom.",
             "price": 50,
@@ -135,6 +142,7 @@
         {
             "id": "itmKeytolotf",
             "name": "Key to the Land of the Free",
+            "base_name": "Key to the Land of the Free",
             "type": "key",
             "description": "Key to the Land of the Free.",
             "price": 10,
@@ -145,6 +153,7 @@
         {
             "id": "itmGold",
             "name": "Gold",
+            "base_name": "Gold",
             "type": "gold",
             "description": "Gold.",
             "price": 1,
@@ -155,6 +164,7 @@
         {
             "id": "itmBook",
             "name": "Book of Knowledge",
+            "base_name": "Book of Knowledge",
             "type": "book",
             "description": "Book that contains knowledge.",
             "price": 250,
@@ -173,6 +183,29 @@
                 "used": false,
                 "args": ["max_knowledge", 10]
             }
+        },
+        {
+            "id": "itmSteel",
+            "name": "Steel",
+            "base_name": "Steel",
+            "type": "ingredient",
+            "description": "Steel slab.",
+            "price": 20,
+            "image": "textures/items/heirloom.png",
+            "dropable": true,
+            "rarity": "uncommon"
+        },
+        {
+            "id": "itmLether",
+            "name": "Leather",
+            "base_name": "Leather",
+            "type": "ingredient",
+            "description": "Leather piece.",
+            "price": 5,
+            "image": "textures/items/heirloom.png",
+            "dropable": true,
+            "rarity": "common"
         }
+
     ]
 }

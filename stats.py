@@ -50,6 +50,9 @@ class Stats:
     
     def update_weapon_damage(self, value):
         self.weapon_damage+=value
+    
+    def update_defense(self, value):
+        self.defense+=value
         
     def to_dict(self):
         return {

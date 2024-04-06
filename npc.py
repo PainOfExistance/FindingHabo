@@ -159,10 +159,9 @@ def update_npc(subtitle_font, prompt_font):
                         GM.npc_list[index]["name"]["stats"]["type"] = "enemy"
                         GM.npc_list[index]["agroved"] = True
 
-                    enemy_index = index
-                    GM.npc_list[enemy_index]["name"]["stats"][
+                    GM.npc_list[index]["name"]["stats"][
                         "health"
-                    ] -= CM.player.stats.weapon_damage
+                    ] -= int(CM.player.stats.weapon_damage)
 
                     if GM.npc_list[index]["name"]["stats"]["health"] <= 0:
                         CM.player.level.gain_experience(

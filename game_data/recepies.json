@@ -3,7 +3,7 @@
     {
       "name": "Steel Sword",
       "type": "smithing",
-      "ingredients": ["Iron", 2, "Wood", 1],
+      "ingredients": ["Steel", 2, "Wood", 1, "Leather", 1],
       "amount": 1
     },
     {
@@ -19,7 +19,7 @@
       "amount": 2
     },
     {
-        "name": "Lether",
+        "name": "Leather",
         "type": "smithing",
         "ingredients": ["Animal pelt", 1],
         "amount": 4
@@ -35,6 +35,12 @@
         "type": "cooking",
         "ingredients": ["Meat", 1, "Vegetables", 2, "Water", 1],
         "amount": 1
-    }
+    },
+    {
+        "name": "Steel Sword",
+        "type": "upgrade",
+        "ingredients": ["Steel", 1, "Leather", 1],
+        "amount": 1
+      }
   ]
 }
