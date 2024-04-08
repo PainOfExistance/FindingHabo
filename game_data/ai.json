@@ -10,7 +10,9 @@
                 "type": "patrol",
                 "movement_speed": 150,
                 "dirrection": 0,
-                "moving": false
+                "moving": false,
+                "counter": 0,
+                "prev_action": ""
             },
             "stats":{
                 "health": 100,
@@ -34,7 +36,9 @@
                 "type": "stand",
                 "movement_speed": 150,
                 "dirrection": 0,
-                "moving": false
+                "moving": false,
+                "counter": 0,
+                "prev_action": ""
             },
             "stats":{
                 "health": 50,
@@ -58,7 +62,9 @@
                 "type": "stand",
                 "movement_speed": 120,
                 "dirrection": 0,
-                "moving": false
+                "moving": false,
+                "counter": 0,
+                "prev_action": ""
             },
             "stats":{
                 "health": 150,
@@ -102,7 +108,9 @@
                 "type": "patrol",
                 "movement_speed": 100,
                 "dirrection": 0,
-                "moving": false
+                "moving": false,
+                "counter": 0,
+                "prev_action": ""
             },
             "stats":{
                 "health": 50,
@@ -127,7 +135,9 @@
                 "type": "patrol",
                 "movement_speed": 100,
                 "dirrection": 0,
-                "moving": false
+                "moving": false,
+                "counter": 0,
+                "prev_action": ""
             },
             "stats":{
                 "health": 20,

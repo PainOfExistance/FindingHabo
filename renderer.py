@@ -381,7 +381,7 @@ def draw_objects(prompt_font):
                         if GM.npc_list[ti]["name"]["stats"]["health"]<=0:
                             GM.npc_list[ti]["name"]["stats"]["status"] = "dead"
                             GM.npc_list[ti]["agroved"] = False
-                            GM.anim_tiles.append({'row': tx["rect"].left, 'col': tx["rect"].top, 'value': tx["name"]["stats"]["death_anim"], "special": "hold"})
+                            GM.anim_tiles.append({'row': tx["rect"].left, 'col': tx["rect"].top, 'value': tx["name"]["stats"]["death_anim"], "special": "hold", "counter": 0})
                         GM.world_objects[index]["name"]["trap"]+=" activated"
                             
                 if other_obj_rect.colliderect(CM.player.player_rect):

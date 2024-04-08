@@ -9,7 +9,7 @@ from game_manager import GameManager as GM
 def update_npc(subtitle_font, prompt_font):
     for index, x in enumerate(GM.npc_list):
         if GM.npc_list[index]["name"]["stats"]["status"] == "dead":
-            GM.anim_tiles.append({'row': x["rect"].top, 'col': x["rect"].left, 'value': x["name"]["stats"]["death_anim"], "special": "hold"})
+            GM.anim_tiles.append({'row': x["rect"].top, 'col': x["rect"].left, 'value': x["name"]["stats"]["death_anim"], "special": "hold", "counter": 0})
             GM.npc_list.pop(index)
 
     for index, x in enumerate(GM.npc_list):
@@ -28,7 +28,7 @@ def update_npc(subtitle_font, prompt_font):
             and not GM.crafting
         ):
             # print(x)
-            _, _, agroved, dirrection = CM.ai.attack(
+            _, _, GM.npc_list[index]["agroved"], x["name"]["movement_behavior"]["dirrection"] = CM.ai.attack(
                 x["name"]["name"],
                 (
                     (x["rect"].centerx),
@@ -42,8 +42,6 @@ def update_npc(subtitle_font, prompt_font):
                 x["rect"],
             )
 
-            GM.npc_list[index]["agroved"] = agroved
-            x["name"]["movement_behavior"]["dirrection"]=dirrection          
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = True
@@ -57,7 +55,7 @@ def update_npc(subtitle_font, prompt_font):
 
             if CM.player.player_rect.colliderect(other_obj_rect):
                 if x["attack_diff"] > x["name"]["attack_speed"]:
-                    res = CM.player.stats.defense - x["name"]["stats"]["damage"]
+                    res = CM.player.stats.defense-x["name"]["stats"]["damage"]
 
                     if res > 0:
                         res = 0
@@ -79,7 +77,7 @@ def update_npc(subtitle_font, prompt_font):
             and not GM.is_in_dialogue
             and not GM.crafting
         ):
-            _, _, dirrection = CM.ai.update(
+            _, _, x["name"]["movement_behavior"]["dirrection"] = CM.ai.update(
                 x["name"]["name"],
                 GM.collision_map,
                 x["rect"].left,
@@ -87,7 +85,6 @@ def update_npc(subtitle_font, prompt_font):
                 x["rect"],
             )
 
-            x["name"]["movement_behavior"]["dirrection"]=dirrection
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = True
@@ -121,14 +118,12 @@ def update_npc(subtitle_font, prompt_font):
                 text = subtitle_font.render(
                     GM.current_line["text"], True, Colors.mid_black
                 )
-
                 text_rect = text.get_rect(
                     center=(
                         GM.screen.get_width() // 2,
                         GM.screen.get_height() - 50,
                     )
                 )
-
                 GM.screen.blit(text, text_rect)
 
             else:
@@ -141,7 +136,7 @@ def update_npc(subtitle_font, prompt_font):
             and relative__top < GM.screen_height + 80
         ):
             if x["name"]["name"] == "Slime":
-                img, _ = CM.animation.animate_npc(x)
+                img, _ = CM.animation.animate_npc(x, index)
                 GM.screen.blit(img, (relative__left, relative__top))
             else:
                 GM.screen.blit(x["image"], (relative__left, relative__top))

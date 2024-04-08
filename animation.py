@@ -1,4 +1,5 @@
 import copy
+from re import X
 
 import pygame
 
@@ -45,7 +46,7 @@ class Animation:
         self.anim_counter = data["anim_counter"]
         self.enemy_anims = data["enemy_anims"]
     
-    def animate_npc(self, data):
+    def animate_npc(self, data, index):
         if data["name"]["movement_behavior"]["moving"]:
             action="move"
         else:
@@ -68,15 +69,14 @@ class Animation:
             case _:
                 dirrection="up"
                 
-        if self.enemy_anims[f"{data["name"]["name"].lower()}"]["prev_action"]!=f"{data["name"]["name"].lower()}_{action}_{dirrection}":
-            self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"]=0
-            self.enemy_anims[f"{data["name"]["name"].lower()}"]["prev_action"]=f"{data["name"]["name"].lower()}_{action}_{dirrection}"
-        
-        self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"] += GM.delta_time*(data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["fps"]/1.5)
-        if int(self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"])>=len(data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["frames"]):
-            self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"]=0
-        
-        tmp=int(self.enemy_anims[f"{data["name"]["name"].lower()}"]["anim_counter"])
+        if GM.npc_list[index]["name"]["movement_behavior"]["prev_action"]!=f"{data["name"]["name"].lower()}_{action}_{dirrection}":
+            GM.npc_list[index]["name"]["movement_behavior"]["counter"]=0
+            GM.npc_list[index]["name"]["movement_behavior"]["prev_action"]=f"{data["name"]["name"].lower()}_{action}_{dirrection}"
+            
+        GM.npc_list[index]["name"]["movement_behavior"]["counter"]+= GM.delta_time*(data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["fps"]/1.5)
+        tmp=int(GM.npc_list[index]["name"]["movement_behavior"]["counter"])
+        if tmp>=len(data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["frames"]):
+            GM.npc_list[index]["name"]["movement_behavior"]["counter"], tmp = 0, 0
         
         return data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["frames"][tmp], data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["rects"][tmp]
     #https://fixupx.com/francenews24/status/1768349762946838655/en
@@ -133,32 +133,37 @@ class Animation:
             and "special" not in x
             ):   
                 value_data = self.data[x["value"]]
-                value_data["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
+                x["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
                 
-                if int(value_data["counter"]) >= len(value_data["frames"]):
-                    value_data["counter"] = 0
+                tmp = int(x["counter"])
+                if tmp >= len(value_data["frames"]):
+                    x["counter"] = 0
+                    tmp = 0
                     
-                tmp = int(value_data["counter"])
                 GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
                 
             elif "special" in x:
                 if "hold" in x["special"]:
                     value_data = self.data[x["value"]]
-                    if int(value_data["counter"]) < len(value_data["frames"])-1:
-                        value_data["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
-                        
-                    tmp = int(value_data["counter"])
+                    tmp = int(x["counter"])
+                    
+                    if tmp >= len(value_data["frames"])-1:
+                        x["counter"]=len(value_data["frames"])-1
+                        tmp=len(value_data["frames"])-1
+                    else:
+                        x["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
+
                     GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
                 
                 elif "once" in x["special"]:
                     value_data = self.data[x["value"]]
-                    value_data["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
+                    x["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
                     
-                    if int(value_data["counter"]) >= len(value_data["frames"]):
+                    tmp = int(x["counter"])
+                    if tmp >= len(value_data["frames"]):
                         removing.append(i)
                         continue
                     
-                    tmp = int(value_data["counter"])
                     GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
         
         for i in removing:

@@ -1,3 +1,4 @@
+import copy
 from os import name
 
 import numpy as np
@@ -26,19 +27,23 @@ class Crafting:
             self.type = type
 
     def craft(self):
-        print("craft")
-        if self.type != "upgrade":
-            item = self.active_recepies[GM.selected_inventory_item]
-            for j in range(0, len(item["ingredients"]), 2):
-                if item["ingredients"][j] not in CM.inventory.quantity or item["ingredients"][j+1] > CM.inventory.quantity[item["ingredients"][j]]:
-                    return
+        #if self.type == "enchant":
+        #    item = self.tmp_items[GM.selected_inventory_item]
+        #    recepie = list(filter(lambda y: y['name'] == item['base_name'], self.active_recepies))[0]
+        #    for j in range(0, len(recepie["ingredients"]), 2):
+        #        if item["ingredients"][j] not in CM.inventory.quantity or recepie["ingredients"][j+1] > CM.inventory.quantity[recepie["ingredients"][j]]:
+        #            return
+#
+        #    itm = self.set_enchantment(copy.deepcoppy(item))
+        #    if itm["effect"] == item["item"]:
+        #        return
+        #    
+        #    for i in range(0, len(recepie["ingredients"]), 2):
+        #        for j in range(0, recepie["ingredients"][i+1], 1):
+        #            CM.player.remove_item(recepie["ingredients"][i])
+        #    CM.player.add_item(item["name"])
 
-            for i in range(0, len(item["ingredients"]), 2):
-                for j in range(0, item["ingredients"][i+1], 1):
-                    CM.player.remove_item(item["ingredients"][i])
-
-            CM.player.add_item(item["name"])
-        else:
+        if self.type == "upgrade":
             item = self.tmp_items[GM.selected_inventory_item]
             recepie = list(filter(lambda y: y['name'] == item['base_name'], self.active_recepies))[0]
             for j in range(0, len(recepie["ingredients"]), 2):
@@ -56,6 +61,21 @@ class Crafting:
             CM.player.remove_item(item["name"])
             item["stats"]["damage"], item["name"] = damage, name
             CM.player.add_item(item)
+            
+        else:
+            item = self.active_recepies[GM.selected_inventory_item]
+            for j in range(0, len(item["ingredients"]), 2):
+                if item["ingredients"][j] not in CM.inventory.quantity or item["ingredients"][j+1] > CM.inventory.quantity[item["ingredients"][j]]:
+                    return
+
+            for i in range(0, len(item["ingredients"]), 2):
+                for j in range(0, item["ingredients"][i+1], 1):
+                    CM.player.remove_item(item["ingredients"][i])
+
+            CM.player.add_item(item["name"])
+    
+    def set_enchantment(self, name, item):
+        pass
     
     def set_upgrade_level(self, name):
         if "weak" in name:

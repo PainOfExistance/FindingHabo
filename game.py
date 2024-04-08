@@ -1282,8 +1282,8 @@ class Game:
     def draw(self):
         GM.screen.fill((230, 60, 20))
         GM.screen.blit(GM.background, GM.bg_rect.topleft)
-        CM.animation.animate_static()
         R.draw_objects(self.prompt_font)
+        CM.animation.animate_static()
         
         if not GM.map_shown:
             CM.map.set_map(GM.background)
@@ -1298,10 +1298,10 @@ class Game:
             CM.player_menu.render()
             
             if GM.crafting:
-                if CM.crafting.type != "upgrade":
-                    CM.crafting.draw_crafting(self.menu_font)
-                else:
+                if CM.crafting.type == "upgrade":
                     CM.crafting.draw_upgrade(self.menu_font)
+                else:
+                    CM.crafting.draw_crafting(self.menu_font)
 
             if GM.is_in_dialogue:
                 CM.ai.strings.draw()
