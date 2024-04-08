@@ -58,8 +58,8 @@ class Crafting:
             CM.player.add_item(item)
     
     def set_upgrade_level(self, name):
-        if "dull" in name:
-            return GM.items[name]["stats"]["damage"], name.replace(" (dull)", "")
+        if "weak" in name:
+            return GM.items[name]["stats"]["damage"], name.replace(" (weak)", "")
         elif "elegant" in name:
             return GM.items[name]["stats"]["damage"]*1.25, name.replace(" (elegant)", " (superior)")
         elif "superior" in name:
