@@ -20,9 +20,6 @@ class Animation:
         self.in_attack=False
         self.data=assets.load_animations()
         
-    def load_anims(self, data):
-        self.enemy_anims[f"{data["name"]["name"].lower()}"]={"anim_counter": 0, "prev_action": f""}
-    
     def init_player(self):
         return self.action_images["player_walk_up"]["image"][0]
     
@@ -47,6 +44,7 @@ class Animation:
         self.enemy_anims = data["enemy_anims"]
     
     def animate_npc(self, data, index):
+        name=data["name"]["name"].lower()
         if data["name"]["movement_behavior"]["moving"]:
             action="move"
         else:
@@ -69,16 +67,16 @@ class Animation:
             case _:
                 dirrection="up"
                 
-        if GM.npc_list[index]["name"]["movement_behavior"]["prev_action"]!=f"{data["name"]["name"].lower()}_{action}_{dirrection}":
+        if GM.npc_list[index]["name"]["movement_behavior"]["prev_action"]!=f"{name}_{action}_{dirrection}":
             GM.npc_list[index]["name"]["movement_behavior"]["counter"]=0
-            GM.npc_list[index]["name"]["movement_behavior"]["prev_action"]=f"{data["name"]["name"].lower()}_{action}_{dirrection}"
-            
-        GM.npc_list[index]["name"]["movement_behavior"]["counter"]+= GM.delta_time*(data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["fps"]/1.5)
+            GM.npc_list[index]["name"]["movement_behavior"]["prev_action"]=f"{name}_{action}_{dirrection}"
+        
+        GM.npc_list[index]["name"]["movement_behavior"]["counter"]+= GM.delta_time*(self.enemy_anims[name]["images"][f"{name}_{action}_{dirrection}"]["fps"]/1.5)
         tmp=int(GM.npc_list[index]["name"]["movement_behavior"]["counter"])
-        if tmp>=len(data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["frames"]):
+        if tmp>=len(self.enemy_anims[name]["images"][f"{name}_{action}_{dirrection}"]["frames"]):
             GM.npc_list[index]["name"]["movement_behavior"]["counter"], tmp = 0, 0
         
-        return data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["frames"][tmp], data["image"][f"{data["name"]["name"].lower()}_{action}_{dirrection}"]["rects"][tmp]
+        return self.enemy_anims[name]["images"][f"{name}_{action}_{dirrection}"]["frames"][tmp], self.enemy_anims[name]["images"][f"{name}_{action}_{dirrection}"]["rects"][tmp]
     #https://fixupx.com/francenews24/status/1768349762946838655/en
     
     def player_anim(self, weapon_equiped, speed=200):

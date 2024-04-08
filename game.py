@@ -129,9 +129,10 @@ class Game:
             else:
                 images, rect=assets.load_enemy_sprites(f"textures/npc/{data[0]["stats"]["image"]}/")
                 rect.center=(data[1], data[2])
+                CM.animation.enemy_anims[data[0]["name"].lower()]={"images": images, "rect": rect, "prev_action": ""}
                 GM.npc_list.append(
                 {
-                    "image": images,
+                    "image": images[list(images.keys())[0]]["frames"][0],
                     "rect": rect,
                     "type": "npc",
                     "name": copy.deepcopy(data[0]),
