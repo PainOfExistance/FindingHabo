@@ -18,6 +18,8 @@ class Crafting:
         self.type = ""
         self.tmp_items=[]
         self.held=False
+        self.in_sub_menu=False
+        self.selected_item={}
 
     def filter_recepies(self, type):
         if isinstance(self.recepies, dict) and 'recipes' in self.recepies:
@@ -27,21 +29,27 @@ class Crafting:
             self.type = type
 
     def craft(self):
-        #if self.type == "enchant":
-        #    item = self.tmp_items[GM.selected_inventory_item]
-        #    recepie = list(filter(lambda y: y['name'] == item['base_name'], self.active_recepies))[0]
-        #    for j in range(0, len(recepie["ingredients"]), 2):
-        #        if item["ingredients"][j] not in CM.inventory.quantity or recepie["ingredients"][j+1] > CM.inventory.quantity[recepie["ingredients"][j]]:
-        #            return
-#
-        #    itm = self.set_enchantment(copy.deepcoppy(item))
-        #    if itm["effect"] == item["item"]:
-        #        return
-        #    
-        #    for i in range(0, len(recepie["ingredients"]), 2):
-        #        for j in range(0, recepie["ingredients"][i+1], 1):
-        #            CM.player.remove_item(recepie["ingredients"][i])
-        #    CM.player.add_item(item["name"])
+        if self.type == "enchanting" and not self.in_sub_menu:
+            self.in_sub_menu = True
+            self.selected_item = copy.deepcopy(self.tmp_items[GM.selected_inventory_item])
+            return
+            
+        elif self.type == "enchanting" and self.in_sub_menu:
+            recepie = self.active_recepies[GM.selected_inventory_item]
+            for j in range(0, len(recepie["ingredients"]), 2):
+                if recepie["ingredients"][j] not in CM.inventory.quantity or recepie["ingredients"][j+1] > CM.inventory.quantity[recepie["ingredients"][j]]:
+                    return
+            
+            for i in range(0, len(recepie["ingredients"]), 2):
+                for j in range(0, recepie["ingredients"][i+1], 1):
+                    CM.player.remove_item(recepie["ingredients"][i])
+                    
+            CM.player.remove_item(self.selected_item["name"])
+            self.selected_item["effect"]["name"], self.selected_item["effect"]["duration"], self.selected_item["effect"]["stat"], self.selected_item["effect"]["value"] = recepie["enchants"][0], recepie["enchants"][1], recepie["enchants"][2], recepie["enchants"][3]
+            self.selected_item["name"]=recepie["name"]+" "+self.selected_item["name"]
+            CM.player.add_item(self.selected_item)
+            self.in_sub_menu = False
+            self.selected_item = {}
 
         if self.type == "upgrade":
             item = self.tmp_items[GM.selected_inventory_item]
@@ -50,7 +58,7 @@ class Crafting:
                 if recepie["ingredients"][j] not in CM.inventory.quantity or recepie["ingredients"][j+1] > CM.inventory.quantity[recepie["ingredients"][j]]:
                     return
                 
-            damage, name = self.set_upgrade_level(item["name"])
+            damage, name = self.set_upgrade_level(item["name"], item["base_name"])
             if damage <= item["stats"]["damage"]:
                 return
             
@@ -71,25 +79,26 @@ class Crafting:
             for i in range(0, len(item["ingredients"]), 2):
                 for j in range(0, item["ingredients"][i+1], 1):
                     CM.player.remove_item(item["ingredients"][i])
-
-            CM.player.add_item(item["name"])
+            
+            for i in range(0, item["amount"], 1):
+                CM.player.add_item(item["name"])
     
     def set_enchantment(self, name, item):
         pass
     
-    def set_upgrade_level(self, name):
+    def set_upgrade_level(self, name, base_name):
         if "weak" in name:
-            return GM.items[name]["stats"]["damage"], name.replace(" (weak)", "")
+            return GM.items[base_name]["stats"]["damage"], name.replace(" (weak)", "")
         elif "elegant" in name:
-            return GM.items[name]["stats"]["damage"]*1.25, name.replace(" (elegant)", " (superior)")
+            return GM.items[base_name]["stats"]["damage"]*1.25, name.replace(" (elegant)", " (superior)")
         elif "superior" in name:
-            return GM.items[name]["stats"]["damage"]*1.4, name.replace(" (superior)", " (immaculate)")
+            return GM.items[base_name]["stats"]["damage"]*1.4, name.replace(" (superior)", " (immaculate)")
         elif "immaculate" in name:
-            return GM.items[name]["stats"]["damage"]*1.55, name.replace(" (immaculate)", " (epic)")
+            return GM.items[base_name]["stats"]["damage"]*1.55, name.replace(" (immaculate)", " (epic)")
         elif "epic" in name:
-            return GM.items[name]["stats"]["damage"]*1.7, name.replace(" (epic)", " (legendary)")
+            return GM.items[base_name]["stats"]["damage"]*1.7, name.replace(" (epic)", " (legendary)")
         else:
-            return GM.items[name]["stats"]["damage"]*1.12, name+" (elegant)"         
+            return GM.items[base_name]["stats"]["damage"]*1.12, name+" (elegant)"         
 
     def draw_crafting(self, menu_font):
         pygame.draw.rect(
@@ -193,6 +202,7 @@ class Crafting:
 
         scroll_position = (GM.selected_inventory_item // 10) * 10
         self.tmp_items = [CM.inventory.items[x] for x in CM.inventory.items if CM.inventory.items[x]['type'] in ['weapon', 'armor']]
+            
         visible_items = self.tmp_items[
             scroll_position: scroll_position + 10
         ]
@@ -263,3 +273,109 @@ class Crafting:
                     item_rect = item_render.get_rect(
                         topleft=(10, 53 + (i + 2) * 20))
                     GM.screen.blit(item_render, item_rect)
+
+    def draw_enchanting(self, menu_font):
+        pygame.draw.rect(
+            GM.bg_surface_menu,
+            Colors.bg_color,
+            GM.bg_surface_menu.get_rect(),
+        )
+        GM.screen.blit(GM.bg_surface_menu, GM.bg_menu)
+
+        pygame.draw.line(
+            GM.screen,
+            Colors.edge_color,
+            (GM.screen.get_width() // 2, 0),
+            (GM.screen.get_width() // 2, GM.screen.get_height()),
+            4,
+        )
+
+        scroll_position = (GM.selected_inventory_item // 10) * 10
+        if not self.in_sub_menu:
+            self.tmp_items = [CM.inventory.items[x] for x in CM.inventory.items if (CM.inventory.items[x]['type'] in ['weapon', 'armor'] and CM.inventory.items[x]["effect"]["name"]=="")]
+        else:
+            self.tmp_items = self.active_recepies
+
+        visible_items = self.tmp_items[
+            scroll_position: scroll_position + 10
+        ]
+
+        i = 0
+        item_render = menu_font.render(
+            CM.player.name,
+            True,
+            Colors.active_item,
+        )
+
+        item_rect = item_render.get_rect(
+            topleft=(
+                GM.screen.get_width() // 2 - GM.screen.get_width() // 3,
+                20 + i * 50,
+            )
+        )
+        GM.screen.blit(item_render, item_rect)
+
+        i += 1
+        pygame.draw.line(
+            GM.screen,
+            Colors.edge_color,
+            (0, 20 + i * 50),
+            (GM.screen.get_width(), 20 + i * 50),
+            4,
+        )
+
+        for index, data in enumerate(visible_items):
+            color = (
+                Colors.active_item
+                if index == GM.selected_inventory_item - scroll_position
+                else Colors.inactive_item
+            )
+
+            if not self.in_sub_menu:
+                if (
+                    index == GM.selected_inventory_item - scroll_position
+                ):
+                    item_text = "}"+f" {data['name']
+                                        } ({CM.inventory.quantity[data['name']]})"
+                else:
+                    item_text = f"    {
+                        data['name']} ({CM.inventory.quantity[data['name']]})"
+            else:
+                if (
+                    index == GM.selected_inventory_item - scroll_position
+                ):
+                    item_text = "}"+f" {data['name']}"
+                else:
+                    item_text = f"    {data['name']}"
+            item_render = menu_font.render(item_text, True, color)
+            item_rect = item_render.get_rect(
+                topleft=(GM.screen.get_width() // 2 +
+                         20, 20 + (index + 2) * 40)
+            )
+            GM.screen.blit(item_render, item_rect)
+            
+            if (index == GM.selected_inventory_item - scroll_position) and not self.in_sub_menu:
+                recepies = list(filter(lambda y: y['recipient'] == data['type'], self.active_recepies))
+                for recepie in recepies:
+                    for i in range(0, len(recepie["ingredients"]), 2):
+                        color = (
+                            Colors.active_item
+                            if (recepie["ingredients"][i] in CM.inventory.quantity and recepie["ingredients"][i + 1] <= CM.inventory.quantity[recepie["ingredients"][i]])
+                            else Colors.inactive_item
+                        )
+
+                        if recepie["ingredients"][i] not in CM.inventory.quantity:
+                            txt = 0
+                        else:
+                            txt = CM.inventory.quantity[recepie['ingredients'][i]]
+
+                        item_text = f"{recepie['ingredients'][i]}: {txt}/{recepie['ingredients'][i + 1]}"
+                        item_render = menu_font.render(item_text, True, color)
+                        item_rect = item_render.get_rect(
+                            topleft=(10, 53 + (i + 2) * 20))
+                        GM.screen.blit(item_render, item_rect)
+                        
+            elif self.in_sub_menu:
+                item_render = menu_font.render(self.selected_item['name'], True, color)
+                item_rect = item_render.get_rect(topleft=(10, 53 + 2 * 20))
+                GM.screen.blit(item_render, item_rect)

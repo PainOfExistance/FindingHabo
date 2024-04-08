@@ -205,7 +205,17 @@
             "image": "textures/items/heirloom.png",
             "dropable": true,
             "rarity": "common"
+        },
+        {
+            "id": "itmFireShard",
+            "name": "Fire Shard",
+            "base_name": "Fire Shard",
+            "type": "ingredient",
+            "description": "Fire shard.",
+            "price": 50,
+            "image": "textures/items/heirloom.png",
+            "dropable": true,
+            "rarity": "rare"
         }
-
     ]
 }

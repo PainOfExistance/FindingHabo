@@ -3,6 +3,7 @@ import os
 import re
 import sys
 from datetime import datetime
+from operator import is_
 
 import numpy as np
 import pygame
@@ -44,6 +45,11 @@ class Game:
         # CM.inventory.add_item(GM.items["Steel Armor"])
         # CM.inventory.add_item(GM.items["Divine Armor"])
         CM.inventory.add_item(GM.items["Leather"])
+        CM.inventory.add_item(GM.items["Leather"])
+        CM.inventory.add_item(GM.items["Leather"])
+        CM.inventory.add_item(GM.items["Fire Shard"])
+        CM.inventory.add_item(GM.items["Steel"])
+        CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         GM.world_objects = list()
@@ -783,6 +789,10 @@ class Game:
             GM.is_ready_to_talk = False
             
             if GM.crafting:
+                if CM.crafting.in_sub_menu:
+                    CM.crafting.in_sub_menu = False
+                    CM.crafting.selected_item={}
+                    return
                 GM.crafting = False
                 CM.crafting.filtered=False
                 return
@@ -814,9 +824,22 @@ class Game:
             and not GM.up_down_held
         ):
             if GM.crafting:
-                GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
+                if CM.crafting.type == "smithing" or CM.crafting.type == "alchemy":
+                    GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
                     CM.crafting.active_recepies
-                )
+                    )
+                elif CM.crafting.type == "upgrade":
+                    GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
+                    CM.crafting.tmp_items
+                    )
+                elif CM.crafting.type == "enchanting" and not CM.crafting.in_sub_menu:
+                    GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
+                    CM.crafting.tmp_items
+                    )
+                elif CM.crafting.type == "enchanting" and CM.crafting.in_sub_menu:
+                    GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
+                    CM.crafting.active_recepies
+                    )
                 GM.up_down_held = True
                 return
             
@@ -864,9 +887,22 @@ class Game:
             and not GM.up_down_held
         ):
             if GM.crafting:
-                GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
+                if CM.crafting.type == "smithing" or CM.crafting.type == "alchemy":
+                    GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
                     CM.crafting.active_recepies
-                )
+                    )
+                elif CM.crafting.type == "upgrade":
+                    GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
+                    CM.crafting.tmp_items
+                    )
+                elif CM.crafting.type == "enchanting" and not CM.crafting.in_sub_menu:
+                    GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
+                    CM.crafting.tmp_items
+                    )
+                elif CM.crafting.type == "enchanting" and CM.crafting.in_sub_menu:
+                    GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
+                    CM.crafting.active_recepies
+                    )
                 GM.up_down_held = True
                 return
             
@@ -946,13 +982,13 @@ class Game:
             GM.selection_held = False
             GM.enter_held = True
             GM.up_down_held = False
-        
+            
         if (keys[pygame.K_RETURN] 
             and GM.crafting
             and not CM.crafting.held):
             CM.crafting.held=True
             CM.crafting.craft()
-        else:
+        elif not keys[pygame.K_RETURN] and GM.crafting:
             CM.crafting.held=False
             
         if (
@@ -1299,10 +1335,12 @@ class Game:
             CM.player_menu.render()
             
             if GM.crafting:
-                if CM.crafting.type == "upgrade":
+                if CM.crafting.type == "smithing" or CM.crafting.type == "alchemy":
+                    CM.crafting.draw_crafting(self.menu_font)
+                elif CM.crafting.type == "upgrade":
                     CM.crafting.draw_upgrade(self.menu_font)
                 else:
-                    CM.crafting.draw_crafting(self.menu_font)
+                    CM.crafting.draw_enchanting(self.menu_font)
 
             if GM.is_in_dialogue:
                 CM.ai.strings.draw()

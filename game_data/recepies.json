@@ -19,28 +19,36 @@
       "amount": 2
     },
     {
-        "name": "Leather",
-        "type": "smithing",
-        "ingredients": ["Animal pelt", 1],
-        "amount": 4
+      "name": "Leather",
+      "type": "smithing",
+      "ingredients": ["Animal pelt", 1],
+      "amount": 4
     },
     {
-        "name": "Iron",
-        "type": "smithing",
-        "ingredients": ["Iron ore", 1],
-        "amount": 2
+      "name": "Iron",
+      "type": "smithing",
+      "ingredients": ["Iron ore", 1],
+      "amount": 2
     },
     {
-        "name": "Stew",
-        "type": "cooking",
-        "ingredients": ["Meat", 1, "Vegetables", 2, "Water", 1],
-        "amount": 1
+      "name": "Stew",
+      "type": "cooking",
+      "ingredients": ["Meat", 1, "Vegetables", 2, "Water", 1],
+      "amount": 1
     },
     {
-        "name": "Steel Sword",
-        "type": "upgrade",
-        "ingredients": ["Steel", 1, "Leather", 1],
-        "amount": 1
-      }
+      "name": "Steel Sword",
+      "type": "upgrade",
+      "ingredients": ["Steel", 1, "Leather", 1],
+      "amount": 1
+    },
+    {
+      "name": "Fire",
+      "type": "enchanting",
+      "ingredients": ["Fire Shard", 1],
+      "amount": 1,
+      "enchants": ["Fire Damage", 5, "health", 25],
+      "recipient": "weapon"
+    }
   ]
 }
