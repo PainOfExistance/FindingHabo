@@ -347,6 +347,12 @@ class Crafting:
                     item_text = "}"+f" {data['name']}"
                 else:
                     item_text = f"    {data['name']}"
+                    
+                for j in range(0, len(data["ingredients"]), 2):
+                    if data["ingredients"][j] not in CM.inventory.quantity or data["ingredients"][j+1] > CM.inventory.quantity[data["ingredients"][j]]:
+                        color = Colors.inactive_item
+                        break
+                    
             item_render = menu_font.render(item_text, True, color)
             item_rect = item_render.get_rect(
                 topleft=(GM.screen.get_width() // 2 +
