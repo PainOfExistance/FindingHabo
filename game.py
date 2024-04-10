@@ -52,7 +52,6 @@ class Game:
         CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
-        GM.world_objects = list()
         self.layers=list()
 
         self.setup(f"terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
