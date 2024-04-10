@@ -45,14 +45,15 @@ class Crafting:
                     CM.player.remove_item(recepie["ingredients"][i])
                     
             CM.player.remove_item(self.selected_item["name"])
-            self.selected_item["effect"]["name"], self.selected_item["effect"]["duration"], self.selected_item["effect"]["stat"], self.selected_item["effect"]["value"] = recepie["enchants"][0], recepie["enchants"][1], recepie["enchants"][2], recepie["enchants"][3]
-            self.selected_item["name"]=recepie["name"]+" "+self.selected_item["name"]
-            CM.player.add_item(self.selected_item)
+            itm=copy.deepcopy(self.selected_item)
+            itm["effect"]["name"], itm["effect"]["duration"], itm["effect"]["stat"], itm["effect"]["value"] = recepie["enchants"][0], recepie["enchants"][1], recepie["enchants"][2], recepie["enchants"][3]
+            itm["name"]=recepie["name"]+" "+itm["name"]
+            CM.player.add_item(itm)
             self.in_sub_menu = False
             self.selected_item = {}
 
         if self.type == "upgrade":
-            item = self.tmp_items[GM.selected_inventory_item]
+            item = copy.deepcopy(self.tmp_items[GM.selected_inventory_item])
             recepie = list(filter(lambda y: y['name'] == item['base_name'], self.active_recepies))[0]
             for j in range(0, len(recepie["ingredients"]), 2):
                 if recepie["ingredients"][j] not in CM.inventory.quantity or recepie["ingredients"][j+1] > CM.inventory.quantity[recepie["ingredients"][j]]:
