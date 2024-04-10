@@ -143,9 +143,9 @@ class Dialougue:
             scroll_position = (self.selected_item // 4) * 4
             self.enabled.clear()
             self.indexed.clear()
-            for value in self.strings[name]["enables"]:
-                if(self.strings[name]["options"][value]["used"]):
-                    self.enabled.append(self.strings[name]["options"][value])
+            for value in self.strings[self.name]["enables"]:
+                if(self.strings[self.name]["options"][value]["used"]):
+                    self.enabled.append(self.strings[self.name]["options"][value])
                     self.indexed.append(value)
 
             visible_options = list(self.enabled)[scroll_position : scroll_position + 4]
@@ -175,11 +175,11 @@ class Dialougue:
                 GM.screen.blit(text, text_rect)
 
             if not self.greeting_played:
-                CM.music_player.play_greeting(self.strings[name]["file"])
+                CM.music_player.play_greeting(self.strings[self.name]["file"])
                 self.greeting_played = True
 
             text = self.subtitle_font.render(
-                f"{name}: {self.strings[name]['greeting']}", True, Colors.mid_black
+                f"{self.name}: {self.strings[self.name]['greeting']}", True, Colors.mid_black
             )
 
             text_rect = text.get_rect(
@@ -243,7 +243,7 @@ class Dialougue:
             for y, line in enumerate(lines):
                 if y == 0:
                     text = self.subtitle_font.render(
-                        f"{name}: {line}", True, Colors.mid_black
+                        f"{self.name}: {line}", True, Colors.mid_black
                     )
                 else:
                     text = self.subtitle_font.render(f"{line}", True, Colors.mid_black)

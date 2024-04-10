@@ -29,7 +29,7 @@ class Crafting:
             self.type = type
 
     def craft(self):
-        if self.type == "enchanting" and not self.in_sub_menu:
+        if self.type == "enchanting" and not self.in_sub_menu and len(list(filter(lambda y: y['recipient'] == self.tmp_items[GM.selected_inventory_item]['type'], self.active_recepies))):
             self.in_sub_menu = True
             self.selected_item = copy.deepcopy(self.tmp_items[GM.selected_inventory_item])
             return
@@ -70,7 +70,7 @@ class Crafting:
             item["stats"]["damage"], item["name"] = damage, name
             CM.player.add_item(item)
             
-        else:
+        elif self.type == "smithing" or self.type == "alchemy":
             item = self.active_recepies[GM.selected_inventory_item]
             for j in range(0, len(item["ingredients"]), 2):
                 if item["ingredients"][j] not in CM.inventory.quantity or item["ingredients"][j+1] > CM.inventory.quantity[item["ingredients"][j]]:
@@ -82,9 +82,6 @@ class Crafting:
             
             for i in range(0, item["amount"], 1):
                 CM.player.add_item(item["name"])
-    
-    def set_enchantment(self, name, item):
-        pass
     
     def set_upgrade_level(self, name, base_name):
         if "weak" in name:
