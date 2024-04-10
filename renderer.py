@@ -235,6 +235,8 @@ def draw_barter(menu_font):
         GM.enter_held = False
 
 def draw_objects(prompt_font):
+    CM.crafting.filtered=False
+    GM.can_craft = False       
     can_travel = False
     for index, x in enumerate(GM.world_objects):
         if index == 0:
@@ -421,8 +423,6 @@ def draw_objects(prompt_font):
                     )
                 )
                 GM.screen.blit(text, text_rect)
-            else:
-                CM.crafting.filtered=False
             
             if (x["type"]=="activator" and x["name"]["type"]=="crafting"):
                 pygame.draw.rect(GM.screen, Colors.dark_black, other_obj_rect)

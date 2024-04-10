@@ -1,4 +1,5 @@
 import copy
+from operator import is_
 from os import name
 
 import numpy as np
@@ -20,6 +21,7 @@ class Crafting:
         self.held=False
         self.in_sub_menu=False
         self.selected_item={}
+        self.if_sure=False
 
     def filter_recepies(self, type):
         if isinstance(self.recepies, dict) and 'recipes' in self.recepies:
@@ -29,6 +31,12 @@ class Crafting:
             self.type = type
 
     def craft(self):
+        if not self.if_sure:
+            self.if_sure=True
+            return
+        elif self.if_sure:
+            self.if_sure=False
+            
         if self.type == "enchanting" and not self.in_sub_menu and len(list(filter(lambda y: y['recipient'] == self.tmp_items[GM.selected_inventory_item]['type'], self.active_recepies))):
             self.in_sub_menu = True
             self.selected_item = copy.deepcopy(self.tmp_items[GM.selected_inventory_item])
@@ -52,7 +60,7 @@ class Crafting:
             self.in_sub_menu = False
             self.selected_item = {}
 
-        if self.type == "upgrade":
+        elif self.type == "upgrade":
             item = copy.deepcopy(self.tmp_items[GM.selected_inventory_item])
             recepie = list(filter(lambda y: y['name'] == item['base_name'], self.active_recepies))[0]
             for j in range(0, len(recepie["ingredients"]), 2):
@@ -121,7 +129,7 @@ class Crafting:
 
         i = 0
         item_render = menu_font.render(
-            CM.player.name,
+            self.type,
             True,
             Colors.active_item,
         )
@@ -171,6 +179,10 @@ class Crafting:
                         if (data["ingredients"][i] in CM.inventory.quantity and data["ingredients"][i + 1] <= CM.inventory.quantity[data["ingredients"][i]])
                         else Colors.inactive_item
                     )
+                    
+                    if (data["ingredients"][i] not in CM.inventory.quantity and data["ingredients"][i + 1] > CM.inventory.quantity[data["ingredients"][i]]):
+                        self.if_sure=False
+                        
                     if data["ingredients"][i] not in CM.inventory.quantity:
                         txt = 0
                     else:
@@ -181,6 +193,20 @@ class Crafting:
                     item_rect = item_render.get_rect(
                         topleft=(10, 53 + (i + 2) * 20))
                     GM.screen.blit(item_render, item_rect)
+            
+            if self.if_sure:
+                item_render = menu_font.render(
+                    "Are you sure?",
+                    True,
+                    Colors.active_item
+                )
+                item_rect = item_render.get_rect(
+                    topleft=(
+                        GM.screen.get_width() // 2 + GM.screen.get_width() // 9,
+                        20,
+                    )
+                )
+                GM.screen.blit(item_render, item_rect)
 
     def draw_upgrade(self, menu_font):
         pygame.draw.rect(
@@ -207,7 +233,7 @@ class Crafting:
 
         i = 0
         item_render = menu_font.render(
-            CM.player.name,
+            self.type,
             True,
             Colors.active_item,
         )
@@ -260,7 +286,9 @@ class Crafting:
                         if (recepie["ingredients"][i] in CM.inventory.quantity and recepie["ingredients"][i + 1] <= CM.inventory.quantity[recepie["ingredients"][i]])
                         else Colors.inactive_item
                     )
-                    
+                    if (recepie["ingredients"][i] not in CM.inventory.quantity or recepie["ingredients"][i + 1] > CM.inventory.quantity[recepie["ingredients"][i]]):
+                        self.if_sure=False
+                        
                     if recepie["ingredients"][i] not in CM.inventory.quantity:
                         txt = 0
                     else:
@@ -271,6 +299,20 @@ class Crafting:
                     item_rect = item_render.get_rect(
                         topleft=(10, 53 + (i + 2) * 20))
                     GM.screen.blit(item_render, item_rect)
+                    
+            if self.if_sure:
+                item_render = menu_font.render(
+                    "Are you sure?",
+                    True,
+                    Colors.active_item
+                )
+                item_rect = item_render.get_rect(
+                    topleft=(
+                        GM.screen.get_width() // 2 + GM.screen.get_width() // 9,
+                        20
+                    )
+                )
+                GM.screen.blit(item_render, item_rect)
 
     def draw_enchanting(self, menu_font):
         pygame.draw.rect(
@@ -300,7 +342,7 @@ class Crafting:
 
         i = 0
         item_render = menu_font.render(
-            CM.player.name,
+            self.type,
             True,
             Colors.active_item,
         )
@@ -367,6 +409,8 @@ class Crafting:
                             if (recepie["ingredients"][i] in CM.inventory.quantity and recepie["ingredients"][i + 1] <= CM.inventory.quantity[recepie["ingredients"][i]])
                             else Colors.inactive_item
                         )
+                        if (recepie["ingredients"][i] not in CM.inventory.quantity and recepie["ingredients"][i + 1] > CM.inventory.quantity[recepie["ingredients"][i]]):
+                            self.if_sure=False
 
                         if recepie["ingredients"][i] not in CM.inventory.quantity:
                             txt = 0
@@ -382,4 +426,18 @@ class Crafting:
             elif self.in_sub_menu:
                 item_render = menu_font.render(self.selected_item['name'], True, color)
                 item_rect = item_render.get_rect(topleft=(10, 53 + 2 * 20))
+                GM.screen.blit(item_render, item_rect)
+            
+            if self.if_sure:
+                item_render = menu_font.render(
+                    "Are you sure?",
+                    True,
+                    Colors.active_item
+                )
+                item_rect = item_render.get_rect(
+                    topleft=(
+                        GM.screen.get_width() // 2 + GM.screen.get_width() // 9,
+                        20 + i * 50,
+                    )
+                )
                 GM.screen.blit(item_render, item_rect)

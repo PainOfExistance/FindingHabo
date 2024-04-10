@@ -788,6 +788,9 @@ class Game:
             GM.is_ready_to_talk = False
             
             if GM.crafting:
+                if CM.crafting.if_sure:
+                    CM.crafting.if_sure = False
+                    return
                 if CM.crafting.in_sub_menu:
                     CM.crafting.in_sub_menu = False
                     CM.crafting.selected_item={}
@@ -822,7 +825,7 @@ class Game:
             and not GM.map_shown
             and not GM.up_down_held
         ):
-            if GM.crafting:
+            if GM.crafting and not CM.crafting.if_sure:
                 if CM.crafting.type == "smithing" or CM.crafting.type == "alchemy":
                     GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
                     CM.crafting.active_recepies
@@ -885,7 +888,7 @@ class Game:
             and not GM.map_shown
             and not GM.up_down_held
         ):
-            if GM.crafting:
+            if GM.crafting and not CM.crafting.if_sure:
                 if CM.crafting.type == "smithing" or CM.crafting.type == "alchemy":
                     GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
                     CM.crafting.active_recepies
