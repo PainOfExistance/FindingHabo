@@ -203,7 +203,7 @@ class Crafting:
                 item_rect = item_render.get_rect(
                     topleft=(
                         GM.screen.get_width() // 2 + GM.screen.get_width() // 9,
-                        20,
+                        20
                     )
                 )
                 GM.screen.blit(item_render, item_rect)
@@ -437,7 +437,7 @@ class Crafting:
                 item_rect = item_render.get_rect(
                     topleft=(
                         GM.screen.get_width() // 2 + GM.screen.get_width() // 9,
-                        20 + i * 50,
+                        20
                     )
                 )
                 GM.screen.blit(item_render, item_rect)
