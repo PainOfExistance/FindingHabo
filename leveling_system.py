@@ -34,6 +34,7 @@ class LevelingSystem:
             base_experience
             + (experience_increment * (increment_multiplier ** (current_level - 2)))
         )
+        #(75 x (Next Level - 1))+200 
     
     def to_dict(self):
         return {
