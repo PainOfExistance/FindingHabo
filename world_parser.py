@@ -81,10 +81,10 @@ def setContainer(item):
                             tmp.append(y)
         elif "level_list" in x:
             types = x.split(" ")[1:]
-            items=CM.level_list.generate_level_list(types, item["number_of_items"][i])
-            for y in items:
+            level_items=CM.level_list.generate_level_list(types, item["number_of_items"][i])
+            for y in level_items:
                 tmp.append(y)
-                num_of_items.append(items[y])
+                num_of_items.append(level_items[y])
         else:
             for y in items:
                 if item["chance"][i] >= random.random() and item["items"][i] == y:
