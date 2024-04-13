@@ -10,6 +10,7 @@ from colors import Colors
 from game import Game
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
+from level_list import LevelList
 from menu import Menu
 from player import Player
 from player_menu import PlayerMenu
@@ -85,6 +86,7 @@ class MainMenu:
             #pygame.display.update()
             
             CM.player = Player()
+            CM.level_list=LevelList()
             CM.menu = Menu()
             CM.player_menu = PlayerMenu()
             CM.ai = Ai()
@@ -113,6 +115,7 @@ class MainMenu:
             #pygame.display.update()
             
             CM.player = Player()
+            CM.level_list=LevelList()
             CM.ai = Ai()
             GM.save_name=f"{selected_option}.habo"
             CM.player.from_dict(assets.load(f"saves/{selected_option}.habo"))

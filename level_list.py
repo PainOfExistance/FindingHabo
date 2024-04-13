@@ -18,31 +18,26 @@ class LevelList:
         
     def generate_level_list(self, item_type, amount):
         max_items=random.randint(max(1, amount-5), amount)
-        item_level_list = []
+        item_level_list = {}
         filtered_items, weight=self.__set_item_rarity_list(item_type)
         items=random.choices(filtered_items, weights=weight, k=max_items)
         for x in items:
-            item_level_list.append({"type":x["name"], "quantity": random.randint(1,3)})
+            if x["name"] in item_level_list:
+                item_level_list[x["name"]]+=1
+            else:
+                item_level_list[x["name"]]=1
         return item_level_list
 
     def __set_item_rarity_list(self, item_type):
         if(CM.player.level.level<9):
-            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["type"]["rarity"] in self.common)]
-            weights=[self.rarity_table[GM.items[x]["type"]["rarity"]] for x in GM.items]
-            return items, weights
+            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["rarity"] in self.common)]
         elif(CM.player.level.level<19):
-            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["type"]["rarity"] in self.uncommon)]
-            weights=[self.rarity_table[GM.items[x]["type"]["rarity"]] for x in GM.items]
-            return items, weights
+            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["rarity"] in self.uncommon)]
         elif(CM.player.level.level<29):
-            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["type"]["rarity"] in self.rare)]
-            weights=[self.rarity_table[GM.items[x]["type"]["rarity"]] for x in GM.items]
-            return items, weights
+            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["rarity"] in self.rare)]
         elif(CM.player.level.level<39):
-            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["type"]["rarity"] in self.very_rare)]
-            weights=[self.rarity_table[GM.items[x]["type"]["rarity"]] for x in GM.items]
-            return items, weights
+            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["rarity"] in self.very_rare)]
         else:
-            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["type"]["rarity"] in self.epic)]
-            weights=[self.rarity_table[GM.items[x]["type"]["rarity"]] for x in GM.items]
-            return items, weights
+            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["rarity"] in self.epic)]
+        weights=[self.rarity_table[x["rarity"]] for x in items]
+        return items, weights

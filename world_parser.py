@@ -79,6 +79,12 @@ def setContainer(item):
                         else:
                             num_of_items.append(item["number_of_items"][i])
                             tmp.append(y)
+        elif "level_list" in x:
+            types = x.split(" ")[1:]
+            items=CM.level_list.generate_level_list(types, item["number_of_items"][i])
+            for y in items:
+                tmp.append(y)
+                num_of_items.append(items[y])
         else:
             for y in items:
                 if item["chance"][i] >= random.random() and item["items"][i] == y:

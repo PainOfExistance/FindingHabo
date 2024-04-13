@@ -180,7 +180,7 @@ class Crafting:
                         else Colors.inactive_item
                     )
                     
-                    if (data["ingredients"][i] not in CM.inventory.quantity and data["ingredients"][i + 1] > CM.inventory.quantity[data["ingredients"][i]]):
+                    if (data["ingredients"][i] not in CM.inventory.quantity or data["ingredients"][i + 1] > CM.inventory.quantity[data["ingredients"][i]]):
                         self.if_sure=False
                         
                     if data["ingredients"][i] not in CM.inventory.quantity:

@@ -85,3 +85,4 @@ class ClassManager:
     map=None
     script_loader=ScriptLoader()
     crafting=None
+    level_list=None

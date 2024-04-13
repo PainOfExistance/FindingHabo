@@ -18,6 +18,7 @@ from colors import Colors
 from crafting import Crafting
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
+from level_list import LevelList
 from map import Map
 from music_player import MusicPlayer
 from script_loader import ScriptLoader
@@ -53,6 +54,8 @@ class Game:
         CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         self.layers=list()
+        ee=CM.level_list.generate_level_list(["weapon", "armor", "ingredient", "key", "gold", "book"], 10)
+        print(ee)
 
         self.setup(f"terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
         CM.player.quests.dialogue = CM.ai.strings
