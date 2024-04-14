@@ -224,10 +224,6 @@ def get_stored_data(path, file_name="data_modified.world"):
         data = json.load(file)
         return data
 
-def pilImageToSurface(pilImage):
-    mode, size, data = pilImage.mode, pilImage.size, pilImage.tobytes()
-    return pygame.image.fromstring(data, size, mode).convert_alpha()
-
 def load_enemy_sprites(path):
     files_in_folder = os.listdir(os.path.dirname(path))
     images={}
@@ -238,18 +234,17 @@ def load_enemy_sprites(path):
         images[os.path.splitext(os.path.basename(file))[0]]=({"frames": frames, "rects": rects, "fps": fps})
     return images, copy.deepcopy(rect)
 
+def pilImageToSurface(pilImage):
+    mode, size, data = pilImage.mode, pilImage.size, pilImage.tobytes()
+    return pygame.image.fromstring(data, size, mode).convert_alpha()
+
 def load_sprites(gif_path):
     pilImage = Image.open(gif_path)
     frames = []
     rects = []
-    fps = pilImage.info.get('duration', 100) # Default to 100ms if duration is not available
-    if pilImage.format == 'GIF' and pilImage.is_animated:
-        for frame in ImageSequence.Iterator(pilImage):
-            pygameImage = pilImageToSurface(frame.convert('RGBA'))
-            frames.append(pygameImage)
-            rects.append(pygameImage.get_rect())
-    else:
-        pygameImage = pilImageToSurface(pilImage)
+    fps = pilImage.info.get('duration', 100)
+    for frame in ImageSequence.Iterator(pilImage):
+        pygameImage = pilImageToSurface(frame.convert('RGBA'))
         frames.append(pygameImage)
         rects.append(pygameImage.get_rect())
     fps=fps/len(frames)
