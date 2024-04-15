@@ -138,7 +138,7 @@ def parser(world):
             for y in world["entities"][x]:
                 tmp = setEnemies(y["customFields"])
                 if tmp:
-                    enemies.append((GM.ai_package[tmp], y["x"], y["y"], y["iid"]))
+                    enemies.append((copy.deepcopy(GM.ai_package[tmp]), y["x"], y["y"], y["iid"]))
 
         elif x == "Item_field":
             for y in world["entities"][x]:

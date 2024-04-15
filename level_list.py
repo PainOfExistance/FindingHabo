@@ -17,7 +17,7 @@ class LevelList:
         self.epic=["common", "uncommon", "rare", "very rare", "epic"]
         self.rarity_table={"common": 0.85, "uncommon": 0.7, "rare": 0.55, "very rare": 0.4, "epic": 0.25}
     
-    def generate_inventroy(self, item_type, amount, rarity):
+    def generate_inventory(self, item_type, amount, rarity):
         if rarity in self.epic:
             item_list=self.generate_level_list(item_type, amount, rarity)
         else:
@@ -27,7 +27,7 @@ class LevelList:
         for item in item_list:
             final_list.append({"type": item, "quantity": item_list[item]})
             
-        return final_list
+        return item_list, final_list
         
     def generate_level_list(self, item_type, amount, rarity=""):
         max_items=random.randint(max(1, amount-5), amount)

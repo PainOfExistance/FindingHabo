@@ -1,3 +1,5 @@
+import copy
+
 import pygame
 
 import puzzle
@@ -10,13 +12,21 @@ def update_npc(subtitle_font, prompt_font):
     for index, x in enumerate(GM.npc_list):
         if GM.npc_list[index]["name"]["stats"]["status"] == "dead":
             GM.anim_tiles.append({'row': x["rect"].top, 'col': x["rect"].left, 'value': x["name"]["stats"]["death_anim"], "special": "hold", "counter": 0})
+            img = CM.animation.data[x["name"]["stats"]["death_anim"]]["frames"][-1]
+            rect = img.get_rect()
+            rect.left = x["rect"].left
+            rect.top = x["rect"].top
+            itm=copy.deepcopy(GM.npc_list[index]["name"]["items"])
+            itm_nums=[x["quantity"] for x in itm]
+            data = (itm, x["rect"].left, x["rect"].top, GM.npc_list[index]["name"]["name"], 'textures/static/chest.jpg', itm_nums, None, "", False)
+            GM.world_objects.append({"image": img, "rect": rect, "type": "container", "name": data, "pedistal": data[6], "iid": data[7]})
             GM.npc_list.pop(index)
 
     for index, x in enumerate(GM.npc_list):
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
         x["name"]["movement_behavior"]["moving"] = False
-        agrov=False
+        agrov = False
         if (
             "stats" in x["name"]
             and "status" in x["name"]["stats"]
@@ -37,17 +47,17 @@ def update_npc(subtitle_font, prompt_font):
             )
             if not CM.player.player_rect.colliderect(other_obj_rect):
                 _, _, GM.npc_list[index]["agroved"], x["name"]["movement_behavior"]["dirrection"] = CM.ai.attack(
-                x["name"]["name"],
-                (
-                    (x["rect"].centerx),
-                    (x["rect"].centery),
-                ),
-                (
-                    (GM.relative_player_left + GM.relative_player_right) // 2,
-                    (GM.relative_player_top + GM.relative_player_bottom) // 2,
-                ),
-                GM.collision_map,
-                x["rect"],
+                    x["name"]["name"],
+                    (
+                        (x["rect"].centerx),
+                        (x["rect"].centery),
+                    ),
+                    (
+                        (GM.relative_player_left + GM.relative_player_right) // 2,
+                        (GM.relative_player_top + GM.relative_player_bottom) // 2,
+                    ),
+                    GM.collision_map,
+                    x["rect"],
                 )
                 x["name"]["movement_behavior"]["moving"] = True
 
@@ -55,7 +65,7 @@ def update_npc(subtitle_font, prompt_font):
             relative__top = int(GM.bg_rect.top + x["rect"].top)
 
             if CM.player.player_rect.colliderect(other_obj_rect):
-                agrov=True
+                agrov = True
                 if x["attack_diff"] > x["name"]["attack_speed"]:
                     res = CM.player.stats.defense-x["name"]["stats"]["damage"]
 
@@ -113,7 +123,8 @@ def update_npc(subtitle_font, prompt_font):
             if line != None and GM.line_time < GM.counter:
                 GM.current_line = line
                 GM.line_time = (
-                    CM.music_player.play_line(GM.current_line["file"]) + GM.counter
+                    CM.music_player.play_line(
+                        GM.current_line["file"]) + GM.counter
                 )
 
             if GM.current_line != None and GM.line_time >= GM.counter:

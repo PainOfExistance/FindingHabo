@@ -8,6 +8,7 @@ from operator import is_
 import numpy as np
 import pygame
 from pygame.locals import *
+from tqdm import TqdmSynchronisationWarning
 
 import asset_loader as assets
 import npc as N
@@ -54,8 +55,6 @@ class Game:
         CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         self.layers=list()
-        ee=CM.level_list.generate_level_list(["weapon", "armor", "ingredient", "key", "gold", "book"], 10)
-        print(ee)
 
         self.setup(f"terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
         CM.player.quests.dialogue = CM.ai.strings
@@ -120,9 +119,20 @@ class Game:
         CM.animation.enemy_anims.clear()
         for data in npcs:
             if "inventory_type" in data[0]["stats"]:
-                tmp=data[0]["stats"]["inventory_type"].split("_")
-                data[0]["items"]+=CM.level_list.generate_inventroy(tmp, int(tmp[-1]), tmp[0])
-                
+                inventory_type = data[0]["stats"]["inventory_type"].split("_")
+                inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
+
+                if len(data[0]["items"]) > 0:
+                    item_list = []
+                    for item in data[0]["items"]:
+                        if item["type"] in inventory:
+                            item["quantity"] = inventory[item["type"]] + item["quantity"]
+                            inventory.pop(item["type"])
+                    for item in inventory:
+                        item_list.append({"type": item, "quantity": inventory[item]})
+
+                data[0]["items"] = item_list
+
             if "png" in data[0]["stats"]["image"]:
                 img, img_rect = assets.load_images(
                 data[0]["stats"]["image"], (64, 64), (data[1], data[2])

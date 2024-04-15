@@ -23,8 +23,11 @@
                 "rarity": "common",
                 "group": "wolf",
                 "mutable": true,
+                "inventory_type": "common_potion_1",
                 "image": "textures/npc/wolf.png"
-            }
+            },
+            "items": [
+            ]
         },
         {
             "name": "Goblin",
@@ -49,8 +52,11 @@
                 "rarity": "common",
                 "group": "goblin",
                 "mutable": true,
+                "inventory_type": "common_weapon_3",
                 "image": "textures/npc/goblin.png"
-            }
+            },
+            "items": [
+            ]
         },
         {
             "name": "Merchant",
@@ -122,8 +128,11 @@
                 "group": "bandit",
                 "mutable": true,
                 "image": "textures/npc/merchant.png",
+                "inventory_type": "common_weapon_armor_6",
                 "death_anim": 1000
-            }
+            },
+            "items": [
+            ]
         },
         {
             "name": "Slime",
@@ -149,8 +158,11 @@
                 "group": "slime",
                 "mutable": true,
                 "image": "slime",
+                "inventory_type": "common_potion_1",
                 "death_anim": 1001
-            }
+            },
+            "items": [
+            ]
         }
     ]
 }
