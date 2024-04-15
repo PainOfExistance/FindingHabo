@@ -16,6 +16,7 @@ def update_npc(subtitle_font, prompt_font):
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
         x["name"]["movement_behavior"]["moving"] = False
+        agrov=False
         if (
             "stats" in x["name"]
             and "status" in x["name"]["stats"]
@@ -28,7 +29,14 @@ def update_npc(subtitle_font, prompt_font):
             and not GM.crafting
         ):
             # print(x)
-            _, _, GM.npc_list[index]["agroved"], x["name"]["movement_behavior"]["dirrection"] = CM.ai.attack(
+            other_obj_rect = pygame.Rect(
+                relative__left,
+                relative__top,
+                x["rect"].width,
+                x["rect"].height,
+            )
+            if not CM.player.player_rect.colliderect(other_obj_rect):
+                _, _, GM.npc_list[index]["agroved"], x["name"]["movement_behavior"]["dirrection"] = CM.ai.attack(
                 x["name"]["name"],
                 (
                     (x["rect"].centerx),
@@ -40,20 +48,14 @@ def update_npc(subtitle_font, prompt_font):
                 ),
                 GM.collision_map,
                 x["rect"],
-            )
+                )
+                x["name"]["movement_behavior"]["moving"] = True
 
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
-            x["name"]["movement_behavior"]["moving"] = True
-
-            other_obj_rect = pygame.Rect(
-                relative__left,
-                relative__top,
-                x["rect"].width,
-                x["rect"].height,
-            )
 
             if CM.player.player_rect.colliderect(other_obj_rect):
+                agrov=True
                 if x["attack_diff"] > x["name"]["attack_speed"]:
                     res = CM.player.stats.defense-x["name"]["stats"]["damage"]
 
@@ -136,7 +138,7 @@ def update_npc(subtitle_font, prompt_font):
             and relative__top < GM.screen_height + 80
         ):
             if x["name"]["name"] == "Slime":
-                img, _ = CM.animation.animate_npc(x, index)
+                img, _ = CM.animation.animate_npc(x, index, agrov)
                 GM.screen.blit(img, (relative__left, relative__top))
             else:
                 GM.screen.blit(x["image"], (relative__left, relative__top))

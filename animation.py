@@ -43,13 +43,13 @@ class Animation:
         self.anim_counter = data["anim_counter"]
         self.enemy_anims = data["enemy_anims"]
     
-    def animate_npc(self, data, index):
+    def animate_npc(self, data, index, agrov):
         name=data["name"]["name"].lower()
         if data["name"]["movement_behavior"]["moving"]:
             action="move"
         else:
             action="idle"
-        if data["agroved"]:
+        if agrov:
             action="attack"
         match data["name"]["movement_behavior"]["dirrection"]:
             case 1:
