@@ -1,4 +1,5 @@
 import random
+from typing import final
 
 import numpy as np
 
@@ -15,11 +16,23 @@ class LevelList:
         self.very_rare=["common", "uncommon", "rare", "very rare"]
         self.epic=["common", "uncommon", "rare", "very rare", "epic"]
         self.rarity_table={"common": 0.85, "uncommon": 0.7, "rare": 0.55, "very rare": 0.4, "epic": 0.25}
+    
+    def generate_inventroy(self, item_type, amount, rarity):
+        if rarity in self.epic:
+            item_list=self.generate_level_list(item_type, amount, rarity)
+        else:
+            item_list=self.generate_level_list(item_type, amount)
         
-    def generate_level_list(self, item_type, amount):
+        final_list=[]
+        for item in item_list:
+            final_list.append({"type": item, "quantity": item_list[item]})
+            
+        return final_list
+        
+    def generate_level_list(self, item_type, amount, rarity=""):
         max_items=random.randint(max(1, amount-5), amount)
         item_level_list = {}
-        filtered_items, weight=self.__set_item_rarity_list(item_type)
+        filtered_items, weight=self.__set_item_rarity_list(item_type, rarity)
         items=random.choices(filtered_items, weights=weight, k=max_items)
         for x in items:
             if x["name"] in item_level_list:
@@ -28,7 +41,9 @@ class LevelList:
                 item_level_list[x["name"]]=1
         return item_level_list
 
-    def __set_item_rarity_list(self, item_type):
+    def __set_item_rarity_list(self, item_type, rarity):
+        if rarity!="":
+            items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["rarity"]==rarity)]
         if(CM.player.level.level<9):
             items = [GM.items[x] for x in GM.items if (GM.items[x]['type'] in item_type and GM.items[x]["rarity"] in self.common)]
         elif(CM.player.level.level<19):

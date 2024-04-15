@@ -75,7 +75,7 @@
                 "rarity": "unique",
                 "group": "Merchant",
                 "mutable": false,
-                "inventory_type": "common",
+                "inventory_type": "common_weapon_armor_potion_10",
                 "image": "textures/npc/merchant.png"
             },
             "gold": 500,

@@ -290,13 +290,26 @@ def remove_uniques(original, modified):
     tmp=[]
     for i, _ in enumerate(orig_enemies):
         if orig_enemies[i][0]["stats"]["rarity"]=="unique":
+                
+            in_mod=False
+            for j in mod_enemies:
+                if orig_enemies[i][0]["name"]==j[0]["name"]:
+                    in_mod=True
+                    if "items" in orig_enemies[i][0]:
+                        orig_enemies[i][0]["items"]=copy.deepcopy(j[0]["items"])
+                    
+            if not in_mod and orig_enemies[i][0]["stats"]["rarity"]=="unique":
+                orig_enemies.pop(i)
+
+    for i, _ in enumerate(orig_enemies):
+        if orig_enemies[i][0]["stats"]["rarity"]=="unique":
             in_mod=False
             for j in mod_enemies:
                 if orig_enemies[i][0]["name"]==j[0]["name"]:
                     in_mod=True
                     
             if not in_mod and orig_enemies[i][0]["stats"]["rarity"]=="unique":
-                orig_enemies.pop(i)
+                orig_enemies.pop(i)  
             
     for i, _ in enumerate(orig_final_items):
         if GM.items[orig_final_items[i][0]]["rarity"]=="unique":

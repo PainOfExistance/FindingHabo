@@ -119,6 +119,10 @@ class Game:
                 
         CM.animation.enemy_anims.clear()
         for data in npcs:
+            if "inventory_type" in data[0]["stats"]:
+                tmp=data[0]["stats"]["inventory_type"].split("_")
+                data[0]["items"]+=CM.level_list.generate_inventroy(tmp, int(tmp[-1]), tmp[0])
+                
             if "png" in data[0]["stats"]["image"]:
                 img, img_rect = assets.load_images(
                 data[0]["stats"]["image"], (64, 64), (data[1], data[2])
