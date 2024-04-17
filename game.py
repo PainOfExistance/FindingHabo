@@ -2,24 +2,22 @@ import copy
 import os
 import re
 import sys
+import threading
 from datetime import datetime
-from operator import is_
+from multiprocessing import Pool
 
 import numpy as np
 import pygame
 from pygame.locals import *
-from tqdm import TqdmSynchronisationWarning
 
 import asset_loader as assets
 import npc as N
 import renderer as R
 import world_parser as wp
-from ai import Ai
 from colors import Colors
 from crafting import Crafting
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
-from level_list import LevelList
 from map import Map
 from music_player import MusicPlayer
 from script_loader import ScriptLoader
@@ -276,6 +274,7 @@ class Game:
         directory, _ = os.path.split(metadata["background"])
     
         for layer in metadata["layers"]:
+            
             new_filepath = os.path.join(directory, layer)
             bg, _ =assets.load_background(new_filepath)
             self.layers.append(bg)
@@ -325,7 +324,7 @@ class Game:
             self.last_frame_time = current_time
             GM.time_diff += GM.delta_time
             GM.counter += GM.delta_time
-            
+            print(GM.delta_time)
             if GM.load:
                 GM.load = False
                 self.travel()
@@ -1339,6 +1338,9 @@ class Game:
         GM._scr.blit(text, text_rect)
         pygame.display.flip()
 
+    def blit_layer(self, layer):
+        GM.screen.blit(layer, GM.bg_rect.topleft)
+
     def draw(self):
         GM.screen.fill((230, 60, 20))
         GM.screen.blit(GM.background, GM.bg_rect.topleft)
@@ -1349,8 +1351,13 @@ class Game:
             CM.map.set_map(GM.background)
             N.update_npc(self.subtitle_font, self.prompt_font)
             CM.player.draw()  # .lulekSprulek.123.fafajMi)
-            for layer in self.layers:
-                GM.screen.blit(layer, GM.bg_rect.topleft)
+            #for layer in self.layers:
+            #    #threading.Thread(target=GM.screen.blit, args=(layer, GM.bg_rect.topleft)).start()
+            #    GM.screen.blit(layer, GM.bg_rect.topleft)
+            
+            with Pool() as p:
+                p.map(self.blit_layer, self.layers)
+                
             CM.player.quests.draw_quest_info()
             R.draw_container(self.menu_font)
             R.draw_barter(self.menu_font)

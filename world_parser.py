@@ -176,7 +176,7 @@ def parser(world):
                 world["entities"][x][0]["customFields"]["music"][i] = world["entities"][
                     x
                 ][0]["customFields"]["music"][i][3:]
-            world["entities"][x][0]["customFields"]["layers"]=world["layers"][2:]
+            world["entities"][x][0]["customFields"]["layers"]=world["layers"][1:]
             metadata = world["entities"][x][0]["customFields"]
             
         elif x == "Activator":

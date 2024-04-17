@@ -14,5 +14,55 @@
 		"Grass.png",
 		"Top_layer.png"
 	],
-	"entities" : {}
+	"entities": {
+		"Player_spawn": [
+			{
+				"id": "Player_spawn",
+				"iid": "41abb430-d7b0-11ee-a225-ff92454fd973",
+				"layer": "LeveL_Data",
+				"x": 1624,
+				"y": 2376,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "default",
+					"unlocked_by": "",
+					"locked": false,
+					"world_to_load": "worlds/simplified/Dream_City/data.json",
+					"world_name": null,
+					"spawn_point": {
+						"cx": 101,
+						"cy": 146
+					}
+				}
+			}
+		],
+		"Metadata": [
+			{
+				"id": "Metadata",
+				"iid": "599f24a0-d7b0-11ee-a225-73e35a3e0ef7",
+				"layer": "LeveL_Data",
+				"x": 24,
+				"y": 24,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"name": "Dream City",
+					"respawn_timer": 20,
+					"time_passed": 0,
+					"music": [
+						"../sounds/bgm/DOVAHKIIN.mp3",
+						"../sounds/bgm/Angelia.mp3",
+						"../sounds/bgm/RadioGaGa.mp3",
+						"../sounds/bgm/Sladka kot med.mp3",
+						"../sounds/bgm/V put.mp3"
+					],
+					"collision_set": "terrain/worlds/simplified/Dream_City/Collision-int.png",
+					"background": "terrain/worlds/simplified/Dream_City/_composite.png"
+				}
+			}
+		]
+	}
 }
