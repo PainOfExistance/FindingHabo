@@ -111,7 +111,7 @@ class Player:
         self.depleted_rect.width = min(
             self.stats.health / self.stats.max_health * 150, 150
         )
-        self.depleted_rect.center = (GM.screen_width // 2, GM.screen_height - 60)
+        self.depleted_rect.center = (80, GM.screen_height - 60)
     
     def update_power(self, power):
         self.stats.update_power(power)
@@ -155,12 +155,12 @@ class Player:
             self.effects.effects[stat]["amount"] += amount
             self.stats.update_max_power(amount)
         elif stat == "power":
-            self.stats.update_power(amount)
+            self.update_power(amount)
         elif stat == "max_knowledge":
             self.effects.effects[stat]["amount"] += amount
             self.stats.update_max_knowlage(amount)
         elif stat == "knowledge":
-            self.stats.update_knowlage(amount)
+            self.update_knowlage(amount)
         elif stat == "weapon_damage":
             self.effects.effects[stat]["amount"] += amount
             self.stats.update_weapon_damage(amount)
