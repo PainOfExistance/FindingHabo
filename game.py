@@ -1260,6 +1260,10 @@ class Game:
                 print(f"attacked with a: {CM.player.equipped_items['hand']}")
                 GM.time_diff = 0
                 self.diff = pygame.time.get_ticks()
+                if CM.player.equipped_items["hand"] == None or CM.inventory.items[CM.player.equipped_items['hand']]["stats"]["hand"]=="one":
+                    CM.player.update_stats("power", -5)
+                else:
+                    CM.player.update_stats("power", -10)
                 
         elif GM.attacking:
             print("no longer attacking")

@@ -52,20 +52,44 @@ class Player:
             min(self.stats.health / self.stats.max_health * 150, 150),
             18,
         )
-
         self.border_rect = pygame.Rect(
             (GM.screen_width // 2 - 150 // 2) - 2,
             GM.screen_height - 20,
             154,
             20,
         )
-        self.depleted_rect.center = (GM.screen_width // 2, GM.screen_height - 10)
-        self.border_rect.center = (GM.screen_width // 2, GM.screen_height - 10)
-
-        self.text = self.font.render("Health", True, Colors.active_item)
-        self.text_rect = self.text.get_rect(
-            center=(GM.screen_width // 2, GM.screen_height - 12)
+        self.depleted_rect.center = (80, GM.screen_height - 60)
+        self.border_rect.center = (80, GM.screen_height - 60)
+        
+        self.depleted_rect2 = pygame.Rect(
+            GM.screen_width // 2 - 150 // 2,
+            GM.screen_height - 19,
+            min(self.stats.power / self.stats.max_power * 150, 150),
+            18,
         )
+        self.border_rect2 = pygame.Rect(
+            (GM.screen_width // 2 - 150 // 2) - 2,
+            GM.screen_height - 20,
+            154,
+            20,
+        )
+        self.depleted_rect2.center = (80, GM.screen_height - 37)
+        self.border_rect2.center = (80, GM.screen_height - 37)
+        
+        self.depleted_rect3 = pygame.Rect(
+            GM.screen_width // 2 - 150 // 2,
+            GM.screen_height - 19,
+            min(self.stats.knowlage / self.stats.max_knowlage * 150, 150),
+            18,
+        )
+        self.border_rect3 = pygame.Rect(
+            (GM.screen_width // 2 - 150 // 2) - 2,
+            GM.screen_height - 20,
+            154,
+            20,
+        )
+        self.depleted_rect3.center = (80, GM.screen_height - 14)
+        self.border_rect3.center = (80, GM.screen_height - 14)
 
         self.equipped_items = {
             "hand": None,
@@ -87,11 +111,23 @@ class Player:
         self.depleted_rect.width = min(
             self.stats.health / self.stats.max_health * 150, 150
         )
-        self.depleted_rect.center = (GM.screen_width // 2, GM.screen_height - 10)
+        self.depleted_rect.center = (GM.screen_width // 2, GM.screen_height - 60)
+    
+    def update_power(self, power):
+        self.stats.update_power(power)
 
-    def update_max_health(self, health):
-        self.stats.update_max_health(health)
-        self.update_health(self.stats.max_health)
+        self.depleted_rect2.width = min(
+            self.stats.power / self.stats.max_power * 150, 150
+        )
+        self.depleted_rect2.center = (80, GM.screen_height - 37)
+    
+    def update_knowlage(self, knowlage):
+        self.stats.update_knowlage(knowlage)
+
+        self.depleted_rect3.width = min(
+            self.stats.knowlage / self.stats.max_knowlage * 150, 150
+        )
+        self.depleted_rect3.center = (80, GM.screen_height - 14)
 
     def add_trait(self, index):
         amount, stat = self.level.traits.add_trait(
@@ -100,7 +136,10 @@ class Player:
         if amount != None:
             self.effects.effects[stat]["amount"] += amount
             self.update_stats(stat, amount)
-
+            self.update_health(self.stats.max_health)
+            self.update_power(self.stats.max_power)
+            self.update_knowlage(self.stats.max_knowlage)
+            
     def check_trait_conditions(self, index):
         return self.level.traits.check_trait_conditions(
             list(self.level.traits.traits.keys())[index], self.level.level
@@ -109,7 +148,7 @@ class Player:
     def update_stats(self, stat, amount):
         if stat == "max_health":
             self.effects.effects[stat]["amount"] += amount
-            self.update_max_health(amount)
+            self.stats.update_max_health(amount)
         elif stat == "health":
             self.update_health(amount)
         elif stat == "max_power":
@@ -365,13 +404,27 @@ class Player:
         new_rect.bottom = self.player_rect.bottom + 11
 
         GM.screen.blit(self.player, new_rect.topleft)
+        
         pygame.draw.rect(
             GM.screen, Colors.dark_black, self.border_rect, border_radius=10
         )
         pygame.draw.rect(
             GM.screen, Colors.communist_red, self.depleted_rect, border_radius=10
+        )     
+        
+        pygame.draw.rect(
+            GM.screen, Colors.dark_black, self.border_rect2, border_radius=10
         )
-        GM.screen.blit(self.text, self.text_rect)
+        pygame.draw.rect(
+            GM.screen, Colors.green, self.depleted_rect2, border_radius=10
+        )
+        
+        pygame.draw.rect(
+            GM.screen, Colors.dark_black, self.border_rect3, border_radius=10
+        )
+        pygame.draw.rect(
+            GM.screen, Colors.blue, self.depleted_rect3, border_radius=10
+        )
 
     def draw_book(self):
         lines=self.handle_input()

@@ -10,3 +10,5 @@ class Colors:
     green = (90, 180, 90)
     dark_black = (6, 11, 11)
     mid_black = (22, 22, 22)
+    green = (55, 115, 55)
+    blue = (40, 55, 125)
