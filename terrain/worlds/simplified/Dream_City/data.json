@@ -10,8 +10,8 @@
 	"customFields" : {},
 	"layers": [
 		"BG.png",
-		"Dirt_path.png",
 		"Walls.png",
+		"Grass.png",
 		"Top_layer.png"
 	],
 	"entities" : {}
