@@ -81,7 +81,6 @@ class Game:
         )
         self.prev=(0,0)
 
-
     def setup_loaded(self, portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes):
         metadata["collision_set"] = re.sub(r'\\+', r'\\', metadata["collision_set"])
         metadata["background"] = re.sub(r'\\+', r'\\', metadata["background"])
@@ -311,7 +310,7 @@ class Game:
                 )
         GM.world_to_travel_to = None
         CM.player.quests.dialogue = CM.ai.strings
-    
+
     def run(self):
         while True:
             # Calculate delta time (time since last frame)
@@ -322,7 +321,6 @@ class Game:
             self.last_frame_time = current_time
             GM.time_diff += GM.delta_time
             GM.counter += GM.delta_time
-            print(GM.delta_time)
             if GM.load:
                 GM.load = False
                 self.travel()
@@ -334,7 +332,7 @@ class Game:
             self.draw()
             GM.game_date.increment_seconds()
             CM.player.check_experation(GM.delta_time)
-            
+            print(GM.delta_time)
             if (
                 not CM.player_menu.visible
                 and not GM.tab_pressed

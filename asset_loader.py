@@ -6,6 +6,7 @@ import os
 import cv2
 import numpy as np
 import pygame
+from numba import jit
 from PIL import Image, ImageSequence
 
 from game_manager import ClassManager as CM

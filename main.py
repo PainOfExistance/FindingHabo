@@ -3,7 +3,6 @@ import sys
 
 import numpy as np
 import pygame
-import screeninfo
 
 from game_manager import GameManager as GM
 from main_menu import MainMenu
