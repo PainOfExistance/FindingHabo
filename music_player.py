@@ -11,7 +11,6 @@ class MusicPlayer:
         pygame.mixer.init()
         pygame.mixer.music.set_endevent(pygame.USEREVENT)
         pygame.mixer.music.set_volume(0.3)
-        self.play_random_track()
         self.sound=None
         self.channel=None
 

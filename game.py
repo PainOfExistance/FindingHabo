@@ -297,7 +297,8 @@ class Game:
         GM.bg_rect.top = -offset[1]
 
         CM.player.player_rect.left = spawn_point[0] - offset[0]
-        CM.player.player_rect.top = spawn_point[1] - offset[1]        
+        CM.player.player_rect.top = spawn_point[1] - offset[1]   
+        CM.music_player.play_random_track()     
 
     def travel(self):
         self.loading()
