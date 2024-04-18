@@ -318,7 +318,8 @@ class Game:
             current_time = pygame.time.get_ticks()
             GM.delta_time = (
                 current_time - self.last_frame_time
-            ) / 1000.0  # Convert to seconds
+            ) / 1000.0
+            
             self.last_frame_time = current_time
             GM.time_diff += GM.delta_time
             GM.counter += GM.delta_time
