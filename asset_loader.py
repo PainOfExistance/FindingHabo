@@ -16,7 +16,7 @@ def load_images(path, size, center):
     if path==None:
         path = "textures/Emblema_KGB.svg.png"
     # Load and return images as needed
-    img = pygame.image.load(path)
+    img = pygame.image.load(path).convert_alpha()
     if size!=(0,0):
         img = pygame.transform.scale(img, size)
     img_rect = img.get_rect()
@@ -25,7 +25,7 @@ def load_images(path, size, center):
 
 def load_player(path):
     # Load player image
-    player = pygame.image.load(path)
+    player = pygame.image.load(path).convert_alpha()
     player = pygame.transform.scale(player, (32, 64))
     player_rect = player.get_rect()
     return player, player_rect
@@ -40,14 +40,14 @@ def load_player_sprites():
             img, _, fps=load_sprites(path)
             rects.clear()
             for i in range(len(img)):
-                img[i] = pygame.transform.scale(img[i], (img[i].get_width()*2, img[i].get_height()*2.5))
+                img[i] = pygame.transform.scale(img[i], (img[i].get_width()*2, img[i].get_height()*2.5)).convert_alpha()
                 rects.append(img[i].get_rect())
             image_list[key] = {"image": img, "rect": rects, "fps": fps}
     return image_list
 
 def load_background(path):
     # Load bg image
-    bg = pygame.image.load(path)
+    bg = pygame.image.load(path).convert_alpha()
     bg_rect = bg.get_rect()
     return bg, bg_rect
 

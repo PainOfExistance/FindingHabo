@@ -8,6 +8,7 @@ from multiprocessing import Pool
 
 import numpy as np
 import pygame
+import pygame._sdl2 as sdl2
 from pygame.locals import *
 
 import asset_loader as assets
@@ -52,12 +53,11 @@ class Game:
         CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
-        self.layers=list()
+        self.layer=pygame.Surface((GM.screen.get_width(), GM.screen.get_height()))
 
         self.setup(f"terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
         CM.player.quests.dialogue = CM.ai.strings
         self.clock = pygame.time.Clock()
-        self.target_fps = 60
         self.last_frame_time = pygame.time.get_ticks()
         self.on_a_diagonal = False
         CM.map=Map()
@@ -79,8 +79,8 @@ class Game:
         GM.bg_surface_menu = pygame.Surface(
             (GM.bg_menu.width, GM.bg_menu.height), pygame.SRCALPHA
         )
-        
         self.prev=(0,0)
+
 
     def setup_loaded(self, portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes):
         metadata["collision_set"] = re.sub(r'\\+', r'\\', metadata["collision_set"])
@@ -272,12 +272,10 @@ class Game:
         CM.music_player = MusicPlayer(metadata["music"])
         GM.background, GM.bg_rect = assets.load_background(metadata["background"])
         directory, _ = os.path.split(metadata["background"])
-    
         for layer in metadata["layers"]:
-            
             new_filepath = os.path.join(directory, layer)
             bg, _ =assets.load_background(new_filepath)
-            self.layers.append(bg)
+            self.layer.blit(bg, (0, 0))
             
         GM.collision_map, GM.anim_tiles = assets.load_collision(metadata["collision_set"])
         GM.map_height = GM.collision_map.shape[0]
@@ -336,6 +334,7 @@ class Game:
             self.draw()
             GM.game_date.increment_seconds()
             CM.player.check_experation(GM.delta_time)
+            
             if (
                 not CM.player_menu.visible
                 and not GM.tab_pressed
@@ -382,7 +381,7 @@ class Game:
             else:
                 R.check_notes()
 
-            self.clock.tick(self.target_fps)
+            self.clock.tick(60)
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -1338,9 +1337,6 @@ class Game:
         GM._scr.blit(text, text_rect)
         pygame.display.flip()
 
-    def blit_layer(self, layer):
-        GM.screen.blit(layer, GM.bg_rect.topleft)
-
     def draw(self):
         GM.screen.fill((230, 60, 20))
         GM.screen.blit(GM.background, GM.bg_rect.topleft)
@@ -1351,12 +1347,7 @@ class Game:
             CM.map.set_map(GM.background)
             N.update_npc(self.subtitle_font, self.prompt_font)
             CM.player.draw()  # .lulekSprulek.123.fafajMi)
-            #for layer in self.layers:
-            #    #threading.Thread(target=GM.screen.blit, args=(layer, GM.bg_rect.topleft)).start()
-            #    GM.screen.blit(layer, GM.bg_rect.topleft)
-            
-            with Pool() as p:
-                p.map(self.blit_layer, self.layers)
+            GM.screen.blit(self.layer, GM.bg_rect.topleft)
                 
             CM.player.quests.draw_quest_info()
             R.draw_container(self.menu_font)
@@ -1384,9 +1375,9 @@ class Game:
             0, 0, GM.screen.get_width(), GM.screen.get_height()
         )
         subsurface = GM.screen.subsurface(subsurface_rect)
-        
         streched = pygame.transform.scale(
             subsurface, (GM._scr.get_width(), GM._scr.get_height())
         )
+        
         GM._scr.blit(streched, (0, 0))
         pygame.display.flip()

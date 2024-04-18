@@ -11,25 +11,17 @@ from main_menu import MainMenu
 pygame.init()
 display=pygame.display.get_desktop_sizes()
 
-file_path = "./textures/logo.png"
-if os.path.isfile(file_path):
-    pygame_icon = pygame.image.load(file_path)
-    pygame.display.set_icon(pygame_icon)
-else:
-    print(f"No file '{file_path}' found.")
-
+pygame.display.set_icon(pygame.image.load("./textures/logo.png"))
 pygame.mouse.set_visible(False) 
 pygame.event.set_grab(True)
 screen_width, screen_height = display[0][0], display[0][1]
-screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
+screen = pygame.display.set_mode((1280, 720), vsync=0, flags= pygame.SCALED | pygame.RESIZABLE)
 GM._scr=screen
 GM.screen=pygame.Surface((1280, 720))
 pygame.display.set_caption("Finding Habo")
 if __name__ == "__main__":
     menu=MainMenu()
     menu.run()
-    pygame.quit()
-    sys.exit()
 
 
 """
