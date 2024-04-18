@@ -2,6 +2,8 @@ import math
 
 import numpy as np
 
+from game_manager import GameManager as GM
+
 
 class Stats:
     def __init__(self):
@@ -26,6 +28,7 @@ class Stats:
             self.health = self.max_health
         elif self.health < 0:
             self.health = 0
+            GM.dead=True
             
     def update_max_power(self, value):
         self.max_power+=value      

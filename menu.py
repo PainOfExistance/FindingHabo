@@ -118,7 +118,7 @@ class Menu:
             pygame.quit()
             sys.exit()
         elif self.in_sub_menu == 1:
-            if self.action == "Save":
+            if self.action == "Save" and not GM.dead:
                 tmp = assets.save()
                 if tmp:
                     saves = glob.glob(os.path.join("saves", "*.habo"))
@@ -141,7 +141,7 @@ class Menu:
                 CM.game.__init__()
                 self.visible = False
                 CM.game.run()
-            elif self.action == "Overwrite" and len(self.saves) > 0:
+            elif self.action == "Overwrite" and len(self.saves) > 0 and not GM.dead:
                 os.remove(f"saves/{selected_option}.habo")
                 assets.save()
                 saves = glob.glob(os.path.join("saves", "*.habo"))

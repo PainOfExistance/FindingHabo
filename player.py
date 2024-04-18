@@ -27,7 +27,7 @@ class Player:
         self.quests = Quests()
         self.name = f"Player"
         self.gold = 1000
-        self.current_world = f"Dream World"
+        self.current_world = f"Dream City"
         self.range = 5
         self.active_effects = []
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
@@ -41,7 +41,7 @@ class Player:
                 string.ascii_uppercase + string.digits + string.ascii_lowercase, k=32
             )
         )
-        # self.hash = "Player"
+        self.been_dead = False
 
         self.player = CM.animation.init_player()
         self.player_rect = pygame.Rect(600, 500, 32, 53)
@@ -397,13 +397,17 @@ class Player:
         return lines
     
     def draw(self):
-        self.player, new_rect = CM.animation.player_anim(
-            self.equipped_items["hand"], self.movement_speed
-        )
-        new_rect.center = self.player_rect.center
-        new_rect.bottom = self.player_rect.bottom + 11
+        if not GM.dead:
+            self.player, new_rect = CM.animation.player_anim(
+                self.equipped_items["hand"], self.movement_speed
+            )
+            new_rect.center = self.player_rect.center
+            new_rect.bottom = self.player_rect.bottom + 11
 
-        GM.screen.blit(self.player, new_rect.topleft)
+            GM.screen.blit(self.player, new_rect.topleft)
+        elif GM.dead and not self.been_dead:
+            self.been_dead = True
+            GM.anim_tiles.append({'row': GM.relative_player_top, 'col': GM.relative_player_left, 'value': 1991, "special": "hold", "counter": 0})
         
         pygame.draw.rect(
             GM.screen, Colors.dark_black, self.border_rect, border_radius=10

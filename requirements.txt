@@ -2,4 +2,3 @@ numpy
 pygame
 opencv-python
 pillow
-numba

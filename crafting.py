@@ -79,7 +79,7 @@ class Crafting:
             item["stats"]["damage"], item["name"] = damage, name
             CM.player.add_item(item)
             
-        elif self.type == "smithing" or self.type == "alchemy":
+        elif self.type == "smithing" or self.type == "alchemy" or self.type == "coocking":
             item = self.active_recepies[GM.selected_inventory_item]
             for j in range(0, len(item["ingredients"]), 2):
                 if item["ingredients"][j] not in CM.inventory.quantity or item["ingredients"][j+1] > CM.inventory.quantity[item["ingredients"][j]]:

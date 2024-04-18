@@ -12,6 +12,7 @@ from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from level_list import LevelList
 from menu import Menu
+from music_player import MusicPlayer
 from player import Player
 from player_menu import PlayerMenu
 
@@ -28,6 +29,8 @@ class MainMenu:
         saves = glob.glob(os.path.join("saves", "*.habo"))
         self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves[::-1]]
         self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 40)  
+        CM.music_player = MusicPlayer("sounds/bgm/DOVAHKIIN.mp3")
+        CM.music_player.play_random_track()
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
@@ -194,6 +197,9 @@ class MainMenu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.is_menu_visible = False
+                                
+                if event.type == pygame.USEREVENT:
+                    CM.music_player.update()
 
             GM._scr.fill(Colors.dark_black)
             self.handle_input()

@@ -241,9 +241,7 @@ class Game:
         
         #print(GM.world_objects)
 
-    def setup(
-        self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"
-    ):
+    def setup(self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"):
         GM.world_objects.clear()
         GM.npc_list.clear()
         
@@ -268,7 +266,6 @@ class Game:
             spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes = wp.parser(level_data)
             self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
         
-        CM.music_player = MusicPlayer(metadata["music"])
         GM.background, GM.bg_rect = assets.load_background(metadata["background"])
         directory, _ = os.path.split(metadata["background"])
         for layer in metadata["layers"]:
@@ -298,6 +295,7 @@ class Game:
 
         CM.player.player_rect.left = spawn_point[0] - offset[0]
         CM.player.player_rect.top = spawn_point[1] - offset[1]   
+        CM.music_player.set_tracks(metadata["music"])
         CM.music_player.play_random_track()     
 
     def travel(self):
@@ -327,21 +325,19 @@ class Game:
                 GM.load = False
                 self.travel()
             
-            if GM.can_move:
+            if not GM.dead:
                 self.handle_input()
                 
             self.handle_events()
             self.draw()
             GM.game_date.increment_seconds()
             CM.player.check_experation(GM.delta_time)
-            print(GM.delta_time)
             if (
                 not CM.player_menu.visible
                 and not GM.tab_pressed
                 and not GM.container_open
                 and not GM.is_in_dialogue
                 and not GM.map_shown
-                and GM.can_move
                 and not GM.crafting
             ):
                 CM.menu.handle_input()
@@ -352,7 +348,7 @@ class Game:
                 and not GM.container_open
                 and not GM.is_in_dialogue
                 and not GM.map_shown
-                and GM.can_move
+                and not GM.dead
                 and not GM.crafting
             ):
                 CM.player_menu.handle_input()
@@ -364,7 +360,7 @@ class Game:
                 and not CM.player_menu.visible
                 and not CM.menu.visible
                 and not GM.map_shown
-                and GM.can_move
+                and not GM.dead
                 and not GM.crafting
             ):
                 CM.ai.strings.handle_input()
@@ -417,19 +413,19 @@ class Game:
         
         keys = pygame.key.get_pressed()
 
-        if CM.player.player_rect.left <= 10:
+        if CM.player.player_rect.left <= 60:
             GM.bg_rect.move_ip(movement, 0)
             CM.player.player_rect.move_ip(movement, 0)
 
-        if CM.player.player_rect.right >= GM.screen_width - 10:
+        if CM.player.player_rect.right >= GM.screen_width - 60:
             GM.bg_rect.move_ip(-movement, 0)
             CM.player.player_rect.move_ip(-movement, 0)
             
-        if CM.player.player_rect.top <= 10:
+        if CM.player.player_rect.top <= 60:
             GM.bg_rect.move_ip(0, movement)
             CM.player.player_rect.move_ip(0, movement)
             
-        if CM.player.player_rect.bottom >= GM.screen_height - 10:
+        if CM.player.player_rect.bottom >= GM.screen_height - 60:
             GM.bg_rect.move_ip(0, -movement)
             CM.player.player_rect.move_ip(0, -movement)
 
@@ -451,12 +447,11 @@ class Game:
             and not GM.map_shown
             and not GM.crafting
         ):
-            if CM.player.player_rect.left > 10:
-                CM.player.player_rect.move_ip(-movement, 0)
-                if GM.rotation_angle != 90:
-                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
-                    GM.rotation_angle = 90
-                GM.moving = True
+            CM.player.player_rect.move_ip(-movement, 0)
+            if GM.rotation_angle != 90:
+                # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
+                GM.rotation_angle = 90
+            GM.moving = True
 
         elif (
             keys[pygame.K_a]
@@ -528,12 +523,11 @@ class Game:
             and not GM.map_shown
             and not GM.crafting
         ):
-            if CM.player.player_rect.right < GM.screen_width - 10:
-                CM.player.player_rect.move_ip(movement, 0)
-                if GM.rotation_angle != 270:
-                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
-                    GM.rotation_angle = 270
-                GM.moving = True
+            CM.player.player_rect.move_ip(movement, 0)
+            if GM.rotation_angle != 270:
+                # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
+                GM.rotation_angle = 270
+            GM.moving = True
 
         elif (
             keys[pygame.K_d]
@@ -604,12 +598,11 @@ class Game:
             and not GM.map_shown
             and not GM.crafting
         ):
-            if CM.player.player_rect.top > 10:
-                CM.player.player_rect.move_ip(0, -movement)
-                if GM.rotation_angle != 0:
-                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
-                    GM.rotation_angle = 0
-                GM.moving = True
+            CM.player.player_rect.move_ip(0, -movement)
+            if GM.rotation_angle != 0:
+                # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
+                GM.rotation_angle = 0
+            GM.moving = True
 
         elif (
             keys[pygame.K_w]
@@ -680,12 +673,11 @@ class Game:
             and not GM.map_shown
             and not GM.crafting
         ):
-            if CM.player.player_rect.bottom < GM.screen_height - 10:
-                CM.player.player_rect.move_ip(0, movement)
-                if GM.rotation_angle != 180:
-                    # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
-                    GM.rotation_angle = 180
-                GM.moving = True
+            CM.player.player_rect.move_ip(0, movement)
+            if GM.rotation_angle != 180:
+                # CM.player.player = pygame.transform.rotate(CM.player.player, GM.rotation_angle)
+                GM.rotation_angle = 180
+            GM.moving = True
 
         elif (
             keys[pygame.K_s]
@@ -1347,8 +1339,8 @@ class Game:
             CM.map.set_map(GM.background)
             N.update_npc(self.subtitle_font, self.prompt_font)
             CM.player.draw()  # .lulekSprulek.123.fafajMi)
+
             GM.screen.blit(self.layer, GM.bg_rect.topleft)
-                
             CM.player.quests.draw_quest_info()
             R.draw_container(self.menu_font)
             R.draw_barter(self.menu_font)
@@ -1356,7 +1348,7 @@ class Game:
             CM.player_menu.render()
             
             if GM.crafting:
-                if CM.crafting.type == "smithing" or CM.crafting.type == "alchemy":
+                if CM.crafting.type == "smithing" or CM.crafting.type == "alchemy" or CM.crafting.type == "coocking":
                     CM.crafting.draw_crafting(self.menu_font)
                 elif CM.crafting.type == "upgrade":
                     CM.crafting.draw_upgrade(self.menu_font)

@@ -60,7 +60,7 @@ class GameManager:
     screen_height_scr=0
     ratio=(0,0)
     can_fast_travel=True
-    can_move=True
+    dead=False
     anim_tiles=[[]]
     crafting=False
     can_craft=False
