@@ -13,7 +13,8 @@
 		"Walls.png",
 		"Grass.png",
 		"Fences.png",
-		"Top_layer.png"
+		"Top_layer.png",
+		"Temple.png"
 	],
 	"entities": {
 		"Player_spawn": [

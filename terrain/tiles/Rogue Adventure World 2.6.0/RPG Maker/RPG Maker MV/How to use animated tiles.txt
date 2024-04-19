@@ -1,0 +1,25 @@
+Dear valued customer,
+
+Thank you for purchasing my asset pack!
+Rogue Adventure animated tiles contains 4 frames, which are looped through the 
+directions of the sprite not a stepping event.
+To use the animated tiles, create one event, select the animated sprite that you
+want to use, at "Autonomous Movement" set "Type: Custom" and "Freq: 5: Highest".
+Now let's set the "Route..." as the following:
+
+Turn Down 
+Wait 15ms
+Turn Left
+Wait 15ms
+Turn Right 
+Wait 15ms
+Turn Up
+Wait 15ms
+
+Don't forget to tick "Repeat Movements" so the animation keep playing.
+A screenshot has been added for reference.
+
+Have fun! 
+
+Best regards,
+ElvGames
