@@ -35,7 +35,7 @@ class Player:
         self.title_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 30)
         self.book_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 26)
         CM.animation = Animation()
-        self.movement_speed = 125
+        self.movement_speed = 120
         GM.game_date = GameDate()
         self.hash = "".join(
             random.choices(

@@ -33,7 +33,6 @@ class Game:
         
         GM.items = assets.load_items()
         GM.ai_package = assets.load_ai_package()
-        self.loader = ScriptLoader()
         self.prompt_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 20)
         self.subtitle_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 28)
         self.menu_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 34)
