@@ -13,7 +13,7 @@ class LevelingSystem:
         self.experience = 0
         self.required_experience = 100
         self.traits = Traits()
-        self.trait_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
+        self.trait_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 28)
 
     def gain_experience(self, amount):
         self.experience += amount

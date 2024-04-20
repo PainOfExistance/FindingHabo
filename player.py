@@ -31,9 +31,9 @@ class Player:
         self.current_world = f"Dream City"
         self.range = 5
         self.active_effects = []
-        self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 18)
-        self.title_font = pygame.font.Font("fonts/SovngardeBold.ttf", 30)
-        self.book_font = pygame.font.Font("fonts/SovngardeBold.ttf", 26)
+        self.font = pygame.font.Font("./fonts/SovngardeBold.ttf", 18)
+        self.title_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 30)
+        self.book_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 26)
         CM.animation = Animation()
         self.movement_speed = 125
         GM.game_date = GameDate()

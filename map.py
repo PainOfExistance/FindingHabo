@@ -23,7 +23,7 @@ class Map:
         self.bottom_right_rect = pygame.Rect(GM.screen_width-20, 20, 20, GM.screen_height-20)
         self.map_rect=None
         self.zoom=1
-        self.prompt_font = pygame.font.Font("fonts/SovngardeBold.ttf", 20)
+        self.prompt_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 20)
         
     def set_map(self, map):
         self.full_map = map

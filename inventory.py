@@ -13,7 +13,7 @@ class Inventory:
     def __init__(self):
         self.items = {}
         self.quantity = {}
-        self.inventory_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
+        self.inventory_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 28)
         
     def add_item(self, item):
         name = item["name"]

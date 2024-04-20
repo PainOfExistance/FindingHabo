@@ -10,7 +10,7 @@ from game_manager import GameManager as GM
 class Effects:
     def __init__(self):
         self.effects = assets.load_effects()
-        self.effects_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
+        self.effects_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 28)
     
     def to_dict(self):
         return {

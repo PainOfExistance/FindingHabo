@@ -24,7 +24,7 @@
                 "group": "wolf",
                 "mutable": true,
                 "inventory_type": "common_potion_1",
-                "image": "textures/npc/wolf.png"
+                "image": "./textures/npc/wolf.png"
             },
             "items": [
             ]
@@ -53,7 +53,7 @@
                 "group": "goblin",
                 "mutable": true,
                 "inventory_type": "common_weapon_3",
-                "image": "textures/npc/goblin.png"
+                "image": "./textures/npc/goblin.png"
             },
             "items": [
             ]
@@ -82,7 +82,7 @@
                 "group": "Merchant",
                 "mutable": false,
                 "inventory_type": "common_weapon_armor_potion_10",
-                "image": "textures/npc/merchant.png"
+                "image": "./textures/npc/merchant.png"
             },
             "gold": 500,
             "items": [
@@ -127,7 +127,7 @@
                 "rarity": "uncommon",
                 "group": "bandit",
                 "mutable": true,
-                "image": "textures/npc/merchant.png",
+                "image": "./textures/npc/merchant.png",
                 "inventory_type": "common_weapon_armor_6",
                 "death_anim": 1000
             },

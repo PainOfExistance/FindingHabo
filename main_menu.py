@@ -26,10 +26,10 @@ class MainMenu:
         GM.screen_height = GM._scr.get_height()
         self.is_menu_visible = True
         self.in_sub_menu = 0
-        saves = glob.glob(os.path.join("saves", "*.habo"))
+        saves = glob.glob(os.path.join("./saves", "*.habo"))
         self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves[::-1]]
-        self.font = pygame.font.Font("fonts/SovngardeBold.ttf", 40)  
-        CM.music_player = MusicPlayer("sounds/bgm/DOVAHKIIN.mp3")
+        self.font = pygame.font.Font("./fonts/SovngardeBold.ttf", 40)  
+        CM.music_player = MusicPlayer("./sounds/bgm/DOVAHKIIN.mp3")
         CM.music_player.play_random_track()
 
     def handle_input(self):
@@ -59,8 +59,8 @@ class MainMenu:
         
         elif keys[pygame.K_r] and not self.selection_held and len(self.saves) > 0:
             selected_option = self.saves[self.selected_item]
-            os.remove(f"saves/{selected_option}.habo")
-            saves = glob.glob(os.path.join("saves", "*.habo"))
+            os.remove(f"./saves/{selected_option}.habo")
+            saves = glob.glob(os.path.join("./saves", "*.habo"))
             self.saves = [os.path.splitext(os.path.basename(filename))[0] for filename in saves[::-1]]
             self.selection_held = True
 

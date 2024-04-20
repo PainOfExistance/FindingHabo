@@ -26,17 +26,17 @@ from script_loader import ScriptLoader
 
 class Game:
     def __init__(self):
-        for item in os.listdir("terrain\worlds\simplified"):
-            item_path=f"terrain\worlds\simplified\{item}\{CM.player.hash}\data_modified.world"
+        for item in os.listdir("./terrain\worlds\simplified"):
+            item_path=f"./terrain\worlds\simplified\{item}\{CM.player.hash}\data_modified.world"
             if os.path.isfile(item_path):
                 os.remove(item_path)
         
         GM.items = assets.load_items()
         GM.ai_package = assets.load_ai_package()
         self.loader = ScriptLoader()
-        self.prompt_font = pygame.font.Font("fonts/SovngardeBold.ttf", 20)
-        self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
-        self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
+        self.prompt_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 20)
+        self.subtitle_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 28)
+        self.menu_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 34)
         CM.crafting = Crafting()
 
         CM.inventory.add_item(GM.items["Minor Health Potion"])
@@ -55,7 +55,7 @@ class Game:
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         self.layer=pygame.Surface((GM.screen.get_width(), GM.screen.get_height()))
 
-        self.setup(f"terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
+        self.setup(f"./terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
         CM.player.quests.dialogue = CM.ai.strings
         self.clock = pygame.time.Clock()
         self.last_frame_time = pygame.time.get_ticks()
@@ -146,7 +146,7 @@ class Game:
                 }
                 )
             else:
-                images, rect=assets.load_enemy_sprites(f"textures/npc/{data[0]["stats"]["image"]}/")
+                images, rect=assets.load_enemy_sprites(f"./textures/npc/{data[0]["stats"]["image"]}/")
                 rect.center=(data[1], data[2])
                 CM.animation.enemy_anims[data[0]["name"].lower()]={"images": images, "rect": rect, "prev_action": ""}
                 GM.npc_list.append(
@@ -166,7 +166,7 @@ class Game:
         for data in portals:
             if "unlocked_by" in data[0]:
                 img, img_rect = assets.load_images(
-                    "textures\static\door.png", (64, 64), (data[1], data[2])
+                    "./textures\static\door.png", (64, 64), (data[1], data[2])
                 )
                 GM.world_objects.append(
                     {
@@ -179,7 +179,7 @@ class Game:
                 )
             else:
                 img, img_rect = assets.load_images(
-                    "textures\\static\\barrier.png", (data[4], data[5]), (data[1], data[2])
+                    "./textures\\static\\barrier.png", (data[4], data[5]), (data[1], data[2])
                 )
                 GM.world_objects.append(
                     {
@@ -241,7 +241,7 @@ class Game:
         
         #print(GM.world_objects)
 
-    def setup(self, path="terrain/worlds/simplified/Dream_World/data.json", type="default"):
+    def setup(self, path="./terrain/worlds/simplified/Dream_World/data.json", type="default"):
         GM.world_objects.clear()
         GM.npc_list.clear()
         
@@ -304,7 +304,7 @@ class Game:
         GM.world_objects[GM.world_to_travel_to["index"]]["name"]["locked"] = False
         assets.world_save()
         self.setup(
-                    "terrain/" + GM.world_to_travel_to["world_to_load"],
+                    "./terrain/" + GM.world_to_travel_to["world_to_load"],
                     GM.world_to_travel_to["type"],
                 )
         GM.world_to_travel_to = None
@@ -1321,7 +1321,7 @@ class Game:
 
     def loading(self):
         GM._scr.fill((255,255,255))
-        font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
+        font = pygame.font.Font("./fonts/SovngardeBold.ttf", 34)
         text = font.render("Loading...", True, Colors.edge_color)
         text_rect = text.get_rect(
             center=(GM.screen.get_width() // 2, GM.screen.get_height() // 2.5)

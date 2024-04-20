@@ -38,13 +38,13 @@ class MusicPlayer:
         pygame.mixer.music.stop()
 
     def play_line(self, line):
-        sound = pygame.mixer.Sound(f"sounds/dialogue/{line}.mp3")
+        sound = pygame.mixer.Sound(f"./sounds/dialogue/{line}.mp3")
         sound.play()
         sound.set_volume(0.2)
         return sound.get_length()
 
     def play_current_line(self, line):
-        self.sound = pygame.mixer.Sound(f"sounds/dialogue/{line}.mp3")
+        self.sound = pygame.mixer.Sound(f"./sounds/dialogue/{line}.mp3")
         self.channel = self.sound.play()
         self.sound.set_volume(0.3)
 
@@ -55,7 +55,7 @@ class MusicPlayer:
         self.channel=None
 
     def play_greeting(self, line):
-        self.sound = pygame.mixer.Sound(f"sounds/dialogue/{line}.mp3")
+        self.sound = pygame.mixer.Sound(f"./sounds/dialogue/{line}.mp3")
         self.sound.set_volume(0.3)
         self.sound.get_length()
         self.sound.play()

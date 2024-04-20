@@ -5,12 +5,12 @@ import sys
 
 class ScriptLoader:
     def __init__(self):
-        self.script_dir = "scripts/"
+        self.script_dir = "./scripts/"
         self.scripts = {}
-        for script in os.listdir("scripts/"):
+        for script in os.listdir("./scripts/"):
             if script.endswith('.py'):
                 script_name = os.path.splitext(script)[0]
-                self.scripts[script_name] = os.path.join("scripts/", script)
+                self.scripts[script_name] = os.path.join("./scripts/", script)
 
     def run_script(self, script_name, function_name, *args, **kwargs):
         # Get the path of the script from the scripts dictionary

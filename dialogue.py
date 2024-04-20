@@ -31,8 +31,8 @@ class Dialougue:
         self.starts = 0
         self.advances = 0
         
-        self.subtitle_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
-        self.option_font = pygame.font.Font("fonts/SovngardeBold.ttf", 24)
+        self.subtitle_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 28)
+        self.option_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 24)
         
         self.bg_menu = pygame.Rect(
             25,

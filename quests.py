@@ -15,8 +15,8 @@ class Quests:
         self.tics = 0
         self.text_to_draw = []
         self.dialogue = None
-        self.quests_font = pygame.font.Font("fonts/SovngardeBold.ttf", 28)
-        self.quest_start_font = pygame.font.Font("fonts/SovngardeBold.ttf", 36)
+        self.quests_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 28)
+        self.quest_start_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 36)
         self.name=""
 
     def advance_quest(self, id):

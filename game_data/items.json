@@ -7,7 +7,7 @@
             "type": "potion",
             "description": "Restores health.",
             "price": 20,
-            "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - RED - 0000.png",
+            "image": "./textures/items/potions/ALL Potions - First Frame/Small Vial - RED - 0000.png",
             "dropable": true,
             "rarity": "common",
             "effect": {
@@ -24,7 +24,7 @@
             "type": "potion",
             "description": "Increases knowledge temporarily.",
             "price": 30,
-            "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - BLUE - 0000.png",
+            "image": "./textures/items/potions/ALL Potions - First Frame/Small Vial - BLUE - 0000.png",
             "dropable": true,
             "rarity": "common",
             "effect": {
@@ -41,7 +41,7 @@
             "type": "potion",
             "description": "Temporarily boosts power.",
             "price": 25,
-            "image": "textures/items/potions/ALL Potions - First Frame/Small Vial - TEAL - 0000.png",
+            "image": "./textures/items/potions/ALL Potions - First Frame/Small Vial - TEAL - 0000.png",
             "dropable": true,
             "rarity": "uncommon",
             "effect": {
@@ -58,7 +58,7 @@
             "type": "weapon",
             "description": "Steel sword.",
             "price": 40,
-            "image": "textures/items/steel_sword.jpg",
+            "image": "./textures/items/steel_sword.jpg",
             "dropable": true,
             "rarity": "common",
             "effect": {
@@ -84,7 +84,7 @@
             "type": "armor",
             "description": "Steel armor.",
             "price": 80,
-            "image": "textures/items/heirloom.png",
+            "image": "./textures/items/heirloom.png",
             "dropable": true,
             "rarity": "rare",
             "effect": {
@@ -109,7 +109,7 @@
             "type": "armor",
             "description": "Divine armor.",
             "price": 150,
-            "image": "textures/items/heirloom.png",
+            "image": "./textures/items/heirloom.png",
             "dropable": true,
             "rarity": "epic",
             "effect": {
@@ -134,7 +134,7 @@
             "type": "item",
             "description": "Family heirloom.",
             "price": 50,
-            "image": "textures/items/heirloom.png",
+            "image": "./textures/items/heirloom.png",
             "dropable": false,
             "rarity": "unique",
             "quest": [1,1]
@@ -146,7 +146,7 @@
             "type": "key",
             "description": "Key to the Land of the Free.",
             "price": 10,
-            "image": "textures/items/heirloom.png",
+            "image": "./textures/items/heirloom.png",
             "dropable": true,
             "rarity": "common"
         },
@@ -157,7 +157,7 @@
             "type": "gold",
             "description": "Gold.",
             "price": 1,
-            "image": "textures/items/heirloom.png",
+            "image": "./textures/items/heirloom.png",
             "dropable": false,
             "rarity": "common"
         },
@@ -168,12 +168,12 @@
             "type": "book",
             "description": "Book that contains knowledge.",
             "price": 250,
-            "image": "textures/items/heirloom.png",
+            "image": "./textures/items/heirloom.png",
             "dropable": true,
             "rarity": "epic",
             "text": {
                 "title": "Book of Knowledge",
-                "content": "game_data/texts/temp1.txt"
+                "content": "./game_data/texts/temp1.txt"
             },
             "script": {
                 "time": "on_use",
@@ -191,7 +191,7 @@
             "type": "ingredient",
             "description": "Steel slab.",
             "price": 20,
-            "image": "textures/items/heirloom.png",
+            "image": "./textures/items/heirloom.png",
             "dropable": true,
             "rarity": "uncommon"
         },
@@ -202,7 +202,7 @@
             "type": "ingredient",
             "description": "Leather piece.",
             "price": 5,
-            "image": "textures/items/heirloom.png",
+            "image": "./textures/items/heirloom.png",
             "dropable": true,
             "rarity": "common"
         },
@@ -213,7 +213,7 @@
             "type": "ingredient",
             "description": "Fire shard.",
             "price": 50,
-            "image": "textures/items/heirloom.png",
+            "image": "./textures/items/heirloom.png",
             "dropable": true,
             "rarity": "rare"
         }

@@ -21,8 +21,8 @@ class PlayerMenu:
         self.trait_selection = -1
         self.book_open = False
         
-        self.menu_font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
-        self.stats_font = pygame.font.Font("fonts/SovngardeBold.ttf", 22)
+        self.menu_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 34)
+        self.stats_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 22)
 
         self.bg = pygame.Rect(
             0, 0, GM.screen.get_width() // 4, GM.screen.get_height()

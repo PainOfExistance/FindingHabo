@@ -121,7 +121,7 @@ class Menu:
             if self.action == "Save" and not GM.dead:
                 tmp = assets.save()
                 if tmp:
-                    saves = glob.glob(os.path.join("saves", "*.habo"))
+                    saves = glob.glob(os.path.join("./saves", "*.habo"))
                     self.saves = [
                         os.path.splitext(os.path.basename(filename))[0]
                         for filename in saves[::-1]
@@ -135,16 +135,16 @@ class Menu:
                 CM.player.__init__()
                 CM.ai.__init__()
                 GM.save_name = f"{selected_option}.habo"
-                CM.player.from_dict(assets.load(f"saves/{selected_option}.habo"))
+                CM.player.from_dict(assets.load(f"./saves/{selected_option}.habo"))
                 CM.menu.__init__()
                 CM.player_menu.__init__()
                 CM.game.__init__()
                 self.visible = False
                 CM.game.run()
             elif self.action == "Overwrite" and len(self.saves) > 0 and not GM.dead:
-                os.remove(f"saves/{selected_option}.habo")
+                os.remove(f"./saves/{selected_option}.habo")
                 assets.save()
-                saves = glob.glob(os.path.join("saves", "*.habo"))
+                saves = glob.glob(os.path.join("./saves", "*.habo"))
                 self.saves = [
                     os.path.splitext(os.path.basename(filename))[0]
                     for filename in saves[::-1]
@@ -152,7 +152,7 @@ class Menu:
 
     def loading(self):
         GM._scr.fill((255, 255, 255))
-        font = pygame.font.Font("fonts/SovngardeBold.ttf", 34)
+        font = pygame.font.Font("./fonts/SovngardeBold.ttf", 34)
         text = font.render("Loading...", True, Colors.edge_color)
         text_rect = text.get_rect(
             center=(GM.screen.get_width() // 2, GM.screen.get_height() // 2.5)

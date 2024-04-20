@@ -14,7 +14,7 @@ from game_manager import GameManager as GM
 
 def load_images(path, size, center):
     if path==None:
-        path = "textures/Emblema_KGB.svg.png"
+        path = "./textures/Emblema_KGB.svg.png"
     # Load and return images as needed
     img = pygame.image.load(path).convert_alpha()
     if size!=(0,0):
@@ -33,9 +33,9 @@ def load_player(path):
 def load_player_sprites():
     image_list = {}
     rects=[]
-    for filename in os.listdir("textures/npc/player"):
+    for filename in os.listdir("./textures/npc/player"):
         if filename.endswith(".gif"):
-            path = os.path.join("textures/npc/player", filename)
+            path = os.path.join("./textures/npc/player", filename)
             key = filename[:-4]
             img, _, fps=load_sprites(path)
             rects.clear()
@@ -51,7 +51,7 @@ def load_background(path):
     bg_rect = bg.get_rect()
     return bg, bg_rect
 
-def load_level_data(path="terrain/worlds/simplified/Dream_World/data.json"):
+def load_level_data(path="./terrain/worlds/simplified/Dream_World/data.json"):
     level_data = np.array({})
     with open(path, "r") as ai_file:
         level_data = json.load(ai_file)
@@ -85,42 +85,42 @@ def set_anim_places(path):
 
 def load_items():
     item_list = np.array({})
-    with open("game_data/items.json", "r") as items:
+    with open("./game_data/items.json", "r") as items:
         item_list = json.load(items)
         item_list = {item["name"]: item for item in item_list["items"]}
     return item_list
 
 def load_traits():
     traits = np.array({})
-    with open("game_data/traits.json", "r") as traits_file:
+    with open("./game_data/traits.json", "r") as traits_file:
         traits_data = json.load(traits_file)
         traits = {trait["name"]: trait for trait in traits_data["traits"]}
     return traits
 
 def load_effects():
     effects = np.array({})
-    with open("game_data/effects.json", "r") as effect_file:
+    with open("./game_data/effects.json", "r") as effect_file:
         effects_data = json.load(effect_file)
         effects = {effect["stat"]: effect for effect in effects_data["effects"]}
     return effects
 
 def load_worlds():
     worlds = np.array({})
-    with open("game_data/leveldata.json", "r") as world_file:
+    with open("./game_data/leveldata.json", "r") as world_file:
         world_data = json.load(world_file)
         worlds = {world["name"]: world for world in world_data["worlds"]}
     return worlds
 
 def load_ai_package():
     ai_package = np.array({})
-    with open("game_data/ai.json", "r") as ai_file:
+    with open("./game_data/ai.json", "r") as ai_file:
         ai_data = json.load(ai_file)
         ai_package = {ai["name"]: ai for ai in ai_data["npcs"]}
     return ai_package
 
 def load_dialogue():
     dialogue_lines = np.array({})
-    with open("game_data/dialogue.json", "r") as dialogue_file:
+    with open("./game_data/dialogue.json", "r") as dialogue_file:
         dialogue_data = json.load(dialogue_file)
         dialogue_lines = {
             dialogue["name"]: dialogue for dialogue in dialogue_data["dialoge"]
@@ -129,7 +129,7 @@ def load_dialogue():
 
 def load_quests():
     quests = np.array({})
-    with open("game_data/quests.json", "r") as quest_file:
+    with open("./game_data/quests.json", "r") as quest_file:
         quest_data = json.load(quest_file)
         quests = {quest["id"]: quest for quest in quest_data["quests"]}
     return quests
@@ -145,8 +145,8 @@ def find_substring_index_in_list(new_path, substr):
         GM.save_world_names.append(new_path)
 
 def rename_index_worlds(save_name):
-    for item in os.listdir("terrain\worlds\simplified"):
-        item_path=f"terrain\worlds\simplified\{item}\{CM.player.hash}\data_modified.world"
+    for item in os.listdir("./terrain\worlds\simplified"):
+        item_path=f"./terrain\worlds\simplified\{item}\{CM.player.hash}\data_modified.world"
         if os.path.isfile(item_path):
             new_path=os.path.join(os.path.dirname(item_path), save_name+".world")
             os.rename(item_path, os.path.join(os.path.dirname(item_path), save_name+".world"))
@@ -164,7 +164,7 @@ def save():
     #print("-----------------------------")
     if not os.path.exists("saves"):
         os.makedirs("saves")
-    with open(f"saves/{GM.save_name}.habo", "w") as file:
+    with open(f"./saves/{GM.save_name}.habo", "w") as file:
         json_data=json.dumps(data, indent=2)
         file.write(json_data)
         return True
@@ -252,11 +252,11 @@ def load_sprites(gif_path):
 
 def load_animations():
     animations = np.array({})
-    with open("game_data/animations.json", "r") as anim_file:
+    with open("./game_data/animations.json", "r") as anim_file:
         animations = json.load(anim_file)
     animations = {int(k): v for k, v in animations.items()}
     for key, value in animations.items():
-        frames,_,fps=load_sprites(f"textures\\static\\{value["folder"]}\\{value['name']}.gif")
+        frames,_,fps=load_sprites(f"./textures\\static\\{value["folder"]}\\{value['name']}.gif")
         animations[key]["frames"]=frames
         animations[key]["fps"]=fps
     return animations
@@ -267,7 +267,7 @@ def load_text(path):
     return data
 
 def load_recepies():
-    with open("game_data/recepies.json", "r") as file:
+    with open("./game_data/recepies.json", "r") as file:
         data = json.load(file)
     return data
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic
