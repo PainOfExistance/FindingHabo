@@ -10,11 +10,12 @@
 	"customFields" : {},
 	"layers": [
 		"BG.png",
-		"Walls.png",
 		"Grass.png",
-		"Fences.png",
-		"Top_layer.png",
-		"Temple.png"
+		"RRW.png",
+		"RGP.png",
+		"RAC.png",
+		"Walls.png",
+		"Top_layer.png"
 	],
 	"entities": {
 		"Player_spawn": [
