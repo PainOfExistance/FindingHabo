@@ -53,6 +53,7 @@ class Game:
         CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         self.layer=pygame.Surface((GM.screen.get_width(), GM.screen.get_height()))
+        self.layers=[]
 
         self.setup(f"./terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
         CM.player.quests.dialogue = CM.ai.strings
@@ -271,6 +272,7 @@ class Game:
             new_filepath = os.path.join(directory, layer)
             bg, _ =assets.load_background(new_filepath)
             self.layer.blit(bg, (0, 0))
+            self.layers.append(bg)
             
         GM.collision_map, GM.anim_tiles = assets.load_collision(metadata["collision_set"])
         GM.map_height = GM.collision_map.shape[0]
@@ -1340,6 +1342,8 @@ class Game:
             CM.player.draw()  # .lulekSprulek.123.fafajMi)
 
             GM.screen.blit(self.layer, GM.bg_rect.topleft)
+            #for layer in self.layers:
+            #    GM.screen.blit(layer, GM.bg_rect.topleft)
             CM.player.quests.draw_quest_info()
             R.draw_container(self.menu_font)
             R.draw_barter(self.menu_font)
@@ -1361,7 +1365,7 @@ class Game:
             CM.map.draw()
         
         # https://www.youtube.com/watch?v=RXkeWnbJlOE&list=RD_u8CpQdZLMA&index=3
-        # pygame.draw.rect(GM.screen, (0, 0, 0), GM.weapon_rect)
+        #pygame.draw.rect(GM.screen, (0, 0, 0), CM.player.player_rect)
         subsurface_rect = pygame.Rect(
             0, 0, GM.screen.get_width(), GM.screen.get_height()
         )

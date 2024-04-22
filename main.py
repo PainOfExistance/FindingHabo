@@ -16,7 +16,7 @@ pygame.event.set_grab(True)
 screen_width, screen_height = display[0][0], display[0][1]
 screen = pygame.display.set_mode((1280, 720), vsync=0, flags= pygame.SCALED | pygame.RESIZABLE | pygame.NOFRAME)
 GM._scr=screen
-GM.screen=pygame.Surface((1280, 720))
+GM.screen=pygame.Surface((1024, 576))
 pygame.display.set_caption("Finding Habo")
 if __name__ == "__main__":
     menu=MainMenu()

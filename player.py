@@ -35,7 +35,7 @@ class Player:
         self.title_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 30)
         self.book_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 26)
         CM.animation = Animation()
-        self.movement_speed = 120
+        self.movement_speed = 117
         GM.game_date = GameDate()
         self.hash = "".join(
             random.choices(
@@ -45,7 +45,7 @@ class Player:
         self.been_dead = False
 
         self.player = CM.animation.init_player()
-        self.player_rect = pygame.Rect(600, 500, 22, 37)
+        self.player_rect = pygame.Rect(600, 500, 14, 18)
 
         self.depleted_rect = pygame.Rect(
             GM.screen_width // 2 - 150 // 2,
@@ -403,8 +403,7 @@ class Player:
                 self.equipped_items["hand"], self.movement_speed
             )
             new_rect.center = self.player_rect.center
-            new_rect.bottom = self.player_rect.bottom + 9
-            new_rect.left -=1
+            new_rect.bottom = self.player_rect.bottom + 7
 
             GM.screen.blit(self.player, new_rect.topleft)
         elif GM.dead and not self.been_dead:

@@ -40,7 +40,7 @@ def load_player_sprites():
             img, _, fps=load_sprites(path)
             rects.clear()
             for i in range(len(img)):
-                img[i] = pygame.transform.scale(img[i], (img[i].get_width()*1.3, img[i].get_height()*1.8)).convert_alpha()
+                img[i] = pygame.transform.scale(img[i], (img[i].get_width(), img[i].get_height())).convert_alpha()
                 rects.append(img[i].get_rect())
             image_list[key] = {"image": img, "rect": rects, "fps": fps}
     return image_list
