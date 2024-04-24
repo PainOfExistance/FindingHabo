@@ -141,27 +141,22 @@ class Animation:
                 GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
                 
             elif "special" in x:
+                value_data = self.data[x["value"]]
                 if "hold" in x["special"]:
-                    value_data = self.data[x["value"]]
                     tmp = int(x["counter"])
-                    
                     if tmp >= len(value_data["frames"])-1:
                         x["counter"]=len(value_data["frames"])-1
                         tmp=len(value_data["frames"])-1
                     else:
                         x["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
-
                     GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
                 
                 elif "once" in x["special"]:
-                    value_data = self.data[x["value"]]
                     x["counter"] += GM.delta_time * (value_data["fps"] / 1.5)
-                    
                     tmp = int(x["counter"])
                     if tmp >= len(value_data["frames"]):
                         removing.append(i)
                         continue
-                    
                     GM.screen.blit(value_data["frames"][tmp], (relative_left, relative_top))
         
         for i in removing:

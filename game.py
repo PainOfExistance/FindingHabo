@@ -1321,7 +1321,7 @@ class Game:
             )  
 
     def loading(self):
-        GM._scr.fill((255,255,255))
+        GM._scr.fill(Colors.dark_black)
         font = pygame.font.Font("./fonts/SovngardeBold.ttf", 34)
         text = font.render("Loading...", True, Colors.edge_color)
         text_rect = text.get_rect(
