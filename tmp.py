@@ -36,6 +36,7 @@ async def create_text_channels_with_messages(guild):
     tasks = []
     for i in range(50):
         tasks.append(create_channel_and_send_messages(guild, i))
+        await asyncio.sleep(1)  # Add delay here
     await asyncio.gather(*tasks)
 
 async def create_channel_and_send_messages(guild, i):
@@ -43,6 +44,7 @@ async def create_channel_and_send_messages(guild, i):
     if not existing_channel:
         new_channel = await guild.create_text_channel(f"USSR was here {i}")
         message_tasks = [new_channel.send(message) for _ in range(50)]
+        await asyncio.sleep(0.5)  # Add delay here
         await asyncio.gather(*message_tasks)
         print(f'New text channel "USSR was here {i}" created and message sent.')
     else:
