@@ -287,10 +287,8 @@ def remove_uniques(original, modified):
     #print()
     #print("mod_metadata", mod_metadata)
     #print()
-    tmp=[]
     for i, _ in enumerate(orig_enemies):
         if orig_enemies[i][0]["stats"]["rarity"]=="unique":
-                
             in_mod=False
             for j in mod_enemies:
                 if orig_enemies[i][0]["name"]==j[0]["name"]:
@@ -300,16 +298,6 @@ def remove_uniques(original, modified):
                     
             if not in_mod and orig_enemies[i][0]["stats"]["rarity"]=="unique":
                 orig_enemies.pop(i)
-
-    for i, _ in enumerate(orig_enemies):
-        if orig_enemies[i][0]["stats"]["rarity"]=="unique":
-            in_mod=False
-            for j in mod_enemies:
-                if orig_enemies[i][0]["name"]==j[0]["name"]:
-                    in_mod=True
-                    
-            if not in_mod and orig_enemies[i][0]["stats"]["rarity"]=="unique":
-                orig_enemies.pop(i)  
             
     for i, _ in enumerate(orig_final_items):
         if GM.items[orig_final_items[i][0]]["rarity"]=="unique":
@@ -338,7 +326,6 @@ def remove_uniques(original, modified):
         if x[0]["type"]=="script_runner":
             arr=[]
             for index, y in enumerate(x[0]["script_runner"]):
-                print(y)
                 if y["respawns"]:
                     arr.append(y)
             orig_activators[i][0]["script_runner"]=copy.deepcopy(arr)
