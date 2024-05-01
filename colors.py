@@ -6,7 +6,7 @@ class Colors:
     bg_color = (44, 44, 44, 200)
     edge_color = (180, 180, 180)
     red = (240, 90, 90)
-    communist_red = (205, 0, 0)
+    very_red = (205, 0, 0)
     green = (90, 180, 90)
     dark_black = (6, 11, 11)
     mid_black = (22, 22, 22)

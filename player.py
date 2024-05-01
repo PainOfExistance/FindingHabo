@@ -414,7 +414,7 @@ class Player:
             GM.screen, Colors.dark_black, self.border_rect, border_radius=10
         )
         pygame.draw.rect(
-            GM.screen, Colors.communist_red, self.depleted_rect, border_radius=10
+            GM.screen, Colors.very_red, self.depleted_rect, border_radius=10
         )     
         
         pygame.draw.rect(
