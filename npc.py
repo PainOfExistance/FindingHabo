@@ -56,7 +56,6 @@ def update_npc(subtitle_font, prompt_font):
                         (GM.relative_player_left + GM.relative_player_right) // 2,
                         (GM.relative_player_top + GM.relative_player_bottom) // 2,
                     ),
-                    GM.collision_map,
                     x["rect"],
                 )
                 x["name"]["movement_behavior"]["moving"] = True
@@ -91,7 +90,6 @@ def update_npc(subtitle_font, prompt_font):
         ):
             _, _, x["name"]["movement_behavior"]["dirrection"] = CM.ai.update(
                 x["name"]["name"],
-                GM.collision_map,
                 x["rect"].left,
                 x["rect"].top,
                 x["rect"],

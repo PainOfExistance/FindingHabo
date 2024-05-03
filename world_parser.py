@@ -292,9 +292,12 @@ def remove_uniques(original, modified):
             in_mod=False
             for j in mod_enemies:
                 if orig_enemies[i][0]["name"]==j[0]["name"]:
-                    in_mod=True
-                    if "items" in orig_enemies[i][0]:
-                        orig_enemies[i][0]["items"]=copy.deepcopy(j[0]["items"])
+                    #in_mod=True
+                    #if "items" in orig_enemies[i][0]:
+                    #    orig_enemies[i][0]["items"]=copy.deepcopy(j[0]["items"])
+                    j[0]["gold"]=orig_enemies[i][0]["gold"]
+                    j[0]["stats"]["health"]=orig_enemies[i][0]["stats"]["health"]
+                    orig_enemies[i][0]=copy.deepcopy(j[0])
                     
             if not in_mod and orig_enemies[i][0]["stats"]["rarity"]=="unique":
                 orig_enemies.pop(i)
