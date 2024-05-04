@@ -14,6 +14,7 @@ class PathFinder:
         self.path = Grid(matrix=GM.collision_map)
     
     def fix_path(self, path):
+        #todo make this work
         return [(int(node[0]), int(node[1])) for node in path]
     
     def find_path(self, start, end):

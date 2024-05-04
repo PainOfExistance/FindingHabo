@@ -93,9 +93,7 @@ class Game:
 
         for data in final_items:
             item = GM.items[data[0]]
-            img, img_rect = assets.load_images(
-                item["image"], (0, 0), (data[1], data[2])
-            )
+            img, img_rect = assets.load_images(item["image"], (0, 0), (data[1], data[2]))
             GM.world_objects.append(
                 {
                     "name": item["name"],
@@ -131,11 +129,8 @@ class Game:
                 data[0]["items"] = item_list
 
             if "png" in data[0]["stats"]["image"]:
-                img, img_rect = assets.load_images(
-                data[0]["stats"]["image"], (64, 64), (data[1], data[2])
-            )
-                GM.npc_list.append(
-                {
+                img, img_rect = assets.load_images(data[0]["stats"]["image"], (64, 64), (data[1], data[2]))
+                GM.npc_list.append({
                     "image": img,
                     "rect": img_rect,
                     "type": "npc",
@@ -143,14 +138,12 @@ class Game:
                     "attack_diff": 0,
                     "agroved": False,
                     "iid": data[3]
-                }
-                )
+                })
             else:
                 images, rect=assets.load_enemy_sprites(f"./textures/npc/{data[0]["stats"]["image"]}/")
                 rect.center=(data[1], data[2])
                 CM.animation.enemy_anims[data[0]["name"].lower()]={"images": images, "rect": rect, "prev_action": ""}
-                GM.npc_list.append(
-                {
+                GM.npc_list.append({
                     "image": images[list(images.keys())[0]]["frames"][0],
                     "rect": rect,
                     "type": "npc",
@@ -158,75 +151,62 @@ class Game:
                     "attack_diff": 0,
                     "agroved": False,
                     "iid": data[3]
-                }
-                )
+                })
                 if GM.npc_list[-1]["name"]["name"].lower() not in CM.animation.enemy_anims:
                     CM.animation.load_anims(GM.npc_list[-1])
 
         for data in portals:
             if "unlocked_by" in data[0]:
-                img, img_rect = assets.load_images(
-                    "./textures\static\door.png", (64, 64), (data[1], data[2])
-                )
-                GM.world_objects.append(
-                    {
+                img, img_rect = assets.load_images("./textures\static\door.png", (64, 64), (data[1], data[2]))
+                GM.world_objects.append({
                         "image": img,
                         "rect": img_rect,
                         "type": "portal",
                         "name": data[0],
                         "iid": data[3],
-                    }
-                )
+                    })
+                
             else:
-                img, img_rect = assets.load_images(
-                    "./textures\\static\\barrier.png", (data[4], data[5]), (data[1], data[2])
-                )
-                GM.world_objects.append(
-                    {
+                img, img_rect = assets.load_images("./textures\\static\\barrier.png", (data[4], data[5]), (data[1], data[2]))
+                GM.world_objects.append({
                         "image": img,
                         "rect": img_rect,
                         "type": "walk_in_portal",
                         "name": data[0],
                         "iid": data[3],
-                    }
-                )
+                    })
             
         for data in activators:
-            img_rect = pygame.Rect(
-                0,0, data[3], data[4]
-            )
+            img_rect = pygame.Rect(0,0, data[3], data[4])
             img_rect.center=(data[1], data[2])
             
-            GM.world_objects.append(
-                {
+            GM.world_objects.append({
                     "rect": img_rect,
                     "type": "activator",
                     "name": data[0],
                     "iid": data[5],
-                }
-            )
+                })
 
         for data in nav_tiles:
-            img_rect = pygame.Rect(
-                0, 0, 16, 16
-            )
-            img_rect.center=(data[1], data[2])
-            
-            GM.world_objects.append(
-                {
-                    "rect": img_rect,
-                    "type": "nav_tile",
-                    "name": data[0],
-                    "iid": data[3]
-                }
-            )
+            for i in data:
+                img_rect = pygame.Rect(0, 0, 16, 16)
+                img_rect.center=(i[1], i[2])
+                
+                GM.nav_tiles[-1].append({
+                        "rect": img_rect,
+                        "name": i[0],
+                        "type": "nav_tile",
+                        "name": i[0],
+                        "iid": i[3]
+                    })   
+                
+                if GM.nav_tiles[-1][-1]["name"]["next_tile"]==None:
+                    GM.nav_tiles.append([])
+        GM.nav_tiles.remove([])
         
         for data in notes:
-            img, img_rect = assets.load_images(
-                data[0]["marker_file"][3:], (16, 16), (data[1], data[2])
-            )
-            GM.notes.append(
-                {
+            img, img_rect = assets.load_images(data[0]["marker_file"][3:], (16, 16), (data[1], data[2]))
+            GM.notes.append({
                     "image": img,
                     "rect": img_rect,
                     "type": "note",
@@ -236,8 +216,7 @@ class Game:
                     "y": data[2],
                     "moved": False,
                     "counter": 0
-                }
-            )
+                })
         
         #print(GM.world_objects)
 

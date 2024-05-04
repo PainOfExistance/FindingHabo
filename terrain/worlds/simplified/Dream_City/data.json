@@ -304,6 +304,116 @@
 					"pause_time": 5,
 					"path_ref": null
 				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "b0baa700-fec0-11ee-80ec-d516a199c7fd",
+				"layer": "LeveL_Data",
+				"x": 3336,
+				"y": 2344,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Guard",
+						"Any"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "b4ed0610-fec0-11ee-80ec-9bbad8de868e",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "b4ed0610-fec0-11ee-80ec-9bbad8de868e",
+				"layer": "LeveL_Data",
+				"x": 2568,
+				"y": 2344,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Guard",
+						"Any"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "b6465480-fec0-11ee-80ec-c3a43b47d3d9",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "b6465480-fec0-11ee-80ec-c3a43b47d3d9",
+				"layer": "LeveL_Data",
+				"x": 1880,
+				"y": 2344,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Guard",
+						"Any"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "b79346e0-fec0-11ee-80ec-ebd55917ff45",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "b79346e0-fec0-11ee-80ec-ebd55917ff45",
+				"layer": "LeveL_Data",
+				"x": 1672,
+				"y": 2200,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Guard",
+						"Any"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "b86e8bb0-fec0-11ee-80ec-afc0f579035c",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "b86e8bb0-fec0-11ee-80ec-afc0f579035c",
+				"layer": "LeveL_Data",
+				"x": 1624,
+				"y": 2072,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Guard",
+						"Any"
+					],
+					"pause_time": 0,
+					"path_ref": null
+				}
 			}
 		]
 	}

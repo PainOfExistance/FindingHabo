@@ -125,7 +125,7 @@ def parser(world):
     containers = []
     metadata = []
     activators = []
-    nav_tiles=[]
+    nav_tiles=[[]]
     notes=[]
 
     for x in world["entities"]:
@@ -187,7 +187,9 @@ def parser(world):
                 
         elif x == "Npc_nav_tile":
             for y in world["entities"][x]:
-                nav_tiles.append((setNavTiles(y["customFields"]), y["x"], y["y"], y["iid"]))
+                nav_tiles[-1].append((setNavTiles(y["customFields"]), y["x"], y["y"], y["iid"]))   
+                if nav_tiles[-1][-1][0]["next_tile"]==None:
+                    nav_tiles.append([])
         
         elif x=="Note_marker":
             for y in world["entities"][x]:
