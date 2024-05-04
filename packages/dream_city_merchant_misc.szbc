@@ -1,0 +1,51 @@
+{
+    "1": {
+        "6.00": {
+            "action": "wakeup",
+            "subactions": ["stretch", "yawn"]
+        },
+        "7.00": {
+            "action": "eat",
+            "location": "home",
+            "subactions": ["prepare_food", "consume_food"]
+        },
+        "8.00": {
+            "action": "moveby",
+            "location": "Merchant OR random",
+            "markers": ["markerGroup1", "markerGroup2"],
+            "subactions": ["arrive_at_location"]
+        },
+        "12.00": {
+            "action": "eat",
+            "location": "Tavern OR home",
+            "subactions": ["prepare_food OR order_food", "consume_food"]
+        },
+        "13.00": {
+            "action": "moveby",
+            "location": "Merchant OR random",
+            "markers": ["markerGroup3", "markerGroup4"],
+            "subactions": ["arrive_at_location"]
+        },
+        "16.00": {
+            "action": "relax",
+            "location": "Park OR home",
+            "subactions": ["leisure_activity"]
+        },
+        "19.00": {
+            "action": "eat",
+            "location": "home",
+            "subactions": ["prepare_food", "consume_food"]
+        },
+        "21.00": {
+            "action": "relax",
+            "location": "home",
+            "subactions": ["leisure_activity"]
+        },
+        "23.00": {
+            "action": "moveby",
+            "location": "Sleep",
+            "markers": ["markerGroup5"],
+            "subactions": ["prepare_for_sleep", "sleep"]
+        }
+    }
+}

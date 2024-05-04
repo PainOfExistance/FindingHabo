@@ -68,6 +68,243 @@
 					"background": "terrain/worlds/simplified/Dream_City/_composite.png"
 				}
 			}
+		],
+		"Enemy_Random_Spawn": [
+			{
+				"id": "Enemy_Random_Spawn",
+				"iid": "d3909e10-fec0-11ee-9877-71776e50475d",
+				"layer": "LeveL_Data",
+				"x": 1816,
+				"y": 2488,
+				"width": 16,
+				"height": 16,
+				"color": 12470831,
+				"customFields": {
+					"chance": 1,
+					"enemy_Type": "Merchant",
+					"rarity": "unique"
+				}
+			}
+		],
+		"Npc_nav_tile": [
+			{
+				"id": "Npc_nav_tile",
+				"iid": "e48541a0-fec0-11ee-9877-070e3d8f1509",
+				"layer": "LeveL_Data",
+				"x": 2248,
+				"y": 2776,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "05a294f0-fec0-11ee-9877-e7ba8cba361f",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "05a294f0-fec0-11ee-9877-e7ba8cba361f",
+				"layer": "LeveL_Data",
+				"x": 2312,
+				"y": 2776,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"All"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "108ff9c0-fec0-11ee-9877-732dcd29b621",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "108ff9c0-fec0-11ee-9877-732dcd29b621",
+				"layer": "LeveL_Data",
+				"x": 2248,
+				"y": 2840,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"All"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "19bf81f0-fec0-11ee-9877-4b8883681107",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "19bf81f0-fec0-11ee-9877-4b8883681107",
+				"layer": "LeveL_Data",
+				"x": 2216,
+				"y": 2936,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"All"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "25cf6dc0-fec0-11ee-9877-6d031723a551",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "25cf6dc0-fec0-11ee-9877-6d031723a551",
+				"layer": "LeveL_Data",
+				"x": 2104,
+				"y": 2984,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"All"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "3156a190-fec0-11ee-9877-e37ccc2f94ad",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "3156a190-fec0-11ee-9877-e37ccc2f94ad",
+				"layer": "LeveL_Data",
+				"x": 2008,
+				"y": 3032,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"All"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "38f1a710-fec0-11ee-9877-3163f03f3f4e",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "38f1a710-fec0-11ee-9877-3163f03f3f4e",
+				"layer": "LeveL_Data",
+				"x": 1864,
+				"y": 3048,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"All"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "407d1c30-fec0-11ee-9877-cf0ab84fc823",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "407d1c30-fec0-11ee-9877-cf0ab84fc823",
+				"layer": "LeveL_Data",
+				"x": 1624,
+				"y": 3048,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"All"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "4910d990-fec0-11ee-9877-ad5c9eb2787c",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					}
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "4910d990-fec0-11ee-9877-ad5c9eb2787c",
+				"layer": "LeveL_Data",
+				"x": 1624,
+				"y": 2520,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"All"
+					],
+					"pause_time": 0,
+					"path_ref": null
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "5b274830-fec0-11ee-9877-9f870ac02d27",
+				"layer": "LeveL_Data",
+				"x": 1800,
+				"y": 2504,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant"
+					],
+					"pause_time": 5,
+					"path_ref": null
+				}
+			}
 		]
 	}
 }

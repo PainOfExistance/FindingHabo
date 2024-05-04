@@ -102,7 +102,10 @@
                     "type": "Key to the Land of the Free",
                     "quantity": 1
                 }
-            ]
+            ],
+            "package": "dream_city_merchant_misc",
+            "path":[],
+            "current_point": null
         },
         {
             "name": "Bandit",
