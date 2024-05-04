@@ -2,3 +2,4 @@ numpy
 pygame
 opencv-python
 pillow
+pathfinding
