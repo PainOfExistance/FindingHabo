@@ -1,60 +1,29 @@
 {
-    "1": [
-        {
-            "time": "6.00",
-            "action": "wakeup",
-            "subactions": ["stretch", "yawn"]
+    "routines": [{
+        "Routine_1": {
+            "8.00": ["wakeup"],
+            "8.01": ["move", "All", "eat"],
+            "9.00": ["move", "Merchant", "sell"],
+            "15.00": ["move", "All", "eat"],
+            "16.00": ["move", "All", "relax"],
+            "18.00": ["move", "Merchant", "rest"],
+            "20.00": ["move", "All", "eat"],
+            "22.00": ["move", "All", "sleep"]
         },
-        {
-            "time": "7.00",
-            "action": "eat",
-            "location": "home",
-            "subactions": ["prepare_food", "consume_food"]
-        },
-        {
-            "time": "8.00",
-            "action": "moveby",
-            "location": "Merchant OR random",
-            "markers": ["markerGroup1", "markerGroup2"],
-            "subactions": ["arrive_at_location"]
-        },
-        {
-            "time": "12.00",
-            "action": "eat",
-            "location": "Tavern OR home",
-            "subactions": ["prepare_food OR order_food", "consume_food"]
-        },
-        {
-            "time": "13.00",
-            "action": "moveby",
-            "location": "Merchant OR random",
-            "markers": ["markerGroup3", "markerGroup4"],
-            "subactions": ["arrive_at_location"]
-        },
-        {
-            "time": "16.00",
-            "action": "relax",
-            "location": "Park OR home",
-            "subactions": ["leisure_activity"]
-        },
-        {
-            "time": "19.00",
-            "action": "eat",
-            "location": "home",
-            "subactions": ["prepare_food", "consume_food"]
-        },
-        {
-            "time": "21.00",
-            "action": "relax",
-            "location": "home",
-            "subactions": ["leisure_activity"]
-        },
-        {
-            "time": "23.00",
-            "action": "moveby",
-            "location": "Sleep",
-            "markers": ["markerGroup5"],
-            "subactions": ["prepare_for_sleep", "sleep"]
+        "Routine_2": {
+            "6.00": ["wakeup"],
+            "7.00": ["eat"],
+            "8.00": ["moveby", "random", "markerGroup1"],
+            "12.00": ["eat", "home"],
+            "13.00": ["moveby", "random", "markerGroup3"],
+            "16.00": ["relax", "home"],
+            "19.00": ["eat"],
+            "21.00": ["relax"],
+            "23.00": ["moveby", "Sleep", "markerGroup5"]
         }
-    ]
+    }],
+    "schedule": {
+        "Routine_1": [1, 2, 3, 4, 5],
+        "Routine_2": [6, 7]
+    }
 }

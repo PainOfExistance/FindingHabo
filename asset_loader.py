@@ -270,4 +270,18 @@ def load_recepies():
     with open("./game_data/recepies.json", "r") as file:
         data = json.load(file)
     return data
+
+def load_routine(filename):
+    with open(f"./packages/{filename}.szbc", 'r') as file:
+        data = json.load(file)
+    return data
+
+def get_actions(day, time):
+    for routine in GM.routines["routines"]:
+        for key, value in routine.items():
+            if day in GM.routines["schedule"][key]:
+                actions = value.get(time)
+                if actions:
+                    return actions
+    return []
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

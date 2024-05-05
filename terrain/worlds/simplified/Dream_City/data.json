@@ -106,7 +106,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -129,7 +131,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -152,7 +156,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -175,7 +181,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -198,7 +206,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -221,7 +231,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -244,7 +256,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -267,7 +281,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -285,7 +301,9 @@
 						"All"
 					],
 					"pause_time": 0,
-					"path_ref": null
+					"path_ref": null,
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -302,7 +320,9 @@
 						"Merchant"
 					],
 					"pause_time": 5,
-					"path_ref": null
+					"path_ref": null,
+					"action": "Idle_Left",
+					"used": false
 				}
 			},
 			{
@@ -325,7 +345,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -348,7 +370,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -371,7 +395,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -394,7 +420,9 @@
 						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
 						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
 						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
-					}
+					},
+					"action": "",
+					"used": false
 				}
 			},
 			{
@@ -412,7 +440,9 @@
 						"Any"
 					],
 					"pause_time": 0,
-					"path_ref": null
+					"path_ref": null,
+					"action": "",
+					"used": false
 				}
 			}
 		]

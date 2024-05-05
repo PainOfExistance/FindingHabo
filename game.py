@@ -40,18 +40,19 @@ class Game:
 
         CM.inventory.add_item(GM.items["Minor Health Potion"])
         CM.inventory.add_item(GM.items["Steel Sword"])
+        CM.inventory.add_item(GM.items["Artifacts Of Habo"])
         # CM.inventory.add_item(GM.items["Knowledge Potion"])
         # CM.inventory.add_item(GM.items["Power Elixir"])
         # CM.inventory.add_item(GM.items["Steel Armor"])
         # CM.inventory.add_item(GM.items["Divine Armor"])
-        CM.inventory.add_item(GM.items["Leather"])
-        CM.inventory.add_item(GM.items["Leather"])
-        CM.inventory.add_item(GM.items["Leather"])
-        CM.inventory.add_item(GM.items["Fire Shard"])
-        CM.inventory.add_item(GM.items["Steel"])
-        CM.inventory.add_item(GM.items["Steel"])
-        CM.inventory.add_item(GM.items["Steel"])
-        CM.inventory.add_item(GM.items["Key to the Land of the Free"])
+        #CM.inventory.add_item(GM.items["Leather"])
+        #CM.inventory.add_item(GM.items["Leather"])
+        #CM.inventory.add_item(GM.items["Leather"])
+        #CM.inventory.add_item(GM.items["Fire Shard"])
+        #CM.inventory.add_item(GM.items["Steel"])
+        #CM.inventory.add_item(GM.items["Steel"])
+        #CM.inventory.add_item(GM.items["Steel"])
+        #CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         self.layer=pygame.Surface((GM.screen.get_width(), GM.screen.get_height()))
         self.layers=[]
 
@@ -127,6 +128,9 @@ class Game:
                         item_list.append({"type": item, "quantity": inventory[item]})
 
                 data[0]["items"] = item_list
+                
+            if "package" in data[0]:
+                data[0]["routine"] = assets.load_routine(data[0]["package"])
 
             if "png" in data[0]["stats"]["image"]:
                 img, img_rect = assets.load_images(data[0]["stats"]["image"], (64, 64), (data[1], data[2]))

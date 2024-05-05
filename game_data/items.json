@@ -216,6 +216,21 @@
             "image": "./textures/items/heirloom.png",
             "dropable": true,
             "rarity": "rare"
+        },
+        {
+            "id": "itmBook",
+            "name": "Artifacts Of Habo",
+            "base_name": "Artifacts Of Habo",
+            "type": "book",
+            "description": "Book that contains knowledge about habo items.",
+            "price": 250,
+            "image": "./textures/items/heirloom.png",
+            "dropable": true,
+            "rarity": "epic",
+            "text": {
+                "title": "Artifacts Of Habo",
+                "content": "./game_data/texts/Artifacts_Of_Habo.txt"
+            }
         }
     ]
 }

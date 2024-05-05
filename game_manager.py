@@ -66,6 +66,7 @@ class GameManager:
     can_craft=False
     up_down_held=False
     nav_tiles=[[]]
+    routines={}
 
 class ClassManager:
     ai=None

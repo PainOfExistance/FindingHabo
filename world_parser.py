@@ -114,8 +114,8 @@ def setActivators(activators):
 
 def setNavTiles(nav_tiles):
     if nav_tiles["path_ref"]==None:
-        return {"group": nav_tiles["group"], "pause_time": nav_tiles["pause_time"], "next_tile": None}
-    return {"group": nav_tiles["group"], "pause_time": nav_tiles["pause_time"], "next_tile": nav_tiles["path_ref"]["entityIid"]} 
+        return {"group": nav_tiles["group"], "pause_time": nav_tiles["pause_time"], "action": nav_tiles["action"], "next_tile": None}
+    return {"group": nav_tiles["group"], "pause_time": nav_tiles["pause_time"], "action": nav_tiles["action"], "next_tile": nav_tiles["path_ref"]["entityIid"]} 
     
 def parser(world):
     spawn = (0, 0)
