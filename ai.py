@@ -14,128 +14,59 @@ from pathfinder import PathFinder
 class Ai:
     def __init__(self):
         self.strings = Dialougue()
-        self.pathfiner = PathFinder()
+        self.pathfinder = PathFinder()
+        self.movement_vectors = {
+        0: (0, -1),
+        1: (0, -1),
+        2: (-1, 0),
+        3: (1, 0),
+        4: (0, 1),
+        }
 
     def update(self, npc):
-        if GM.ai_package[npc["name"]["name"]]["movement_behavior"]["type"] == "patrol":
+        if npc["name"]["movement_behavior"]["type"] == "patrol":
             return self.random_patrol(npc)
 
-        elif GM.ai_package[npc["name"]["name"]]["movement_behavior"]["type"] == "stand" or "Idle" in GM.ai_package[npc["name"]["name"]]["movement_behavior"]["type"]:
-            return npc["rect"].centerx, npc["rect"].centery, GM.ai_package[npc["name"]["name"]]["movement_behavior"]["dirrection"]
+        elif "stand" in npc["name"]["movement_behavior"]["type"] or "Idle" in npc["name"]["movement_behavior"]["type"]:
+            return npc
 
-        elif GM.ai_package[npc["name"]["name"]]["movement_behavior"]["type"] == "move":
-            return self.pathfinder_move(npc)
+        elif npc["name"]["movement_behavior"]["type"] == "move":
+            return self.pathfinder.move(npc)
+
+    def attack(self, npc):
+        if math.dist(npc["rect"].center, GM.player_relative_center) < npc["name"]["detection_range"]:
+            npc["agroved"]=True
+            return self.pathfinder.move(npc, GM.player_relative_center)
+        npc["agroved"]=False
+        return npc
 
     def random_patrol(self, npc):
-        name = npc["name"]["name"]
-        rect = npc["rect"]
-        speed = GM.ai_package[name]["movement_behavior"]["movement_speed"]
-        direction = GM.ai_package[name]["movement_behavior"]["dirrection"]
+        rect = copy.deepcopy(npc["rect"])
+        direction=npc["name"]["movement_behavior"]["dirrection"]
+        movement_vector = self.movement_vectors.get(direction, (0, 0))
 
-        if direction == 1:
-            dy = int(-speed * GM.delta_time)
-            if self.check_collision(rect.left, rect.top + dy, rect):
-                self.rng(name)
-            else:
-                rect.centery += dy
+        target_x = rect.centerx + movement_vector[0]
+        target_y = rect.centery + movement_vector[1]
+        tmp = self.pathfinder.move(npc, (target_x, target_y))
 
-        elif direction == 2:
-            dx = int(speed * GM.delta_time)
-            if self.check_collision(rect.left + dx, rect.top, rect):
-                self.rng(name)
-            else:
-                rect.centerx += dx
+        if tmp["rect"].center == rect.center:
+            direction = self.rng()
+            npc["name"]["movement_behavior"]["dirrection"] = direction
 
-        elif direction == 3:
-            dy = int(speed * GM.delta_time)
-            if self.check_collision(rect.left, rect.top + dy, rect):
-                self.rng(name)
-            else:
-                rect.centery += dy
+        return tmp
 
-        elif direction == 4:
-            dx = int(-speed * GM.delta_time)
-            if self.check_collision(rect.left + dx, rect.top, rect):
-                self.rng(name)
-            else:
-                rect.centerx += dx
-
-        return rect.centerx, rect.centery, direction
-
-    def pathfinder_move(self, npc):
-        path = npc["path"]
-        if path:
-            next_point = path.pop(0)
-            return next_point[0], next_point[1], None
-        else:
-            return npc["rect"].centerx, npc["rect"].centery, None
-
-    def rng(self, name):
-        GM.ai_package[name]["movement_behavior"]["dirrection"] = random.randint(1, 4)
-
-    def check_collision(self, x, y, rect):
-        prev_center = rect.center
-        rect.center = (x, y)
-
-        collision_area = GM.collision_map[rect.top: rect.top + rect.height, rect.left: rect.left + rect.width]
-        if np.count_nonzero(collision_area) <= 30:
-            return True
-
-        rect.center = prev_center
-        return False
-
-    def attack(self, name, npc, player_position, rect):
-        speed = GM.ai_package[name]["movement_behavior"]["movement_speed"]
-        distance = math.dist(npc, player_position)
-
-        if distance < GM.ai_package[name]["detection_range"]:
-            dx, dy = 0, 0
-            move = 0
-            direction = 0
-
-            if player_position[0] > npc[0]:
-                move = int(speed * GM.delta_time)
-                dx = npc[0] + move
-                direction = 4
-            else:
-                move = int(-speed * GM.delta_time)
-                dx = npc[0] + move
-                direction = 2
-
-            if player_position[1] - 10 > npc[1]:
-                move = int(speed * GM.delta_time)
-                dy = npc[1] + move
-                direction = 1
-            else:
-                move = int(-speed * GM.delta_time)
-                dy = npc[1] + move
-                direction = 3
-
-            if self.check_collision(dx, dy, rect):
-                direction = 0
-
-            return dx, dy, True, direction
-        else:
-            return npc[0], npc[1], False, GM.ai_package[name]["movement_behavior"]["dirrection"]
+    def rng(self):
+        return random.randint(1, 4)
 
     def random_line(self, npc, player_position, name):
-        distance = math.dist(npc, player_position)
-        rng = random.randint(1, 100)
-        if distance < GM.ai_package[name]["talk_range"] and rng == 5:
-            return self.strings.random_line(name)
-        return None
-
-    def find_path(self, start_point, end_point):
-        path, _ = self.pathfinder.find_path(start_point, end_point)
-        return path
-
-    def set_action(self, npc):
-        week_day = GM.game_date.current_date.weekday()
-        hour = f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
-        routine = assets.get_actions(week_day, hour, copy.deepcopy(npc["name"]["routine"]))
-        if len(npc["name"]["current_routine"]) == 0 or npc["name"]["current_routine"][-1] != routine[-1]:
-            npc["name"]["current_routine"] = copy.deepcopy(routine)
-            npc["name"]["path"] = self.pathfiner.get_path(npc["name"]["stats"]["group"], npc["rect"].center, routine[2])
+        try:
+            distance = math.dist(npc, player_position)
+            rng = random.randint(1, 100)
+            if distance < GM.ai_package[name]["talk_range"] and rng == 5:
+                return self.strings.random_line(name)
+            return None
+        except:
+            return None
 
     def to_dict(self):
         return {

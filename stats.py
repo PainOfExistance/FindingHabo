@@ -7,8 +7,8 @@ from game_manager import GameManager as GM
 
 class Stats:
     def __init__(self):
-        self.max_health = 100
-        self.health = 100
+        self.max_health = 9999999
+        self.health = 9999999
 
         self.max_power = 100
         self.power = 100

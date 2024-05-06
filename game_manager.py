@@ -66,6 +66,7 @@ class GameManager:
     can_craft=False
     up_down_held=False
     nav_tiles=[[]]
+    player_relative_center=(0,0)
 
 class ClassManager:
     ai=None

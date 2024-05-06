@@ -206,7 +206,10 @@ class Game:
                 
                 if GM.nav_tiles[-1][-1]["name"]["next_tile"]==None:
                     GM.nav_tiles.append([])
-        GM.nav_tiles.remove([])
+        try:
+            GM.nav_tiles.remove([])
+        except:
+            pass
         
         for data in notes:
             img, img_rect = assets.load_images(data[0]["marker_file"][3:], (16, 16), (data[1], data[2]))
@@ -222,9 +225,9 @@ class Game:
                     "counter": 0
                 })
             
-        print()
-        print(GM.nav_tiles)
-        print()
+        #print()
+        #print(GM.nav_tiles)
+        #print()
         #print(GM.world_objects)
 
     def setup(self, path="./terrain/worlds/simplified/Dream_World/data.json", type="default"):
@@ -386,6 +389,7 @@ class Game:
         GM.relative_player_right = int(CM.player.player_rect.right - GM.bg_rect.left)
         GM.relative_player_top = int(CM.player.player_rect.top - GM.bg_rect.top)
         GM.relative_player_bottom = int(CM.player.player_rect.bottom - GM.bg_rect.top)
+        GM.player_relative_center = (int(GM.relative_player_left + CM.player.player_rect.width // 2), int(GM.relative_player_top + CM.player.player_rect.height // 2))
         movement = int(CM.player.movement_speed * GM.delta_time)
         
         CM.player.quests.check_quest_advancement(

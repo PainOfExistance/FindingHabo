@@ -27,7 +27,8 @@
                 "image": "./textures/npc/wolf.png"
             },
             "items": [
-            ]
+            ],
+            "target": null
         },
         {
             "name": "Goblin",
@@ -56,7 +57,8 @@
                 "image": "./textures/npc/goblin.png"
             },
             "items": [
-            ]
+            ],
+            "target": null
         },
         {
             "name": "Merchant",
@@ -105,7 +107,7 @@
             ],
             "package": "dream_city_merchant_misc",
             "path":[],
-            "current_point": null,
+            "target": null,
             "current_routine": []
         },
         {
@@ -116,7 +118,7 @@
             "attack_speed": 0.6,
             "movement_behavior": {
                 "type": "patrol",
-                "movement_speed": 100,
+                "movement_speed": 50,
                 "dirrection": 0,
                 "moving": false,
                 "counter": 0,
@@ -136,7 +138,8 @@
                 "death_anim": 1000
             },
             "items": [
-            ]
+            ],
+            "target": null
         },
         {
             "name": "Slime",
@@ -166,7 +169,8 @@
                 "death_anim": 1001
             },
             "items": [
-            ]
+            ],
+            "target": null
         }
     ]
 }

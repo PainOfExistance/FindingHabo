@@ -37,8 +37,7 @@ def update_npc(subtitle_font, prompt_font):
             and not CM.player_menu.visible
             and not GM.is_in_dialogue
             and not GM.crafting
-        ):
-            # print(x)
+        ):     
             other_obj_rect = pygame.Rect(
                 relative__left,
                 relative__top,
@@ -46,18 +45,7 @@ def update_npc(subtitle_font, prompt_font):
                 x["rect"].height,
             )
             if not CM.player.player_rect.colliderect(other_obj_rect):
-                _, _, GM.npc_list[index]["agroved"], x["name"]["movement_behavior"]["dirrection"] = CM.ai.attack(
-                    x["name"]["name"],
-                    (
-                        (x["rect"].centerx),
-                        (x["rect"].centery),
-                    ),
-                    (
-                        (GM.relative_player_left + GM.relative_player_right) // 2,
-                        (GM.relative_player_top + GM.relative_player_bottom) // 2,
-                    ),
-                    x["rect"],
-                )
+                x = CM.ai.attack(x)
                 x["name"]["movement_behavior"]["moving"] = True
 
             relative__left = int(GM.bg_rect.left + x["rect"].left)
@@ -88,18 +76,7 @@ def update_npc(subtitle_font, prompt_font):
             and not GM.is_in_dialogue
             and not GM.crafting
         ):
-            #CM.ai.set_action(x)
-            #_, _, x["name"]["movement_behavior"]["dirrection"] = CM.ai.update(
-            #    x["name"]["name"],
-            #    x["rect"].left,
-            #    x["rect"].top,
-            #    x["rect"],
-            #)
-            
-            _, _, x["name"]["movement_behavior"]["dirrection"] = CM.ai.update(
-                x
-            )
-            
+            x = CM.ai.update(x)
 
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
