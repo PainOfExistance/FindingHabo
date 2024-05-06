@@ -105,7 +105,8 @@
             ],
             "package": "dream_city_merchant_misc",
             "path":[],
-            "current_point": null
+            "current_point": null,
+            "current_routine": []
         },
         {
             "name": "Bandit",

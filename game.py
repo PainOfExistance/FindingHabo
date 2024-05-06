@@ -111,7 +111,7 @@ class Game:
             GM.world_objects.append(
                 {"image": img, "rect": img_rect, "type": "container", "name": tmp, "pedistal": data[6], "iid": data[7]}
             )
-                
+        
         CM.animation.enemy_anims.clear()
         for data in npcs:
             if "inventory_type" in data[0]["stats"]:
@@ -221,7 +221,10 @@ class Game:
                     "moved": False,
                     "counter": 0
                 })
-        
+            
+        print()
+        print(GM.nav_tiles)
+        print()
         #print(GM.world_objects)
 
     def setup(self, path="./terrain/worlds/simplified/Dream_World/data.json", type="default"):

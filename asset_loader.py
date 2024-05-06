@@ -276,12 +276,15 @@ def load_routine(filename):
         data = json.load(file)
     return data
 
-def get_actions(day, time):
-    for routine in GM.routines["routines"]:
+def get_actions(day, time, routines):
+    for routine in routines["routines"]:
         for key, value in routine.items():
-            if day in GM.routines["schedule"][key]:
-                actions = value.get(time)
+            if day in routines["schedule"][key]:
+                closest_time = min(value.keys(), key=lambda x: abs(float(x) - float(time)))
+                actions = value.get(closest_time)
                 if actions:
+                    actions.append(time)
                     return actions
     return []
+
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

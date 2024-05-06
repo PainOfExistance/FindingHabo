@@ -88,12 +88,18 @@ def update_npc(subtitle_font, prompt_font):
             and not GM.is_in_dialogue
             and not GM.crafting
         ):
+            #CM.ai.set_action(x)
+            #_, _, x["name"]["movement_behavior"]["dirrection"] = CM.ai.update(
+            #    x["name"]["name"],
+            #    x["rect"].left,
+            #    x["rect"].top,
+            #    x["rect"],
+            #)
+            
             _, _, x["name"]["movement_behavior"]["dirrection"] = CM.ai.update(
-                x["name"]["name"],
-                x["rect"].left,
-                x["rect"].top,
-                x["rect"],
+                x
             )
+            
 
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)

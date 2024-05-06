@@ -1,12 +1,11 @@
 {
     "routines": [{
         "Routine_1": {
-            "8.00": ["wakeup"],
-            "8.01": ["move", "All", "eat"],
-            "9.00": ["move", "Merchant", "sell"],
-            "15.00": ["move", "All", "eat"],
+            "8.00": ["move", "All", "house", "Sit_up"],
+            "9.00": ["move", "Merchant", "market", "Idle_left"],
+            "15.00": ["move", "All", "tavern", "Idle_right"],
             "16.00": ["move", "All", "relax"],
-            "18.00": ["move", "Merchant", "rest"],
+            "18.00": ["move", "Merchant", "sit"],
             "20.00": ["move", "All", "eat"],
             "22.00": ["move", "All", "sleep"]
         },
