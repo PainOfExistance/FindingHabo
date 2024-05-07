@@ -225,9 +225,10 @@ class Game:
                     "counter": 0
                 })
             
-        #print()
-        #print(GM.nav_tiles)
-        #print()
+        print()
+        print(GM.nav_tiles)
+        print()
+        
         #print(GM.world_objects)
 
     def setup(self, path="./terrain/worlds/simplified/Dream_World/data.json", type="default"):

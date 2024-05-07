@@ -26,6 +26,14 @@ class PathFinder:
         #todo make this work
         return [(int(node[0]), int(node[1])) for node in path]
     
+    def find_nav_points(self, target, npc):
+        for i, column in enumerate(GM.nav_tiles):
+            for item in column:
+                obj_group = item['name']['group']
+                obj_action = item['name']['action']
+                if target == obj_action and (npc['name']["stats"]['group'] in obj_group or 'All' in obj_group):
+                    return i
+    
     def check_collision(self, dx, dy, rect):
         new_center = (rect.centerx + dx, rect.centery + dy)
         # Calculate the boundaries of the collision area

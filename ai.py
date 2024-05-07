@@ -47,15 +47,23 @@ class Ai:
         actions=assets.get_actions(day, time, npc["name"]["routine"])
         if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"][-1]!=actions[-1]:
             npc["name"]["current_routine"]=copy.deepcopy(actions)
-            npc=self.__get_state_action(npc["name"]["current_routine"])
+            npc=self.__get_state_action(npc)
             #npc["name"]["current_routine"].pop(0)
             #npc["name"]["movement_behavior"]["type"]=copy.deepcopy(actions[0])
             
-    def __get_state_action(self, routine):
+    def __get_state_action(self, npc):
+        routine=npc["name"]["current_routine"]
         if "move" in routine[0]:
             if "||" in routine[0]:
                 split_by_=routine[0].split("_")
                 split_by_vertical=split_by_[-1].split("||")
+                npc["name"]["movement_behavior"]["type"]="".join(split_by_[:-1])
+                target=random.choice(split_by_vertical)
+                index=self.pathfinder.find_nav_points(target, npc)
+                npc["name"]["routine"]=copy.deepcopy(GM.nav_tiles["index"])
+                npc["name"]["target"]=copy.deepcopy(GM.nav_tiles["index"][0])
+                #fix this line
+                
 
 
     def random_patrol(self, npc):
@@ -70,7 +78,6 @@ class Ai:
         if tmp["rect"].center == rect.center:
             direction = self.rng()
             npc["name"]["movement_behavior"]["dirrection"] = direction
-
         return tmp
 
     def rng(self):
