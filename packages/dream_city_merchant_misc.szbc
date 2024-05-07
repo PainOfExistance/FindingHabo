@@ -1,24 +1,21 @@
 {
     "routines": [{
         "Routine_1": {
-            "8.00": ["move", "All", "house", "Sit_up"],
-            "9.00": ["move", "Merchant", "market", "Idle_left"],
-            "15.00": ["move", "All", "tavern", "Idle_right"],
-            "16.00": ["move", "All", "relax"],
-            "18.00": ["move", "Merchant", "sit"],
-            "20.00": ["move", "All", "eat"],
-            "22.00": ["move", "All", "sleep"]
+            "8.00": ["Idle", "Sit_3"],
+            "9.00": ["move_by_path_market", "Idle_4"],
+            "15.00": ["move_by_path_tavern", "Idle_2"],
+            "16.00": ["move_by_path_park||temple", "Sit_1||Idle_1"],
+            "18.00": ["move_by_path_wall", "Idle_4"],
+            "20.00": ["move_by_path_home", "Sit_3"],
+            "22.00": ["Sleep_1"]
         },
         "Routine_2": {
-            "6.00": ["wakeup"],
-            "7.00": ["eat"],
-            "8.00": ["moveby", "random", "markerGroup1"],
-            "12.00": ["eat", "home"],
-            "13.00": ["moveby", "random", "markerGroup3"],
-            "16.00": ["relax", "home"],
-            "19.00": ["eat"],
-            "21.00": ["relax"],
-            "23.00": ["moveby", "Sleep", "markerGroup5"]
+            "8.00": ["Idle", "Sit_3"],
+            "9.00": ["move_by_path_tavern", "Idle_2"],
+            "16.00": ["move_by_path_park||temple", "Sit_1||Idle_1"],
+            "18.00": ["move_by_path_wall", "Idle_4"],
+            "20.00": ["move_by_path_home", "Sit_3"],
+            "22.00": ["Sleep_1"]
         }
     }],
     "schedule": {

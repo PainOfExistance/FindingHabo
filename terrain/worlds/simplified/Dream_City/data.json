@@ -319,9 +319,9 @@
 					"group": [
 						"Merchant"
 					],
-					"pause_time": 5,
+					"pause_time": 0,
 					"path_ref": null,
-					"action": "Idle_Left",
+					"action": "Idle_4",
 					"used": false
 				}
 			},

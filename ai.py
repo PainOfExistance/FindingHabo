@@ -24,21 +24,39 @@ class Ai:
         }
 
     def update(self, npc):
-        if npc["name"]["movement_behavior"]["type"] == "patrol":
+        if npc["name"]["movement_behavior"]["type"] == "random_patrol":
             return self.random_patrol(npc)
-
-        elif "stand" in npc["name"]["movement_behavior"]["type"] or "Idle" in npc["name"]["movement_behavior"]["type"]:
+        elif npc["name"]["target"]!=None:
+            return self.pathfinder.move(npc, npc["name"]["target"])
+        else:
             return npc
-
-        elif npc["name"]["movement_behavior"]["type"] == "move":
-            return self.pathfinder.move(npc)
-
+        
     def attack(self, npc):
         if math.dist(npc["rect"].center, GM.player_relative_center) < npc["name"]["detection_range"]:
             npc["agroved"]=True
             return self.pathfinder.move(npc, GM.player_relative_center)
         npc["agroved"]=False
         return npc
+
+    def follow(self, npc):
+        pass
+    
+    def update_state(self, npc):
+        day=GM.game_date.current_date.weekday()
+        time=f"{GM.game_date.current_date.hour}:{GM.game_date.current_date.minute:02d}"
+        actions=assets.get_actions(day, time, npc["name"]["routine"])
+        if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"][-1]!=actions[-1]:
+            npc["name"]["current_routine"]=copy.deepcopy(actions)
+            npc=self.__get_state_action(npc["name"]["current_routine"])
+            #npc["name"]["current_routine"].pop(0)
+            #npc["name"]["movement_behavior"]["type"]=copy.deepcopy(actions[0])
+            
+    def __get_state_action(self, routine):
+        if "move" in routine[0]:
+            if "||" in routine[0]:
+                split_by_=routine[0].split("_")
+                split_by_vertical=split_by_[-1].split("||")
+
 
     def random_patrol(self, npc):
         rect = copy.deepcopy(npc["rect"])

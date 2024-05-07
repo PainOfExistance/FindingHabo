@@ -40,7 +40,7 @@ def load_player_sprites():
             img, _, fps=load_sprites(path)
             rects.clear()
             for i in range(len(img)):
-                img[i] = pygame.transform.scale(img[i], (img[i].get_width(), img[i].get_height())).convert_alpha()
+                img[i] = img[i].convert_alpha()
                 rects.append(img[i].get_rect())
             image_list[key] = {"image": img, "rect": rects, "fps": fps}
     return image_list
@@ -277,14 +277,16 @@ def load_routine(filename):
     return data
 
 def get_actions(day, time, routines):
+    actions = []
+    hour, _ = map(int, time.split('.'))
     for routine in routines["routines"]:
-        for key, value in routine.items():
-            if day in routines["schedule"][key]:
-                closest_time = min(value.keys(), key=lambda x: abs(float(x) - float(time)))
-                actions = value.get(closest_time)
-                if actions:
-                    actions.append(time)
-                    return actions
-    return []
+        for routine_name, schedule in routine.items():
+            if day in routines["schedule"][routine_name]:
+                closest_hour = min(schedule.keys(), key=lambda x: abs(int(x.split('.')[0]) - hour))
+                routine_actions = schedule.get(closest_hour)
+                if routine_actions:
+                    routine_actions.append(closest_hour)
+                    actions.extend(routine_actions)
+    return actions
 
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

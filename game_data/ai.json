@@ -7,7 +7,7 @@
             "talking": false,
             "attack_speed": 0.3,
             "movement_behavior": {
-                "type": "patrol",
+                "type": "random_patrol",
                 "movement_speed": 150,
                 "dirrection": 0,
                 "moving": false,
@@ -108,7 +108,8 @@
             "package": "dream_city_merchant_misc",
             "path":[],
             "target": null,
-            "current_routine": []
+            "current_routine": [],
+            "routine": []
         },
         {
             "name": "Bandit",
@@ -117,7 +118,7 @@
             "talking": false,
             "attack_speed": 0.6,
             "movement_behavior": {
-                "type": "patrol",
+                "type": "random_patrol",
                 "movement_speed": 50,
                 "dirrection": 0,
                 "moving": false,
@@ -148,7 +149,7 @@
             "talking": false,
             "attack_speed": 0.5,
             "movement_behavior": {
-                "type": "patrol",
+                "type": "random_patrol",
                 "movement_speed": 100,
                 "dirrection": 0,
                 "moving": false,
