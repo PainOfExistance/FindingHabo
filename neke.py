@@ -21,5 +21,5 @@ def get_actions(day, time, routines):
 
 # Example usage
 data = load_routine("dream_city_merchant_misc")
-actions = get_actions(1, "8.59", data)
+actions = get_actions(1, "9.00", data)
 print(actions)

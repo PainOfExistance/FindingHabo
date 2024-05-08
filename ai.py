@@ -27,6 +27,13 @@ class Ai:
         if npc["name"]["movement_behavior"]["type"] == "random_patrol":
             return self.random_patrol(npc)
         elif npc["name"]["target"]!=None:
+            if(math.dist(npc["rect"].center, npc["name"]["target"])<10):
+                if len(npc["name"]["path"])>0:
+                    npc["name"]["target"]=copy.deepcopy(npc["name"]["path"][0])
+                    npc["name"]["path"].pop(0)
+                else:
+                    npc["name"]["target"]==None
+                    npc=self.update_state(npc)
             return self.pathfinder.move(npc, npc["name"]["target"])
         else:
             return npc
@@ -43,29 +50,59 @@ class Ai:
     
     def update_state(self, npc):
         day=GM.game_date.current_date.weekday()
-        time=f"{GM.game_date.current_date.hour}:{GM.game_date.current_date.minute:02d}"
+        time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
         actions=assets.get_actions(day, time, npc["name"]["routine"])
+        
         if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"][-1]!=actions[-1]:
+            npc["name"]["to_face"]=0
             npc["name"]["current_routine"]=copy.deepcopy(actions)
             npc=self.__get_state_action(npc)
-            #npc["name"]["current_routine"].pop(0)
-            #npc["name"]["movement_behavior"]["type"]=copy.deepcopy(actions[0])
+        
+        elif len(npc["name"]["current_routine"])==1 and npc["name"]["to_face"]!=0:
+            npc["name"]["movement_behavior"]["dirrection"]=copy.deepcopy(npc["name"]["to_face"])
+        
+        elif npc["name"]["target"]==None:
+            npc["name"]["to_face"]=0
+            npc["name"]["current_routine"].pop(0)
+            npc=self.__get_state_action(npc)
+            
+        return npc
             
     def __get_state_action(self, npc):
         routine=npc["name"]["current_routine"]
         if "move" in routine[0]:
+            split_by_=routine[0].split("_")
+            npc["name"]["movement_behavior"]["type"]="".join(split_by_[:-1])
             if "||" in routine[0]:
-                split_by_=routine[0].split("_")
                 split_by_vertical=split_by_[-1].split("||")
-                npc["name"]["movement_behavior"]["type"]="".join(split_by_[:-1])
                 target=random.choice(split_by_vertical)
-                index=self.pathfinder.find_nav_points(target, npc)
-                npc["name"]["routine"]=copy.deepcopy(GM.nav_tiles["index"])
-                npc["name"]["target"]=copy.deepcopy(GM.nav_tiles["index"][0])
-                #fix this line
+            else:
+                target=split_by_[-1]
+            
+            index1, index2, column_index=self.pathfinder.find_nav_points(target, npc)
+            if index1>index2:
+                index1, index2=index2, index1
                 
-
-
+            npc["name"]["path"]=copy.deepcopy([x["rect"].center for x in GM.nav_tiles[column_index][index1:index2+1]])
+            npc["name"]["target"]=copy.deepcopy(npc["name"]["path"][0])
+            npc["name"]["path"].pop(0)
+            npc["name"]["index_points"]=[i for i in range(index1, index2+1)]
+            npc["name"]["column_index"]=column_index
+        else:
+            if "||" in routine[0]:
+                split_by_vertical=routine[0].split("||")
+                target=random.choice(split_by_vertical)
+            target=target.split("_")
+            index1, index2, column_index=self.pathfinder.find_nav_points(target[0], npc)
+            npc["name"]["path"], _=self.pathfinder.find_path(npc["rect"].center, GM.nav_tiles[column_index][index1]["rect"].center)
+            npc["name"]["target"]=copy.deepcopy(npc["name"]["path"][0])
+            npc["name"]["path"].pop(0)
+            npc["name"]["index_points"]=[i for i in range(index1, index2+1)]
+            npc["name"]["column_index"]=column_index
+            npc["name"]["to_face"]=target[1]
+            #todo idle, sleep, eat etc here 
+        return npc
+                
     def random_patrol(self, npc):
         rect = copy.deepcopy(npc["rect"])
         direction=npc["name"]["movement_behavior"]["dirrection"]

@@ -25,8 +25,8 @@
 				"id": "Player_spawn",
 				"iid": "41abb430-d7b0-11ee-a225-ff92454fd973",
 				"layer": "LeveL_Data",
-				"x": 1624,
-				"y": 2376,
+				"x": 2328,
+				"y": 2696,
 				"width": 16,
 				"height": 16,
 				"color": 0,
@@ -37,8 +37,8 @@
 					"world_to_load": "worlds/simplified/Dream_City/data.json",
 					"world_name": null,
 					"spawn_point": {
-						"cx": 101,
-						"cy": 146
+						"cx": 145,
+						"cy": 166
 					}
 				}
 			}
@@ -74,8 +74,8 @@
 				"id": "Enemy_Random_Spawn",
 				"iid": "d3909e10-fec0-11ee-9877-71776e50475d",
 				"layer": "LeveL_Data",
-				"x": 1816,
-				"y": 2488,
+				"x": 2280,
+				"y": 2712,
 				"width": 16,
 				"height": 16,
 				"color": 12470831,
@@ -302,7 +302,7 @@
 					],
 					"pause_time": 0,
 					"path_ref": null,
-					"action": "",
+					"action": "market",
 					"used": false
 				}
 			},
@@ -441,6 +441,30 @@
 					],
 					"pause_time": 0,
 					"path_ref": null,
+					"action": "",
+					"used": false
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "207a5e60-fec0-11ee-ae03-759a58f9ab95",
+				"layer": "LeveL_Data",
+				"x": 2360,
+				"y": 2744,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Any"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "05a294f0-fec0-11ee-9877-e7ba8cba361f",
+						"layerIid": "f5554af2-d7b0-11ee-9cf4-91f78bcb148e",
+						"levelIid": "f5554af0-d7b0-11ee-9cf4-5f46fbe0f9ea",
+						"worldIid": "f2370500-b0a0-11ee-9f4b-e31aa7f75faf"
+					},
 					"action": "",
 					"used": false
 				}

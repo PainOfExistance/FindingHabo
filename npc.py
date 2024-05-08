@@ -23,6 +23,7 @@ def update_npc(subtitle_font, prompt_font):
             GM.npc_list.pop(index)
 
     for index, x in enumerate(GM.npc_list):
+        x=CM.ai.update_state(x)
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
         x["name"]["movement_behavior"]["moving"] = False

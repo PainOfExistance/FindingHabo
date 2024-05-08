@@ -68,7 +68,7 @@
             "attack_speed": 0.7,
             "movement_behavior": {
                 "type": "stand",
-                "movement_speed": 120,
+                "movement_speed": 45,
                 "dirrection": 0,
                 "moving": false,
                 "counter": 0,
@@ -109,7 +109,10 @@
             "path":[],
             "target": null,
             "current_routine": [],
-            "routine": []
+            "routine": [],
+            "index_points": [],
+            "column_index": 0,
+            "to_face":0
         },
         {
             "name": "Bandit",
