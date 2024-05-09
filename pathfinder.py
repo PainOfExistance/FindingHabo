@@ -6,23 +6,22 @@ from turtle import speed
 
 import numpy as np
 from pathfinding.core.grid import Grid
+from pathfinding.core.node import Node
 from pathfinding.finder.a_star import AStarFinder
 
+from astar import AStar
 from game_manager import GameManager as GM
 
 
 class PathFinder:
     def __init__(self):
-        self.path = Grid(matrix=GM.collision_map)
-        self.finder = AStarFinder()
+        self.finder = AStar(GM.collision_map)
     
     def update(self):
-        self.path = Grid(matrix=GM.collision_map)  
+        self.finder = AStar(GM.collision_map)
           
-    def find_path(self, start, end):
-        start_node = Grid.node(*start)
-        end_node = Grid.node(*end)
-        return self.finder.find_path(start_node, end_node, self.path)
+    def find_path(self, start, end, size=(1, 1)):
+        return self.finder.find_path(start, end, size)
     
     def fix_path(self, path):
         #todo make this work
@@ -77,17 +76,6 @@ class PathFinder:
         #                if distance_to_market < min_distance_to_market:
         #                    min_distance_to_market = distance_to_market
         #                    closest_market_index = k
-#
-        #    # Return indexes range from closest object to closest 'market' object in the closest column
-        #    if closest_market_index is not None:
-        #        start_index = min(closest_object_index, closest_market_index)
-        #        end_index = max(closest_object_index, closest_market_index)
-        #        return list(range(start_index, end_index + 1))
-        #    else:
-        #        return [closest_object_index]
-        #else:
-        #    return None
-
     
     def check_collision(self, dx, dy, rect):
         new_center = (rect.centerx + dx, rect.centery + dy)

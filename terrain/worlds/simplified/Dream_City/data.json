@@ -25,8 +25,8 @@
 				"id": "Player_spawn",
 				"iid": "41abb430-d7b0-11ee-a225-ff92454fd973",
 				"layer": "LeveL_Data",
-				"x": 2328,
-				"y": 2696,
+				"x": 1592,
+				"y": 3016,
 				"width": 16,
 				"height": 16,
 				"color": 0,
@@ -37,8 +37,8 @@
 					"world_to_load": "worlds/simplified/Dream_City/data.json",
 					"world_name": null,
 					"spawn_point": {
-						"cx": 145,
-						"cy": 166
+						"cx": 99,
+						"cy": 186
 					}
 				}
 			}
@@ -74,8 +74,8 @@
 				"id": "Enemy_Random_Spawn",
 				"iid": "d3909e10-fec0-11ee-9877-71776e50475d",
 				"layer": "LeveL_Data",
-				"x": 2280,
-				"y": 2712,
+				"x": 1672,
+				"y": 3000,
 				"width": 16,
 				"height": 16,
 				"color": 12470831,
@@ -321,7 +321,7 @@
 					],
 					"pause_time": 0,
 					"path_ref": null,
-					"action": "Idle_4",
+					"action": "Idle",
 					"used": false
 				}
 			},

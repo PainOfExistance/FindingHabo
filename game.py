@@ -21,6 +21,7 @@ from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 from map import Map
 from music_player import MusicPlayer
+from pathfinder import PathFinder
 from script_loader import ScriptLoader
 
 
@@ -81,6 +82,7 @@ class Game:
             (GM.bg_menu.width, GM.bg_menu.height), pygame.SRCALPHA
         )
         self.prev=(0,0)
+        CM.ai.pathfinder=PathFinder()
 
     def setup_loaded(self, portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes):
         metadata["collision_set"] = re.sub(r'\\+', r'\\', metadata["collision_set"])

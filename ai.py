@@ -14,7 +14,7 @@ from pathfinder import PathFinder
 class Ai:
     def __init__(self):
         self.strings = Dialougue()
-        self.pathfinder = PathFinder()
+        self.pathfinder = None
         self.movement_vectors = {
         0: (0, -1),
         1: (0, -1),
@@ -32,8 +32,9 @@ class Ai:
                     npc["name"]["target"]=copy.deepcopy(npc["name"]["path"][0])
                     npc["name"]["path"].pop(0)
                 else:
-                    npc["name"]["target"]==None
+                    npc["name"]["target"]=None
                     npc=self.update_state(npc)
+                    return npc
             return self.pathfinder.move(npc, npc["name"]["target"])
         else:
             return npc
@@ -58,10 +59,11 @@ class Ai:
             npc["name"]["current_routine"]=copy.deepcopy(actions)
             npc=self.__get_state_action(npc)
         
-        elif len(npc["name"]["current_routine"])==1 and npc["name"]["to_face"]!=0:
+        elif len(npc["name"]["current_routine"])==1 and npc["name"]["to_face"]!=0 and len(npc["name"]["path"])==0:
             npc["name"]["movement_behavior"]["dirrection"]=copy.deepcopy(npc["name"]["to_face"])
-        
-        elif npc["name"]["target"]==None:
+            npc["name"]["to_face"]=0      
+            
+        elif npc["name"]["target"]==None and not len(npc["name"]["current_routine"])==1:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"].pop(0)
             npc=self.__get_state_action(npc)
@@ -89,18 +91,18 @@ class Ai:
             npc["name"]["index_points"]=[i for i in range(index1, index2+1)]
             npc["name"]["column_index"]=column_index
         else:
+            target=routine[0]
             if "||" in routine[0]:
                 split_by_vertical=routine[0].split("||")
                 target=random.choice(split_by_vertical)
             target=target.split("_")
             index1, index2, column_index=self.pathfinder.find_nav_points(target[0], npc)
-            npc["name"]["path"], _=self.pathfinder.find_path(npc["rect"].center, GM.nav_tiles[column_index][index1]["rect"].center)
+            npc["name"]["path"]=self.pathfinder.find_path(npc["rect"].center, GM.nav_tiles[column_index][index1]["rect"].center, (npc["rect"].width, npc["rect"].height))
             npc["name"]["target"]=copy.deepcopy(npc["name"]["path"][0])
             npc["name"]["path"].pop(0)
             npc["name"]["index_points"]=[i for i in range(index1, index2+1)]
             npc["name"]["column_index"]=column_index
             npc["name"]["to_face"]=target[1]
-            #todo idle, sleep, eat etc here 
         return npc
                 
     def random_patrol(self, npc):
