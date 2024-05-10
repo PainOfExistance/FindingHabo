@@ -14,16 +14,16 @@ class AStar:
 
         # Load the shared library based on the operating system
         if sys.platform.startswith('win'):
-            lib_path = os.path.abspath('./lib/astar.dll')
+            lib_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'lib', 'astarc.dll'))
         elif sys.platform.startswith('linux') or sys.platform.startswith('darwin'):
-            lib_path = os.path.abspath('./lib/libastar.so')
+            lib_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'lib', 'libastarc.so'))
         else:
             raise NotImplementedError("Unsupported operating system")
         
         os.environ['PATH'] = os.path.dirname(lib_path) + ';' + os.environ['PATH']
         
         # Use lib_path instead of a hardcoded path
-        self.lib = ctypes.CDLL(lib_path, winmode=5)
+        self.lib = ctypes.CDLL(lib_path)
 
         # Define return types and argument types for functions
         self.lib.AStar_new.argtypes = [ctypes.POINTER(ctypes.c_long), ctypes.c_int, ctypes.c_int]
@@ -37,7 +37,6 @@ class AStar:
 
         # Create AStar instance
         rows, cols = self.grid.shape
-        grid_data = (ctypes.c_long * cols) * rows
         grid_1d = self.grid.flatten()
         self.grid_data_instance = (ctypes.c_long * len(grid_1d))(*grid_1d)
         self.astar = self.lib.AStar_new(self.grid_data_instance, rows, cols)
