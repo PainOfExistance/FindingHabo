@@ -8,7 +8,7 @@ typedef struct {
     int y;
 } Point;
 
-// Define Node struct for priority queue
+// Define Node struct for binary heap
 typedef struct {
     int priority;
     Point point;
@@ -66,7 +66,7 @@ Point* AStar_find_path(AStar* astar, Point start, Point end, Point npc_size, int
         return NULL;
     }
 
-    // Priority queue implementation using an array
+    // Binary heap for open set
     Node* open_set = (Node*)malloc(astar->width * astar->height * sizeof(Node));
     int open_set_size = 0;
     
@@ -92,7 +92,7 @@ Point* AStar_find_path(AStar* astar, Point start, Point end, Point npc_size, int
     g_cost[start.x][start.y] = 0;
 
     while (open_set_size > 0) {
-        // Find node with minimum priority
+        // Find node with minimum priority (smallest f value)
         int min_index = 0;
         for (int i = 1; i < open_set_size; i++) {
             if (open_set[i].priority < open_set[min_index].priority) {
@@ -101,10 +101,8 @@ Point* AStar_find_path(AStar* astar, Point start, Point end, Point npc_size, int
         }
         Node current = open_set[min_index];
         
-        // Pop node from open set
-        for (int i = min_index; i < open_set_size - 1; i++) {
-            open_set[i] = open_set[i + 1];
-        }
+        // Swap current node with the last node and decrement open set size
+        open_set[min_index] = open_set[open_set_size - 1];
         open_set_size--;
 
         if (current.point.x == end.x && current.point.y == end.y) {
@@ -151,7 +149,23 @@ Point* AStar_find_path(AStar* astar, Point start, Point end, Point npc_size, int
                     if (new_g_cost < g_cost[x][y] || g_cost[x][y] == -1) {
                         g_cost[x][y] = new_g_cost;
                         parent[x][y] = current.point;
+
+                        // Insert the new node into the binary heap
                         open_set[open_set_size++] = (Node){new_g_cost + heuristic((Point){x, y}, end), (Point){x, y}};
+                        // Percolate up to maintain the heap property
+                        int current_index = open_set_size - 1;
+                        while (current_index > 0) {
+                            int parent_index = (current_index - 1) / 2;
+                            if (open_set[current_index].priority < open_set[parent_index].priority) {
+                                // Swap current node with its parent
+                                Node temp = open_set[current_index];
+                                open_set[current_index] = open_set[parent_index];
+                                open_set[parent_index] = temp;
+                                current_index = parent_index;
+                            } else {
+                                break;
+                            }
+                        }
                     }
                 }
             }
