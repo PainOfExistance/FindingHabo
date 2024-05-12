@@ -37,7 +37,7 @@ class Ai:
                     return npc
             return self.pathfinder.move(npc, npc["name"]["target"])
         else:
-            return npc
+            return self.update_state(npc)
         
     def attack(self, npc):
         if math.dist(npc["rect"].center, GM.player_relative_center) < npc["name"]["detection_range"]:
