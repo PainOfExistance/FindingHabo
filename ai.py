@@ -97,7 +97,13 @@ class Ai:
                 target=random.choice(split_by_vertical)
             target=target.split("_")
             index1, index2, column_index=self.pathfinder.find_nav_points(target[0], npc)
-            npc["name"]["path"]=self.pathfinder.find_path(npc["rect"].center, GM.nav_tiles[column_index][index1]["rect"].center, (npc["rect"].width, npc["rect"].height))
+            #npc["name"]["path"]=self.pathfinder.find_path(npc["rect"].center, GM.nav_tiles[column_index][index1]["rect"].center, (npc["rect"].width, npc["rect"].height))
+            #todo speed test
+            
+            npc["name"]["path"]=copy.deepcopy([x["rect"].center for x in GM.nav_tiles[column_index][index1:index2+1]])
+            #todo this to implement once original is done
+            
+            npc["name"]["path"]=copy.deepcopy([GM.nav_tiles[column_index][0]["rect"].center])
             npc["name"]["target"]=copy.deepcopy(npc["name"]["path"][0])
             npc["name"]["path"].pop(0)
             npc["name"]["index_points"]=[i for i in range(index1, index2+1)]

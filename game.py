@@ -384,7 +384,7 @@ class Game:
                 CM.map.handle_events(event)
 
     def handle_input(self):
-        # na lestvici 1-10 kako bi ocenili Saro Dugi iz ITK?
+        
         if GM.time_diff >= 20:
             GM.time_diff = 5
 
