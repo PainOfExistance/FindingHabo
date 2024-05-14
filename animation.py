@@ -71,10 +71,12 @@ class Animation:
             GM.npc_list[index]["name"]["movement_behavior"]["counter"]=0
             GM.npc_list[index]["name"]["movement_behavior"]["prev_action"]=f"{name}_{action}_{dirrection}"
         
-        GM.npc_list[index]["name"]["movement_behavior"]["counter"]+= GM.delta_time*(self.enemy_anims[name]["images"][f"{name}_{action}_{dirrection}"]["fps"]/1.5)
         tmp=int(GM.npc_list[index]["name"]["movement_behavior"]["counter"])
-        if tmp>=len(self.enemy_anims[name]["images"][f"{name}_{action}_{dirrection}"]["frames"]):
-            GM.npc_list[index]["name"]["movement_behavior"]["counter"], tmp = 0, 0
+        if (not CM.menu.visible and not CM.player_menu.visible):
+            GM.npc_list[index]["name"]["movement_behavior"]["counter"]+= GM.delta_time*(self.enemy_anims[name]["images"][f"{name}_{action}_{dirrection}"]["fps"]/1.5)
+            tmp=int(GM.npc_list[index]["name"]["movement_behavior"]["counter"])
+            if tmp>=len(self.enemy_anims[name]["images"][f"{name}_{action}_{dirrection}"]["frames"]):
+                GM.npc_list[index]["name"]["movement_behavior"]["counter"], tmp = 0, 0
         
         return self.enemy_anims[name]["images"][f"{name}_{action}_{dirrection}"]["frames"][tmp], self.enemy_anims[name]["images"][f"{name}_{action}_{dirrection}"]["rects"][tmp]
     #https://fixupx.com/francenews24/status/1768349762946838655/en

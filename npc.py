@@ -25,7 +25,12 @@ def update_npc(subtitle_font, prompt_font):
 
     for index, x in enumerate(GM.npc_list):
         def worker(x, subtitle_font, prompt_font):
-            x = CM.ai.update(x)
+            if (
+                not CM.menu.visible
+                and not CM.player_menu.visible
+            ):
+                x = CM.ai.update(x)
+                
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = False
