@@ -1,3 +1,4 @@
+import copy
 import math
 import random
 from os import close
@@ -16,6 +17,13 @@ from game_manager import GameManager as GM
 class PathFinder:
     def __init__(self):
         self.finder = AStar(GM.collision_map)
+        self.movement_vectors = {
+         (0, -1): 1,
+         (-1, 0): 2,
+         (1, 0):  3,
+         (0, 1):  4,
+        }
+
     
     def update(self):
         self.finder = AStar(GM.collision_map)
@@ -94,7 +102,10 @@ class PathFinder:
         target_x, target_y = target
         dx = target_x - x
         dy = target_y - y
-
+        
+        tdx=dx/abs(dx)
+        tdy=dy/abs(dy)
+        
         magnitude = math.sqrt(dx ** 2 + dy ** 2)
         if magnitude != 0:
             dx /= magnitude
@@ -107,4 +118,6 @@ class PathFinder:
         new_center_x, new_center_y = self.check_collision(dx, dy, npc["rect"])
         npc["rect"].centerx = new_center_x
         npc["rect"].centery = new_center_y
+        
+        npc["name"]["movement_behavior"]["dirrection"]=copy.deepcopy(self.movement_vectors[(tdx, tdy)])
         return npc
