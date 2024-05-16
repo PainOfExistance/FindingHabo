@@ -19,9 +19,17 @@ class PathFinder:
         self.finder = AStar(GM.collision_map)
         self.movement_vectors = {
          (0, -1): 1,
-         (-1, 0): 2,
+         (-1, -1): 1,
+         (1, -1): 1,
+         (-1, 1):  2,
+         (0, 1):  2,
+         (1, 1):  2,
          (1, 0):  3,
-         (0, 1):  4,
+         (1, 1):  3,
+         (1, -1):  3,
+         (-1, -1): 4,
+         (-1, 0): 4,
+         (-1, 1): 4,
         }
 
     
@@ -103,8 +111,8 @@ class PathFinder:
         dx = target_x - x
         dy = target_y - y
         
-        tdx=dx/abs(dx)
-        tdy=dy/abs(dy)
+        tdx=int(dx/abs(dx))
+        tdy=int(dy/abs(dy))
         
         magnitude = math.sqrt(dx ** 2 + dy ** 2)
         if magnitude != 0:
