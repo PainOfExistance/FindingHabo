@@ -469,6 +469,46 @@
 					"used": false
 				}
 			}
+		],
+		"Activator": [
+			{
+				"id": "Activator",
+				"iid": "a7186e10-fec0-11ee-8723-19216b4ccbf5",
+				"layer": "LeveL_Data",
+				"x": 2840,
+				"y": 2280,
+				"width": 48,
+				"height": 48,
+				"color": 11320532,
+				"customFields": {
+					"quest": -1,
+					"trap": "",
+					"pedistal": [],
+					"action_ref": null,
+					"door_ref": null,
+					"script_runner": [],
+					"type": "smithing"
+				}
+			},
+			{
+				"id": "Activator",
+				"iid": "b914ec10-fec0-11ee-8723-556e9cf973d3",
+				"layer": "LeveL_Data",
+				"x": 2888,
+				"y": 2280,
+				"width": 16,
+				"height": 48,
+				"color": 11320532,
+				"customFields": {
+					"quest": -1,
+					"trap": "",
+					"pedistal": [],
+					"action_ref": null,
+					"door_ref": null,
+					"script_runner": [],
+					"type": "upgrade"
+				}
+			}
 		]
 	}
 }

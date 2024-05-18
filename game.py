@@ -265,6 +265,8 @@ class Game:
             bg, _ =assets.load_background(new_filepath)
             self.layer.blit(bg, (0, 0))
             self.layers.append(bg)
+        
+        self.layers=self.layers[-1]
             
         GM.collision_map, GM.anim_tiles = assets.load_collision(metadata["collision_set"])
         GM.map_height = GM.collision_map.shape[0]
@@ -1335,8 +1337,7 @@ class Game:
             CM.player.draw()  # .lulekSprulek.123.fafajMi)
 
             GM.screen.blit(self.layer, GM.bg_rect.topleft)
-            #for layer in self.layers:
-            #    GM.screen.blit(layer, GM.bg_rect.topleft)
+            GM.screen.blit(self.layers, GM.bg_rect.topleft)
             CM.player.quests.draw_quest_info()
             R.draw_container(self.menu_font)
             R.draw_barter(self.menu_font)
