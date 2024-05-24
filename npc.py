@@ -35,6 +35,105 @@ def update_npc(subtitle_font, prompt_font):
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = False
             agrov = False
+            counter=0
+            for other in GM.npc_list:
+                if other is not x:
+                    counter+=1
+                    dx = x["rect"].centerx - other["rect"].centerx
+                    dy = x["rect"].centery - other["rect"].centery
+                    distance = (dx**2 + dy**2)**0.5
+                    if distance < x["name"]["talk_range"] and other["name"]["faction_data"]["faction"] not in x["name"]["faction_data"]["enemy_factions"]:
+                        other_obj_rect = pygame.Rect(
+                        relative__left,
+                        relative__top,
+                        x["rect"].width,
+                        x["rect"].height,
+                        )
+
+                        line = CM.ai.random_line(
+                        (
+                            (x["rect"].centerx),
+                            (x["rect"].centery),
+                        ),
+                        (
+                            (other["rect"].centerx),
+                            (other["rect"].centery),
+                        ),
+                            x["name"]["name"],
+                        )
+
+                        if line != None and GM.line_time < GM.counter:
+                            GM.current_line = line
+                            GM.line_time = (
+                                CM.music_player.play_line(
+                                    GM.current_line["file"]) + GM.counter
+                            )
+
+                        if GM.current_line != None and GM.line_time >= GM.counter:
+                            text = subtitle_font.render(
+                                GM.current_line["text"], True, Colors.mid_black
+                            )
+                            text_rect = text.get_rect(
+                                center=(
+                                    GM.screen.get_width() // 2,
+                                    GM.screen.get_height() - 50,
+                                )
+                            )
+                            GM.screen.blit(text, text_rect)
+
+                        else:
+                            GM.current_line = None
+                        
+                        x["agroved"]=False
+                        other["agroved"]=False
+                            
+                    elif distance < x["name"]["detection_range"] and other["name"]["faction_data"]["faction"] in x["name"]["faction_data"]["enemy_factions"]:
+                        x["name"]["movement_behavior"]["target"] = other["rect"].center
+                        other["name"]["movement_behavior"]["target"] = x["rect"].center
+                        x["name"]["movement_behavior"]["moving"] = True
+                        other["name"]["movement_behavior"]["moving"] = True
+                        x["agroved"]=True
+                        other["agroved"]=True
+                    
+                        if other["rect"].colliderect(x["rect"]):
+                            agrov = True
+                            if x["attack_diff"] > x["name"]["attack_speed"]:
+                                res = other["name"]["stats"]["defense"]-x["name"]["stats"]["damage"]
+                                if res > 0:
+                                    res = 0
+
+                                other["name"]["stats"]["health"] += res
+                                x["attack_diff"] = 0
+
+                                if other["name"]["stats"]["health"] <= 0:
+                                    other["name"]["stats"]["status"] = "dead"
+                                    other["name"]["movement_behavior"]["moving"] = False
+                                    other["name"]["movement_behavior"]["target"] = None
+
+                            if x["attack_diff"] < 5:
+                                x["attack_diff"] += GM.delta_time
+
+                            if other["attack_diff"]> other["name"]["attack_speed"]:
+                                res = x["name"]["stats"]["defense"]-other["name"]["stats"]["damage"]
+                                if res > 0:
+                                    res = 0
+
+                                x["name"]["stats"]["health"] += res
+                                other["attack_diff"] = 0
+
+                                if x["name"]["stats"]["health"] <= 0:
+                                    x["name"]["stats"]["status"] = "dead"
+                                    x["name"]["movement_behavior"]["moving"] = False
+                                    x["name"]["movement_behavior"]["target"] = None
+
+                            if other["attack_diff"] < 5:
+                                other["attack_diff"] += GM.delta_time
+                                
+                            break
+                        
+            if counter==len(GM.npc_list)-2:
+                    x["agroved"]=False
+                    
             if (
                 "stats" in x["name"]
                 and "status" in x["name"]["stats"]
@@ -52,9 +151,13 @@ def update_npc(subtitle_font, prompt_font):
                     x["rect"].width,
                     x["rect"].height,
                 )
+                    
                 if not CM.player.player_rect.colliderect(other_obj_rect):
                     x = CM.ai.attack(x)
                     x["name"]["movement_behavior"]["moving"] = True
+                
+                if counter<len(GM.npc_list)-2:
+                    x["agroved"]=True
 
                 relative__left = int(GM.bg_rect.left + x["rect"].left)
                 relative__top = int(GM.bg_rect.top + x["rect"].top)
@@ -156,7 +259,7 @@ def update_npc(subtitle_font, prompt_font):
 
                         GM.npc_list[index]["name"]["stats"][
                             "health"
-                        ] -= int(CM.player.stats.weapon_damage)
+                        ] -= (int(CM.player.stats.weapon_damage)-int(x["name"]["stats"]["defense"]))
 
                         if GM.npc_list[index]["name"]["stats"]["health"] <= 0:
                             CM.player.level.gain_experience(

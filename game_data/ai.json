@@ -24,11 +24,16 @@
                 "group": "wolf",
                 "mutable": true,
                 "inventory_type": "common_potion_1",
-                "image": "./textures/npc/wolf.png"
+                "image": "./textures/npc/wolf.png",
+                "defence": 5
             },
             "items": [
             ],
-            "target": null
+            "target": null,
+            "faction_data": {
+                "faction": "beast",
+                "enemy_factions": ["bandit", "citizen", "slime", "cultists", "goblin", "player"]
+            }
         },
         {
             "name": "Goblin",
@@ -54,15 +59,20 @@
                 "group": "goblin",
                 "mutable": true,
                 "inventory_type": "common_weapon_3",
-                "image": "./textures/npc/goblin.png"
+                "image": "./textures/npc/goblin.png",
+                "defence": 5
             },
             "items": [
             ],
-            "target": null
+            "target": null,
+            "faction_data": {
+                "faction": "goblin",
+                "enemy_factions": ["bandit", "citizen", "beast", "cultists", "player"]
+            }
         },
         {
             "name": "Merchant",
-            "detection_range": 200,
+            "detection_range": 300,
             "talk_range": 250,
             "talking": false,
             "attack_speed": 0.7,
@@ -84,7 +94,8 @@
                 "group": "Merchant",
                 "mutable": false,
                 "inventory_type": "common_weapon_armor_potion_10",
-                "image": "./textures/npc/merchant.png"
+                "image": "./textures/npc/merchant.png",
+                "defence": 20
             },
             "gold": 500,
             "items": [
@@ -112,7 +123,11 @@
             "routine": [],
             "index_points": [],
             "column_index": 0,
-            "to_face":0
+            "to_face":0,
+            "faction_data": {
+                "faction": "citizen",
+                "enemy_factions": ["bandit","goblin","beast","slime", "cultists"]
+            }
         },
         {
             "name": "Bandit",
@@ -139,11 +154,16 @@
                 "mutable": true,
                 "image": "./textures/npc/merchant.png",
                 "inventory_type": "common_weapon_armor_6",
-                "death_anim": 1000
+                "death_anim": 1000,
+                "defence": 10
             },
             "items": [
             ],
-            "target": null
+            "target": null,
+            "faction_data": {
+                "faction": "bandit",
+                "enemy_factions": ["beast", "citizen", "slime", "cultists", "goblin", "player"]
+            }
         },
         {
             "name": "Slime",
@@ -170,11 +190,16 @@
                 "mutable": true,
                 "image": "slime",
                 "inventory_type": "common_potion_1",
-                "death_anim": 1001
+                "death_anim": 1001,
+                "defence": 1
             },
             "items": [
             ],
-            "target": null
+            "target": null,
+            "faction_data": {
+                "faction": "slime",
+                "enemy_factions": ["beast", "citizen", "cultists", "bandit", "player"]
+            }
         }
     ]
 }
