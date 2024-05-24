@@ -409,7 +409,8 @@ class Player:
         elif GM.dead and not self.been_dead:
             self.been_dead = True
             GM.anim_tiles.append({'row': GM.relative_player_top, 'col': GM.relative_player_left, 'value': 1991, "special": "hold", "counter": 0})
-        
+    
+    def draw_hud(self):
         pygame.draw.rect(
             GM.screen, Colors.dark_black, self.border_rect, border_radius=10
         )
@@ -430,7 +431,7 @@ class Player:
         pygame.draw.rect(
             GM.screen, Colors.blue, self.depleted_rect3, border_radius=10
         )
-
+        
     def draw_book(self):
         lines=self.handle_input()
         left = (GM.screen.get_width() + GM.screen.get_width() // 4) / 2

@@ -67,6 +67,7 @@ class GameManager:
     up_down_held=False
     nav_tiles=[[]]
     player_relative_center=(0,0)
+    line=[]
 
 class ClassManager:
     ai=None
