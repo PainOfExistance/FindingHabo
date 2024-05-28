@@ -54,7 +54,7 @@ def update_npc(subtitle_font, prompt_font):
                         x["rect"].height,
                         )
 
-                        GM.line.append(CM.ai.random_line(
+                        GM.line=CM.ai.random_line(
                         (
                             (x["rect"].centerx),
                             (x["rect"].centery),
@@ -64,7 +64,7 @@ def update_npc(subtitle_font, prompt_font):
                             (other["rect"].centery),
                         ),
                             x["name"]["name"],
-                        ))
+                        )
 
                         x["agroved"] = False
                         other["agroved"] = False
@@ -183,7 +183,7 @@ def update_npc(subtitle_font, prompt_font):
                     x["rect"].height,
                 )
 
-                GM.line.append(CM.ai.random_line(
+                GM.line=CM.ai.random_line(
                     (
                         (x["rect"].centerx),
                         (x["rect"].centery),
@@ -193,7 +193,7 @@ def update_npc(subtitle_font, prompt_font):
                         (GM.relative_player_top + GM.relative_player_bottom) // 2,
                     ),
                     x["name"]["name"],
-                ))
+                )
 
             if (
                 relative__left > -80
@@ -297,27 +297,22 @@ def update_npc(subtitle_font, prompt_font):
 
 
 def play_line(subtitle_font):
-    for line in GM.line:
-        if line != None and GM.line_time < GM.counter:
-            GM.current_line = line
-            GM.line_time = (
-                CM.music_player.play_line(
-                    GM.current_line["file"]) + GM.counter
+    if GM.line != None and GM.line_time < GM.counter:
+        GM.current_line = GM.line
+        GM.line_time = (
+            CM.music_player.play_line(
+                GM.current_line["file"]) + GM.counter
+        )
+    if GM.current_line != None and GM.line_time >= GM.counter:
+        text = subtitle_font.render(
+            GM.current_line["text"], True, Colors.mid_black
+        )
+        text_rect = text.get_rect(
+            center=(
+                GM.screen.get_width() // 2,
+                GM.screen.get_height() - 50,
             )
-
-            if GM.current_line != None and GM.line_time >= GM.counter:
-                text = subtitle_font.render(
-                    GM.current_line["text"], True, Colors.mid_black
-                )
-                text_rect = text.get_rect(
-                    center=(
-                        GM.screen.get_width() // 2,
-                        GM.screen.get_height() - 50,
-                    )
-                )
-                GM.screen.blit(text, text_rect)
-
-            else:
-                GM.current_line = None
-                
-                #todo fix this
+        )
+        GM.screen.blit(text, text_rect)
+    else:
+        GM.current_line = None

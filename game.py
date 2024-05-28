@@ -1334,10 +1334,12 @@ class Game:
         if not GM.map_shown:
             CM.map.set_map(GM.background)
             N.update_npc(self.subtitle_font, self.prompt_font)
-            CM.player.draw()  # .lulekSprulek.123.fafajMi)
+            CM.player.draw()
 
             GM.screen.blit(self.layer, GM.bg_rect.topleft)
             GM.screen.blit(self.layers, GM.bg_rect.topleft)
+            CM.player.draw_hud()
+            N.play_line(self.subtitle_font)
             CM.player.quests.draw_quest_info()
             R.draw_container(self.menu_font)
             R.draw_barter(self.menu_font)
