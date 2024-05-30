@@ -41,6 +41,27 @@
 						"cy": 186
 					}
 				}
+			},
+			{
+				"id": "Player_spawn",
+				"iid": "8dc49d30-fec0-11ee-802d-e7790be7cd58",
+				"layer": "LeveL_Data",
+				"x": 1784,
+				"y": 2520,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "dw_lotf_portal_01",
+					"unlocked_by": "Key to the Land of the Free",
+					"locked": false,
+					"world_to_load": "worlds/simplified/Land_Of_the_Free/data.json",
+					"world_name": "Land of the Free",
+					"spawn_point": {
+						"cx": 110,
+						"cy": 157
+					}
+				}
 			}
 		],
 		"Metadata": [

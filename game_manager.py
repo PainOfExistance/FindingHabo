@@ -68,6 +68,7 @@ class GameManager:
     nav_tiles=[[]]
     player_relative_center=(0,0)
     line=[]
+    transfer_list=[]
 
 class ClassManager:
     ai=None

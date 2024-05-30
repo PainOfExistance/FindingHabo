@@ -276,6 +276,7 @@ class Game:
             for i, _ in enumerate(portals):
                 if portals[i][0]["type"] == type:
                     spawn_point = (portals[i][0]["spawn_point"]["cx"]*16, portals[i][0]["spawn_point"]["cy"]*16)
+                N.transfer_npc(portals[i][0])
 
         if spawn_point == (0, 0):
             spawn_point = (GM.relative_player_left, GM.relative_player_top)

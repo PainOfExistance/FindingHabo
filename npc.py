@@ -15,7 +15,7 @@ def update_npc(subtitle_font, prompt_font):
             GM.anim_tiles.append({'row': x["rect"].top, 'col': x["rect"].left,
                                  'value': x["name"]["stats"]["death_anim"], "special": "hold", "counter": 0})
             img = CM.animation.data[x["name"]
-                ["stats"]["death_anim"]]["frames"][-1]
+                                    ["stats"]["death_anim"]]["frames"][-1]
             rect = img.get_rect()
             rect.left = x["rect"].left
             rect.top = x["rect"].top
@@ -26,6 +26,9 @@ def update_npc(subtitle_font, prompt_font):
             GM.world_objects.append({"image": img, "rect": rect, "type": "container",
                                     "name": data, "pedistal": data[6], "iid": data[7]})
             GM.npc_list.pop(index)
+            
+        elif GM.npc_list[index]["name"]["stats"]["status"]=="transfer":
+            GM.npc_list.pop(index)
 
     for index, x in enumerate(GM.npc_list):
         def worker(x, subtitle_font, prompt_font):
@@ -34,7 +37,6 @@ def update_npc(subtitle_font, prompt_font):
                 and not CM.player_menu.visible
             ):
                 x = CM.ai.update(x)
-
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = False
@@ -48,21 +50,21 @@ def update_npc(subtitle_font, prompt_font):
                     distance = (dx**2 + dy**2)**0.5
                     if distance < x["name"]["talk_range"] and other["name"]["faction_data"]["faction"] not in x["name"]["faction_data"]["enemy_factions"]:
                         other_obj_rect = pygame.Rect(
-                        relative__left,
-                        relative__top,
-                        x["rect"].width,
-                        x["rect"].height,
+                            relative__left,
+                            relative__top,
+                            x["rect"].width,
+                            x["rect"].height,
                         )
 
-                        GM.line=CM.ai.random_line(
-                        (
-                            (x["rect"].centerx),
-                            (x["rect"].centery),
-                        ),
-                        (
-                            (other["rect"].centerx),
-                            (other["rect"].centery),
-                        ),
+                        GM.line = CM.ai.random_line(
+                            (
+                                (x["rect"].centerx),
+                                (x["rect"].centery),
+                            ),
+                            (
+                                (other["rect"].centerx),
+                                (other["rect"].centery),
+                            ),
                             x["name"]["name"],
                         )
 
@@ -116,7 +118,27 @@ def update_npc(subtitle_font, prompt_font):
                             break
 
             if counter == len(GM.npc_list)-2:
-                    x["agroved"] = False
+                x["agroved"] = False
+
+            other_obj_rect = pygame.Rect(
+                    relative__left,
+                    relative__top,
+                    x["rect"].width,
+                    x["rect"].height,
+                )
+            for object in GM.world_objects:
+                rl = int(GM.bg_rect.left + x["rect"].left)
+                rt = int(GM.bg_rect.top + x["rect"].top)
+                portal = pygame.Rect(
+                        rl,
+                        rt,
+                        x["rect"].width,
+                        x["rect"].height,
+                    )
+                if object["type"] == "portal" and other_obj_rect.colliderect(portal):
+                    GM.transfer_list.append((copy.deepcopy(x), object['name']['type']))
+                    x["name"]["stats"]["status"] = "transfer"
+
 
             if (
                 "stats" in x["name"]
@@ -183,7 +205,7 @@ def update_npc(subtitle_font, prompt_font):
                     x["rect"].height,
                 )
 
-                GM.line=CM.ai.random_line(
+                GM.line = CM.ai.random_line(
                     (
                         (x["rect"].centerx),
                         (x["rect"].centery),
@@ -316,3 +338,12 @@ def play_line(subtitle_font):
         GM.screen.blit(text, text_rect)
     else:
         GM.current_line = None
+
+def transfer_npc(portal):
+    for i, npc in enumerate(GM.transfer_list):
+        if npc[1] == portal["type"]:
+            npc[0]["rect"].centerx = portal["spawn_point"]["cx"]*16
+            npc[0]["rect"].centery = portal["spawn_point"]["cy"]*16
+            GM.npc_list.append(copy.deepcopy(npc[0]))
+            GM.transfer_list.pop(i)
+            break
