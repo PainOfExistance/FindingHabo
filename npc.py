@@ -4,6 +4,7 @@ import threading
 
 import pygame
 
+import asset_loader as assets
 from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
@@ -37,6 +38,7 @@ def update_npc(subtitle_font, prompt_font):
                 and not CM.player_menu.visible
             ):
                 x = CM.ai.update(x)
+            
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = False
@@ -126,19 +128,11 @@ def update_npc(subtitle_font, prompt_font):
                     x["rect"].width,
                     x["rect"].height,
                 )
+            
             for object in GM.world_objects:
-                rl = int(GM.bg_rect.left + x["rect"].left)
-                rt = int(GM.bg_rect.top + x["rect"].top)
-                portal = pygame.Rect(
-                        rl,
-                        rt,
-                        x["rect"].width,
-                        x["rect"].height,
-                    )
-                if object["type"] == "portal" and other_obj_rect.colliderect(portal):
-                    GM.transfer_list.append((copy.deepcopy(x), object['name']['type']))
+                if object["type"] == "portal" and object["name"]["type"]!="default" and "rect" in object and x["rect"].colliderect(object["rect"]):
+                    GM.transfer_list.append((copy.deepcopy(x["name"]), object['name']['type'], object["name"]["world_name"], x["iid"]))
                     x["name"]["stats"]["status"] = "transfer"
-
 
             if (
                 "stats" in x["name"]
@@ -151,22 +145,12 @@ def update_npc(subtitle_font, prompt_font):
                 and not GM.is_in_dialogue
                 and not GM.crafting
             ):
-                other_obj_rect = pygame.Rect(
-                    relative__left,
-                    relative__top,
-                    x["rect"].width,
-                    x["rect"].height,
-                )
-
                 if not CM.player.player_rect.colliderect(other_obj_rect):
                     x = CM.ai.attack(x)
                     x["name"]["movement_behavior"]["moving"] = True
 
                 if counter < len(GM.npc_list)-2:
                     x["agroved"] = True
-
-                relative__left = int(GM.bg_rect.left + x["rect"].left)
-                relative__top = int(GM.bg_rect.top + x["rect"].top)
 
                 if CM.player.player_rect.colliderect(other_obj_rect):
                     agrov = True
@@ -194,17 +178,7 @@ def update_npc(subtitle_font, prompt_font):
                 and not GM.is_in_dialogue
                 and not GM.crafting
             ):
-                relative__left = int(GM.bg_rect.left + x["rect"].left)
-                relative__top = int(GM.bg_rect.top + x["rect"].top)
                 x["name"]["movement_behavior"]["moving"] = True
-
-                other_obj_rect = pygame.Rect(
-                    relative__left,
-                    relative__top,
-                    x["rect"].width,
-                    x["rect"].height,
-                )
-
                 GM.line = CM.ai.random_line(
                     (
                         (x["rect"].centerx),
@@ -228,13 +202,6 @@ def update_npc(subtitle_font, prompt_font):
                     GM.screen.blit(img, (relative__left, relative__top))
                 else:
                     GM.screen.blit(x["image"], (relative__left, relative__top))
-
-                other_obj_rect = pygame.Rect(
-                    relative__left,
-                    relative__top,
-                    x["rect"].width,
-                    x["rect"].height,
-                )
 
                 if other_obj_rect.colliderect(GM.weapon_rect) and x["type"] == "npc":
                     if GM.attacking:
@@ -317,7 +284,6 @@ def update_npc(subtitle_font, prompt_font):
         for thread in threads:
             thread.join()
 
-
 def play_line(subtitle_font):
     if GM.line != None and GM.line_time < GM.counter:
         GM.current_line = GM.line
@@ -341,9 +307,49 @@ def play_line(subtitle_font):
 
 def transfer_npc(portal):
     for i, npc in enumerate(GM.transfer_list):
-        if npc[1] == portal["type"]:
-            npc[0]["rect"].centerx = portal["spawn_point"]["cx"]*16
-            npc[0]["rect"].centery = portal["spawn_point"]["cy"]*16
-            GM.npc_list.append(copy.deepcopy(npc[0]))
+        if npc[1] == portal["type"] and npc[2]==portal["world_name"]:
+            if "inventory_type" in npc[0]["stats"]:
+                inventory_type = npc[0]["stats"]["inventory_type"].split("_")
+                inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
+                if len(npc[0]["items"]) > 0:
+                    item_list = []
+                    for item in npc[0]["items"]:
+                        if item["type"] in inventory:
+                            item["quantity"] = inventory[item["type"]] + item["quantity"]
+                            inventory.pop(item["type"])
+                    for item in inventory:
+                        item_list.append({"type": item, "quantity": inventory[item]})
+                npc[0]["items"] = item_list
+                
+            if "package" in npc[0]:
+                npc[0]["routine"] = assets.load_routine(npc[0]["package"])
+
+            if "png" in npc[0]["stats"]["image"]:
+                img, img_rect = assets.load_images(npc[0]["stats"]["image"], (64, 64), (portal["spawn_point"]["cx"]*16, portal["spawn_point"]["cy"]*16))
+                GM.npc_list.append({
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "npc",
+                    "name": copy.deepcopy(npc[0]),
+                    "attack_diff": 0,
+                    "agroved": False,
+                    "iid": npc[3]
+                })
+            else:
+                images, rect=assets.load_enemy_sprites(f"./textures/npc/{npc[0]["stats"]["image"]}/")
+                rect.center=(portal["spawn_point"]["cx"]*16, portal["spawn_point"]["cy"]*16)
+                CM.animation.enemy_anims[npc[0]["name"].lower()]={"images": images, "rect": rect, "prev_action": ""}
+                GM.npc_list.append({
+                    "image": images[list(images.keys())[0]]["frames"][0],
+                    "rect": rect,
+                    "type": "npc",
+                    "name": copy.deepcopy(npc[0]),
+                    "attack_diff": 0,
+                    "agroved": False,
+                    "iid": npc[3]
+                })
+                if GM.npc_list[-1]["name"]["name"].lower() not in CM.animation.enemy_anims:
+                    CM.animation.load_anims(GM.npc_list[-1])
+                    
             GM.transfer_list.pop(i)
             break

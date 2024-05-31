@@ -1370,6 +1370,5 @@ class Game:
         streched = pygame.transform.scale(
             subsurface, (GM._scr.get_width(), GM._scr.get_height())
         )
-        
         GM._scr.blit(streched, (0, 0))
         pygame.display.flip()
