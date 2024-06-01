@@ -1,6 +1,9 @@
 import copy
 import multiprocessing
 import threading
+from calendar import c
+from math import e
+from nis import cat
 
 import pygame
 
@@ -29,10 +32,13 @@ def update_npc(subtitle_font, prompt_font):
             GM.npc_list.pop(index)
             
         elif GM.npc_list[index]["name"]["stats"]["status"]=="transfer":
-            GM.npc_list.pop(index)
+            GM.npc_list[index]["name"]["stats"]["status"]=""
 
     for index, x in enumerate(GM.npc_list):
-        def worker(x, subtitle_font, prompt_font):
+        try:
+            if x["name"]["stats"]["status"] == "":
+                continue
+            
             if (
                 not CM.menu.visible
                 and not CM.player_menu.visible
@@ -131,6 +137,13 @@ def update_npc(subtitle_font, prompt_font):
             
             for object in GM.world_objects:
                 if object["type"] == "portal" and object["name"]["type"]!="default" and "rect" in object and x["rect"].colliderect(object["rect"]):
+                    x["name"]["path"]=[]
+                    x["name"]["target"]=None
+                    x["name"]["current_routine"]=[]
+                    x["name"]["routine"]=[]
+                    x["name"]["index_points"]=[]
+                    x["name"]["column_index"]=0
+                    x["name"]["to_face"]=0
                     GM.transfer_list.append((copy.deepcopy(x["name"]), object['name']['type'], object["name"]["world_name"], x["iid"]))
                     x["name"]["stats"]["status"] = "transfer"
 
@@ -273,16 +286,11 @@ def update_npc(subtitle_font, prompt_font):
                     and GM.npc_list[index]["name"]["stats"]["status"] != "dead"
                 ):
                     GM.is_ready_to_talk = False
-        threads = []
-        for npc in GM.npc_list:
-            thread = threading.Thread(target=worker, args=(
-                npc, subtitle_font, prompt_font))
-            thread.start()
-            threads.append(thread)
-
-        # Wait for all threads to complete
-        for thread in threads:
-            thread.join()
+                    
+        except Exception as e:
+            print()
+            print(e)
+            print()
 
 def play_line(subtitle_font):
     if GM.line != None and GM.line_time < GM.counter:
