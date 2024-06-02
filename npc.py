@@ -3,7 +3,6 @@ import multiprocessing
 import threading
 from calendar import c
 from math import e
-from nis import cat
 
 import pygame
 
@@ -42,6 +41,7 @@ def update_npc(subtitle_font, prompt_font):
             if (
                 not CM.menu.visible
                 and not CM.player_menu.visible
+                and not GM.is_in_dialogue
             ):
                 x = CM.ai.update(x)
             
@@ -315,7 +315,7 @@ def play_line(subtitle_font):
 
 def transfer_npc(portal):
     for i, npc in enumerate(GM.transfer_list):
-        if npc[1] == portal["type"] and npc[2]==portal["world_name"]:
+        if npc[1] == portal["type"] and npc[2]==CM.player.current_world:
             if "inventory_type" in npc[0]["stats"]:
                 inventory_type = npc[0]["stats"]["inventory_type"].split("_")
                 inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
@@ -359,5 +359,16 @@ def transfer_npc(portal):
                 if GM.npc_list[-1]["name"]["name"].lower() not in CM.animation.enemy_anims:
                     CM.animation.load_anims(GM.npc_list[-1])
                     
+            try:
+                GM.npc_list[-1]=CM.ai.update(GM.npc_list[-1])
+                if len(GM.npc_list[-1]["name"]["path"])>0:
+                    GM.npc_list[-1]["name"]["target"]=copy.deepcopy(GM.npc_list[-1]["name"]["path"][-1])
+                    GM.npc_list[-1]["name"]["path"]=[]
+                GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
+            except Exception as e:
+                print(e)
             GM.transfer_list.pop(i)
             break
+        
+#teleportaj ga pol samo na začetni/končni point rutine ki jo dela pa kkeri je cajt najbližje, tak več kot 2 al pa 3 nebota chainani pa je good
+ 

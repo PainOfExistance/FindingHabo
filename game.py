@@ -192,7 +192,7 @@ class Game:
                     "name": data[0],
                     "iid": data[5],
                 })
-
+        GM.nav_tiles=[[]]
         for data in nav_tiles:
             for i in data:
                 img_rect = pygame.Rect(0, 0, 16, 16)
@@ -260,6 +260,7 @@ class Game:
         
         GM.background, GM.bg_rect = assets.load_background(metadata["background"])
         directory, _ = os.path.split(metadata["background"])
+        self.layers=[]
         for layer in metadata["layers"]:
             new_filepath = os.path.join(directory, layer)
             bg, _ =assets.load_background(new_filepath)
@@ -292,7 +293,10 @@ class Game:
         CM.player.player_rect.left = spawn_point[0] - offset[0]
         CM.player.player_rect.top = spawn_point[1] - offset[1]   
         CM.music_player.set_tracks(metadata["music"])
-        CM.music_player.play_random_track()     
+        CM.music_player.play_random_track()
+        
+        relative__left = int(GM.bg_rect.left + GM.npc_list[-1]["rect"].left)
+        relative__top = int(GM.bg_rect.top + GM.npc_list[-1]["rect"].top)
 
     def travel(self):
         self.loading()
@@ -1321,7 +1325,7 @@ class Game:
         font = pygame.font.Font("./fonts/SovngardeBold.ttf", 34)
         text = font.render("Loading...", True, Colors.edge_color)
         text_rect = text.get_rect(
-            center=(GM.screen.get_width() // 2, GM.screen.get_height() // 2.5)
+            center=(GM._scr.get_width() // 2, GM._scr.get_height() // 2.5)
         )
         GM._scr.blit(text, text_rect)
         pygame.display.flip()
