@@ -53,7 +53,7 @@ class Game:
         #CM.inventory.add_item(GM.items["Steel"])
         #CM.inventory.add_item(GM.items["Steel"])
         #CM.inventory.add_item(GM.items["Steel"])
-        #CM.inventory.add_item(GM.items["Key to the Land of the Free"])
+        CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         self.layer=pygame.Surface((GM.screen.get_width(), GM.screen.get_height()))
         self.layers=[]
 
@@ -114,7 +114,6 @@ class Game:
                 {"image": img, "rect": img_rect, "type": "container", "name": tmp, "pedistal": data[6], "iid": data[7]}
             )
         
-        CM.animation.enemy_anims.clear()
         for data in npcs:
             if "inventory_type" in data[0]["stats"]:
                 inventory_type = data[0]["stats"]["inventory_type"].split("_")
@@ -192,7 +191,7 @@ class Game:
                     "name": data[0],
                     "iid": data[5],
                 })
-        GM.nav_tiles=[[]]
+            
         for data in nav_tiles:
             for i in data:
                 img_rect = pygame.Rect(0, 0, 16, 16)
@@ -236,6 +235,8 @@ class Game:
     def setup(self, path="./terrain/worlds/simplified/Dream_World/data.json", type="default"):
         GM.world_objects.clear()
         GM.npc_list.clear()
+        CM.animation.enemy_anims.clear()
+        GM.nav_tiles=[[]]
         
         level_data = assets.load_level_data(path)
         modified_data = assets.get_stored_data(path)
@@ -247,7 +248,8 @@ class Game:
             delta = date1 - date2
             if modified_data[0]["name"]["respawn_timer"] > delta.days:
                 print("respawned")
-                spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes = wp.parse_visited(modified_data)
+                spawn_point, portals, npcs, final_items, containers, metadata, activators, _, notes = wp.parse_visited(modified_data)
+                _, _, _, _, _, _, _, nav_tiles, _ = wp.parser(level_data)
                 self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
             else:
                 print("basic in")
@@ -294,9 +296,6 @@ class Game:
         CM.player.player_rect.top = spawn_point[1] - offset[1]   
         CM.music_player.set_tracks(metadata["music"])
         CM.music_player.play_random_track()
-        
-        relative__left = int(GM.bg_rect.left + GM.npc_list[-1]["rect"].left)
-        relative__top = int(GM.bg_rect.top + GM.npc_list[-1]["rect"].top)
 
     def travel(self):
         self.loading()

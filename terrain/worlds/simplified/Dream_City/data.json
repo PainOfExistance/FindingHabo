@@ -103,7 +103,8 @@
 				"customFields": {
 					"chance": 1,
 					"enemy_Type": "Merchant",
-					"rarity": "unique"
+					"rarity": "unique",
+					"package": "dream_city_merchant_misc"
 				}
 			}
 		],

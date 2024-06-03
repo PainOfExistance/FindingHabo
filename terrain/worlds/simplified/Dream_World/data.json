@@ -77,7 +77,8 @@
 				"customFields": {
 					"chance": 0.5,
 					"enemy_Type": "bandit",
-					"rarity": "uncommon"
+					"rarity": "uncommon",
+					"package": ""
 				}
 			},
 			{
@@ -92,7 +93,8 @@
 				"customFields": {
 					"chance": 0.6,
 					"enemy_Type": "goblin",
-					"rarity": "common"
+					"rarity": "common",
+					"package": ""
 				}
 			},
 			{
@@ -107,7 +109,8 @@
 				"customFields": {
 					"chance": 0.8,
 					"enemy_Type": "wolf",
-					"rarity": "common"
+					"rarity": "common",
+					"package": ""
 				}
 			},
 			{
@@ -122,7 +125,8 @@
 				"customFields": {
 					"chance": 1,
 					"enemy_Type": "Merchant",
-					"rarity": "unique"
+					"rarity": "unique",
+					"package": ""
 				}
 			},
 			{
@@ -137,7 +141,8 @@
 				"customFields": {
 					"chance": 0.8,
 					"enemy_Type": "bandit",
-					"rarity": "uncommon"
+					"rarity": "uncommon",
+					"package": ""
 				}
 			},
 			{
@@ -152,7 +157,8 @@
 				"customFields": {
 					"chance": 1,
 					"enemy_Type": "bandit",
-					"rarity": "uncommon"
+					"rarity": "uncommon",
+					"package": ""
 				}
 			},
 			{
@@ -167,7 +173,8 @@
 				"customFields": {
 					"chance": 1,
 					"enemy_Type": "slime",
-					"rarity": "common"
+					"rarity": "common",
+					"package": ""
 				}
 			}
 		],
