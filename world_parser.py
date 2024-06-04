@@ -340,3 +340,19 @@ def remove_uniques(original, modified):
             orig_activators[i][0]["script_runner"]=copy.deepcopy(arr)
 
     return orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles, notes
+
+def get_global_npcs():
+    data_list=assets.load_global_npc_state("terrain/meta_data", f"{CM.player.hash}_global_npc.json")
+    if data_list != None:
+        GM.global_enemy_list=data_list
+        return
+
+    data_list=assets.load_all_world_data()
+    global_enemy_list=[]
+    for data in data_list:
+        if "Enemy_Random_Spawn" in data["entities"]:
+            for x in data["entities"]["Enemy_Random_Spawn"]:
+                global_enemy_list.append(x)
+
+    GM.global_enemy_list.clear()
+    GM.global_enemy_list = [x for x in global_enemy_list for y in GM.npc_list if x["iid"]==y["iid"]]

@@ -69,6 +69,7 @@ class GameManager:
     player_relative_center=(0,0)
     line=None
     transfer_list=[]
+    global_enemy_list=[]
 
 class ClassManager:
     ai=None

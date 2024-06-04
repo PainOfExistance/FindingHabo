@@ -288,5 +288,29 @@ def get_actions(day, time, routines):
                     actions.extend(routine_actions)
     return actions
 
+def load_all_world_data():
+    world_data = []
+    for file in glob.glob("./terrain/worlds/simplified/*/data.json"):
+        with open(file, "r") as world_file:
+            data = json.load(world_file)
+            world_data.append(data)
+    return world_data
 
+def load_global_npc_state(path, filename="npc_state.json"):
+    full_path = os.path.join(path, filename)
+    if not os.path.exists(os.path.dirname(full_path)):
+        return None
+    
+    with open(full_path, "r") as file:
+        data = json.load(file)
+        return data
+
+def save_global_npc_state(path, data, filename="npc_state.json"):
+    full_path = os.path.join(path, filename)
+    if not os.path.exists(os.path.dirname(full_path)):
+        os.makedirs(os.path.dirname(full_path))
+    
+    with open(full_path, "w") as file:
+        json_data=json.dumps(data, indent=2)
+        file.write(json_data)
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

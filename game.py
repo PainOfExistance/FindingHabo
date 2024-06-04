@@ -260,6 +260,10 @@ class Game:
             spawn_point, portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes = wp.parser(level_data)
             self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
         
+        wp.get_global_npcs()
+        print()
+        print(GM.global_enemy_list)
+        print()
         GM.background, GM.bg_rect = assets.load_background(metadata["background"])
         directory, _ = os.path.split(metadata["background"])
         self.layers=[]

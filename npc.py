@@ -31,7 +31,7 @@ def update_npc(subtitle_font, prompt_font):
             GM.npc_list.pop(index)
             
         elif GM.npc_list[index]["name"]["stats"]["status"]=="transfer":
-            GM.npc_list[index]["name"]["stats"]["status"]=""
+            GM.npc_list.pop(index)
 
     for index, x in enumerate(GM.npc_list):
         try:
