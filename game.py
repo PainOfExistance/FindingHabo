@@ -261,11 +261,15 @@ class Game:
             self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
         
         wp.get_global_npcs()
+        
         print()
-        print(GM.global_enemy_list)
+        for znj in GM.global_enemy_list:
+            print(znj)
         print()
+        
         GM.background, GM.bg_rect = assets.load_background(metadata["background"])
         directory, _ = os.path.split(metadata["background"])
+        
         self.layers=[]
         for layer in metadata["layers"]:
             new_filepath = os.path.join(directory, layer)
@@ -273,8 +277,7 @@ class Game:
             self.layer.blit(bg, (0, 0))
             self.layers.append(bg)
         
-        self.layers=self.layers[-1]
-            
+        self.layers=self.layers[-1]  
         GM.collision_map, GM.anim_tiles = assets.load_collision(metadata["collision_set"])
         GM.map_height = GM.collision_map.shape[0]
         GM.map_width = GM.collision_map.shape[1]
@@ -334,7 +337,10 @@ class Game:
             self.handle_events()
             self.draw()
             GM.game_date.increment_seconds()
+            if GM.game_date.current_date.minute == 0 or GM.game_date.current_date.minute == 30:
+                N.set_npc()
             CM.player.check_experation(GM.delta_time)
+            
             if (
                 not CM.player_menu.visible
                 and not GM.tab_pressed

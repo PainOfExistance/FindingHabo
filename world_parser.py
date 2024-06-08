@@ -355,4 +355,4 @@ def get_global_npcs():
                 global_enemy_list.append(x)
 
     GM.global_enemy_list.clear()
-    GM.global_enemy_list = [x for x in global_enemy_list for y in GM.npc_list if x["iid"]==y["iid"]]
+    GM.global_enemy_list = [x for x in global_enemy_list for y in GM.npc_list if x["iid"]!=y["iid"]]

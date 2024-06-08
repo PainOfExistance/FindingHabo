@@ -369,6 +369,8 @@ def transfer_npc(portal):
                 print(e)
             GM.transfer_list.pop(i)
             break
-        
+
+def set_npc():
+    pass          
 #teleportaj ga pol samo na začetni/končni point rutine ki jo dela pa kkeri je cajt najbližje, tak več kot 2 al pa 3 nebota chainani pa je good
  

@@ -268,13 +268,7 @@ def draw_objects(prompt_font):
 
             elif "stats" not in x["name"] and "image" in x:
                 GM.screen.blit(x["image"], (relative__left, relative__top))
-
-            #if x["type"] == "container":
-            #    GM.collision_map[
-            #        x["rect"].top + 10 : x["rect"].bottom - 10,
-            #        x["rect"].left + 10 : x["rect"].right - 10,
-            #    ] = 1
-
+            
             other_obj_rect = pygame.Rect(
                 relative__left,
                 relative__top,
