@@ -371,6 +371,15 @@ def transfer_npc(portal):
             break
 
 def set_npc():
-    pass          
+    for x in GM.global_enemy_list():
+        day=GM.game_date.current_date.weekday()
+        time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
+        current_routine, world, portal=copy.deepcopy(assets.get_actions(day, time, x["routine"]))
+        if x["current_routine"]!=current_routine:
+            x["current_routine"]=copy.deepcopy(current_routine)
+            x["world"]=copy.deepcopy(world)
+            x["portal"]=copy.deepcopy(portal)
+            if CM.player.current_world in world:
+                pass
+                #todo parse npc, and do all the nececary shit
 #teleportaj ga pol samo na začetni/končni point rutine ki jo dela pa kkeri je cajt najbližje, tak več kot 2 al pa 3 nebota chainani pa je good
- 

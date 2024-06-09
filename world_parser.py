@@ -352,7 +352,11 @@ def get_global_npcs():
     for data in data_list:
         if "Enemy_Random_Spawn" in data["entities"]:
             for x in data["entities"]["Enemy_Random_Spawn"]:
-                global_enemy_list.append(x)
+                day=GM.game_date.current_date.weekday()
+                time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
+                x["routine"] = assets.load_routine(x["customFields"]["package"] if x["customFields"]["package"] != '' else "dream_city_merchant_misc")
+                x["current_routine"], x["world"], x["portal"]=copy.deepcopy(assets.get_actions(day, time, x["routine"]))
+                global_enemy_list.append(copy.deepcopy(x))
 
     GM.global_enemy_list.clear()
     GM.global_enemy_list = [x for x in global_enemy_list for y in GM.npc_list if x["iid"]!=y["iid"]]

@@ -52,9 +52,9 @@ class Ai:
     def update_state(self, npc):
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
-        actions=assets.get_actions(day, time, npc["name"]["routine"])
+        actions, _, _=assets.get_actions(day, time, npc["name"]["routine"])
         
-        if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"][-1]!=actions[-1]:
+        if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"]!=actions:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"]=copy.deepcopy(actions)
             npc=self.__get_state_action(npc)

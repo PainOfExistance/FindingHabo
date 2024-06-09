@@ -271,7 +271,7 @@ def load_recepies():
         data = json.load(file)
     return data
 
-def load_routine(filename):
+def load_routine(filename="dream_city_merchant_misc"):
     with open(f"./packages/{filename}.szbc", 'r') as file:
         data = json.load(file)
     return data
@@ -286,7 +286,11 @@ def get_actions(day, time, routines):
                 routine_actions = schedule.get(closest_time)
                 if routine_actions:
                     actions.extend(routine_actions)
-    return actions
+                    world=routines["world"][closest_time]
+                    portal=None
+                    if closest_time in routines["portals"].keys():
+                        portal=routines["portals"][closest_time]
+    return actions, world, portal
 
 def load_all_world_data():
     world_data = []
