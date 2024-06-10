@@ -337,9 +337,18 @@ class Game:
             self.handle_events()
             self.draw()
             GM.game_date.increment_seconds()
-            if GM.game_date.current_date.minute == 0 or GM.game_date.current_date.minute == 30:
-                N.set_npc()
             CM.player.check_experation(GM.delta_time)
+            
+            if (GM.game_date.current_date.minute == 0 or GM.game_date.current_date.minute == 30 
+                and not CM.menu.visible
+                and not CM.player_menu.visible
+                and not GM.container_open
+                and not GM.is_in_dialogue
+                and not GM.map_shown
+                and not GM.crafting
+                and not GM.dead
+                ):
+                N.set_npc()
             
             if (
                 not CM.player_menu.visible

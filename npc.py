@@ -7,6 +7,7 @@ from math import e
 import pygame
 
 import asset_loader as assets
+import world_parser as wp
 from colors import Colors
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
@@ -314,8 +315,12 @@ def play_line(subtitle_font):
         GM.current_line = None
 
 def transfer_npc(portal):
+    if portal==None or portal=="default":
+        portal["type"]="default"
     for i, npc in enumerate(GM.transfer_list):
-        if npc[1] == portal["type"] and npc[2]==CM.player.current_world:
+        if (npc[1] == portal["type"] or portal["type"]) and npc[2]==CM.player.current_world:
+            portal["spawn_point"]["cx"]=npc[-1][0]
+            portal["spawn_point"]["cy"]=npc[-1][1]
             if "inventory_type" in npc[0]["stats"]:
                 inventory_type = npc[0]["stats"]["inventory_type"].split("_")
                 inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
@@ -371,15 +376,25 @@ def transfer_npc(portal):
             break
 
 def set_npc():
-    for x in GM.global_enemy_list():
+    for x in GM.global_enemy_list:
+        y=None
+        if x is tuple:
+            y=x[0]
+        else:
+            y=x     
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
-        current_routine, world, portal=copy.deepcopy(assets.get_actions(day, time, x["routine"]))
-        if x["current_routine"]!=current_routine:
-            x["current_routine"]=copy.deepcopy(current_routine)
-            x["world"]=copy.deepcopy(world)
-            x["portal"]=copy.deepcopy(portal)
+        current_routine, world, portal=copy.deepcopy(assets.get_actions(day, time, y["routine"]))
+        if y["current_routine"]!=current_routine:
+            y["current_routine"]=copy.deepcopy(current_routine)
+            y["world"]=copy.deepcopy(world)
+            y["portal"]=copy.deepcopy(portal)
             if CM.player.current_world in world:
-                pass
-                #todo parse npc, and do all the nececary shit
-#teleportaj ga pol samo na začetni/končni point rutine ki jo dela pa kkeri je cajt najbližje, tak več kot 2 al pa 3 nebota chainani pa je good
+                if "stats" not in y:
+                    tmp=wp.setEnemies(y["customFields"])
+                    if tmp:
+                        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"]))
+                        GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
+                elif y["stats"]["status"]!="dead":
+                    GM.transfer_list.append(copy.deepcopy(x))
+                    GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
