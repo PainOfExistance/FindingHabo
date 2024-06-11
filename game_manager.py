@@ -70,6 +70,7 @@ class GameManager:
     line=None
     transfer_list=[]
     global_enemy_list=[]
+    propmt_pos=(0,0)
 
 class ClassManager:
     ai=None

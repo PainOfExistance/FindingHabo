@@ -145,7 +145,7 @@ def update_npc(subtitle_font, prompt_font):
                     x["name"]["index_points"]=[]
                     x["name"]["column_index"]=0
                     x["name"]["to_face"]=0
-                    GM.transfer_list.append((copy.deepcopy(x["name"]), object['name']['type'], object["name"]["world_name"], x["iid"]))
+                    GM.global_enemy_list.append((copy.deepcopy(x["name"]), object['name']['type'], object["name"]["world_name"], x["iid"]))
                     x["name"]["stats"]["status"] = "transfer"
 
             if (
@@ -239,20 +239,8 @@ def update_npc(subtitle_font, prompt_font):
                         and GM.npc_list[index]["name"]["stats"]["type"] != "enemy"
                         and GM.npc_list[index]["name"]["stats"]["status"] != "dead"
                     ):
-                        text = prompt_font.render(
-                            f"E) {GM.npc_list[index]['name']['name']}",
-                            True,
-                            Colors.mid_black,
-                        )
-
-                        text_rect = text.get_rect(
-                            center=(
-                                relative__left + x["rect"].width // 2,
-                                relative__top - 10,
-                            )
-                        )
                         GM.talk_to_name = x["name"]["name"]
-                        GM.screen.blit(text, text_rect)
+                        GM.propmt_pos = (relative__left + x["rect"].width // 2, relative__top - 10)
                         GM.is_ready_to_talk = True
 
                     elif (
@@ -293,7 +281,21 @@ def update_npc(subtitle_font, prompt_font):
             print(e)
             print()
 
-def play_line(subtitle_font):
+def play_line(subtitle_font, prompt_font):
+    if GM.talk_to_name != "":
+        text = prompt_font.render(
+            f"E) {GM.talk_to_name}",
+            True,
+            Colors.mid_black,
+        )
+        text_rect = text.get_rect(
+            center=(
+                GM.propmt_pos[0],
+                GM.propmt_pos[1],
+            )
+        )
+        GM.screen.blit(text, text_rect)
+    
     if GM.line != None and GM.line_time < GM.counter:
         GM.current_line = GM.line
         GM.line_time = (
@@ -315,12 +317,13 @@ def play_line(subtitle_font):
         GM.current_line = None
 
 def transfer_npc(portal):
-    if portal==None or portal=="default":
-        portal["type"]="default"
     for i, npc in enumerate(GM.transfer_list):
-        if (npc[1] == portal["type"] or portal["type"]) and npc[2]==CM.player.current_world:
+        if portal==None or portal=="default":
+            portal["type"]="default"
             portal["spawn_point"]["cx"]=npc[-1][0]
             portal["spawn_point"]["cy"]=npc[-1][1]
+            
+        if (npc[1] == portal["type"] or portal["type"]=="default") and CM.player.current_world in npc[2]:
             if "inventory_type" in npc[0]["stats"]:
                 inventory_type = npc[0]["stats"]["inventory_type"].split("_")
                 inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
@@ -381,7 +384,7 @@ def set_npc():
         if x is tuple:
             y=x[0]
         else:
-            y=x     
+            y=x
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
         current_routine, world, portal=copy.deepcopy(assets.get_actions(day, time, y["routine"]))
@@ -393,8 +396,10 @@ def set_npc():
                 if "stats" not in y:
                     tmp=wp.setEnemies(y["customFields"])
                     if tmp:
-                        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"]))
+                        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"], (0,0)))
                         GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
                 elif y["stats"]["status"]!="dead":
-                    GM.transfer_list.append(copy.deepcopy(x))
+                    znj=(y, y["portal"], y["world"], x[3], x[4])
+                    GM.transfer_list.append(copy.deepcopy(znj))
                     GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
+                    #todo, x and y where npc should be and all that shit
