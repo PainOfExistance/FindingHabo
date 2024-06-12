@@ -243,13 +243,6 @@ def update_npc(subtitle_font, prompt_font):
                         GM.propmt_pos = (relative__left + x["rect"].width // 2, relative__top - 10)
                         GM.is_ready_to_talk = True
 
-                    elif (
-                        not other_obj_rect.colliderect(GM.weapon_rect)
-                        and x["type"] == "npc"
-                    ):
-                        GM.talk_to_name = ""
-                        GM.is_ready_to_talk = False
-
                     if (
                         "stats" in GM.npc_list[index]["name"]
                         and GM.npc_list[index]["name"]["stats"]["health"] > 0
@@ -275,6 +268,7 @@ def update_npc(subtitle_font, prompt_font):
                     and GM.npc_list[index]["name"]["stats"]["status"] != "dead"
                 ):
                     GM.is_ready_to_talk = False
+                    GM.talk_to_name = ""
                     
         except Exception as e:
             print()
