@@ -4,6 +4,7 @@ import math
 import numpy as np
 import pygame
 
+import npc as N
 import puzzle
 from colors import Colors
 from game_manager import ClassManager as CM
@@ -325,6 +326,9 @@ def draw_objects(prompt_font):
                 and index == GM.container_hovered
             ):
                 GM.container_hovered = None
+            
+            if (x["type"]=="portal" and len(GM.transfer_list)):
+                N.transfer_npc(x["name"], inline=True)
 
             if (
                 x["type"] == "portal"

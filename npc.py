@@ -310,7 +310,7 @@ def play_line(subtitle_font, prompt_font):
     else:
         GM.current_line = None
 
-def transfer_npc(portal):
+def transfer_npc(portal, inline=True):
     for i, npc in enumerate(GM.transfer_list):
         if portal==None or portal=="default":
             portal["type"]="default"
@@ -363,10 +363,11 @@ def transfer_npc(portal):
                     
             try:
                 GM.npc_list[-1]=CM.ai.update(GM.npc_list[-1])
-                if len(GM.npc_list[-1]["name"]["path"])>0:
-                    GM.npc_list[-1]["name"]["target"]=copy.deepcopy(GM.npc_list[-1]["name"]["path"][-1])
-                    GM.npc_list[-1]["name"]["path"]=[]
-                GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
+                if inline:
+                    if len(GM.npc_list[-1]["name"]["path"])>0:
+                        GM.npc_list[-1]["name"]["target"]=copy.deepcopy(GM.npc_list[-1]["name"]["path"][-1])
+                        GM.npc_list[-1]["name"]["path"]=[]
+                    GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
             except Exception as e:
                 print(e)
             GM.transfer_list.pop(i)
@@ -390,7 +391,7 @@ def set_npc():
                 if "stats" not in y:
                     tmp=wp.setEnemies(y["customFields"])
                     if tmp:
-                        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"], (0,0)))
+                        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"], (GM.bg_rect.width//2, GM.bg_rect.height//2)))
                         GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
                 elif y["stats"]["status"]!="dead":
                     znj=(y, y["portal"], y["world"], x[3], x[4])
