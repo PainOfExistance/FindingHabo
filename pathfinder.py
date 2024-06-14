@@ -16,7 +16,7 @@ from game_manager import GameManager as GM
 
 class PathFinder:
     def __init__(self):
-        self.finder = AStar(GM.collision_map)
+        #self.finder = AStar(GM.collision_map)
         self.movement_vectors = {
          (0, -1): 1,
          (-1, -1): 1,
@@ -33,8 +33,8 @@ class PathFinder:
         }
 
     
-    def update(self):
-        self.finder = AStar(GM.collision_map)
+    #def update(self):
+    #    self.finder = AStar(GM.collision_map)
           
     def find_path(self, start, end, size=(1, 1)):
         return self.finder.find_path(start, end, size)

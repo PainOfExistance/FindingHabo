@@ -37,6 +37,7 @@ def update_npc(subtitle_font, prompt_font):
     for index, x in enumerate(GM.npc_list):
         try:
             if x["name"]["stats"]["status"] == "":
+                # Add your indented block here
                 continue
             
             if (
@@ -310,10 +311,12 @@ def play_line(subtitle_font, prompt_font):
     else:
         GM.current_line = None
 
-def transfer_npc(portal, inline=True):
+def transfer_npc(portal, inline=False):
     for i, npc in enumerate(GM.transfer_list):
         if portal==None or portal=="default":
+            portal={}
             portal["type"]="default"
+            portal["spawn_point"]={}
             portal["spawn_point"]["cx"]=npc[-1][0]
             portal["spawn_point"]["cy"]=npc[-1][1]
             
@@ -360,41 +363,48 @@ def transfer_npc(portal, inline=True):
                 })
                 if GM.npc_list[-1]["name"]["name"].lower() not in CM.animation.enemy_anims:
                     CM.animation.load_anims(GM.npc_list[-1])
-                    
+            GM.transfer_list.pop(i)
+
             try:
                 GM.npc_list[-1]=CM.ai.update(GM.npc_list[-1])
-                if inline:
+                if not inline:
                     if len(GM.npc_list[-1]["name"]["path"])>0:
                         GM.npc_list[-1]["name"]["target"]=copy.deepcopy(GM.npc_list[-1]["name"]["path"][-1])
                         GM.npc_list[-1]["name"]["path"]=[]
                     GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
             except Exception as e:
+                print()
                 print(e)
-            GM.transfer_list.pop(i)
-            break
-
+                print()
+            
 def set_npc():
-    for x in GM.global_enemy_list:
+    for i, x in enumerate(GM.global_enemy_list):
         y=None
-        if x is tuple:
+        if type(x) is tuple:
             y=x[0]
         else:
             y=x
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
         current_routine, world, portal=copy.deepcopy(assets.get_actions(day, time, y["routine"]))
-        if y["current_routine"]!=current_routine:
+        print(current_routine, y["current_routine"])
+        if y["current_routine"]!=current_routine or CM.player.current_world in world:
             y["current_routine"]=copy.deepcopy(current_routine)
             y["world"]=copy.deepcopy(world)
             y["portal"]=copy.deepcopy(portal)
             if CM.player.current_world in world:
+                print("Routine changed")
                 if "stats" not in y:
                     tmp=wp.setEnemies(y["customFields"])
                     if tmp:
                         GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"], (GM.bg_rect.width//2, GM.bg_rect.height//2)))
                         GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
+                        GM.global_enemy_list.pop(i)
+                        print("meow")
                 elif y["stats"]["status"]!="dead":
                     znj=(y, y["portal"], y["world"], x[3], x[4])
                     GM.transfer_list.append(copy.deepcopy(znj))
                     GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
-                    #todo, x and y where npc should be and all that shit
+                    GM.global_enemy_list.pop(i)
+                    print("meow")
+                #todo, x and y where npc should be and all that shit
