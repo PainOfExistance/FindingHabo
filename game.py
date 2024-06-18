@@ -56,10 +56,11 @@ class Game:
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         self.layer=pygame.Surface((GM.screen.get_width(), GM.screen.get_height()))
         self.layers=[]
-        wp.get_global_npcs()
+        #wp.get_global_npcs()
+        wp.get_global_nav_tiles()
         #print()
-        #for znj in GM.global_enemy_list:
-        #    print(znj)
+        #for znj in GM.global_nav_tiles:
+        #    print(f"{znj}: {GM.global_nav_tiles[znj]}")
         #print()
 
         CM.ai.pathfinder=PathFinder()
@@ -122,51 +123,52 @@ class Game:
         #print()
         #print(GM.transfer_list)
         #print()
-        #for data in npcs:
-        #    if "inventory_type" in data[0]["stats"]:
-        #        inventory_type = data[0]["stats"]["inventory_type"].split("_")
-        #        inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
-        #
-        #        if len(data[0]["items"]) > 0:
-        #            item_list = []
-        #            for item in data[0]["items"]:
-        #                if item["type"] in inventory:
-        #                    item["quantity"] = inventory[item["type"]] + item["quantity"]
-        #                    inventory.pop(item["type"])
-        #            for item in inventory:
-        #                item_list.append({"type": item, "quantity": inventory[item]})
-        #
-        #        data[0]["items"] = item_list
-        #        
-        #    if "package" in data[0]:
-        #        data[0]["routine"] = assets.load_routine(data[0]["package"])
-        #
-        #    if "png" in data[0]["stats"]["image"]:
-        #        img, img_rect = assets.load_images(data[0]["stats"]["image"], (64, 64), (data[1], data[2]))
-        #        GM.npc_list.append({
-        #            "image": img,
-        #            "rect": img_rect,
-        #            "type": "npc",
-        #            "name": copy.deepcopy(data[0]),
-        #            "attack_diff": 0,
-        #            "agroved": False,
-        #            "iid": data[3]
-        #        })
-        #    else:
-        #        images, rect=assets.load_enemy_sprites(f"./textures/npc/{data[0]["stats"]["image"]}/")
-        #        rect.center=(data[1], data[2])
-        #        CM.animation.enemy_anims[data[0]["name"].lower()]={"images": images, "rect": rect, "prev_action": ""}
-        #        GM.npc_list.append({
-        #            "image": images[list(images.keys())[0]]["frames"][0],
-        #            "rect": rect,
-        #            "type": "npc",
-        #            "name": copy.deepcopy(data[0]),
-        #            "attack_diff": 0,
-        #            "agroved": False,
-        #            "iid": data[3]
-        #        })
-        #        if GM.npc_list[-1]["name"]["name"].lower() not in CM.animation.enemy_anims:
-        #            CM.animation.load_anims(GM.npc_list[-1])
+        for data in npcs:
+            if "inventory_type" in data[0]["stats"]:
+                inventory_type = data[0]["stats"]["inventory_type"].split("_")
+                inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
+        
+                if len(data[0]["items"]) > 0:
+                    item_list = []
+                    for item in data[0]["items"]:
+                        if item["type"] in inventory:
+                            item["quantity"] = inventory[item["type"]] + item["quantity"]
+                            inventory.pop(item["type"])
+                    for item in inventory:
+                        item_list.append({"type": item, "quantity": inventory[item]})
+        
+                data[0]["items"] = item_list
+                
+            if "package" in data[0]:
+                data[0]["routine"] = assets.load_routine(data[0]["package"])
+        
+            if "png" in data[0]["stats"]["image"]:
+                img, img_rect = assets.load_images(data[0]["stats"]["image"], (64, 64), (data[1], data[2]))
+                GM.npc_list.append({
+                    "image": img,
+                    "rect": img_rect,
+                    "type": "npc",
+                    "name": copy.deepcopy(data[0]),
+                    "attack_diff": 0,
+                    "agroved": False,
+                    "iid": data[3]
+                })
+            else:
+                images, rect=assets.load_enemy_sprites(f"./textures/npc/{data[0]["stats"]["image"]}/")
+                rect.center=(data[1], data[2])
+                CM.animation.enemy_anims[data[0]["name"].lower()]={"images": images, "rect": rect, "prev_action": ""}
+                GM.npc_list.append({
+                    "image": images[list(images.keys())[0]]["frames"][0],
+                    "rect": rect,
+                    "type": "npc",
+                    "name": copy.deepcopy(data[0]),
+                    "attack_diff": 0,
+                    "agroved": False,
+                    "iid": data[3]
+                })
+                if GM.npc_list[-1]["name"]["name"].lower() not in CM.animation.enemy_anims:
+                    CM.animation.load_anims(GM.npc_list[-1])
+            GM.npc_list[-1]["name"]["world"]=CM.player.current_world
 
         for data in portals:
             if "unlocked_by" in data[0]:
@@ -209,7 +211,6 @@ class Game:
                         "rect": img_rect,
                         "name": i[0],
                         "type": "nav_tile",
-                        "name": i[0],
                         "iid": i[3]
                     })   
                 
@@ -343,15 +344,7 @@ class Game:
             GM.game_date.increment_seconds()
             CM.player.check_experation(GM.delta_time)
             
-            if (GM.game_date.current_date.minute == 0 or GM.game_date.current_date.minute == 30 
-                and not CM.menu.visible
-                and not CM.player_menu.visible
-                and not GM.container_open
-                and not GM.is_in_dialogue
-                and not GM.map_shown
-                and not GM.crafting
-                and not GM.dead
-                ):
+            if (GM.game_date.current_date.minute == 0 or GM.game_date.current_date.minute == 30 ):
                 N.set_npc()
             
             if (

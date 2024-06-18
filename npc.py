@@ -13,7 +13,17 @@ from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
 
+def manage_global_npc():
+    for index, x in enumerate(GM.global_enemy_list):
+        if x is type(tuple):
+            #todo
+            lenghten_active_npc(x, CM.ai.update(shorten_active_npc(x)))
+        else:
+            #todo
+            lenghten_active_npc(x, CM.ai.update(shorten_active_npc(x)))
+
 def update_npc(subtitle_font, prompt_font):
+    rm_list=[]
     for index, x in enumerate(GM.npc_list):
         if GM.npc_list[index]["name"]["stats"]["status"] == "dead":
             GM.anim_tiles.append({'row': x["rect"].top, 'col': x["rect"].left,
@@ -29,13 +39,16 @@ def update_npc(subtitle_font, prompt_font):
                     ["name"], 'textures/static/chest.jpg', itm_nums, None, "", False)
             GM.world_objects.append({"image": img, "rect": rect, "type": "container",
                                     "name": data, "pedistal": data[6], "iid": data[7]})
-            GM.npc_list.pop(index)
-            
+            rm_list.append(index)   
         elif GM.npc_list[index]["name"]["stats"]["status"]=="transfer":
-            GM.npc_list.pop(index)
+            rm_list.append(index)
+    GM.npc_list = [x for i, x in enumerate(GM.npc_list) if i not in rm_list] 
 
     for index, x in enumerate(GM.npc_list):
-        try:
+            #print()
+            #print(x["name"]["path"])
+            #print(x["name"]["target"])
+            #print()
             if x["name"]["stats"]["status"] == "":
                 # Add your indented block here
                 continue
@@ -45,7 +58,7 @@ def update_npc(subtitle_font, prompt_font):
                 and not CM.player_menu.visible
                 and not GM.is_in_dialogue
             ):
-                x = CM.ai.update(x)
+                lenghten_active_npc(x, CM.ai.update(shorten_active_npc(x)))
             
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
@@ -144,6 +157,7 @@ def update_npc(subtitle_font, prompt_font):
                     x["name"]["current_routine"]=[]
                     x["name"]["routine"]=[]
                     x["name"]["index_points"]=[]
+                    x["name"]["column_index"]=0
                     x["name"]["column_index"]=0
                     x["name"]["to_face"]=0
                     GM.global_enemy_list.append((copy.deepcopy(x["name"]), object['name']['type'], object["name"]["world_name"], x["iid"]))
@@ -270,11 +284,6 @@ def update_npc(subtitle_font, prompt_font):
                 ):
                     GM.is_ready_to_talk = False
                     GM.talk_to_name = ""
-                    
-        except Exception as e:
-            print()
-            print(e)
-            print()
 
 def play_line(subtitle_font, prompt_font):
     if GM.talk_to_name != "":
@@ -312,6 +321,7 @@ def play_line(subtitle_font, prompt_font):
         GM.current_line = None
 
 def transfer_npc(portal, inline=False):
+    rm_list=[]
     for i, npc in enumerate(GM.transfer_list):
         if portal==None or portal=="default":
             portal={}
@@ -321,90 +331,159 @@ def transfer_npc(portal, inline=False):
             portal["spawn_point"]["cy"]=npc[-1][1]
             
         if (npc[1] == portal["type"] or portal["type"]=="default") and CM.player.current_world in npc[2]:
-            if "inventory_type" in npc[0]["stats"]:
-                inventory_type = npc[0]["stats"]["inventory_type"].split("_")
-                inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
-                if len(npc[0]["items"]) > 0:
-                    item_list = []
-                    for item in npc[0]["items"]:
-                        if item["type"] in inventory:
-                            item["quantity"] = inventory[item["type"]] + item["quantity"]
-                            inventory.pop(item["type"])
-                    for item in inventory:
-                        item_list.append({"type": item, "quantity": inventory[item]})
-                npc[0]["items"] = item_list
-                
-            if "package" in npc[0]:
-                npc[0]["routine"] = assets.load_routine(npc[0]["package"])
-
-            if "png" in npc[0]["stats"]["image"]:
-                img, img_rect = assets.load_images(npc[0]["stats"]["image"], (64, 64), (portal["spawn_point"]["cx"]*16, portal["spawn_point"]["cy"]*16))
-                GM.npc_list.append({
-                    "image": img,
-                    "rect": img_rect,
-                    "type": "npc",
-                    "name": copy.deepcopy(npc[0]),
-                    "attack_diff": 0,
-                    "agroved": False,
-                    "iid": npc[3]
-                })
-            else:
-                images, rect=assets.load_enemy_sprites(f"./textures/npc/{npc[0]["stats"]["image"]}/")
-                rect.center=(portal["spawn_point"]["cx"]*16, portal["spawn_point"]["cy"]*16)
-                CM.animation.enemy_anims[npc[0]["name"].lower()]={"images": images, "rect": rect, "prev_action": ""}
-                GM.npc_list.append({
-                    "image": images[list(images.keys())[0]]["frames"][0],
-                    "rect": rect,
-                    "type": "npc",
-                    "name": copy.deepcopy(npc[0]),
-                    "attack_diff": 0,
-                    "agroved": False,
-                    "iid": npc[3]
-                })
-                if GM.npc_list[-1]["name"]["name"].lower() not in CM.animation.enemy_anims:
-                    CM.animation.load_anims(GM.npc_list[-1])
-            GM.transfer_list.pop(i)
-
             try:
-                GM.npc_list[-1]=CM.ai.update(GM.npc_list[-1])
-                if not inline:
-                    if len(GM.npc_list[-1]["name"]["path"])>0:
-                        GM.npc_list[-1]["name"]["target"]=copy.deepcopy(GM.npc_list[-1]["name"]["path"][-1])
-                        GM.npc_list[-1]["name"]["path"]=[]
-                    GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
+                if "inventory_type" in npc[0]["stats"]:
+                    inventory_type = npc[0]["stats"]["inventory_type"].split("_")
+                    inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
+                    if len(npc[0]["items"]) > 0:
+                        item_list = []
+                        for item in npc[0]["items"]:
+                            if item["type"] in inventory:
+                                item["quantity"] = inventory[item["type"]] + item["quantity"]
+                                inventory.pop(item["type"])
+                        for item in inventory:
+                            item_list.append({"type": item, "quantity": inventory[item]})
+                    npc[0]["items"] = item_list
+
+                if "package" in npc[0]:
+                    npc[0]["routine"] = assets.load_routine(npc[0]["package"])
+
+                if "png" in npc[0]["stats"]["image"]:
+                    img, img_rect = assets.load_images(npc[0]["stats"]["image"], (64, 64), (portal["spawn_point"]["cx"]*16, portal["spawn_point"]["cy"]*16))
+                    GM.npc_list.append({
+                        "image": img,
+                        "rect": img_rect,
+                        "type": "npc",
+                        "name": copy.deepcopy(npc[0]),
+                        "attack_diff": 0,
+                        "agroved": False,
+                        "iid": npc[3]
+                    })
+                else:
+                    images, rect=assets.load_enemy_sprites(f"./textures/npc/{npc[0]["stats"]["image"]}/")
+                    rect.center=(portal["spawn_point"]["cx"]*16, portal["spawn_point"]["cy"]*16)
+                    CM.animation.enemy_anims[npc[0]["name"].lower()]={"images": images, "rect": rect, "prev_action": ""}
+                    GM.npc_list.append({
+                        "image": images[list(images.keys())[0]]["frames"][0],
+                        "rect": rect,
+                        "type": "npc",
+                        "name": copy.deepcopy(npc[0]),
+                        "attack_diff": 0,
+                        "agroved": False,
+                        "iid": npc[3]
+                    })
+                    if GM.npc_list[-1]["name"]["name"].lower() not in CM.animation.enemy_anims:
+                        CM.animation.load_anims(GM.npc_list[-1])
+                rm_list.append(i)
+                try:
+                    GM.npc_list[-1]=CM.ai.update(GM.npc_list[-1])
+                    if not inline:
+                        if len(GM.npc_list[-1]["name"]["path"])>0:
+                            GM.npc_list[-1]["name"]["target"]=copy.deepcopy(GM.npc_list[-1]["name"]["path"][-1])
+                            GM.npc_list[-1]["name"]["path"]=[]
+                        GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
+                except Exception as e:
+                    print()
+                    print(e)
+                    print()
+                    
             except Exception as e:
                 print()
                 print(e)
                 print()
-            
+                
+    GM.transfer_list = [x for i, x in enumerate(GM.transfer_list) if i not in rm_list]
+           
 def set_npc():
+    rm_list=[]
     for i, x in enumerate(GM.global_enemy_list):
         y=None
         if type(x) is tuple:
             y=x[0]
         else:
             y=x
+            
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
         current_routine, world, portal=copy.deepcopy(assets.get_actions(day, time, y["routine"]))
-        print(current_routine, y["current_routine"])
         if y["current_routine"]!=current_routine or CM.player.current_world in world:
             y["current_routine"]=copy.deepcopy(current_routine)
             y["world"]=copy.deepcopy(world)
             y["portal"]=copy.deepcopy(portal)
             if CM.player.current_world in world:
-                print("Routine changed")
                 if "stats" not in y:
                     tmp=wp.setEnemies(y["customFields"])
                     if tmp:
-                        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"], (GM.bg_rect.width//2, GM.bg_rect.height//2)))
+                        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"], (y["x"], y["y"])))
                         GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
-                        GM.global_enemy_list.pop(i)
-                        print("meow")
+                        rm_list.append(i)
                 elif y["stats"]["status"]!="dead":
                     znj=(y, y["portal"], y["world"], x[3], x[4])
                     GM.transfer_list.append(copy.deepcopy(znj))
                     GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
-                    GM.global_enemy_list.pop(i)
-                    print("meow")
-                #todo, x and y where npc should be and all that shit
+                    rm_list.append(i)
+                    
+    GM.global_enemy_list = [x for i, x in enumerate(GM.global_enemy_list) if i not in rm_list]
+    #todo, x and y where npc should be and all that shit
+
+def shorten_active_npc(x):
+    return {
+            "name": {
+                "name": x["name"]["name"],
+                "movement_behavior": {
+                    "type": x["name"]["movement_behavior"]["type"],
+                    "dirrection": x["name"]["movement_behavior"]["dirrection"],
+                    "movement_speed": x["name"]["movement_behavior"]["movement_speed"]
+                },
+                "target": x["name"]["target"],
+                "path": x["name"]["path"],
+                "current_routine": x["name"]["current_routine"],
+                "routine": x["name"]["routine"],
+                "world": x["name"]["world"],
+                "index_points": x["name"]["index_points"],
+                "column_index": x["name"]["column_index"],
+                "to_face":  x["name"]["to_face"],
+                "detection_range": x["name"]["detection_range"],
+                "stats": {
+                    "group": x["name"]["stats"]["group"]
+                }
+            },
+            "rect": {
+                "center": x["rect"].center,
+                "width": x["rect"].width,
+                "height": x["rect"].height,
+                "left": x["rect"].left,
+                "top": x["rect"].top,
+                "bottom": x["rect"].bottom,
+                "right": x["rect"].right,
+                "centerx": x["rect"].centerx,
+                "centery": x["rect"].centery
+            },
+            "agroved": x["agroved"]
+        }
+
+def lenghten_active_npc(x, npc):
+    x["name"]["movement_behavior"]["type"]=npc["name"]["movement_behavior"]["type"]
+    x["name"]["movement_behavior"]["dirrection"]=npc["name"]["movement_behavior"]["dirrection"]
+    x["name"]["movement_behavior"]["movement_speed"]=npc["name"]["movement_behavior"]["movement_speed"]
+    x["name"]["target"]=npc["name"]["target"]
+    x["name"]["path"]=npc["name"]["path"]
+    x["name"]["current_routine"]=npc["name"]["current_routine"]
+    x["name"]["routine"]=npc["name"]["routine"]
+    x["name"]["world"]=npc["name"]["world"]
+    x["name"]["index_points"]=npc["name"]["index_points"]
+    x["name"]["column_index"]=npc["name"]["column_index"]
+    x["name"]["to_face"]=npc["name"]["to_face"]
+    x["name"]["detection_range"]=npc["name"]["detection_range"]
+    x["agroved"]=npc["agroved"]
+    x["name"]["stats"]["group"]=npc["name"]["stats"]["group"]
+    x["rect"].center=npc["rect"]["center"]
+    x["rect"].width=npc["rect"]["width"]
+    x["rect"].height=npc["rect"]["height"]
+    x["rect"].left=npc["rect"]["left"]
+    x["rect"].top=npc["rect"]["top"]
+    x["rect"].bottom=npc["rect"]["bottom"]
+    x["rect"].right=npc["rect"]["right"]
+    x["rect"].centerx=npc["rect"]["centerx"]
+    x["rect"].centery=npc["rect"]["centery"]
+    x["name"]["name"]=npc["name"]["name"]

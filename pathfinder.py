@@ -43,26 +43,56 @@ class PathFinder:
         #todo make this work
         return [(int(node[0]), int(node[1])) for node in path]
     
+    def find_global_nav_points(self, action, npc):
+        if "name" in npc:
+            npc_group = npc["name"]["stats"]["group"]
+            npc_center=npc["rect"]["center"]
+            world=npc["name"]["world"].replace(" ","_")
+        elif npc is type(tuple):
+            npc_group = npc[0]["stats"]["group"]
+            npc_center = npc[-1]
+            world=npc[0]["world"].replace(" ","_")
+        else:
+            npc_group = npc["customFields"]["enemy_Type"]
+            npc_center=(npc["x"],npc["y"])
+            world=npc["world"].replace(" ","_")
+            
+        #npc_group = npc["name"]["stats"]["group"]
+        min_distance = float('inf')
+        closest_column_index = None
+        closest_object_index = None
+        nav_tiles=GM.global_nav_tiles[world]
+        for i, column in enumerate(nav_tiles):
+            if np.any([obj[0]['action'] == action for obj in column]):
+                for j, obj in enumerate(column):
+                    obj_group = obj[0]['group']
+                    obj_action = obj[0]['action']
+                    if npc_group in obj_group or 'All' in obj_group:
+                        distance = math.dist(npc_center, obj[1])
+                        if distance < min_distance:
+                            min_distance = distance
+                            closest_column_index = i
+                            closest_object_index = j
+
+        for i, column in enumerate(nav_tiles[closest_column_index]):
+            obj_group = column[0]['group']
+            obj_action = column[0]['action']
+            if action==obj_action:
+                return closest_object_index, i, closest_column_index
+    
     def find_nav_points(self, action, npc):
         npc_group = npc["name"]["stats"]["group"]
         min_distance = float('inf')
         closest_column_index = None
         closest_object_index = None
-
-        # Iterate over all columns and objects to find the closest one with the specified action
+        
         for i, column in enumerate(GM.nav_tiles):
-            #print()
-            #print(column, action, np.any([obj['name']['action'] == action for obj in column]))
-            #print()
             if np.any([obj['name']['action'] == action for obj in column]):
                 for j, obj in enumerate(column):
                     obj_group = obj['name']['group']
                     obj_action = obj['name']['action']
-                    # Check if the object's group matches NPC group or 'All'
                     if npc_group in obj_group or 'All' in obj_group:
-                        # Calculate the distance between specified point and object's center
                         distance = math.dist(npc["rect"].center, obj['rect'].center)
-                        # Update closest indexes if this object is closer
                         if distance < min_distance:
                             min_distance = distance
                             closest_column_index = i
@@ -73,40 +103,21 @@ class PathFinder:
             obj_action = column['name']['action']
             if action==obj_action:
                 return closest_object_index, i, closest_column_index
-                        
-
-        ## Now find the object with action 'market' in the closest column
-        #if closest_column_index is not None:
-        #    closest_column = filtered_columns[closest_column_index]
-        #    min_distance_to_market = float('inf')
-        #    closest_market_index = None
-        #    for k, obj in enumerate(closest_column):
-        #        obj_group = obj['name']['group']
-        #        obj_action = obj['name']['action']
-        #        if 'All' in obj_group or npc_group in obj_group:
-        #            if obj_action == action:
-        #                # Calculate the distance between the closest object and 'market' object
-        #                obj_center_x, obj_center_y = obj['rect'].center
-        #                distance_to_market = np.sqrt((obj_center_x - closest_column[closest_object_index]['rect'].center[0]) ** 2 + (obj_center_y - closest_column[closest_object_index]['rect'].center[1]) ** 2)
-        #                # Update closest market object index if this 'market' object is closer
-        #                if distance_to_market < min_distance_to_market:
-        #                    min_distance_to_market = distance_to_market
-        #                    closest_market_index = k
     
     def check_collision(self, dx, dy, rect):
-        new_center = (rect.centerx + dx, rect.centery + dy)
+        new_center = (rect["centerx"] + dx, rect["centery"] + dy)
         # Calculate the boundaries of the collision area
-        top = int(rect.top + dy)
-        bottom = int(rect.bottom + dy)
-        left = int(rect.left + dx)
-        right = int(rect.right + dx)
+        top = int(rect["top"] + dy)
+        bottom = int(rect["bottom"] + dy)
+        left = int(rect["left"] + dx)
+        right = int(rect["right"] + dx)
         collision_area = GM.collision_map[top: bottom, left: right]
         if np.count_nonzero(collision_area) <= 30:
             return new_center
-        return rect.center
+        return rect["center"]
 
     def move(self, npc, target):
-        x, y = npc["rect"].center
+        x, y = npc["rect"]["center"]
         target_x, target_y = target
         dx = target_x - x
         dy = target_y - y
@@ -124,8 +135,8 @@ class PathFinder:
         dy *= speed
 
         new_center_x, new_center_y = self.check_collision(dx, dy, npc["rect"])
-        npc["rect"].centerx = new_center_x
-        npc["rect"].centery = new_center_y
+        npc["rect"]["centerx"] = new_center_x
+        npc["rect"]["centery"] = new_center_y
         
         npc["name"]["movement_behavior"]["dirrection"]=copy.deepcopy(self.movement_vectors[(tdx, tdy)])
         return npc

@@ -361,3 +361,16 @@ def get_global_npcs():
     GM.global_enemy_list.clear()
     GM.global_enemy_list = copy.deepcopy(global_enemy_list)
     print("Global NPC list updated", len(GM.global_enemy_list))
+
+def get_global_nav_tiles():
+    data_list=assets.load_all_world_data()
+    GM.global_nav_tiles.clear()
+    for data in data_list:
+        ident=data["identifier"]
+        GM.global_nav_tiles[ident]=[]
+        if "Npc_nav_tile" in data["entities"]:
+            GM.global_nav_tiles[ident].append([])
+            for x in data["entities"]["Npc_nav_tile"]:
+                GM.global_nav_tiles[ident][-1].append((setNavTiles(x["customFields"]), (x["x"], x["y"]), x["iid"]))
+                    
+    print("Global nav list updated", len(GM.global_nav_tiles))

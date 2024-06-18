@@ -71,6 +71,7 @@ class GameManager:
     transfer_list=[]
     global_enemy_list=[]
     propmt_pos=(0,0)
+    global_nav_tiles={}
 
 class ClassManager:
     ai=None
