@@ -1,6 +1,7 @@
 import copy
 import math
 import random
+from tkinter import N
 
 import numpy as np
 
@@ -52,6 +53,9 @@ class Ai:
     def update_state(self, npc):
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
+        print()
+        print(npc)
+        print()
         actions, _, _=assets.get_actions(day, time, npc["name"]["routine"])
         
         if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"]!=actions:
@@ -99,15 +103,17 @@ class Ai:
                 target=random.choice(split_by_vertical)
             target=target.split("_")
             index1, index2, column_index=self.pathfinder.find_global_nav_points(target[0], npc)
+            if index1==None:
+                return npc
             #npc["name"]["path"]=self.pathfinder.find_path(npc["rect"]["center"], GM.nav_tiles[column_index][index1]["rect"]["center"], (npc["rect"].width, npc["rect"].height))
             #todo speed test
             
-            npc["name"]["path"]=copy.deepcopy([x[1] for x in GM.global_nav_tiles[world][column_index][index1:index2+1]])
-            npc["name"]["target"]=copy.deepcopy(npc["name"]["path"][0])
-            npc["name"]["path"].pop(0)
-            npc["name"]["index_points"]=[i for i in range(index1, index2+1)]
-            npc["name"]["column_index"]=column_index
-            npc["name"]["to_face"]=target[1]
+            #npc["name"]["path"]=copy.deepcopy([x[1] for x in GM.global_nav_tiles[world][column_index][index1:index2+1]])
+            #npc["name"]["target"]=copy.deepcopy(npc["name"]["path"][0])
+            #npc["name"]["path"].pop(0)
+            #npc["name"]["index_points"]=[i for i in range(index1, index2+1)]
+            #npc["name"]["column_index"]=column_index
+            #npc["name"]["to_face"]=target[1]
 
         return npc
                 

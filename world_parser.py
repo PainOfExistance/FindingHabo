@@ -4,6 +4,7 @@ import os
 import random
 
 import asset_loader as assets
+import world_parser as wp
 from game_manager import ClassManager as CM
 from game_manager import GameManager as GM
 
@@ -352,15 +353,42 @@ def get_global_npcs():
     for data in data_list:
         if "Enemy_Random_Spawn" in data["entities"]:
             for x in data["entities"]["Enemy_Random_Spawn"]:
-                day=GM.game_date.current_date.weekday()
-                time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
-                x["routine"] = assets.load_routine(x["customFields"]["package"] if x["customFields"]["package"] != '' else "dream_city_merchant_misc")
-                x["current_routine"], x["world"], x["portal"]=copy.deepcopy(assets.get_actions(day, time, x["routine"]))
-                global_enemy_list.append(copy.deepcopy(x))
+                tmp = setEnemies(x["customFields"])
+                if tmp:
+                    data=(copy.deepcopy(GM.ai_package[tmp]), x["x"], x["y"], x["iid"])
+                    data[0]["package"]=(x["customFields"]["package"] if x["customFields"]["package"] != '' else "dream_city_merchant_misc")
+                    data[0]["customFields"]=x["customFields"]
+                    if "inventory_type" in data[0]["stats"]:
+                        inventory_type = data[0]["stats"]["inventory_type"].split("_")
+                        inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
 
+                        if len(data[0]["items"]) > 0:
+                            item_list = []
+                            for item in data[0]["items"]:
+                                if item["type"] in inventory:
+                                    item["quantity"] = inventory[item["type"]] + item["quantity"]
+                                    inventory.pop(item["type"])
+                            for item in inventory:
+                                item_list.append({"type": item, "quantity": inventory[item]})
+
+                        data[0]["items"] = item_list
+
+                    if "package" in data[0]:
+                        data[0]["routine"] = assets.load_routine(data[0]["package"])
+                        day=GM.game_date.current_date.weekday()
+                        time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
+                        data[0]["current_routine"], data[0]["world"], data[0]["portal"]=copy.deepcopy(assets.get_actions(day, time, data[0]["routine"]))
+                    
+                    data[0]["name"]="TBP"
+                    global_enemy_list.append((copy.deepcopy(data[0]), data[0]["world"], data[0]["portal"], x["iid"], (data[1], data[2])))
+                    
     GM.global_enemy_list.clear()
     GM.global_enemy_list = copy.deepcopy(global_enemy_list)
     print("Global NPC list updated", len(GM.global_enemy_list))
+    
+    print()
+    print(GM.global_enemy_list)
+    print()
 
 def get_global_nav_tiles():
     data_list=assets.load_all_world_data()

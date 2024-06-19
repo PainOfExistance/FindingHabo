@@ -245,7 +245,9 @@ def draw_objects(prompt_font):
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
         #print(x["rect"].left, x["rect"].top, relative__left, relative__top)
-
+        if (x["type"]=="portal" and len(GM.transfer_list)):
+            N.transfer_npc(x["name"], inline=True)
+            
         if (
             relative__left > -80
             and relative__left < GM.screen_width + 80
@@ -326,9 +328,6 @@ def draw_objects(prompt_font):
                 and index == GM.container_hovered
             ):
                 GM.container_hovered = None
-            
-            if (x["type"]=="portal" and len(GM.transfer_list)):
-                N.transfer_npc(x["name"], inline=True)
 
             if (
                 x["type"] == "portal"

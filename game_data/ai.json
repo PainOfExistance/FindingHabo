@@ -29,7 +29,14 @@
             },
             "items": [
             ],
+            "package": "",
+            "path":[],
             "target": null,
+            "current_routine": [],
+            "routine": [],
+            "index_points": [],
+            "column_index": 0,
+            "to_face":0,
             "faction_data": {
                 "faction": "beast",
                 "enemy_factions": ["bandit", "citizen", "slime", "cultists", "goblin", "player"]
@@ -64,7 +71,14 @@
             },
             "items": [
             ],
+            "package": "",
+            "path":[],
             "target": null,
+            "current_routine": [],
+            "routine": [],
+            "index_points": [],
+            "column_index": 0,
+            "to_face":0,
             "faction_data": {
                 "faction": "goblin",
                 "enemy_factions": ["bandit", "citizen", "beast", "cultists", "player"]
@@ -116,7 +130,7 @@
                     "quantity": 1
                 }
             ],
-            "package": "",
+            "package": "dream_city_merchant_misc",
             "path":[],
             "target": null,
             "current_routine": [],
@@ -159,7 +173,14 @@
             },
             "items": [
             ],
+            "package": "",
+            "path":[],
             "target": null,
+            "current_routine": [],
+            "routine": [],
+            "index_points": [],
+            "column_index": 0,
+            "to_face":0,
             "faction_data": {
                 "faction": "bandit",
                 "enemy_factions": ["beast", "citizen", "slime", "cultists", "goblin", "player"]
@@ -195,7 +216,14 @@
             },
             "items": [
             ],
+            "package": "",
+            "path":[],
             "target": null,
+            "current_routine": [],
+            "routine": [],
+            "index_points": [],
+            "column_index": 0,
+            "to_face":0,
             "faction_data": {
                 "faction": "slime",
                 "enemy_factions": ["beast", "citizen", "cultists", "bandit", "player"]

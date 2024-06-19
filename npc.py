@@ -14,13 +14,8 @@ from game_manager import GameManager as GM
 
 
 def manage_global_npc():
-    for index, x in enumerate(GM.global_enemy_list):
-        if x is type(tuple):
-            #todo
-            lenghten_active_npc(x, CM.ai.update(shorten_active_npc(x)))
-        else:
-            #todo
-            lenghten_active_npc(x, CM.ai.update(shorten_active_npc(x)))
+    for x in GM.global_enemy_list:
+        lengthen_tuple_npc(x, CM.ai.update(shorten_tuple_npc(x)))
 
 def update_npc(subtitle_font, prompt_font):
     rm_list=[]
@@ -383,26 +378,23 @@ def transfer_npc(portal, inline=False):
                             GM.npc_list[-1]["name"]["path"]=[]
                         GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
                 except Exception as e:
-                    print()
-                    print(e)
-                    print()
+                    #print()
+                    #print(e)
+                    #print()
+                    pass
                     
             except Exception as e:
-                print()
-                print(e)
-                print()
+                #print()
+                #print(e)
+                #print()
+                pass
                 
     GM.transfer_list = [x for i, x in enumerate(GM.transfer_list) if i not in rm_list]
            
 def set_npc():
     rm_list=[]
     for i, x in enumerate(GM.global_enemy_list):
-        y=None
-        if type(x) is tuple:
-            y=x[0]
-        else:
-            y=x
-            
+        y=x[0]
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
         current_routine, world, portal=copy.deepcopy(assets.get_actions(day, time, y["routine"]))
@@ -411,20 +403,26 @@ def set_npc():
             y["world"]=copy.deepcopy(world)
             y["portal"]=copy.deepcopy(portal)
             if CM.player.current_world in world:
-                if "stats" not in y:
+                #if "stats" not in y:
+                #    tmp=wp.setEnemies(y["customFields"])
+                #    if tmp:
+                #        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"], (y["x"], y["y"])))
+                #        GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
+                #        rm_list.append(i)
+                if y["name"]=="TBP":
                     tmp=wp.setEnemies(y["customFields"])
                     if tmp:
-                        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"], (y["x"], y["y"])))
+                        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], x[-2], x[-1]))
                         GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
                         rm_list.append(i)
-                elif y["stats"]["status"]!="dead":
+                    
+                elif y["stats"]["status"]!="dead" and y["stats"]["status"]!="" and y["name"]!="TBP":
                     znj=(y, y["portal"], y["world"], x[3], x[4])
                     GM.transfer_list.append(copy.deepcopy(znj))
                     GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
                     rm_list.append(i)
                     
     GM.global_enemy_list = [x for i, x in enumerate(GM.global_enemy_list) if i not in rm_list]
-    #todo, x and y where npc should be and all that shit
 
 def shorten_active_npc(x):
     return {
@@ -459,9 +457,49 @@ def shorten_active_npc(x):
                 "centerx": x["rect"].centerx,
                 "centery": x["rect"].centery
             },
-            "agroved": x["agroved"]
+            "agroved": x["agroved"],
+            "active": True
         }
 
+def shorten_tuple_npc(x):
+    y=x[-1]
+    x=x[0]
+    return {
+            "name": {
+                "name": x["name"],
+                "movement_behavior": {
+                    "type": x["movement_behavior"]["type"],
+                    "dirrection": x["movement_behavior"]["dirrection"],
+                    "movement_speed": x["movement_behavior"]["movement_speed"]
+                },
+                "target": x["target"],
+                "path": x["path"],
+                "current_routine": x["current_routine"],
+                "routine": x["routine"],
+                "world": x["world"],
+                "index_points": x["index_points"],
+                "column_index": x["column_index"],
+                "to_face":  x["to_face"],
+                "detection_range": x["detection_range"],
+                "stats": {
+                    "group": x["stats"]["group"]
+                }
+            },
+            "rect": {
+                "center": (y[0], y[1]),
+                "width": 1,
+                "height": 1,
+                "left": y[0],
+                "top": y[1],
+                "bottom": y[1],
+                "right": y[0],
+                "centerx": y[0],
+                "centery": y[1]
+            },
+            "agroved": False,
+            "active": False
+        }
+    
 def lenghten_active_npc(x, npc):
     x["name"]["movement_behavior"]["type"]=npc["name"]["movement_behavior"]["type"]
     x["name"]["movement_behavior"]["dirrection"]=npc["name"]["movement_behavior"]["dirrection"]
@@ -487,3 +525,24 @@ def lenghten_active_npc(x, npc):
     x["rect"].centerx=npc["rect"]["centerx"]
     x["rect"].centery=npc["rect"]["centery"]
     x["name"]["name"]=npc["name"]["name"]
+    x["name"]["active"]=True
+
+def lengthen_tuple_npc(x, npc):
+    x=list(x)
+    x[0]["movement_behavior"]["type"]=npc["name"]["movement_behavior"]["type"]
+    x[0]["movement_behavior"]["dirrection"]=npc["name"]["movement_behavior"]["dirrection"]
+    x[0]["movement_behavior"]["movement_speed"]=npc["name"]["movement_behavior"]["movement_speed"]
+    x[0]["target"]=npc["name"]["target"]
+    x[0]["path"]=npc["name"]["path"]
+    x[0]["current_routine"]=npc["name"]["current_routine"]
+    x[0]["routine"]=npc["name"]["routine"]
+    x[0]["world"]=npc["name"]["world"]
+    x[0]["index_points"]=npc["name"]["index_points"]
+    x[0]["column_index"]=npc["name"]["column_index"]
+    x[0]["to_face"]=npc["name"]["to_face"]
+    x[0]["detection_range"]=npc["name"]["detection_range"]
+    x[0]["stats"]["group"]=npc["name"]["stats"]["group"]
+    x[-1]=(npc["rect"]["center"][0], npc["rect"]["center"][1])
+    x[0]["name"]=npc["name"]["name"]
+    x[0]["active"]=False
+    x=tuple(x)

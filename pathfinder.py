@@ -1,6 +1,7 @@
 import copy
 import math
 import random
+import re
 from os import close
 from tokenize import group
 from turtle import speed
@@ -32,6 +33,8 @@ class PathFinder:
          (-1, 1): 4,
         }
 
+    def weird_division(self, n, d):
+        return n / d if d else 0
     
     #def update(self):
     #    self.finder = AStar(GM.collision_map)
@@ -73,34 +76,12 @@ class PathFinder:
                             min_distance = distance
                             closest_column_index = i
                             closest_object_index = j
-
+        if closest_column_index is None:
+            return None, None, None
+        
         for i, column in enumerate(nav_tiles[closest_column_index]):
             obj_group = column[0]['group']
             obj_action = column[0]['action']
-            if action==obj_action:
-                return closest_object_index, i, closest_column_index
-    
-    def find_nav_points(self, action, npc):
-        npc_group = npc["name"]["stats"]["group"]
-        min_distance = float('inf')
-        closest_column_index = None
-        closest_object_index = None
-        
-        for i, column in enumerate(GM.nav_tiles):
-            if np.any([obj['name']['action'] == action for obj in column]):
-                for j, obj in enumerate(column):
-                    obj_group = obj['name']['group']
-                    obj_action = obj['name']['action']
-                    if npc_group in obj_group or 'All' in obj_group:
-                        distance = math.dist(npc["rect"].center, obj['rect'].center)
-                        if distance < min_distance:
-                            min_distance = distance
-                            closest_column_index = i
-                            closest_object_index = j
-
-        for i, column in enumerate(GM.nav_tiles[closest_column_index]):
-            obj_group = column['name']['group']
-            obj_action = column['name']['action']
             if action==obj_action:
                 return closest_object_index, i, closest_column_index
     
@@ -122,8 +103,8 @@ class PathFinder:
         dx = target_x - x
         dy = target_y - y
         
-        tdx=int(dx/abs(dx))
-        tdy=int(dy/abs(dy))
+        tdx=int(self.weird_division(dx,abs(dx)))
+        tdy=int(self.weird_division(dy,abs(dy)))
         
         magnitude = math.sqrt(dx ** 2 + dy ** 2)
         if magnitude != 0:
@@ -134,7 +115,11 @@ class PathFinder:
         dx *= speed
         dy *= speed
 
-        new_center_x, new_center_y = self.check_collision(dx, dy, npc["rect"])
+        if npc["active"]:
+            new_center_x, new_center_y = self.check_collision(dx, dy, npc["rect"])
+        else:
+            new_center_x, new_center_y = npc["rect"]["centerx"]+dx, npc["rect"]["centery"]+dy
+            
         npc["rect"]["centerx"] = new_center_x
         npc["rect"]["centery"] = new_center_y
         
