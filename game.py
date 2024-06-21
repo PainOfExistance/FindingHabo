@@ -120,8 +120,8 @@ class Game:
                 {"image": img, "rect": img_rect, "type": "container", "name": tmp, "pedistal": data[6], "iid": data[7]}
             )
         
-        N.set_npc()
-        N.transfer_npc(None)
+        #N.set_npc()
+        #N.transfer_npc(None)
         #print()
         #print(GM.transfer_list)
         #print()
@@ -337,15 +337,15 @@ class Game:
             
             if not GM.dead:
                 self.handle_input()
-                
+            N.manage_global_npc()
+            
             self.handle_events()
             self.draw()
             GM.game_date.increment_seconds()
             CM.player.check_experation(GM.delta_time)
             
-            if (GM.game_date.current_date.minute == 0 or GM.game_date.current_date.minute == 30 ):
-                N.set_npc()
-                print("meow")
+            #if (GM.game_date.current_date.minute == 0 or GM.game_date.current_date.minute == 30):
+            #    N.set_npc()
             
             if (
                 not CM.player_menu.visible
@@ -1354,7 +1354,6 @@ class Game:
         if not GM.map_shown:
             CM.map.set_map(GM.background)
             N.update_npc(self.subtitle_font, self.prompt_font)
-            N.manage_global_npc()
             CM.player.draw()
 
             GM.screen.blit(self.layer, GM.bg_rect.topleft)

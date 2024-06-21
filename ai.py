@@ -1,9 +1,11 @@
 import copy
 import math
 import random
+import sys
 from tkinter import N
 
 import numpy as np
+import pygame
 
 import asset_loader as assets
 from dialogue import Dialougue
@@ -53,11 +55,22 @@ class Ai:
     def update_state(self, npc):
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
-        print()
-        print(npc)
-        print()
-        actions, _, _=assets.get_actions(day, time, npc["name"]["routine"])
+        #print()
+        #print("meow", npc)
+        #print()
+        #if "image" in npc:
+        #    print()
+        #    print("global list", GM.global_enemy_list)
+        #    print()
+        #    print()
+        #    print("transfer list", GM.transfer_list)
+        #    print()
+        #    print()
+        #    print("active lsit", GM.npc_list)
+        #    print()
+        #    sys.exit()
         
+        actions, npc["name"]["world"], npc["name"]["portal"]=assets.get_actions(day, time, npc["name"]["routine"])      
         if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"]!=actions:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"]=copy.deepcopy(actions)
@@ -76,7 +89,6 @@ class Ai:
             
     def __get_state_action(self, npc):
         routine=npc["name"]["current_routine"]
-        npc["name"]["world"]="Dream City"
         world=npc["name"]["world"].replace(" ","_")
         if "move" in routine[0]:
             split_by_=routine[0].split("_")

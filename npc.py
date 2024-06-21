@@ -1,5 +1,6 @@
 import copy
 import multiprocessing
+import sys
 import threading
 from calendar import c
 from math import e
@@ -14,8 +15,40 @@ from game_manager import GameManager as GM
 
 
 def manage_global_npc():
-    for x in GM.global_enemy_list:
-        lengthen_tuple_npc(x, CM.ai.update(shorten_tuple_npc(x)))
+    rm_list=[]
+    for i, x in enumerate(GM.global_enemy_list):
+        npc=shorten_tuple_npc(x)
+        #print()
+        #print()
+        #print("x", x)
+        #print()
+        #print("shortened", npc)
+        #print()
+        #print()
+        tmp=CM.ai.update(npc)
+        lengthen_tuple_npc(x, tmp)
+        if CM.player.current_world in x[0]["world"]:
+            print()
+            print("meow")
+            print(x)
+            print("meow")
+            print()
+            if x[0]["name"]=="TBP" or x[0]["stats"]["status"]=="dead":
+                    tmp=wp.setEnemies(x[0]["customFields"])
+                    if tmp:
+                        znj=((copy.deepcopy(GM.ai_package[tmp]), x[0]["portal"], x[0]["world"], x[-2], x[-1]))
+                        GM.transfer_list.append(copy.deepcopy(znj))
+                        GM.transfer_list[-1][0]["package"]=x[0]["customFields"]["package"]
+                        rm_list.append(i)
+                    
+            elif x[0]["stats"]["status"]!="dead" and x[0]["stats"]["status"]!="" and x[0]["name"]!="TBP":
+                znj=(x[0], x[0]["portal"], x[0]["world"], x[3], x[4])
+                GM.transfer_list.append(copy.deepcopy(znj))
+                GM.transfer_list[-1][0]["package"]=x[0]["customFields"]["package"]
+                rm_list.append(i)
+          
+    GM.global_enemy_list = [x for i, x in enumerate(GM.global_enemy_list) if i not in rm_list]
+            
 
 def update_npc(subtitle_font, prompt_font):
     rm_list=[]
@@ -54,6 +87,7 @@ def update_npc(subtitle_font, prompt_font):
                 and not GM.is_in_dialogue
             ):
                 lenghten_active_npc(x, CM.ai.update(shorten_active_npc(x)))
+                
             
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
@@ -372,11 +406,11 @@ def transfer_npc(portal, inline=False):
                 rm_list.append(i)
                 try:
                     GM.npc_list[-1]=CM.ai.update(GM.npc_list[-1])
-                    if not inline:
-                        if len(GM.npc_list[-1]["name"]["path"])>0:
-                            GM.npc_list[-1]["name"]["target"]=copy.deepcopy(GM.npc_list[-1]["name"]["path"][-1])
-                            GM.npc_list[-1]["name"]["path"]=[]
-                        GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
+                    #if not inline:
+                    #    if len(GM.npc_list[-1]["name"]["path"])>0:
+                    #        GM.npc_list[-1]["name"]["target"]=copy.deepcopy(GM.npc_list[-1]["name"]["path"][-1])
+                    #        GM.npc_list[-1]["name"]["path"]=[]
+                    #    GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
                 except Exception as e:
                     #print()
                     #print(e)
@@ -388,13 +422,17 @@ def transfer_npc(portal, inline=False):
                 #print(e)
                 #print()
                 pass
-                
+            
+                    
     GM.transfer_list = [x for i, x in enumerate(GM.transfer_list) if i not in rm_list]
-           
+               
 def set_npc():
     rm_list=[]
     for i, x in enumerate(GM.global_enemy_list):
         y=x[0]
+        print()
+        print("set_npc", x)
+        print()
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
         current_routine, world, portal=copy.deepcopy(assets.get_actions(day, time, y["routine"]))
@@ -409,10 +447,11 @@ def set_npc():
                 #        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], y["iid"], (y["x"], y["y"])))
                 #        GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
                 #        rm_list.append(i)
-                if y["name"]=="TBP":
+                if y["name"]=="TBP" or y["stats"]["status"]=="dead":
                     tmp=wp.setEnemies(y["customFields"])
                     if tmp:
-                        GM.transfer_list.append((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], x[-2], x[-1]))
+                        znj=((copy.deepcopy(GM.ai_package[tmp]), y["portal"], y["world"], x[-2], x[-1]))
+                        GM.transfer_list.append(copy.deepcopy(znj))
                         GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
                         rm_list.append(i)
                     
@@ -421,7 +460,7 @@ def set_npc():
                     GM.transfer_list.append(copy.deepcopy(znj))
                     GM.transfer_list[-1][0]["package"]=y["customFields"]["package"]
                     rm_list.append(i)
-                    
+          
     GM.global_enemy_list = [x for i, x in enumerate(GM.global_enemy_list) if i not in rm_list]
 
 def shorten_active_npc(x):
@@ -442,6 +481,7 @@ def shorten_active_npc(x):
                 "column_index": x["name"]["column_index"],
                 "to_face":  x["name"]["to_face"],
                 "detection_range": x["name"]["detection_range"],
+                "portal": x["name"]["portal"] if "portal" in x["name"] else None,
                 "stats": {
                     "group": x["name"]["stats"]["group"]
                 }
@@ -462,8 +502,8 @@ def shorten_active_npc(x):
         }
 
 def shorten_tuple_npc(x):
-    y=x[-1]
-    x=x[0]
+    y=copy.deepcopy(x[-1])
+    x=copy.deepcopy(x[0])
     return {
             "name": {
                 "name": x["name"],
@@ -481,6 +521,7 @@ def shorten_tuple_npc(x):
                 "column_index": x["column_index"],
                 "to_face":  x["to_face"],
                 "detection_range": x["detection_range"],
+                "portal": x["portal"] if "portal" in x else None,
                 "stats": {
                     "group": x["stats"]["group"]
                 }
@@ -526,6 +567,7 @@ def lenghten_active_npc(x, npc):
     x["rect"].centery=npc["rect"]["centery"]
     x["name"]["name"]=npc["name"]["name"]
     x["name"]["active"]=True
+    x["name"]["portal"]=npc["name"]["portal"]
 
 def lengthen_tuple_npc(x, npc):
     x=list(x)
@@ -545,4 +587,5 @@ def lengthen_tuple_npc(x, npc):
     x[-1]=(npc["rect"]["center"][0], npc["rect"]["center"][1])
     x[0]["name"]=npc["name"]["name"]
     x[0]["active"]=False
+    x[0]["portal"]=npc["name"]["portal"]
     x=tuple(x)
