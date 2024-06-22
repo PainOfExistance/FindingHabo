@@ -55,21 +55,6 @@ class Ai:
     def update_state(self, npc):
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
-        #print()
-        #print("meow", npc)
-        #print()
-        #if "image" in npc:
-        #    print()
-        #    print("global list", GM.global_enemy_list)
-        #    print()
-        #    print()
-        #    print("transfer list", GM.transfer_list)
-        #    print()
-        #    print()
-        #    print("active lsit", GM.npc_list)
-        #    print()
-        #    sys.exit()
-        
         actions, npc["name"]["world"], npc["name"]["portal"]=assets.get_actions(day, time, npc["name"]["routine"])      
         if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"]!=actions:
             npc["name"]["to_face"]=0
@@ -99,7 +84,19 @@ class Ai:
             else:
                 target=split_by_[-1]
             
+            if "||" in world:
+                world=world.split("||")
+                if CM.player.current_world==world[0]:
+                    world=world[0]
+                else:
+                    world=world[1]
+                    
+            npc["name"]["world"]=world
+            
             index1, index2, column_index=self.pathfinder.find_global_nav_points(target, npc)
+            if index1==None:
+                return npc
+            
             if index1>index2:
                 index1, index2=index2, index1
                 
@@ -114,6 +111,16 @@ class Ai:
                 split_by_vertical=routine[0].split("||")
                 target=random.choice(split_by_vertical)
             target=target.split("_")
+            
+            if "||" in world:
+                world=world.split("||")
+                if CM.player.current_world==world[0]:
+                    world=world[0]
+                else:
+                    world=world[1]
+                    
+            npc["name"]["world"]=world
+            
             index1, index2, column_index=self.pathfinder.find_global_nav_points(target[0], npc)
             if index1==None:
                 return npc

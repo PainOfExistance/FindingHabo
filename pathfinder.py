@@ -51,14 +51,6 @@ class PathFinder:
             npc_group = npc["name"]["stats"]["group"]
             npc_center=npc["rect"]["center"]
             world=npc["name"]["world"].replace(" ","_")
-        elif npc is type(tuple):
-            npc_group = npc[0]["stats"]["group"]
-            npc_center = npc[-1]
-            world=npc[0]["world"].replace(" ","_")
-        else:
-            npc_group = npc["customFields"]["enemy_Type"]
-            npc_center=(npc["x"],npc["y"])
-            world=npc["world"].replace(" ","_")
             
         #npc_group = npc["name"]["stats"]["group"]
         min_distance = float('inf')

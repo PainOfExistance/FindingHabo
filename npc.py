@@ -18,38 +18,29 @@ def manage_global_npc():
     rm_list=[]
     for i, x in enumerate(GM.global_enemy_list):
         npc=shorten_tuple_npc(x)
-        #print()
-        #print()
-        #print("x", x)
-        #print()
-        #print("shortened", npc)
-        #print()
-        #print()
         tmp=CM.ai.update(npc)
         lengthen_tuple_npc(x, tmp)
-        if CM.player.current_world in x[0]["world"]:
-            print()
-            print("meow")
-            print(x)
-            print("meow")
-            print()
+        pw=CM.player.current_world.replace(" ","_")
+        if pw in x[0]["world"]:
             if x[0]["name"]=="TBP" or x[0]["stats"]["status"]=="dead":
                     tmp=wp.setEnemies(x[0]["customFields"])
                     if tmp:
                         znj=((copy.deepcopy(GM.ai_package[tmp]), x[0]["portal"], x[0]["world"], x[-2], x[-1]))
+                        znj[0]["package"]=x[0]["customFields"]["package"]
                         GM.transfer_list.append(copy.deepcopy(znj))
-                        GM.transfer_list[-1][0]["package"]=x[0]["customFields"]["package"]
                         rm_list.append(i)
                     
             elif x[0]["stats"]["status"]!="dead" and x[0]["stats"]["status"]!="" and x[0]["name"]!="TBP":
                 znj=(x[0], x[0]["portal"], x[0]["world"], x[3], x[4])
+                znj[0]["package"]=x[0]["customFields"]["package"]
                 GM.transfer_list.append(copy.deepcopy(znj))
-                GM.transfer_list[-1][0]["package"]=x[0]["customFields"]["package"]
                 rm_list.append(i)
           
-    GM.global_enemy_list = [x for i, x in enumerate(GM.global_enemy_list) if i not in rm_list]
+    for index in sorted(rm_list, reverse=True):
+         GM.global_enemy_list.pop(index)
+         
+    #GM.global_enemy_list = [x for i, x in enumerate(GM.global_enemy_list) if i not in rm_list]
             
-
 def update_npc(subtitle_font, prompt_font):
     rm_list=[]
     for index, x in enumerate(GM.npc_list):
@@ -70,13 +61,14 @@ def update_npc(subtitle_font, prompt_font):
             rm_list.append(index)   
         elif GM.npc_list[index]["name"]["stats"]["status"]=="transfer":
             rm_list.append(index)
-    GM.npc_list = [x for i, x in enumerate(GM.npc_list) if i not in rm_list] 
+    
+    for index in sorted(rm_list, reverse=True):
+        #? meow
+        #GM.global_enemy_list.append((copy.deepcopy(GM.npc_list[index]["name"]), GM.npc_list[index]["name"]["world"], GM.npc_list[index]["name"]["portal"], GM.npc_list[index]["iid"], GM.npc_list[index]["rect"].center))
+        GM.npc_list.pop(index)
+    #GM.npc_list = [x for i, x in enumerate(GM.npc_list) if i not in rm_list] 
 
     for index, x in enumerate(GM.npc_list):
-            #print()
-            #print(x["name"]["path"])
-            #print(x["name"]["target"])
-            #print()
             if x["name"]["stats"]["status"] == "":
                 # Add your indented block here
                 continue
@@ -181,6 +173,7 @@ def update_npc(subtitle_font, prompt_font):
             
             for object in GM.world_objects:
                 if object["type"] == "portal" and object["name"]["type"]!="default" and "rect" in object and x["rect"].colliderect(object["rect"]):
+                    print("meow")
                     x["name"]["path"]=[]
                     x["name"]["target"]=None
                     x["name"]["current_routine"]=[]
@@ -189,7 +182,8 @@ def update_npc(subtitle_font, prompt_font):
                     x["name"]["column_index"]=0
                     x["name"]["column_index"]=0
                     x["name"]["to_face"]=0
-                    GM.global_enemy_list.append((copy.deepcopy(x["name"]), object['name']['type'], object["name"]["world_name"], x["iid"]))
+                    #? meow
+                    GM.global_enemy_list.append((copy.deepcopy(x["name"]), object["name"]["world_name"], object['name']['type'], x["iid"], x["rect"].center))
                     x["name"]["stats"]["status"] = "transfer"
 
             if (
@@ -358,8 +352,9 @@ def transfer_npc(portal, inline=False):
             portal["spawn_point"]={}
             portal["spawn_point"]["cx"]=npc[-1][0]
             portal["spawn_point"]["cy"]=npc[-1][1]
-            
-        if (npc[1] == portal["type"] or portal["type"]=="default") and CM.player.current_world in npc[2]:
+        
+        pw=CM.player.current_world.replace(" ","_")
+        if (npc[1] == portal["type"] or portal["type"]=="default") and pw in npc[2]:
             try:
                 if "inventory_type" in npc[0]["stats"]:
                     inventory_type = npc[0]["stats"]["inventory_type"].split("_")
@@ -422,9 +417,20 @@ def transfer_npc(portal, inline=False):
                 #print(e)
                 #print()
                 pass
-            
-                    
-    GM.transfer_list = [x for i, x in enumerate(GM.transfer_list) if i not in rm_list]
+    
+    for index in sorted(rm_list, reverse=True):
+         GM.transfer_list.pop(index)
+    #GM.transfer_list = [x for i, x in enumerate(GM.transfer_list) if i not in rm_list]
+    
+    #print()
+    #print("-----------------")
+    #print(GM.global_enemy_list)
+    #print("-----------------")
+    #print(GM.transfer_list)
+    #print("-----------------")
+    #print(GM.npc_list)
+    #print("-----------------")
+    #print()           
                
 def set_npc():
     rm_list=[]

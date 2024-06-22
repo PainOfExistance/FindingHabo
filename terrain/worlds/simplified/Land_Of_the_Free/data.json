@@ -25,8 +25,8 @@
 				"id": "Player_spawn",
 				"iid": "cc337620-b0a0-11ee-90c2-5dbef1522b45",
 				"layer": "LeveL_Data",
-				"x": 1112,
-				"y": 2376,
+				"x": 1880,
+				"y": 2152,
 				"width": 16,
 				"height": 16,
 				"color": 0,
@@ -37,9 +37,8 @@
 					"world_to_load": "worlds/simplified/Land_Of_the_Free/data.json",
 					"world_name": null,
 					"spawn_point": {
-						"cx": 69,
-						"cy": 152
-
+						"cx": 117,
+						"cy": 132
 					}
 				}
 			},
@@ -55,9 +54,9 @@
 				"customFields": {
 					"type": "dw_lotf_portal_01",
 					"unlocked_by": "Key to the Land of the Free",
-					"locked": false,
-					"world_to_load": "worlds/simplified/Dream_City/data.json",
-					"world_name": "Dream City",
+					"locked": true,
+					"world_to_load": "worlds/simplified/Dream_World/data.json",
+					"world_name": "Dream World",
 					"spawn_point": {
 						"cx": 69,
 						"cy": 152
@@ -81,6 +80,7 @@
 					"time_passed": 0,
 					"music": [
 						"../sounds/bgm/Angelia.mp3",
+						"../sounds/bgm/Christmas Time.mp3",
 						"../sounds/bgm/DOVAHKIIN.mp3",
 						"../sounds/bgm/peace.mp3"
 					],

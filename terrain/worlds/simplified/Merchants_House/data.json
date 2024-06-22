@@ -1,0 +1,238 @@
+{
+	"identifier": "Merchants_House",
+	"uniqueIdentifer": "cf29ae01-25d0-11ef-8845-4ffd9d5a9842",
+	"x": 0,
+	"y": 0,
+	"width": 256,
+	"height": 256,
+	"bgColor": "#696A79",
+	"neighbourLevels": [],
+	"customFields" : {},
+	"layers": [
+		"BG.png",
+		"Grass.png",
+		"Walls.png",
+		"RGP.png",
+		"Village.png",
+		"Castle.png",
+		"RRW.png",
+		"RAC.png",
+		"Top_layer.png"
+	],
+	"entities": {
+		"Player_spawn": [
+			{
+				"id": "Player_spawn",
+				"iid": "ec627750-25d0-11ef-8845-311b4ae1b9d5",
+				"layer": "LeveL_Data",
+				"x": 152,
+				"y": 152,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "dc_mhc_portal_01",
+					"unlocked_by": "",
+					"locked": false,
+					"world_to_load": "worlds/simplified/Dream_City/data.json",
+					"world_name": "Dream City",
+					"spawn_point": {
+						"cx": 8,
+						"cy": 7
+					}
+				}
+			},
+			{
+				"id": "Player_spawn",
+				"iid": "f3740180-25d0-11ef-8845-215c244d1f6d",
+				"layer": "LeveL_Data",
+				"x": 184,
+				"y": 88,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "default",
+					"unlocked_by": "",
+					"locked": false,
+					"world_to_load": "worlds/simplified/Merchants_House/data.json",
+					"world_name": null,
+					"spawn_point": {
+						"cx": 11,
+						"cy": 3
+					}
+				}
+			}
+		],
+		"Metadata": [
+			{
+				"id": "Metadata",
+				"iid": "fe85b730-25d0-11ef-8845-318c6b774129",
+				"layer": "LeveL_Data",
+				"x": 8,
+				"y": 8,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"name": "Merchants House",
+					"respawn_timer": 15,
+					"time_passed": 0,
+					"music": [
+						"../sounds/bgm/Sladka kot med.mp3"
+					],
+					"collision_set": "terrain/worlds/simplified/Merchants_House/Collision-int.png",
+					"background": "terrain/worlds/simplified/Merchants_House/_composite.png"
+				}
+			}
+		],
+		"Npc_nav_tile": [
+			{
+				"id": "Npc_nav_tile",
+				"iid": "e36fb490-25d0-11ef-8845-fbf9e57e2c1c",
+				"layer": "LeveL_Data",
+				"x": 152,
+				"y": 152,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"Wife"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "e5fb1a60-25d0-11ef-8845-c7be31efd256",
+						"layerIid": "cf29ae03-25d0-11ef-8845-a9a4b50873b9",
+						"levelIid": "cf29ae01-25d0-11ef-8845-4ffd9d5a9842",
+						"worldIid": "cf29ae00-25d0-11ef-8845-2b3b0d51448e"
+					},
+					"action": "market",
+					"used": false
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "e5fb1a60-25d0-11ef-8845-c7be31efd256",
+				"layer": "LeveL_Data",
+				"x": 120,
+				"y": 136,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"Wife"
+					],
+					"pause_time": 0,
+					"path_ref": {
+						"entityIid": "e7e9f210-25d0-11ef-8845-af6fe9e1cd60",
+						"layerIid": "cf29ae03-25d0-11ef-8845-a9a4b50873b9",
+						"levelIid": "cf29ae01-25d0-11ef-8845-4ffd9d5a9842",
+						"worldIid": "cf29ae00-25d0-11ef-8845-2b3b0d51448e"
+					},
+					"action": "",
+					"used": false
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "e7e9f210-25d0-11ef-8845-af6fe9e1cd60",
+				"layer": "LeveL_Data",
+				"x": 120,
+				"y": 88,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant",
+						"Wife"
+					],
+					"pause_time": 0,
+					"path_ref": null,
+					"action": "home",
+					"used": false
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "3d827b70-25d0-11ef-8845-cf7f38845100",
+				"layer": "LeveL_Data",
+				"x": 104,
+				"y": 104,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant"
+					],
+					"pause_time": 0,
+					"path_ref": null,
+					"action": "Sit_3",
+					"used": false
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "42237ad0-25d0-11ef-8845-116ace394eba",
+				"layer": "LeveL_Data",
+				"x": 120,
+				"y": 56,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Merchant"
+					],
+					"pause_time": 0,
+					"path_ref": null,
+					"action": "Sleep_4",
+					"used": false
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "8a491b10-25d0-11ef-8845-a19d78639dc4",
+				"layer": "LeveL_Data",
+				"x": 104,
+				"y": 152,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Wife"
+					],
+					"pause_time": 0,
+					"path_ref": null,
+					"action": "Sit_1",
+					"used": false
+				}
+			},
+			{
+				"id": "Npc_nav_tile",
+				"iid": "96bd9510-25d0-11ef-8845-77a5ab2d7f98",
+				"layer": "LeveL_Data",
+				"x": 120,
+				"y": 72,
+				"width": 16,
+				"height": 16,
+				"color": 16766464,
+				"customFields": {
+					"group": [
+						"Wife"
+					],
+					"pause_time": 0,
+					"path_ref": null,
+					"action": "Sleep_4",
+					"used": false
+				}
+			}
+		]
+	}
+}

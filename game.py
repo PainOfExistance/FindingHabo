@@ -120,7 +120,6 @@ class Game:
                 {"image": img, "rect": img_rect, "type": "container", "name": tmp, "pedistal": data[6], "iid": data[7]}
             )
         
-        #N.set_npc()
         #N.transfer_npc(None)
         #print()
         #print(GM.transfer_list)
@@ -174,7 +173,7 @@ class Game:
 
         for data in portals:
             if "unlocked_by" in data[0]:
-                img, img_rect = assets.load_images("./textures\static\door.png", (64, 64), (data[1], data[2]))
+                img, img_rect = assets.load_images("./textures\static\door.png", (16, 16), (data[1], data[2]))
                 GM.world_objects.append({
                         "image": img,
                         "rect": img_rect,

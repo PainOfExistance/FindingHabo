@@ -7,7 +7,7 @@
             "16.00": ["move_by_path_park||temple", "Sit_1||Idle_1"],
             "18.00": ["move_by_path_wall", "Idle_4"],
             "20.00": ["move_by_path_home", "Sit_3"],
-            "22.00": ["Sleep_1"]
+            "22.00": ["Sleep_4"]
         },
         "Routine_2": {
             "8.00": ["Idle", "Sit_3"],
@@ -15,7 +15,7 @@
             "16.00": ["move_by_path_park||temple", "Sit_1||Idle_1"],
             "18.00": ["move_by_path_wall", "Idle_4"],
             "20.00": ["move_by_path_home", "Sit_3"],
-            "22.00": ["Sleep_1"]
+            "22.00": ["Sleep_4"]
         }
     }],
     "schedule": {
@@ -23,17 +23,17 @@
         "Routine_2": [6, 7]
     },
     "world":{
-        "8.00": "Merchant House",
-        "9.00": "Merchant House||Dream City",
+        "8.00": "Merchants House",
+        "9.00": "Merchants House||Dream City",
         "15.00": "Dream City",
         "16.00": "Dream City",
         "18.00": "Dream City",
-        "20.00": "Dream City||Merchant House",
-        "22.00": "Merchant House"
+        "20.00": "Dream City||Merchants House",
+        "22.00": "Merchants House"
     },
     "portals":{
-        "9.00": "dw_lotf_portal_01",
+        "9.00": "dc_mhc_portal_01",
         "15.00": "dc_tav_portal_01",
-        "20.00": "dw_lotf_portal_01"
+        "20.00": "dc_mhc_portal_01"
     }
 }

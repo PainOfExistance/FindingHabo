@@ -46,20 +46,20 @@
 				"id": "Player_spawn",
 				"iid": "8dc49d30-fec0-11ee-802d-e7790be7cd58",
 				"layer": "LeveL_Data",
-				"x": 1784,
-				"y": 2520,
+				"x": 2248,
+				"y": 2776,
 				"width": 16,
 				"height": 16,
 				"color": 0,
 				"customFields": {
-					"type": "dw_lotf_portal_01",
-					"unlocked_by": "Key to the Land of the Free",
+					"type": "dc_mhc_portal_01",
+					"unlocked_by": "",
 					"locked": false,
-					"world_to_load": "worlds/simplified/Land_Of_the_Free/data.json",
-					"world_name": "Land of the Free",
+					"world_to_load": "worlds/simplified/Merchants_House/data.json",
+					"world_name": "Merchants House",
 					"spawn_point": {
-						"cx": 110,
-						"cy": 157
+						"cx": 144,
+						"cy": 173
 					}
 				}
 			}
@@ -113,7 +113,7 @@
 				"id": "Npc_nav_tile",
 				"iid": "e48541a0-fec0-11ee-9877-070e3d8f1509",
 				"layer": "LeveL_Data",
-				"x": 2248,
+				"x": 2280,
 				"y": 2776,
 				"width": 16,
 				"height": 16,
