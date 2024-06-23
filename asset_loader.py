@@ -23,6 +23,13 @@ def load_images(path, size, center):
     img_rect.center = center
     return img, img_rect
 
+def load_empty_image(size, center):
+    img = pygame.Surface(size, pygame.SRCALPHA, 32)
+    img.fill((0, 0, 0, 0))
+    img_rect = img.get_rect()
+    img_rect.center = center
+    return img, img_rect
+
 def load_player(path):
     # Load player image
     player = pygame.image.load(path).convert_alpha()

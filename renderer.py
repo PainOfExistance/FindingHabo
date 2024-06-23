@@ -245,7 +245,7 @@ def draw_objects(prompt_font):
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
         #print(x["rect"].left, x["rect"].top, relative__left, relative__top)
-        if (x["type"]=="portal" and len(GM.transfer_list)):
+        if (x["type"]=="portal" or x["type"]=="walk_in_portal" and len(GM.transfer_list)):
             N.transfer_npc(x["name"], inline=True)
             
         if (
@@ -284,7 +284,7 @@ def draw_objects(prompt_font):
                 and x["type"] == "item"
             ):
                 GM.item_hovered = index
-                text = prompt_font.render(f"E) Pick up", True, Colors.mid_black)
+                text = prompt_font.render(f"E) Pick up", True, Colors.chroma_blue)
                 text_rect = text.get_rect(
                     center=(
                         relative__left + x["rect"].width // 2,
@@ -293,7 +293,7 @@ def draw_objects(prompt_font):
                 )
                 GM.screen.blit(text, text_rect)
 
-                text = prompt_font.render(x["name"], True, Colors.mid_black)
+                text = prompt_font.render(x["name"], True, Colors.chroma_blue)
                 text_rect = text.get_rect(
                     center=(
                         relative__left + x["rect"].width // 2,
@@ -314,7 +314,7 @@ def draw_objects(prompt_font):
                 and x["type"] == "container"
             ):
                 GM.container_hovered = index
-                text = prompt_font.render(f"E) Access", True, Colors.mid_black)
+                text = prompt_font.render(f"E) Access", True, Colors.chroma_blue)
                 text_rect = text.get_rect(
                     center=(
                         relative__left + x["rect"].width // 2,
@@ -342,11 +342,11 @@ def draw_objects(prompt_font):
                     text = prompt_font.render(
                         f"Key required) {x['name']['world_name']} ",
                         True,
-                        Colors.mid_black
+                        Colors.chroma_blue
                     )
                 else:
                     text = prompt_font.render(
-                        f"E) {x['name']['world_name']} ", True, Colors.mid_black
+                        f"E) {x['name']['world_name']} ", True, Colors.chroma_blue
                     )
                 text_rect = text.get_rect(
                     center=(
@@ -389,7 +389,7 @@ def draw_objects(prompt_font):
                     
             if (other_obj_rect.colliderect(CM.player.player_rect) and x["type"]=="activator" and x["name"]["type"]=="board"):
                 can_travel = True
-                text = prompt_font.render(f"Fast Travel Point", True, Colors.mid_black)
+                text = prompt_font.render(f"Fast Travel Point", True, Colors.chroma_blue)
                 text_rect = text.get_rect(
                     center=(
                         relative__left + x["rect"].width // 2,
@@ -411,7 +411,7 @@ def draw_objects(prompt_font):
                 if not CM.crafting.filtered:
                     CM.crafting.filter_recepies(x["name"]["crafter"])
                 text = prompt_font.render(
-                        f"E) Craft", True, Colors.mid_black
+                        f"E) Craft", True, Colors.chroma_blue
                     )
                 text_rect = text.get_rect(
                     center=(
@@ -447,7 +447,7 @@ def draw_objects(prompt_font):
                     ] = 0
                     
                     text = prompt_font.render(
-                        f"{x['name']['world_name']} ", True, Colors.mid_black
+                        f"{x['name']['world_name']} ", True, Colors.chroma_blue
                     )
                     text_rect = text.get_rect(
                         center=(
@@ -493,7 +493,7 @@ def draw_notes(rect, prompt_font):
             mouse_x, mouse_y = pygame.mouse.get_pos()
             note_rect = pygame.Rect(relative_left, relative_top, note["rect"].width, note["rect"].height)
             if note_rect.collidepoint(np.round(mouse_x*GM.ratio[0]), np.round(mouse_y*GM.ratio[1])):
-                text = prompt_font.render(f"{note['name']['name']}", True, Colors.mid_black)
+                text = prompt_font.render(f"{note['name']['name']}", True, Colors.chroma_blue)
                 text_rect = text.get_rect(
                     center=(relative_left+note["rect"].width//2, relative_top-8)
                 )

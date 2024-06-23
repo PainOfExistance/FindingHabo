@@ -54,7 +54,6 @@ class Game:
         #CM.inventory.add_item(GM.items["Steel"])
         #CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
-        self.layer=pygame.Surface((GM.screen.get_width(), GM.screen.get_height()))
         self.layers=[]
         wp.get_global_npcs()
         wp.get_global_nav_tiles()
@@ -173,7 +172,7 @@ class Game:
 
         for data in portals:
             if "unlocked_by" in data[0]:
-                img, img_rect = assets.load_images("./textures\static\door.png", (16, 16), (data[1], data[2]))
+                img, img_rect = assets.load_empty_image((20, 20), (data[1], data[2]))
                 GM.world_objects.append({
                         "image": img,
                         "rect": img_rect,
@@ -183,7 +182,8 @@ class Game:
                     })
                 
             else:
-                img, img_rect = assets.load_images("./textures\\static\\barrier.png", (data[4], data[5]), (data[1], data[2]))
+                img, img_rect = assets.load_empty_image((20, 20), (data[1], data[2]))
+                #img, img_rect = assets.load_images("./textures\\static\\barrier.png", (data[4], data[5]), (data[1], data[2]))
                 GM.world_objects.append({
                         "image": img,
                         "rect": img_rect,
@@ -271,19 +271,13 @@ class Game:
             self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
         
         GM.background, GM.bg_rect = assets.load_background(metadata["background"])
-        directory, _ = os.path.split(metadata["background"])
-        
-        self.layers=[]
-        for layer in metadata["layers"]:
-            new_filepath = os.path.join(directory, layer)
-            bg, _ =assets.load_background(new_filepath)
-            self.layer.blit(bg, (0, 0))
-            self.layers.append(bg)
-        
-        self.layers=self.layers[-1]  
         GM.collision_map, GM.anim_tiles = assets.load_collision(metadata["collision_set"])
         GM.map_height = GM.collision_map.shape[0]
         GM.map_width = GM.collision_map.shape[1]
+        directory, _ = os.path.split(metadata["background"])
+        
+        bg, _ =assets.load_background(os.path.join(directory, metadata["layers"][-1]))
+        self.layers=bg  
 
         if type != "default":
             for i, _ in enumerate(portals):
@@ -301,7 +295,6 @@ class Game:
 
         GM.bg_rect.left = -offset[0]
         GM.bg_rect.top = -offset[1]
-
         CM.player.player_rect.left = spawn_point[0] - offset[0]
         CM.player.player_rect.top = spawn_point[1] - offset[1]   
         CM.music_player.set_tracks(metadata["music"])
@@ -1354,8 +1347,7 @@ class Game:
             CM.map.set_map(GM.background)
             N.update_npc(self.subtitle_font, self.prompt_font)
             CM.player.draw()
-
-            GM.screen.blit(self.layer, GM.bg_rect.topleft)
+            
             GM.screen.blit(self.layers, GM.bg_rect.topleft)
             CM.player.draw_hud()
             N.play_line(self.subtitle_font, self.prompt_font)

@@ -172,7 +172,7 @@ def update_npc(subtitle_font, prompt_font):
                 )
             
             for object in GM.world_objects:
-                if object["type"] == "portal" and object["name"]["type"]!="default" and "rect" in object and x["rect"].colliderect(object["rect"]):
+                if (object["type"] == "portal" or object["type"]=="walk_in_portal") and object["name"]["type"]!="default" and "rect" in object and x["rect"].colliderect(object["rect"]):
                     print("meow")
                     x["name"]["path"]=[]
                     x["name"]["target"]=None
@@ -313,7 +313,7 @@ def play_line(subtitle_font, prompt_font):
         text = prompt_font.render(
             f"E) {GM.talk_to_name}",
             True,
-            Colors.mid_black,
+            Colors.chroma_blue,
         )
         text_rect = text.get_rect(
             center=(
@@ -331,7 +331,7 @@ def play_line(subtitle_font, prompt_font):
         )
     if GM.current_line != None and GM.line_time >= GM.counter:
         text = subtitle_font.render(
-            GM.current_line["text"], True, Colors.mid_black
+            GM.current_line["text"], True, Colors.chroma_blue
         )
         text_rect = text.get_rect(
             center=(
