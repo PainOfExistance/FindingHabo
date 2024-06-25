@@ -47,7 +47,7 @@
 				"iid": "8dc49d30-fec0-11ee-802d-e7790be7cd58",
 				"layer": "LeveL_Data",
 				"x": 2248,
-				"y": 2760,
+				"y": 2776,
 				"width": 16,
 				"height": 16,
 				"color": 0,
@@ -58,8 +58,8 @@
 					"world_to_load": "worlds/simplified/Merchants_House/data.json",
 					"world_name": "Merchants House",
 					"spawn_point": {
-						"cx": 143,
-						"cy": 172
+						"cx": 142,
+						"cy": 173
 					}
 				}
 			}
@@ -113,8 +113,8 @@
 				"id": "Npc_nav_tile",
 				"iid": "e48541a0-fec0-11ee-9877-070e3d8f1509",
 				"layer": "LeveL_Data",
-				"x": 2296,
-				"y": 2760,
+				"x": 2280,
+				"y": 2776,
 				"width": 16,
 				"height": 16,
 				"color": 16766464,
@@ -343,7 +343,7 @@
 					],
 					"pause_time": 0,
 					"path_ref": null,
-					"action": "Idle",
+					"action": "Idle_4",
 					"used": false
 				}
 			},

@@ -19,32 +19,41 @@ def manage_global_npc():
     for i, x in enumerate(GM.global_enemy_list):
         npc=shorten_tuple_npc(x)
         tmp=CM.ai.update(npc)
-        lengthen_tuple_npc(x, tmp)
+        x=lengthen_tuple_npc(x, tmp)
+        GM.global_enemy_list[i]=x
         pw=CM.player.current_world.replace(" ","_")
         if pw in x[0]["world"]:
             if x[0]["name"]=="TBP" or x[0]["stats"]["status"]=="dead":
                     tmp=wp.setEnemies(x[0]["customFields"])
                     if tmp:
                         znj=((copy.deepcopy(GM.ai_package[tmp]), x[0]["portal"], x[0]["world"], x[-2], x[-1]))
-                        znj[0]["package"]=x[0]["customFields"]["package"]
+                        znj[0]["package"]=(x[0]["customFields"]["package"] if x[0]["customFields"]["package"] != "" else "dream_city_merchant_misc")
+                        znj[0]["routine"] = assets.load_routine(znj[0]["package"])
+                        day=GM.game_date.current_date.weekday()
+                        time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
+                        znj[0]["current_routine"], znj[0]["world"], znj[0]["portal"]=copy.deepcopy(assets.get_actions(day, time, znj[0]["routine"]))
                         GM.transfer_list.append(copy.deepcopy(znj))
                         rm_list.append(i)
                     
             elif x[0]["stats"]["status"]!="dead" and x[0]["stats"]["status"]!="" and x[0]["name"]!="TBP":
                 znj=(x[0], x[0]["portal"], x[0]["world"], x[3], x[4])
-                znj[0]["package"]=x[0]["customFields"]["package"]
+                znj[0]["package"]==(x[0]["customFields"]["package"] if x[0]["customFields"]["package"] != "" else "dream_city_merchant_misc")
+                znj[0]["routine"] = assets.load_routine(znj[0]["package"])
+                day=GM.game_date.current_date.weekday()
+                time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
+                znj[0]["current_routine"], znj[0]["world"], znj[0]["portal"]=copy.deepcopy(assets.get_actions(day, time, znj[0]["routine"]))
                 GM.transfer_list.append(copy.deepcopy(znj))
                 rm_list.append(i)
           
     for index in sorted(rm_list, reverse=True):
          GM.global_enemy_list.pop(index)
-         
+    
     #GM.global_enemy_list = [x for i, x in enumerate(GM.global_enemy_list) if i not in rm_list]
             
 def update_npc(subtitle_font, prompt_font):
     rm_list=[]
     for index, x in enumerate(GM.npc_list):
-        if GM.npc_list[index]["name"]["stats"]["status"] == "dead":
+        if GM.npc_list[index]["name"]["stats"]["status"] == "dead" and "death_anim" in x["name"]["stats"]:
             GM.anim_tiles.append({'row': x["rect"].top, 'col': x["rect"].left,
                                  'value': x["name"]["stats"]["death_anim"], "special": "hold", "counter": 0})
             img = CM.animation.data[x["name"]
@@ -126,7 +135,7 @@ def update_npc(subtitle_font, prompt_font):
                         if other["rect"].colliderect(x["rect"]):
                             agrov = True
                             if x["attack_diff"] > x["name"]["attack_speed"]:
-                                res = other["name"]["stats"]["defense"] - \
+                                res = other["name"]["stats"]["defence"] - \
                                     x["name"]["stats"]["damage"]
                                 if res > 0:
                                     res = 0
@@ -143,7 +152,7 @@ def update_npc(subtitle_font, prompt_font):
                                 x["attack_diff"] += GM.delta_time
 
                             if other["attack_diff"] > other["name"]["attack_speed"]:
-                                res = x["name"]["stats"]["defense"] - \
+                                res = x["name"]["stats"]["defence"] - \
                                     other["name"]["stats"]["damage"]
                                 if res > 0:
                                     res = 0
@@ -198,7 +207,7 @@ def update_npc(subtitle_font, prompt_font):
                 and not GM.crafting
             ):
                 if not CM.player.player_rect.colliderect(other_obj_rect):
-                    x = CM.ai.attack(x)
+                    lenghten_active_npc(x, CM.ai.attack(shorten_active_npc(x)))
                     x["name"]["movement_behavior"]["moving"] = True
 
                 if counter < len(GM.npc_list)-2:
@@ -207,7 +216,7 @@ def update_npc(subtitle_font, prompt_font):
                 if CM.player.player_rect.colliderect(other_obj_rect):
                     agrov = True
                     if x["attack_diff"] > x["name"]["attack_speed"]:
-                        res = CM.player.stats.defense - \
+                        res = CM.player.stats.defence - \
                             x["name"]["stats"]["damage"]
 
                         if res > 0:
@@ -243,6 +252,13 @@ def update_npc(subtitle_font, prompt_font):
                     x["name"]["name"],
                 )
 
+            #if x["name"]["name"]=="Merchant":
+            #    print()
+            #    print()
+            #    print(x)
+            #    print()
+            #    print()
+                
             if (
                 relative__left > -80
                 and relative__left < GM.screen_width + 80
@@ -263,7 +279,7 @@ def update_npc(subtitle_font, prompt_font):
 
                         GM.npc_list[index]["name"]["stats"][
                             "health"
-                        ] -= (int(CM.player.stats.weapon_damage)-int(x["name"]["stats"]["defense"]))
+                        ] -= (int(CM.player.stats.weapon_damage)-int(x["name"]["stats"]["defence"]))
 
                         if GM.npc_list[index]["name"]["stats"]["health"] <= 0:
                             CM.player.level.gain_experience(
@@ -345,13 +361,15 @@ def play_line(subtitle_font, prompt_font):
 
 def transfer_npc(portal, inline=False):
     rm_list=[]
+    tmp=copy.deepcopy(portal)
     for i, npc in enumerate(GM.transfer_list):
+        portal=copy.deepcopy(tmp)
         if portal==None or portal=="default":
             portal={}
             portal["type"]="default"
             portal["spawn_point"]={}
-            portal["spawn_point"]["cx"]=npc[-1][0]
-            portal["spawn_point"]["cy"]=npc[-1][1]
+            portal["spawn_point"]["cx"]=npc[-1][0]//16
+            portal["spawn_point"]["cy"]=npc[-1][1]//16
         
         pw=CM.player.current_world.replace(" ","_")
         if (npc[1] == portal["type"] or portal["type"]=="default") and pw in npc[2]:
@@ -400,37 +418,24 @@ def transfer_npc(portal, inline=False):
                         CM.animation.load_anims(GM.npc_list[-1])
                 rm_list.append(i)
                 try:
-                    GM.npc_list[-1]=CM.ai.update(GM.npc_list[-1])
-                    #if not inline:
-                    #    if len(GM.npc_list[-1]["name"]["path"])>0:
-                    #        GM.npc_list[-1]["name"]["target"]=copy.deepcopy(GM.npc_list[-1]["name"]["path"][-1])
-                    #        GM.npc_list[-1]["name"]["path"]=[]
-                    #    GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
+                    GM.npc_list[-1]["name"]["world"]=pw
+                    lenghten_active_npc(GM.npc_list[-1], CM.ai.update(shorten_active_npc(GM.npc_list[-1])))
+                    if not inline:
+                        GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
                 except Exception as e:
-                    #print()
-                    #print(e)
-                    #print()
+                    print()
+                    print(e)
+                    print()
                     pass
                     
             except Exception as e:
-                #print()
-                #print(e)
-                #print()
+                print()
+                print(e)
+                print()
                 pass
     
     for index in sorted(rm_list, reverse=True):
-         GM.transfer_list.pop(index)
-    #GM.transfer_list = [x for i, x in enumerate(GM.transfer_list) if i not in rm_list]
-    
-    #print()
-    #print("-----------------")
-    #print(GM.global_enemy_list)
-    #print("-----------------")
-    #print(GM.transfer_list)
-    #print("-----------------")
-    #print(GM.npc_list)
-    #print("-----------------")
-    #print()           
+         GM.transfer_list.pop(index)         
                
 def set_npc():
     rm_list=[]
@@ -590,8 +595,9 @@ def lengthen_tuple_npc(x, npc):
     x[0]["to_face"]=npc["name"]["to_face"]
     x[0]["detection_range"]=npc["name"]["detection_range"]
     x[0]["stats"]["group"]=npc["name"]["stats"]["group"]
-    x[-1]=(npc["rect"]["center"][0], npc["rect"]["center"][1])
+    x[-1]=npc["rect"]["center"]
     x[0]["name"]=npc["name"]["name"]
     x[0]["active"]=False
     x[0]["portal"]=npc["name"]["portal"]
     x=tuple(x)
+    return x

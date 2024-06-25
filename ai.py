@@ -120,19 +120,18 @@ class Ai:
                     world=world[1]
                     
             npc["name"]["world"]=world
-            
             index1, index2, column_index=self.pathfinder.find_global_nav_points(target[0], npc)
             if index1==None:
                 return npc
             #npc["name"]["path"]=self.pathfinder.find_path(npc["rect"]["center"], GM.nav_tiles[column_index][index1]["rect"]["center"], (npc["rect"].width, npc["rect"].height))
             #todo speed test
             
-            #npc["name"]["path"]=copy.deepcopy([x[1] for x in GM.global_nav_tiles[world][column_index][index1:index2+1]])
-            #npc["name"]["target"]=copy.deepcopy(npc["name"]["path"][0])
-            #npc["name"]["path"].pop(0)
-            #npc["name"]["index_points"]=[i for i in range(index1, index2+1)]
-            #npc["name"]["column_index"]=column_index
-            #npc["name"]["to_face"]=target[1]
+            npc["name"]["path"]=copy.deepcopy([x[1] for x in GM.global_nav_tiles[world][column_index][index1:index2+1]])
+            npc["name"]["target"]=copy.deepcopy(npc["name"]["path"][0])
+            npc["name"]["path"].pop(0)
+            npc["name"]["index_points"]=[i for i in range(index1, index2+1)]
+            npc["name"]["column_index"]=column_index
+            npc["name"]["to_face"]=target[1]
 
         return npc
                 

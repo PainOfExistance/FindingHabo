@@ -2,6 +2,7 @@ import copy
 import math
 import random
 import re
+import sys
 from os import close
 from tokenize import group
 from turtle import speed
@@ -58,7 +59,7 @@ class PathFinder:
         closest_object_index = None
         nav_tiles=GM.global_nav_tiles[world]
         for i, column in enumerate(nav_tiles):
-            if np.any([obj[0]['action'] == action for obj in column]):
+            if np.any([action in obj[0]['action'] for obj in column]):
                 for j, obj in enumerate(column):
                     obj_group = obj[0]['group']
                     obj_action = obj[0]['action']
@@ -70,11 +71,10 @@ class PathFinder:
                             closest_object_index = j
         if closest_column_index is None:
             return None, None, None
-        
         for i, column in enumerate(nav_tiles[closest_column_index]):
             obj_group = column[0]['group']
             obj_action = column[0]['action']
-            if action==obj_action:
+            if action in obj_action:
                 return closest_object_index, i, closest_column_index
     
     def check_collision(self, dx, dy, rect):
@@ -94,6 +94,9 @@ class PathFinder:
         target_x, target_y = target
         dx = target_x - x
         dy = target_y - y
+        if abs(dx)>3000 or abs(dy)>3000:
+            npc["rect"]["center"]=target
+            return npc
         
         tdx=int(self.weird_division(dx,abs(dx)))
         tdy=int(self.weird_division(dy,abs(dy)))

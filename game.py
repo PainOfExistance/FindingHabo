@@ -278,12 +278,14 @@ class Game:
         
         bg, _ =assets.load_background(os.path.join(directory, metadata["layers"][-1]))
         self.layers=bg  
-
+        
         if type != "default":
             for i, _ in enumerate(portals):
                 if portals[i][0]["type"] == type:
                     spawn_point = (portals[i][0]["spawn_point"]["cx"]*16, portals[i][0]["spawn_point"]["cy"]*16)
-                N.transfer_npc(portals[i][0])
+        
+        N.manage_global_npc()     
+        N.transfer_npc("default")
 
         if spawn_point == (0, 0):
             spawn_point = (GM.relative_player_left, GM.relative_player_top)
@@ -1338,7 +1340,7 @@ class Game:
         pygame.display.flip()
 
     def draw(self):
-        GM.screen.fill((230, 60, 20))
+        GM.screen.fill(Colors.dark_black)
         GM.screen.blit(GM.background, GM.bg_rect.topleft)
         R.draw_objects(self.prompt_font)
         CM.animation.animate_static()

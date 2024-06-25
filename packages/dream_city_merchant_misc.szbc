@@ -1,7 +1,7 @@
 {
     "routines": [{
         "Routine_1": {
-            "8.00": ["Idle", "Sit_3"],
+            "8.00": ["move_by_path_home","Sit_3"],
             "9.00": ["move_by_path_market", "Idle_4"],
             "15.00": ["move_by_path_tavern", "Idle_2"],
             "16.00": ["move_by_path_park||temple", "Sit_1||Idle_1"],
@@ -10,7 +10,7 @@
             "22.00": ["Sleep_4"]
         },
         "Routine_2": {
-            "8.00": ["Idle", "Sit_3"],
+            "8.00": ["move_by_path_home","Sit_3"],
             "9.00": ["move_by_path_tavern", "Idle_2"],
             "16.00": ["move_by_path_park||temple", "Sit_1||Idle_1"],
             "18.00": ["move_by_path_wall", "Idle_4"],

@@ -2,6 +2,7 @@ import copy
 import json
 import os
 import random
+import sys
 
 import asset_loader as assets
 import world_parser as wp
@@ -262,7 +263,6 @@ def parse_visited(world):
         
     return spawn, portals, enemies, final_items, containers, metadata, activators, nav_tiles, notes
 
-
 def remove_uniques(original, modified):
     orig_spawn, orig_portals, orig_enemies, orig_final_items, orig_containers, orig_metadata, orig_activators, orig_tiles, _ = parser(copy.deepcopy(original))
     mod_spawn, mod_portals, mod_enemies, mod_final_items, mod_containers, mod_metadata, mod_activators, mod_tiles, notes = parse_visited(copy.deepcopy(modified))
@@ -381,21 +381,20 @@ def get_global_npcs():
                     
                     data[0]["name"]="TBP"
                     global_enemy_list.append((copy.deepcopy(data[0]), data[0]["world"], data[0]["portal"], x["iid"], (data[1], data[2])))
-    
                     
     GM.global_enemy_list.clear()
     GM.global_enemy_list = copy.deepcopy(global_enemy_list)
-    print("Global NPC list updated", len(GM.global_enemy_list))
 
 def get_global_nav_tiles():
     data_list=assets.load_all_world_data()
     GM.global_nav_tiles.clear()
     for data in data_list:
         ident=data["identifier"]
-        GM.global_nav_tiles[ident]=[]
+        GM.global_nav_tiles[ident]=[[]]
         if "Npc_nav_tile" in data["entities"]:
-            GM.global_nav_tiles[ident].append([])
             for x in data["entities"]["Npc_nav_tile"]:
                 GM.global_nav_tiles[ident][-1].append((setNavTiles(x["customFields"]), (x["x"], x["y"]), x["iid"]))
-                    
+                if GM.global_nav_tiles[ident][-1][-1][0]["next_tile"]==None:
+                    GM.global_nav_tiles[ident].append([])
+    
     print("Global nav list updated", len(GM.global_nav_tiles))
