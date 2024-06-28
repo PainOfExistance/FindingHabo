@@ -54,13 +54,10 @@ class Game:
         #CM.inventory.add_item(GM.items["Steel"])
         #CM.inventory.add_item(GM.items["Steel"])
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
-        self.layers=[]
+        self.top_layer=[]
+        self.npc_top_layer=[]
         wp.get_global_npcs()
         wp.get_global_nav_tiles()
-        #print()
-        #for znj in GM.global_nav_tiles:
-        #    print(f"{znj}: {GM.global_nav_tiles[znj]}")
-        #print()
 
         CM.ai.pathfinder=PathFinder()
         self.setup(f"./terrain/worlds/simplified/{CM.player.current_world.replace(' ', '_')}/data.json")
@@ -277,7 +274,10 @@ class Game:
         directory, _ = os.path.split(metadata["background"])
         
         bg, _ =assets.load_background(os.path.join(directory, metadata["layers"][-1]))
-        self.layers=bg  
+        self.top_layer=bg
+        
+        bg, _ =assets.load_background(os.path.join(directory, metadata["layers"][-2]))
+        self.npc_top_layer=bg
         
         if type != "default":
             for i, _ in enumerate(portals):
@@ -1347,10 +1347,11 @@ class Game:
         
         if not GM.map_shown:
             CM.map.set_map(GM.background)
-            N.update_npc(self.subtitle_font, self.prompt_font)
             CM.player.draw()
+            GM.screen.blit(self.npc_top_layer, GM.bg_rect.topleft)
+            N.update_npc(self.subtitle_font, self.prompt_font)
+            GM.screen.blit(self.top_layer, GM.bg_rect.topleft)
             
-            GM.screen.blit(self.layers, GM.bg_rect.topleft)
             CM.player.draw_hud()
             N.play_line(self.subtitle_font, self.prompt_font)
             CM.player.quests.draw_quest_info()

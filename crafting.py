@@ -22,6 +22,7 @@ class Crafting:
         self.in_sub_menu=False
         self.selected_item={}
         self.if_sure=False
+        self.types={"smithing":"Smithing", "upgrade":"Upgrading", "enchanting":"Enchatning", "alchemy": "Alchemy", "cooking": "Cooking"}
 
     def filter_recepies(self, type):
         if isinstance(self.recepies, dict) and 'recipes' in self.recepies:
@@ -79,7 +80,7 @@ class Crafting:
             item["stats"]["damage"], item["name"] = damage, name
             CM.player.add_item(item)
             
-        elif self.type == "smithing" or self.type == "alchemy" or self.type == "coocking":
+        elif self.type == "smithing" or self.type == "alchemy" or self.type == "cooking":
             item = self.active_recepies[GM.selected_inventory_item]
             for j in range(0, len(item["ingredients"]), 2):
                 if item["ingredients"][j] not in CM.inventory.quantity or item["ingredients"][j+1] > CM.inventory.quantity[item["ingredients"][j]]:
@@ -102,7 +103,7 @@ class Crafting:
         elif "immaculate" in name:
             return GM.items[base_name]["stats"]["damage"]*1.55, name.replace(" (immaculate)", " (epic)")
         elif "epic" in name:
-            return GM.items[base_name]["stats"]["damage"]*1.7, name.replace(" (epic)", " (legendary)")
+            return GM.items[base_name]["stats"]["damage"]*1.75, name.replace(" (epic)", " (legendary)")
         else:
             return GM.items[base_name]["stats"]["damage"]*1.12, name+" (elegant)"         
 
@@ -129,7 +130,7 @@ class Crafting:
 
         i = 0
         item_render = menu_font.render(
-            self.type,
+            self.types[self.type],
             True,
             Colors.active_item,
         )
@@ -233,7 +234,7 @@ class Crafting:
 
         i = 0
         item_render = menu_font.render(
-            self.type,
+            self.types[self.type],
             True,
             Colors.active_item,
         )
@@ -342,7 +343,7 @@ class Crafting:
 
         i = 0
         item_render = menu_font.render(
-            self.type,
+            self.types[self.type],
             True,
             Colors.active_item,
         )

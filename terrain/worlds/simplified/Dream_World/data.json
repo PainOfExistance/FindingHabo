@@ -1,8 +1,8 @@
 {
 	"identifier": "Dream_World",
 	"uniqueIdentifer": "f2377a30-b0a0-11ee-9f4b-abcd821ed932",
-	"x": 3232,
-	"y": -12328,
+	"x": 464,
+	"y": -7024,
 	"width": 6416,
 	"height": 6416,
 	"bgColor": "#CB410E",
@@ -17,6 +17,7 @@
 		"Castle.png",
 		"RRW.png",
 		"RAC.png",
+		"Top_layer_npc.png",
 		"Top_layer.png"
 	],
 	"entities": {
