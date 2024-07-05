@@ -31,6 +31,7 @@ class MainMenu:
         self.font = pygame.font.Font("./fonts/SovngardeBold.ttf", 40)  
         CM.music_player = MusicPlayer("./sounds/bgm/DOVAHKIIN.mp3")
         CM.music_player.play_random_track()
+        self.logo, self.logo_rect = assets.load_images("./textures/logo.png", (int((GM.screen_height)*0.8), GM.screen_height), (GM.screen_width // 3, (GM.screen_height // 2)-25))
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
@@ -144,11 +145,12 @@ class MainMenu:
                 text = self.font.render(item, True, color)
                 text_rect = text.get_rect(
                     center=(
-                        GM._scr.get_width() // 2,
+                        (GM._scr.get_width() // 2)+(GM._scr.get_width() // 4),
                         GM._scr.get_height() // 2.5 + index * 50,
                     )
                 )
                 GM._scr.blit(text, text_rect)
+                GM._scr.blit(self.logo, self.logo_rect)
 
         elif self.in_sub_menu == 1:
             
