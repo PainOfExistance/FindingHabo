@@ -2,8 +2,6 @@ import copy
 import multiprocessing
 import sys
 import threading
-from calendar import c
-from math import e
 
 import pygame
 
@@ -37,7 +35,7 @@ def manage_global_npc():
                     
             elif x[0]["stats"]["status"]!="dead" and x[0]["stats"]["status"]!="" and x[0]["name"]!="TBP":
                 znj=(x[0], x[0]["portal"], x[0]["world"], x[3], x[4])
-                znj[0]["package"]==(x[0]["customFields"]["package"] if x[0]["customFields"]["package"] != "" else "dream_city_merchant_misc")
+                #znj[0]["package"]==(x[0]["customFields"]["package"] if x[0]["customFields"]["package"] != "" else "dream_city_merchant_misc")
                 znj[0]["routine"] = assets.load_routine(znj[0]["package"])
                 day=GM.game_date.current_date.weekday()
                 time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
@@ -181,11 +179,11 @@ def update_npc(subtitle_font, prompt_font):
             
             for object in GM.world_objects:
                 if (object["type"] == "portal" or object["type"]=="walk_in_portal") and object["name"]["type"]!="default" and "rect" in object and x["rect"].colliderect(object["rect"]):
-                    print("meow")
+                    print("meow when colliding portal")
+                    #x["name"]["routine"]=[]
                     x["name"]["path"]=[]
                     x["name"]["target"]=None
                     x["name"]["current_routine"]=[]
-                    x["name"]["routine"]=[]
                     x["name"]["index_points"]=[]
                     x["name"]["column_index"]=0
                     x["name"]["column_index"]=0
@@ -215,8 +213,7 @@ def update_npc(subtitle_font, prompt_font):
                 if CM.player.player_rect.colliderect(other_obj_rect):
                     agrov = True
                     if x["attack_diff"] > x["name"]["attack_speed"]:
-                        res = CM.player.stats.defence - \
-                            x["name"]["stats"]["damage"]
+                        res = CM.player.stats.defense - x["name"]["stats"]["damage"]
 
                         if res > 0:
                             res = 0
@@ -578,6 +575,7 @@ def lenghten_active_npc(x, npc):
     x["name"]["name"]=npc["name"]["name"]
     x["name"]["active"]=True
     x["name"]["portal"]=npc["name"]["portal"]
+    x["name"]["portal_to_be"]=npc.get("name").get("portal_to_be", "")
 
 def lengthen_tuple_npc(x, npc):
     x=list(x)
@@ -598,5 +596,6 @@ def lengthen_tuple_npc(x, npc):
     x[0]["name"]=npc["name"]["name"]
     x[0]["active"]=False
     x[0]["portal"]=npc["name"]["portal"]
+    x[0]["portal_to_be"]=npc.get("name").get("portal_to_be", "")
     x=tuple(x)
     return x

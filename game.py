@@ -426,19 +426,19 @@ class Game:
         
         keys = pygame.key.get_pressed()
 
-        if CM.player.player_rect.left <= 60:
+        if CM.player.player_rect.left <= 100:
             GM.bg_rect.move_ip(movement, 0)
             CM.player.player_rect.move_ip(movement, 0)
 
-        if CM.player.player_rect.right >= GM.screen_width - 60:
+        if CM.player.player_rect.right >= GM.screen_width - 100:
             GM.bg_rect.move_ip(-movement, 0)
             CM.player.player_rect.move_ip(-movement, 0)
             
-        if CM.player.player_rect.top <= 60:
+        if CM.player.player_rect.top <= 100:
             GM.bg_rect.move_ip(0, movement)
             CM.player.player_rect.move_ip(0, movement)
             
-        if CM.player.player_rect.bottom >= GM.screen_height - 60:
+        if CM.player.player_rect.bottom >= GM.screen_height - 100:
             GM.bg_rect.move_ip(0, -movement)
             CM.player.player_rect.move_ip(0, -movement)
 

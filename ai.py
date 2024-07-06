@@ -50,6 +50,7 @@ class Ai:
         return npc
 
     def follow(self, npc):
+        #todo
         pass
     
     def update_state(self, npc):
@@ -85,10 +86,13 @@ class Ai:
                 target=split_by_[-1]
             
             if "||" in world:
+                pre_split=world
                 world=world.split("||")
                 if CM.player.current_world==world[0]:
+                    npc["name"]["portal_to_be"]=pre_split
                     world=world[0]
                 else:
+                    npc["name"]["portal_to_be"]=""
                     world=world[1]
                     
             npc["name"]["world"]=world
@@ -113,10 +117,13 @@ class Ai:
             target=target.split("_")
             
             if "||" in world:
+                pre_split=world
                 world=world.split("||")
                 if CM.player.current_world==world[0]:
+                    npc["name"]["portal_to_be"]=pre_split
                     world=world[0]
                 else:
+                    npc["name"]["portal_to_be"]=""
                     world=world[1]
                     
             npc["name"]["world"]=world
