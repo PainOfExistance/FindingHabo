@@ -304,6 +304,9 @@ class Game:
 
     def travel(self):
         self.loading()
+        for x in GM.npc_list:
+            GM.global_enemy_list.append((copy.deepcopy(x["name"]), CM.player.current_world, None, x["iid"], x["rect"].center))
+            #https://flashpointarchive.org/downloads/
         CM.player.current_world = GM.world_to_travel_to["world_name"]
         GM.world_objects[GM.world_to_travel_to["index"]]["name"]["locked"] = False
         assets.world_save()

@@ -88,8 +88,7 @@ def update_npc(subtitle_font, prompt_font):
                 and not GM.is_in_dialogue
             ):
                 lenghten_active_npc(x, CM.ai.update(shorten_active_npc(x)))
-                
-            
+                        
             relative__left = int(GM.bg_rect.left + x["rect"].left)
             relative__top = int(GM.bg_rect.top + x["rect"].top)
             x["name"]["movement_behavior"]["moving"] = False
