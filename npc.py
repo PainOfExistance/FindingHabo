@@ -18,10 +18,18 @@ def manage_global_npc():
         npc=shorten_tuple_npc(x)
         tmp=CM.ai.update(npc)
         x=lengthen_tuple_npc(x, tmp)
+        #if tmp["name"]["stats"]["group"]=="Merchant":
+        #    print(x)
+        #    print()
         GM.global_enemy_list[i]=x
         if CM.player.current_world in x[0]["world"]:
             if x[0]["name"]=="TBP" or x[0]["stats"]["status"]=="dead":
                     tmp=wp.setEnemies(x[0]["customFields"])
+                    print()
+                    print(tmp)
+                    print(CM.player.current_world)
+                    print(x[0]["world"])
+                    print()
                     if tmp:
                         x[0]["name"]=copy.deepcopy(GM.ai_package[tmp]["name"])
                         x[0]["movement_behavior"]=copy.deepcopy(GM.ai_package[tmp]["movement_behavior"])
@@ -365,9 +373,8 @@ def play_line(subtitle_font, prompt_font):
     else:
         GM.current_line = None
 
-def transfer_npc(portal, inline=False):
+def transfer_npc(tmp, inline=False):
     rm_list=[]
-    tmp=copy.deepcopy(portal)
     for i, npc in enumerate(GM.transfer_list):
         portal=copy.deepcopy(tmp)
         if portal==None or portal=="default":
@@ -377,7 +384,12 @@ def transfer_npc(portal, inline=False):
             portal["spawn_point"]["cx"]=npc[-1][0]//16
             portal["spawn_point"]["cy"]=npc[-1][1]//16
         
-        CM.player.current_world=CM.player.current_world.replace(" ","_")
+        if npc[0]["name"]=="Merchant":
+            print()
+            print(npc[0]["name"])
+            print(npc[2])
+            print(CM.player.current_world)
+            print()
         if (npc[1] == portal["type"] or portal["type"]=="default") and CM.player.current_world in npc[2]:
             try:
                 if "inventory_type" in npc[0]["stats"]:
@@ -425,9 +437,9 @@ def transfer_npc(portal, inline=False):
                 rm_list.append(i)
                 try:
                     GM.npc_list[-1]["name"]["world"]=CM.player.current_world
-                    lenghten_active_npc(GM.npc_list[-1], CM.ai.update(shorten_active_npc(GM.npc_list[-1])))
-                    if not inline:
-                        GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
+                    #lenghten_active_npc(GM.npc_list[-1], CM.ai.update(shorten_active_npc(GM.npc_list[-1])))
+                    #if not inline:
+                    #    GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])
                 except Exception as e:
                     print()
                     print(e)

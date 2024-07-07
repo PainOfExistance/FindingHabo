@@ -27,6 +27,14 @@ class Ai:
         }
 
     def update(self, npc):
+        #if npc["name"]["stats"]["group"]=="Merchant":
+        #    print()
+        #    print()
+        #    print(npc["name"]["target"])
+        #    print(npc["rect"])
+        #    print()
+        #    print()
+
         if npc["name"]["movement_behavior"]["type"] == "random_patrol":
             return self.random_patrol(npc)
         elif npc["name"]["target"]!=None:
@@ -56,7 +64,24 @@ class Ai:
     def update_state(self, npc):
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
-        actions, npc["name"]["world"], npc["name"]["portal"]=assets.get_actions(day, time, npc["name"]["routine"])      
+        actions, npc["name"]["world"], npc["name"]["portal"]=assets.get_actions(day, time, npc["name"]["routine"])
+        
+        if npc["name"]["stats"]["group"]=="Merchant" and time=="8.45":
+            print()
+            print(npc["name"]["stats"]["group"])
+            print(actions)
+            print(npc["name"]["world"])
+            print(npc["name"]["portal"])
+            print()
+            
+        if npc["name"]["stats"]["group"]=="Merchant" and time=="9.00":
+            print()
+            print(npc["name"]["stats"]["group"])
+            print(actions)
+            print(npc["name"]["world"])
+            print(npc["name"]["portal"])
+            print()
+            
         if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"]!=actions:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"]=copy.deepcopy(actions)
@@ -85,13 +110,13 @@ class Ai:
             else:
                 target=split_by_[-1]
             
-            npc["name"]["portal_to_be"]=""
             if "||" in world:
-                npc["name"]["portal_to_be"]=world
                 world=world.split("||")
                 if CM.player.current_world==world[0]:
+                    npc["name"]["portal_to_be"]=""
                     world=world[0]
                 else:
+                    npc["name"]["portal_to_be"]=world[0]
                     world=world[1]
                     
             npc["name"]["world"]=world
@@ -108,6 +133,7 @@ class Ai:
             npc["name"]["path"].pop(0)
             npc["name"]["index_points"]=[i for i in range(index1, index2+1)]
             npc["name"]["column_index"]=column_index
+            
         else:
             target=routine[0]
             if "||" in routine[0]:
@@ -116,16 +142,16 @@ class Ai:
             target=target.split("_")
             
             if "||" in world:
-                pre_split=world
                 world=world.split("||")
                 if CM.player.current_world==world[0]:
-                    npc["name"]["portal_to_be"]=pre_split
+                    npc["name"]["portal_to_be"]=world[1]
                     world=world[0]
                 else:
-                    npc["name"]["portal_to_be"]=""
+                    npc["name"]["portal_to_be"]=world[0]
                     world=world[1]
                     
             npc["name"]["world"]=world
+            
             index1, index2, column_index=self.pathfinder.find_global_nav_points(target[0], npc)
             if index1==None:
                 return npc

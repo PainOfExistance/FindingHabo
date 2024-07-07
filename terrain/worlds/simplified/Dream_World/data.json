@@ -70,22 +70,6 @@
 		"Enemy_Random_Spawn": [
 			{
 				"id": "Enemy_Random_Spawn",
-				"iid": "a4ef42f0-b0a0-11ee-b02a-2f33a30b0e15",
-				"layer": "LeveL_Data",
-				"x": 512,
-				"y": 3168,
-				"width": 16,
-				"height": 16,
-				"color": 12470831,
-				"customFields": {
-					"chance": 0.5,
-					"enemy_Type": "bandit",
-					"rarity": "uncommon",
-					"package": "test_stand_meow"
-				}
-			},
-			{
-				"id": "Enemy_Random_Spawn",
 				"iid": "c0e43e70-b0a0-11ee-b02a-6583af3deefd",
 				"layer": "LeveL_Data",
 				"x": 1248,

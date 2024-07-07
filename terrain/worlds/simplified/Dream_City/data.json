@@ -61,8 +61,8 @@
 					"world_to_load": "worlds/simplified/Merchants_House/data.json",
 					"world_name": "Merchants House",
 					"spawn_point": {
-						"cx": 142,
-						"cy": 173
+						"cx": 141,
+						"cy": 177
 					}
 				}
 			}
@@ -108,22 +108,6 @@
 					"enemy_Type": "Merchant",
 					"rarity": "unique",
 					"package": "dream_city_merchant_misc"
-				}
-			},
-			{
-				"id": "Enemy_Random_Spawn",
-				"iid": "bb2f8520-b0a0-11ee-b02a-d383876d63fd",
-				"layer": "LeveL_Data",
-				"x": 1600,
-				"y": 1950,
-				"width": 16,
-				"height": 16,
-				"color": 12470831,
-				"customFields": {
-					"chance": 1.0,
-					"enemy_Type": "goblin",
-					"rarity": "common",
-					"package": "test_stand_meow"
 				}
 			}
 		],
@@ -525,7 +509,9 @@
 				"height": 16,
 				"color": 16766464,
 				"customFields": {
-					"group": ["goblin"],
+					"group": [
+						"goblin"
+					],
 					"pause_time": 0,
 					"path_ref": null,
 					"action": "Idle_3",

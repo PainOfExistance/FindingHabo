@@ -48,10 +48,9 @@ class PathFinder:
         return [(int(node[0]), int(node[1])) for node in path]
     
     def find_global_nav_points(self, action, npc):
-        if "name" in npc:
-            npc_group = npc["name"]["stats"]["group"]
-            npc_center=npc["rect"]["center"]
-            world=npc["name"]["world"].replace(" ","_")
+        npc_group = npc["name"]["stats"]["group"]
+        npc_center=npc["rect"]["center"]
+        world=npc["name"]["world"]
             
         #npc_group = npc["name"]["stats"]["group"]
         min_distance = float('inf')
@@ -94,8 +93,11 @@ class PathFinder:
         target_x, target_y = target
         dx = target_x - x
         dy = target_y - y
-        if abs(dx)>3000 or abs(dy)>3000:
+        if abs(dx)>0 or abs(dy)>0:
             npc["rect"]["center"]=target
+            #print(abs(dx))
+            #print(abs(dy))
+            #print(npc["rect"]["center"])
             return npc
         
         tdx=int(self.weird_division(dx,abs(dx)))

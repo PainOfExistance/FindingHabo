@@ -310,12 +310,11 @@ class Game:
             x["name"]["current_routine"]=[]
             x["name"]["index_points"]=[]
             x["name"]["column_index"]=0
-            x["name"]["column_index"]=0
             x["name"]["to_face"]=0
             GM.global_enemy_list.append((copy.deepcopy(x["name"]), CM.player.current_world, None, x["iid"], x["rect"].center))
             #https://flashpointarchive.org/downloads/
             
-        CM.player.current_world = GM.world_to_travel_to["world_name"]
+        CM.player.current_world = GM.world_to_travel_to["world_name"].replace(" ", "_")
         GM.world_objects[GM.world_to_travel_to["index"]]["name"]["locked"] = False
         assets.world_save()
         self.setup(
@@ -324,12 +323,12 @@ class Game:
                 )
         GM.world_to_travel_to = None
         CM.player.quests.dialogue = CM.ai.strings
-        for i, x in enumerate(GM.global_enemy_list):
-            print()
-            print(x[0]["stats"]["group"])
-            print(CM.player.current_world)
-            print(x[0]["world"])
-            print()
+        #for i, x in enumerate(GM.global_enemy_list):
+        #    print()
+        #    print(x[0]["stats"]["group"])
+        #    print(CM.player.current_world)
+        #    print(x[0]["world"])
+        #    print()
 
 
     def run(self):
