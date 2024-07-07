@@ -19,19 +19,27 @@ def manage_global_npc():
         tmp=CM.ai.update(npc)
         x=lengthen_tuple_npc(x, tmp)
         GM.global_enemy_list[i]=x
-        pw=CM.player.current_world.replace(" ","_")
-        if pw in x[0]["world"]:
+        if CM.player.current_world in x[0]["world"]:
             if x[0]["name"]=="TBP" or x[0]["stats"]["status"]=="dead":
                     tmp=wp.setEnemies(x[0]["customFields"])
                     if tmp:
-                        znj=((copy.deepcopy(GM.ai_package[tmp]), x[0]["portal"], x[0]["world"], x[-2], x[-1]))
+                        x[0]["name"]=copy.deepcopy(GM.ai_package[tmp]["name"])
+                        x[0]["movement_behavior"]=copy.deepcopy(GM.ai_package[tmp]["movement_behavior"])
+                        x[0]["stats"]=copy.deepcopy(GM.ai_package[tmp]["stats"])
+                        x[0]["items"]=copy.deepcopy(GM.ai_package[tmp]["items"])
+                        x[0]["faction_data"]=copy.deepcopy(GM.ai_package[tmp]["faction_data"])
+                        znj=((copy.deepcopy(x[0]), x[0]["portal"], x[0]["world"], x[-2], x[-1]))
                         znj[0]["package"]=(x[0]["customFields"]["package"] if x[0]["customFields"]["package"] != "" else "dream_city_merchant_misc")
                         znj[0]["routine"] = assets.load_routine(znj[0]["package"])
+                        znj[0]["customFields"]=x[0]["customFields"]
                         day=GM.game_date.current_date.weekday()
                         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
                         znj[0]["current_routine"], znj[0]["world"], znj[0]["portal"]=copy.deepcopy(assets.get_actions(day, time, znj[0]["routine"]))
                         GM.transfer_list.append(copy.deepcopy(znj))
                         rm_list.append(i)
+                        print()
+                        print(znj)
+                        print()
                     
             elif x[0]["stats"]["status"]!="dead" and x[0]["stats"]["status"]!="" and x[0]["name"]!="TBP":
                 znj=(x[0], x[0]["portal"], x[0]["world"], x[3], x[4])
@@ -65,8 +73,11 @@ def update_npc(subtitle_font, prompt_font):
                     ["name"], 'textures/static/chest.jpg', itm_nums, None, "", False)
             GM.world_objects.append({"image": img, "rect": rect, "type": "container",
                                     "name": data, "pedistal": data[6], "iid": data[7]})
+            GM.global_enemy_list.append((copy.deepcopy(GM.npc_list[index]["name"]), GM.npc_list[index]["name"]["world"], None, GM.npc_list[index]["iid"], GM.npc_list[index]["rect"].center))
             rm_list.append(index)   
         elif GM.npc_list[index]["name"]["stats"]["status"]=="transfer":
+            rm_list.append(index)
+        elif GM.npc_list[index]["name"]["stats"]["status"] == "dead":
             rm_list.append(index)
     
     for index in sorted(rm_list, reverse=True):
@@ -132,8 +143,7 @@ def update_npc(subtitle_font, prompt_font):
                         if other["rect"].colliderect(x["rect"]):
                             agrov = True
                             if x["attack_diff"] > x["name"]["attack_speed"]:
-                                res = other["name"]["stats"]["defence"] - \
-                                    x["name"]["stats"]["damage"]
+                                res = other["name"]["stats"]["defence"] - x["name"]["stats"]["damage"]
                                 if res > 0:
                                     res = 0
 
@@ -180,7 +190,6 @@ def update_npc(subtitle_font, prompt_font):
             for object in GM.world_objects:
                 if (object["type"] == "portal" or object["type"]=="walk_in_portal") and object["name"]["type"]!="default" and "rect" in object and x["rect"].colliderect(object["rect"]):
                     print("meow when colliding portal")
-                    #x["name"]["routine"]=[]
                     x["name"]["path"]=[]
                     x["name"]["target"]=None
                     x["name"]["current_routine"]=[]
@@ -190,7 +199,7 @@ def update_npc(subtitle_font, prompt_font):
                     x["name"]["to_face"]=0
                     #? meow
                     GM.global_enemy_list.append((copy.deepcopy(x["name"]), object["name"]["world_name"], object['name']['type'], x["iid"], x["rect"].center))
-                    x["name"]["stats"]["status"] = "transfer"
+                    GM.npc_list[index]["name"]["stats"]["status"] = "transfer"
 
             if (
                 "stats" in x["name"]
@@ -272,10 +281,11 @@ def update_npc(subtitle_font, prompt_font):
                         if x["name"]["stats"]["type"] != "enemy":
                             GM.npc_list[index]["name"]["stats"]["type"] = "enemy"
                             GM.npc_list[index]["agroved"] = True
-
+                        special_damage=(int(CM.player.stats.power)/int(CM.player.stats.max_power))*15
+                        damage = special_damage+(int(CM.player.stats.weapon_damage)*min(0.98, ((0.2*int(CM.player.stats.weapon_damage))/int(x["name"]["stats"]["defence"]))**0.365))
                         GM.npc_list[index]["name"]["stats"][
                             "health"
-                        ] -= (int(CM.player.stats.weapon_damage)-int(x["name"]["stats"]["defence"]))
+                        ] -= damage
 
                         if GM.npc_list[index]["name"]["stats"]["health"] <= 0:
                             CM.player.level.gain_experience(
@@ -367,8 +377,8 @@ def transfer_npc(portal, inline=False):
             portal["spawn_point"]["cx"]=npc[-1][0]//16
             portal["spawn_point"]["cy"]=npc[-1][1]//16
         
-        pw=CM.player.current_world.replace(" ","_")
-        if (npc[1] == portal["type"] or portal["type"]=="default") and pw in npc[2]:
+        CM.player.current_world=CM.player.current_world.replace(" ","_")
+        if (npc[1] == portal["type"] or portal["type"]=="default") and CM.player.current_world in npc[2]:
             try:
                 if "inventory_type" in npc[0]["stats"]:
                     inventory_type = npc[0]["stats"]["inventory_type"].split("_")
@@ -414,7 +424,7 @@ def transfer_npc(portal, inline=False):
                         CM.animation.load_anims(GM.npc_list[-1])
                 rm_list.append(i)
                 try:
-                    GM.npc_list[-1]["name"]["world"]=pw
+                    GM.npc_list[-1]["name"]["world"]=CM.player.current_world
                     lenghten_active_npc(GM.npc_list[-1], CM.ai.update(shorten_active_npc(GM.npc_list[-1])))
                     if not inline:
                         GM.npc_list[-1]["rect"].center=copy.deepcopy(GM.npc_list[-1]["name"]["target"])

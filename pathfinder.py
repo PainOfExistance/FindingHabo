@@ -110,10 +110,10 @@ class PathFinder:
         dx *= speed
         dy *= speed
 
-        if npc["active"]:
-            new_center_x, new_center_y = self.check_collision(dx, dy, npc["rect"])
-        else:
-            new_center_x, new_center_y = npc["rect"]["centerx"]+dx, npc["rect"]["centery"]+dy
+        #if npc["active"]:
+        #    new_center_x, new_center_y = self.check_collision(dx, dy, npc["rect"])
+        #else:
+        new_center_x, new_center_y = npc["rect"]["centerx"]+dx, npc["rect"]["centery"]+dy
             
         npc["rect"]["centerx"] = new_center_x
         npc["rect"]["centery"] = new_center_y

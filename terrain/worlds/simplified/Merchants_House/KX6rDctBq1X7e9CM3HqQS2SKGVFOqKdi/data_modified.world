@@ -1,0 +1,205 @@
+[
+  {
+    "name": {
+      "name": "Merchants House",
+      "respawn_timer": 15,
+      "time_passed": "1945-05-09T08:36:42",
+      "music": [
+        "sounds/bgm/Sladka kot med.mp3"
+      ],
+      "collision_set": "terrain/worlds/simplified/Merchants_House/Collision-int.png",
+      "background": "terrain/worlds/simplified/Merchants_House/_composite.png",
+      "layers": [
+        "Grass.png",
+        "Walls.png",
+        "RGP.png",
+        "Village.png",
+        "Castle.png",
+        "RRW.png",
+        "RAC.png",
+        "Drve.png",
+        "Drve_top.png",
+        "Top_layer_npc.png",
+        "Top_layer.png"
+      ]
+    },
+    "type": "metadata"
+  },
+  {
+    "name": {
+      "type": "dc_mhc_portal_01",
+      "unlocked_by": "",
+      "locked": false,
+      "world_to_load": "worlds/simplified/Dream_City/data.json",
+      "world_name": "Dream City",
+      "spawn_point": {
+        "cx": 8,
+        "cy": 8
+      },
+      "index": 1
+    },
+    "type": "portal",
+    "x": 168,
+    "y": 152,
+    "iid": "ec627750-25d0-11ef-8845-311b4ae1b9d5"
+  },
+  {
+    "name": {
+      "name": "Merchant",
+      "detection_range": 300,
+      "talk_range": 250,
+      "talking": false,
+      "attack_speed": 0.7,
+      "movement_behavior": {
+        "type": "movebypath",
+        "movement_speed": 45,
+        "dirrection": 4,
+        "moving": true,
+        "counter": 0,
+        "prev_action": ""
+      },
+      "stats": {
+        "health": 150,
+        "type": "ally",
+        "xp": 50,
+        "status": "alive",
+        "damage": 30,
+        "rarity": "unique",
+        "group": "Merchant",
+        "mutable": false,
+        "inventory_type": "common_weapon_armor_potion_10",
+        "image": "./textures/npc/merchant.png",
+        "defence": 20
+      },
+      "gold": 500,
+      "items": [
+        {
+          "type": "Steel Sword",
+          "quantity": 3
+        },
+        {
+          "type": "Minor Health Potion",
+          "quantity": 2
+        }
+      ],
+      "package": "dream_city_merchant_misc",
+      "path": [],
+      "target": null,
+      "current_routine": [],
+      "routine": {
+        "routines": [
+          {
+            "Routine_1": {
+              "8.00": [
+                "move_by_path_home",
+                "Sit_3"
+              ],
+              "9.00": [
+                "move_by_path_market",
+                "Idle_4"
+              ],
+              "15.00": [
+                "move_by_path_tavern",
+                "Idle_2"
+              ],
+              "16.00": [
+                "move_by_path_park||temple",
+                "Sit_1||Idle_1"
+              ],
+              "18.00": [
+                "move_by_path_wall",
+                "Idle_4"
+              ],
+              "20.00": [
+                "move_by_path_home",
+                "Sit_3"
+              ],
+              "22.00": [
+                "Sleep_4"
+              ]
+            },
+            "Routine_2": {
+              "8.00": [
+                "move_by_path_home",
+                "Sit_3"
+              ],
+              "9.00": [
+                "move_by_path_tavern",
+                "Idle_2"
+              ],
+              "16.00": [
+                "move_by_path_park||temple",
+                "Sit_1||Idle_1"
+              ],
+              "18.00": [
+                "move_by_path_wall",
+                "Idle_4"
+              ],
+              "20.00": [
+                "move_by_path_home",
+                "Sit_3"
+              ],
+              "22.00": [
+                "Sleep_4"
+              ]
+            }
+          }
+        ],
+        "schedule": {
+          "Routine_1": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "Routine_2": [
+            6,
+            7
+          ]
+        },
+        "world": {
+          "8.00": "Merchants_House",
+          "9.00": "Merchants_House||Dream_City",
+          "15.00": "Dream_City",
+          "16.00": "Dream_City",
+          "18.00": "Dream_City",
+          "20.00": "Dream_City||Merchants_House",
+          "22.00": "Merchants_House"
+        },
+        "portals": {
+          "9.00": "dc_mhc_portal_01",
+          "15.00": "dc_tav_portal_01",
+          "20.00": "dc_mhc_portal_01"
+        }
+      },
+      "index_points": [],
+      "column_index": 0,
+      "to_face": 0,
+      "faction_data": {
+        "faction": "citizen",
+        "enemy_factions": [
+          "bandit",
+          "goblin",
+          "beast",
+          "slime",
+          "cultists"
+        ]
+      },
+      "customFields": {
+        "chance": 1,
+        "enemy_Type": "Merchant",
+        "rarity": "unique",
+        "package": "dream_city_merchant_misc"
+      },
+      "world": "Merchants_House",
+      "portal": null,
+      "active": true,
+      "portal_to_be": ""
+    },
+    "type": "npc",
+    "x": 111,
+    "y": 97,
+    "iid": "d3909e10-fec0-11ee-9877-71776e50475d"
+  }
+]

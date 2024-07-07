@@ -1,0 +1,460 @@
+[
+  {
+    "name": {
+      "name": "Dream City",
+      "respawn_timer": 20,
+      "time_passed": "1945-05-09T08:21:36",
+      "music": [
+        "sounds/bgm/It's Time.mp3",
+        "sounds/bgm/DOVAHKIIN.mp3",
+        "sounds/bgm/RadioGaGa.mp3",
+        "sounds/bgm/Sladka kot med.mp3",
+        "sounds/bgm/Angelia.mp3"
+      ],
+      "collision_set": "terrain/worlds/simplified/Dream_City/Collision-int.png",
+      "background": "terrain/worlds/simplified/Dream_City/_composite.png",
+      "layers": [
+        "Grass.png",
+        "Walls.png",
+        "RGP.png",
+        "Village.png",
+        "Castle.png",
+        "RRW.png",
+        "RAC.png",
+        "Drve.png",
+        "Drve_top.png",
+        "Top_layer_npc.png",
+        "Top_layer.png"
+      ]
+    },
+    "type": "metadata"
+  },
+  {
+    "name": {
+      "type": "dc_mhc_portal_01",
+      "unlocked_by": "",
+      "locked": false,
+      "world_to_load": "worlds/simplified/Merchants_House/data.json",
+      "world_name": "Merchants House",
+      "spawn_point": {
+        "cx": 142,
+        "cy": 173
+      },
+      "index": 1
+    },
+    "type": "portal",
+    "x": 2248,
+    "y": 2776,
+    "iid": "8dc49d30-fec0-11ee-802d-e7790be7cd58"
+  },
+  {
+    "name": {
+      "crafter": "smithing",
+      "type": "crafting",
+      "ref": null
+    },
+    "type": "activator",
+    "x": 2840,
+    "y": 2280,
+    "width": 48,
+    "height": 48,
+    "iid": "a7186e10-fec0-11ee-8723-19216b4ccbf5"
+  },
+  {
+    "name": {
+      "crafter": "upgrade",
+      "type": "crafting",
+      "ref": null
+    },
+    "type": "activator",
+    "x": 2888,
+    "y": 2280,
+    "width": 16,
+    "height": 48,
+    "iid": "b914ec10-fec0-11ee-8723-556e9cf973d3"
+  },
+  {
+    "name": {
+      "name": "Goblin",
+      "detection_range": 300,
+      "talk_range": 150,
+      "talking": false,
+      "attack_speed": 0.5,
+      "movement_behavior": {
+        "type": "stand",
+        "movement_speed": 150,
+        "dirrection": 0,
+        "moving": true,
+        "counter": 0,
+        "prev_action": ""
+      },
+      "stats": {
+        "health": 50,
+        "type": "enemy",
+        "xp": 200,
+        "status": "alive",
+        "damage": 20,
+        "rarity": "common",
+        "group": "goblin",
+        "mutable": true,
+        "inventory_type": "common_weapon_3",
+        "image": "./textures/npc/goblin.png",
+        "defence": 5
+      },
+      "items": [
+        {
+          "type": "Steel Sword",
+          "quantity": 2
+        }
+      ],
+      "package": "test_stand_meow",
+      "path": [],
+      "target": null,
+      "current_routine": [],
+      "routine": {
+        "routines": [
+          {
+            "Routine_1": {
+              "7.00": [
+                "Idle_3"
+              ]
+            }
+          }
+        ],
+        "schedule": {
+          "Routine_1": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        "world": {
+          "7.00": "Dream_City"
+        },
+        "portals": {}
+      },
+      "index_points": [],
+      "column_index": 0,
+      "to_face": 0,
+      "faction_data": {
+        "faction": "goblin",
+        "enemy_factions": [
+          "bandit",
+          "citizen",
+          "beast",
+          "cultists",
+          "player"
+        ]
+      },
+      "customFields": {
+        "chance": 1.0,
+        "enemy_Type": "goblin",
+        "rarity": "common",
+        "package": "test_stand_meow"
+      },
+      "world": "Dream_City",
+      "portal": null,
+      "active": true,
+      "portal_to_be": ""
+    },
+    "type": "npc",
+    "x": 1600,
+    "y": 1936,
+    "iid": "bb2f8520-b0a0-11ee-b02a-d383876d63fd"
+  },
+  {
+    "name": {
+      "name": "Wolf",
+      "detection_range": 200,
+      "talk_range": 150,
+      "talking": false,
+      "attack_speed": 0.3,
+      "movement_behavior": {
+        "type": "random_patrol",
+        "movement_speed": 150,
+        "dirrection": 1,
+        "moving": true,
+        "counter": 0,
+        "prev_action": ""
+      },
+      "stats": {
+        "health": 100,
+        "type": "enemy",
+        "xp": 50,
+        "status": "alive",
+        "damage": 10,
+        "rarity": "common",
+        "group": "wolf",
+        "mutable": true,
+        "inventory_type": "common_potion_1",
+        "image": "./textures/npc/wolf.png",
+        "defence": 5
+      },
+      "items": [
+        {
+          "type": "Minor Health Potion",
+          "quantity": 1
+        }
+      ],
+      "package": "test_stand_meow",
+      "path": [],
+      "target": null,
+      "current_routine": [],
+      "routine": {
+        "routines": [
+          {
+            "Routine_1": {
+              "7.00": [
+                "Idle_3"
+              ]
+            }
+          }
+        ],
+        "schedule": {
+          "Routine_1": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        "world": {
+          "7.00": "Dream_City"
+        },
+        "portals": {}
+      },
+      "index_points": [],
+      "column_index": 0,
+      "to_face": 0,
+      "faction_data": {
+        "faction": "beast",
+        "enemy_factions": [
+          "bandit",
+          "citizen",
+          "slime",
+          "cultists",
+          "goblin",
+          "player"
+        ]
+      },
+      "customFields": {
+        "chance": 0.8,
+        "enemy_Type": "wolf",
+        "rarity": "common",
+        "package": "test_stand_meow"
+      },
+      "world": "Dream_City",
+      "portal": null,
+      "active": true,
+      "portal_to_be": ""
+    },
+    "type": "npc",
+    "x": 1158,
+    "y": 3245,
+    "iid": "c0e43e70-b0a0-11ee-b02a-6583af3deefd"
+  },
+  {
+    "name": {
+      "name": "Bandit",
+      "detection_range": 350,
+      "talk_range": 150,
+      "talking": false,
+      "attack_speed": 0.6,
+      "movement_behavior": {
+        "type": "random_patrol",
+        "movement_speed": 50,
+        "dirrection": 1,
+        "moving": true,
+        "counter": 0,
+        "prev_action": "",
+        "target": [
+          3431,
+          3360
+        ]
+      },
+      "stats": {
+        "health": 50,
+        "type": "enemy",
+        "xp": 200,
+        "status": "alive",
+        "damage": 20,
+        "rarity": "uncommon",
+        "group": "bandit",
+        "mutable": true,
+        "image": "./textures/npc/merchant.png",
+        "inventory_type": "common_weapon_armor_6",
+        "death_anim": 1000,
+        "defence": 10
+      },
+      "items": [
+        {
+          "type": "Steel Sword",
+          "quantity": 2
+        }
+      ],
+      "package": "test_stand_meow",
+      "path": [],
+      "target": null,
+      "current_routine": [],
+      "routine": {
+        "routines": [
+          {
+            "Routine_1": {
+              "7.00": [
+                "Idle_3"
+              ]
+            }
+          }
+        ],
+        "schedule": {
+          "Routine_1": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        "world": {
+          "7.00": "Dream_City"
+        },
+        "portals": {}
+      },
+      "index_points": [],
+      "column_index": 0,
+      "to_face": 0,
+      "faction_data": {
+        "faction": "bandit",
+        "enemy_factions": [
+          "beast",
+          "citizen",
+          "slime",
+          "cultists",
+          "goblin",
+          "player"
+        ]
+      },
+      "customFields": {
+        "chance": 1,
+        "enemy_Type": "bandit",
+        "rarity": "uncommon",
+        "package": "test_stand_meow"
+      },
+      "world": "Dream_City",
+      "portal": null,
+      "active": true,
+      "portal_to_be": ""
+    },
+    "type": "npc",
+    "x": 3188,
+    "y": 3353,
+    "iid": "ae5dc300-b0a0-11ee-b847-2559a52a68f0"
+  },
+  {
+    "name": {
+      "name": "Slime",
+      "detection_range": 200,
+      "talk_range": 150,
+      "talking": false,
+      "attack_speed": 0.5,
+      "movement_behavior": {
+        "type": "random_patrol",
+        "movement_speed": 100,
+        "dirrection": 2,
+        "moving": true,
+        "counter": 0,
+        "prev_action": "",
+        "target": [
+          3188,
+          3353
+        ]
+      },
+      "stats": {
+        "health": 20,
+        "type": "enemy",
+        "xp": 50,
+        "status": "alive",
+        "damage": 10,
+        "rarity": "common",
+        "group": "slime",
+        "mutable": true,
+        "image": "slime",
+        "inventory_type": "common_potion_1",
+        "death_anim": 1001,
+        "defence": 1
+      },
+      "items": [
+        {
+          "type": "Knowledge Potion",
+          "quantity": 1
+        }
+      ],
+      "package": "test_stand_meow",
+      "path": [],
+      "target": null,
+      "current_routine": [],
+      "routine": {
+        "routines": [
+          {
+            "Routine_1": {
+              "7.00": [
+                "Idle_3"
+              ]
+            }
+          }
+        ],
+        "schedule": {
+          "Routine_1": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        "world": {
+          "7.00": "Dream_City"
+        },
+        "portals": {}
+      },
+      "index_points": [],
+      "column_index": 0,
+      "to_face": 0,
+      "faction_data": {
+        "faction": "slime",
+        "enemy_factions": [
+          "beast",
+          "citizen",
+          "cultists",
+          "bandit",
+          "player"
+        ]
+      },
+      "customFields": {
+        "chance": 1,
+        "enemy_Type": "slime",
+        "rarity": "common",
+        "package": "test_stand_meow"
+      },
+      "world": "Dream_City",
+      "portal": null,
+      "active": true,
+      "portal_to_be": ""
+    },
+    "type": "npc",
+    "x": 3433,
+    "y": 3360,
+    "iid": "24461130-d7b0-11ee-8f0c-7551969033b9"
+  }
+]

@@ -75,7 +75,7 @@ class Ai:
             
     def __get_state_action(self, npc):
         routine=npc["name"]["current_routine"]
-        world=npc["name"]["world"].replace(" ","_")
+        world=npc["name"]["world"]
         if "move" in routine[0]:
             split_by_=routine[0].split("_")
             npc["name"]["movement_behavior"]["type"]="".join(split_by_[:-1])
@@ -85,14 +85,13 @@ class Ai:
             else:
                 target=split_by_[-1]
             
+            npc["name"]["portal_to_be"]=""
             if "||" in world:
-                pre_split=world
+                npc["name"]["portal_to_be"]=world
                 world=world.split("||")
                 if CM.player.current_world==world[0]:
-                    npc["name"]["portal_to_be"]=pre_split
                     world=world[0]
                 else:
-                    npc["name"]["portal_to_be"]=""
                     world=world[1]
                     
             npc["name"]["world"]=world
