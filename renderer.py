@@ -244,10 +244,7 @@ def draw_objects(prompt_font):
             continue
         relative__left = int(GM.bg_rect.left + x["rect"].left)
         relative__top = int(GM.bg_rect.top + x["rect"].top)
-        #print(x["rect"].left, x["rect"].top, relative__left, relative__top)
-        if (x["type"]=="portal" or x["type"]=="walk_in_portal" and len(GM.transfer_list)):
-            N.transfer_npc(x["name"], inline=True)
-            
+        #print(x["rect"].left, x["rect"].top, relative__left, relative__top)    
         if (
             relative__left > -80
             and relative__left < GM.screen_width + 80

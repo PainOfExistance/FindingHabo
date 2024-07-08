@@ -93,7 +93,7 @@ class PathFinder:
         target_x, target_y = target
         dx = target_x - x
         dy = target_y - y
-        if abs(dx)>0 or abs(dy)>0:
+        if abs(dx)>1000 or abs(dy)>1000:
             npc["rect"]["center"]=target
             #print(abs(dx))
             #print(abs(dy))

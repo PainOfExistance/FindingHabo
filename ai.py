@@ -65,24 +65,8 @@ class Ai:
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
         actions, npc["name"]["world"], npc["name"]["portal"]=assets.get_actions(day, time, npc["name"]["routine"])
-        
-        if npc["name"]["stats"]["group"]=="Merchant" and time=="8.45":
-            print()
-            print(npc["name"]["stats"]["group"])
-            print(actions)
-            print(npc["name"]["world"])
-            print(npc["name"]["portal"])
-            print()
             
-        if npc["name"]["stats"]["group"]=="Merchant" and time=="9.00":
-            print()
-            print(npc["name"]["stats"]["group"])
-            print(actions)
-            print(npc["name"]["world"])
-            print(npc["name"]["portal"])
-            print()
-            
-        if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"]!=actions:
+        if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"][-1]!=actions[-1]:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"]=copy.deepcopy(actions)
             npc=self.__get_state_action(npc)
@@ -95,6 +79,17 @@ class Ai:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"].pop(0)
             npc=self.__get_state_action(npc)
+            
+        if npc["name"]["stats"]["group"]=="Merchant":
+            print()
+            print()
+            print(npc["name"]["target"])
+            print(npc["rect"])
+            print(npc["name"]["current_routine"])
+            print(npc["name"]["to_face"])
+            print(npc["name"]["path"])
+            print()
+            print()
             
         return npc
             

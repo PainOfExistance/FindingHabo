@@ -241,7 +241,6 @@ class Game:
 
     def setup(self, path="./terrain/worlds/simplified/Dream_World/data.json", type="default"):
         GM.world_objects.clear()
-        GM.npc_list.clear()
         CM.animation.enemy_anims.clear()
         GM.nav_tiles=[[]]
         
@@ -284,9 +283,6 @@ class Game:
                 if portals[i][0]["type"] == type:
                     spawn_point = (portals[i][0]["spawn_point"]["cx"]*16, portals[i][0]["spawn_point"]["cy"]*16)
         
-        N.manage_global_npc()     
-        N.transfer_npc("default")
-
         if spawn_point == (0, 0):
             spawn_point = (GM.relative_player_left, GM.relative_player_top)
 
@@ -305,14 +301,9 @@ class Game:
     def travel(self):
         self.loading()
         for x in GM.npc_list:
-            x["name"]["path"]=[]
-            x["name"]["target"]=None
-            x["name"]["current_routine"]=[]
-            x["name"]["index_points"]=[]
-            x["name"]["column_index"]=0
-            x["name"]["to_face"]=0
-            GM.global_enemy_list.append((copy.deepcopy(x["name"]), CM.player.current_world, None, x["iid"], x["rect"].center))
-            #https://flashpointarchive.org/downloads/
+            if type(x) is not tuple:
+                x=(copy.deepcopy(x["name"]), CM.player.current_world, None, x["iid"], x["rect"].center)
+                #https://flashpointarchive.org/downloads/
             
         CM.player.current_world = GM.world_to_travel_to["world_name"].replace(" ", "_")
         GM.world_objects[GM.world_to_travel_to["index"]]["name"]["locked"] = False
@@ -330,7 +321,6 @@ class Game:
         #    print(x[0]["world"])
         #    print()
 
-
     def run(self):
         while True:
             # Calculate delta time (time since last frame)
@@ -340,20 +330,30 @@ class Game:
             ) / 1000.0
             
             self.last_frame_time = current_time
-            GM.time_diff += GM.delta_time
-            GM.counter += GM.delta_time
+            if (
+                not CM.menu.visible
+                and not CM.player_menu.visible
+                and not GM.is_in_dialogue
+            ):
+                GM.time_diff += GM.delta_time
+                GM.counter += GM.delta_time
+                
             if GM.load:
                 GM.load = False
                 self.travel()
             
             if not GM.dead:
                 self.handle_input()
-            N.manage_global_npc()
             
             self.handle_events()
             self.draw()
-            GM.game_date.increment_seconds()
-            CM.player.check_experation(GM.delta_time)
+            if (
+                not CM.menu.visible
+                and not CM.player_menu.visible
+                and not GM.is_in_dialogue
+            ):
+                GM.game_date.increment_seconds()
+                CM.player.check_experation(GM.delta_time)
             
             #if (GM.game_date.current_date.minute == 0 or GM.game_date.current_date.minute == 30):
             #    N.set_npc()
