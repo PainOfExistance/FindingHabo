@@ -78,7 +78,7 @@
 				"height": 16,
 				"color": 0,
 				"customFields": {
-					"name": "Dream City",
+					"name": "Dream_City",
 					"respawn_timer": 20,
 					"time_passed": 0,
 					"music": [

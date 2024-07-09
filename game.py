@@ -300,9 +300,9 @@ class Game:
 
     def travel(self):
         self.loading()
-        for x in GM.npc_list:
+        for i, x in enumerate(GM.npc_list):
             if type(x) is not tuple:
-                x=(copy.deepcopy(x["name"]), CM.player.current_world, None, x["iid"], x["rect"].center)
+                GM.npc_list[i]=(copy.deepcopy(x["name"]), CM.player.current_world, None, x["iid"], x["rect"].center)
                 #https://flashpointarchive.org/downloads/
             
         CM.player.current_world = GM.world_to_travel_to["world_name"].replace(" ", "_")
@@ -314,13 +314,7 @@ class Game:
                 )
         GM.world_to_travel_to = None
         CM.player.quests.dialogue = CM.ai.strings
-        #for i, x in enumerate(GM.global_enemy_list):
-        #    print()
-        #    print(x[0]["stats"]["group"])
-        #    print(CM.player.current_world)
-        #    print(x[0]["world"])
-        #    print()
-
+        
     def run(self):
         while True:
             # Calculate delta time (time since last frame)

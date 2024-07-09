@@ -21,7 +21,7 @@ class GameDate:
         }
         # Set the starting date
         start_date = datetime(1945, 5, 9)
-        start_date = start_date.replace(hour=8, minute=2, second=36)
+        start_date = start_date.replace(hour=8, minute=40, second=36)
         self.current_date=start_date
 
     def increment_seconds(self):

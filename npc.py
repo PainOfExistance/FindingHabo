@@ -13,11 +13,6 @@ from game_manager import GameManager as GM
 
 
 def update_active_npc(x, index, subtitle_font, prompt_font):    
-    #if x["name"]["name"]=="Merchant":
-    #    print()
-    #    print(x)
-    #    print()
-        
     if x["name"]["stats"]["status"] == "" or x["name"]["stats"]["status"] == "dead" or x["name"]["stats"]["status"] == "transfer":
         if x["name"]["stats"]["status"] == "dead" and "death_anim" in x["name"]["stats"]:
             GM.anim_tiles.append({'row': x["rect"].top, 'col': x["rect"].left, 'value': x["name"]["stats"]["death_anim"], "special": "hold", "counter": 0})
@@ -30,7 +25,7 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
             data = (itm, x["rect"].left, x["rect"].top, GM.npc_list[index]["name"]["name"], 'textures/static/chest.jpg', itm_nums, None, "", False)
             GM.world_objects.append({"image": img, "rect": rect, "type": "container", "name": data, "pedistal": data[6], "iid": data[7]})
         #global_enemy_list.append((copy.deepcopy(data[0]), data[0]["world"], data[0]["portal"], x["iid"], (data[1], data[2])))
-        x=(copy.deepcopy(x), x["name"]["world"], x["name"]["portal"], x["iid"], x["rect"].center)
+        x=(copy.deepcopy(x["name"]), x["name"]["world"], x["name"]["portal"], x["iid"], x["rect"].center)
         return x
     
     if (
@@ -138,9 +133,9 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
             x["name"]["index_points"]=[]
             x["name"]["column_index"]=0
             x["name"]["to_face"]=0
+            x["name"]["stats"]["status"]="transfer"
             #? fix this meow
-            x=(copy.deepcopy(x["name"]), object["name"]["world_name"], object['name']['type'], x["iid"], x["rect"].center)
-            return x
+            return (copy.deepcopy(x["name"]), object["name"]["world_name"], object["name"]["type"], x["iid"], x["rect"].center)
 
     if (
         "stats" in x["name"]
@@ -293,21 +288,28 @@ def update_nonactive_npc(x, i, subtitle_font, prompt_font):
             time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
             x[0]["current_routine"], x[0]["world"], x[0]["portal"]=copy.deepcopy(assets.get_actions(day, time, x[0]["routine"]))
             x=transfer_npc(x, x[0]["portal"])
-    
-    #if type(x) is dict:
-    #    print()
-    #    print()
-    #    print()
-    #    raise Exception(x)
-    
+            
+            if x["name"]["stats"]["status"]=="transfer":
+                x["name"]["stats"]["status"]="alive"
+            
     return x
  
 def update_npc(subtitle_font, prompt_font):
     for index, x in enumerate(GM.npc_list):
         if type(x) is tuple:
-            GM.npc_list[index]=update_nonactive_npc(x, index, subtitle_font, prompt_font)
+            if x[0]["name"]=="Merchant":
+                print()
+                print(x)
+                print()
+            x=update_nonactive_npc(x, index, subtitle_font, prompt_font)
+            GM.npc_list[index]=x
         else:
-            GM.npc_list[index]=update_active_npc(x, index, subtitle_font, prompt_font)
+            if x["name"]["name"]=="Merchant":
+                print()
+                print(x)
+                print()
+            x=update_active_npc(x, index, subtitle_font, prompt_font)
+            GM.npc_list[index]=x
 
 def transfer_npc(x, tmp):
     portal=copy.deepcopy(tmp)
@@ -322,14 +324,7 @@ def transfer_npc(x, tmp):
             if obj["type"]=="portal" or obj["type"]=="walk_in_portal" and obj["name"]["type"]==portal:
                 portal=obj["name"]
                 break
-                
-    if x[0]["name"]=="Merchant":
-        print()
-        print(x[0]["name"])
-        print(x[4])
-        print(CM.player.current_world)
-        print()
-        
+             
     try:
         if "inventory_type" in x[0]["stats"]:
             inventory_type = x[0]["stats"]["inventory_type"].split("_")

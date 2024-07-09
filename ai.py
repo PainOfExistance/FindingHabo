@@ -27,14 +27,6 @@ class Ai:
         }
 
     def update(self, npc):
-        #if npc["name"]["stats"]["group"]=="Merchant":
-        #    print()
-        #    print()
-        #    print(npc["name"]["target"])
-        #    print(npc["rect"])
-        #    print()
-        #    print()
-
         if npc["name"]["movement_behavior"]["type"] == "random_patrol":
             return self.random_patrol(npc)
         elif npc["name"]["target"]!=None:
@@ -69,6 +61,11 @@ class Ai:
         if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"][-1]!=actions[-1]:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"]=copy.deepcopy(actions)
+            if npc["name"]["portal"]!=None and CM.player.current_world in npc["name"]["world"]:
+                for obj in GM.world_objects:
+                    if obj["type"]=="portal" or obj["type"]=="walk_in_portal" and obj["name"]["type"]==npc["name"]["portal"]:
+                        npc["rect"]["center"]=(obj["name"]["spawn_point"]["cx"]*16, obj["name"]["spawn_point"]["cy"]*16)
+                        break
             npc=self.__get_state_action(npc)
         
         elif len(npc["name"]["current_routine"])==1 and npc["name"]["to_face"]!=0 and len(npc["name"]["path"])==0:
@@ -79,17 +76,6 @@ class Ai:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"].pop(0)
             npc=self.__get_state_action(npc)
-            
-        if npc["name"]["stats"]["group"]=="Merchant":
-            print()
-            print()
-            print(npc["name"]["target"])
-            print(npc["rect"])
-            print(npc["name"]["current_routine"])
-            print(npc["name"]["to_face"])
-            print(npc["name"]["path"])
-            print()
-            print()
             
         return npc
             

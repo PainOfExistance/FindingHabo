@@ -78,7 +78,7 @@
 				"height": 16,
 				"color": 0,
 				"customFields": {
-					"name": "Merchants House",
+					"name": "Merchants_House",
 					"respawn_timer": 15,
 					"time_passed": 0,
 					"music": [
