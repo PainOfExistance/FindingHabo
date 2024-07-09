@@ -56,17 +56,12 @@ class Ai:
     def update_state(self, npc):
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
-        actions, npc["name"]["world"], npc["name"]["portal"]=assets.get_actions(day, time, npc["name"]["routine"])
-            
+        actions, world, portal=assets.get_actions(day, time, npc["name"]["routine"])
         if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"][-1]!=actions[-1]:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"]=copy.deepcopy(actions)
-            if npc["name"]["portal"]!=None and CM.player.current_world in npc["name"]["world"]:
-                for obj in GM.world_objects:
-                    if obj["type"]=="portal" or obj["type"]=="walk_in_portal" and obj["name"]["type"]==npc["name"]["portal"]:
-                        npc["rect"]["center"]=(obj["name"]["spawn_point"]["cx"]*16, obj["name"]["spawn_point"]["cy"]*16)
-                        break
-            npc=self.__get_state_action(npc)
+            npc["name"]["portal"]=portal
+            npc=self.__get_state_action(npc, world)
         
         elif len(npc["name"]["current_routine"])==1 and npc["name"]["to_face"]!=0 and len(npc["name"]["path"])==0:
             npc["name"]["movement_behavior"]["dirrection"]=copy.deepcopy(npc["name"]["to_face"])
@@ -75,13 +70,12 @@ class Ai:
         elif npc["name"]["target"]==None and not len(npc["name"]["current_routine"])==1:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"].pop(0)
-            npc=self.__get_state_action(npc)
+            npc=self.__get_state_action(npc, world)
             
         return npc
             
-    def __get_state_action(self, npc):
+    def __get_state_action(self, npc, world):
         routine=npc["name"]["current_routine"]
-        world=npc["name"]["world"]
         if "move" in routine[0]:
             split_by_=routine[0].split("_")
             npc["name"]["movement_behavior"]["type"]="".join(split_by_[:-1])
@@ -91,17 +85,34 @@ class Ai:
             else:
                 target=split_by_[-1]
             
+            shall_transfer=False
             if "||" in world:
                 world=world.split("||")
-                if CM.player.current_world==world[0]:
-                    npc["name"]["portal_to_be"]=""
-                    world=world[0]
-                else:
-                    npc["name"]["portal_to_be"]=world[0]
+                if world[1]==npc["name"]["world"] or world[1]==CM.player.current_world:
+                    shall_transfer=True
                     world=world[1]
+                    npc["name"]["world"]=world
+                elif world[0]==CM.player.current_world:
+                    world=world[0]
+                    npc["name"]["world"]=world
+                else:
+                    world=world[0]
+                    npc["name"]["world"]=world
                     
-            npc["name"]["world"]=world
-            
+            if npc["name"]["portal"]!=None and shall_transfer:
+                all_data=assets.load_level_data(f"./terrain/worlds/simplified/{npc["name"]["world"]}/data.json")
+                if "Player_spawn" in all_data["entities"]:
+                    for y in all_data["entities"]["Player_spawn"]:
+                        if y["customFields"]["type"]==npc["name"]["portal"]:
+                            npc["rect"]["center"]=(y["customFields"]["spawn_point"]["cx"]*16, y["customFields"]["spawn_point"]["cy"]*16)
+                            break
+                if "Portal_walk_in" in all_data["entities"]:
+                    for y in all_data["entities"]["Portal_walk_in"]:
+                        if y["customFields"]["type"]==npc["name"]["portal"]:
+                            npc["rect"]["center"]=(y["customFields"]["spawn_point"]["cx"]*16, y["customFields"]["spawn_point"]["cy"]*16)
+                            break
+                npc["name"]["portal"]=None
+                                
             index1, index2, column_index=self.pathfinder.find_global_nav_points(target, npc)
             if index1==None:
                 return npc
@@ -122,16 +133,33 @@ class Ai:
                 target=random.choice(split_by_vertical)
             target=target.split("_")
             
+            shall_transfer=False
             if "||" in world:
                 world=world.split("||")
-                if CM.player.current_world==world[0]:
-                    npc["name"]["portal_to_be"]=world[1]
-                    world=world[0]
-                else:
-                    npc["name"]["portal_to_be"]=world[0]
+                if world[1]==npc["name"]["world"] or world[1]==CM.player.current_world:
+                    shall_transfer=True
                     world=world[1]
+                    npc["name"]["world"]=world
+                elif world[0]==CM.player.current_world:
+                    world=world[0]
+                    npc["name"]["world"]=world
+                else:
+                    world=world[0]
+                    npc["name"]["world"]=world
                     
-            npc["name"]["world"]=world
+            if npc["name"]["portal"]!=None and shall_transfer:
+                all_data=assets.load_level_data(f"./terrain/worlds/simplified/{npc["name"]["world"]}/data.json")
+                if "Player_spawn" in all_data["entities"]:
+                    for y in all_data["entities"]["Player_spawn"]:
+                        if y["customFields"]["type"]==npc["name"]["portal"]:
+                            npc["rect"]["center"]=(y["customFields"]["spawn_point"]["cx"]*16, y["customFields"]["spawn_point"]["cy"]*16)
+                            break
+                if "Portal_walk_in" in all_data["entities"]:
+                    for y in all_data["entities"]["Portal_walk_in"]:
+                        if y["customFields"]["type"]==npc["name"]["portal"]:
+                            npc["rect"]["center"]=(y["customFields"]["spawn_point"]["cx"]*16, y["customFields"]["spawn_point"]["cy"]*16)
+                            break
+                npc["name"]["portal"]=None
             
             index1, index2, column_index=self.pathfinder.find_global_nav_points(target[0], npc)
             if index1==None:

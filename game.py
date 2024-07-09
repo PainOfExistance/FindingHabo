@@ -302,6 +302,7 @@ class Game:
         self.loading()
         for i, x in enumerate(GM.npc_list):
             if type(x) is not tuple:
+                x["name"]["world"]=CM.player.current_world
                 GM.npc_list[i]=(copy.deepcopy(x["name"]), CM.player.current_world, None, x["iid"], x["rect"].center)
                 #https://flashpointarchive.org/downloads/
             

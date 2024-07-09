@@ -134,13 +134,14 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
             x["name"]["column_index"]=0
             x["name"]["to_face"]=0
             x["name"]["stats"]["status"]="transfer"
+            x["name"]["world"]=object["name"]["world_name"]
+            GM.is_ready_to_talk = False
+            GM.talk_to_name = ""
             #? fix this meow
             return (copy.deepcopy(x["name"]), object["name"]["world_name"], object["name"]["type"], x["iid"], x["rect"].center)
 
     if (
-        "stats" in x["name"]
-        and "status" in x["name"]["stats"]
-        and x["name"]["stats"]["status"] == "alive"
+        x["name"]["stats"]["status"] == "alive"
         and x["name"]["stats"]["type"] == "enemy"
         and not GM.container_open
         and not CM.menu.visible
@@ -172,9 +173,7 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
             GM.npc_list[index]["attack_diff"] += GM.delta_time
 
     if (
-        "stats" in x["name"]
-        and "status" in x["name"]["stats"]
-        and x["name"]["stats"]["status"] == "alive"
+        x["name"]["stats"]["status"] == "alive"
         and not x["agroved"]
         and not GM.container_open
         and not CM.menu.visible
@@ -207,7 +206,7 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
         else:
             GM.screen.blit(x["image"], (relative__left, relative__top))
 
-        if other_obj_rect.colliderect(GM.weapon_rect) and x["type"] == "npc":
+        if other_obj_rect.colliderect(GM.weapon_rect):
             if GM.attacking:
                 if x["name"]["stats"]["type"] != "enemy":
                     GM.npc_list[index]["name"]["stats"]["type"] = "enemy"
@@ -226,17 +225,16 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
                     GM.npc_list[index]["agroved"] = False
 
             if (
-                "stats" in GM.npc_list[index]["name"]
-                and GM.npc_list[index]["name"]["stats"]["type"] != "enemy"
+                GM.npc_list[index]["name"]["stats"]["type"] != "enemy"
                 and GM.npc_list[index]["name"]["stats"]["status"] != "dead"
             ):
                 GM.talk_to_name = x["name"]["name"]
                 GM.propmt_pos = (relative__left + x["rect"].width // 2, relative__top - 10)
                 GM.is_ready_to_talk = True
+                print("can talk")
 
             if (
-                "stats" in GM.npc_list[index]["name"]
-                and GM.npc_list[index]["name"]["stats"]["health"] > 0
+                GM.npc_list[index]["name"]["stats"]["health"] > 0
                 and GM.npc_list[index]["name"]["stats"]["type"] == "enemy"
             ):
                 text = prompt_font.render(
@@ -253,19 +251,22 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
                 GM.screen.blit(text, text_rect)
         elif (
             not other_obj_rect.colliderect(GM.weapon_rect)
-            and x["type"] == "npc"
-            and "stats" in GM.npc_list[index]["name"]
             and GM.npc_list[index]["name"]["stats"]["type"] != "enemy"
             and GM.npc_list[index]["name"]["stats"]["status"] != "dead"
         ):
             GM.is_ready_to_talk = False
             GM.talk_to_name = ""
+            print("cannot talk")
     return x
 
 def update_nonactive_npc(x, i, subtitle_font, prompt_font):
     npc=shorten_tuple_npc(x)
     tmp=CM.ai.update(npc)
     x=lengthen_tuple_npc(x, tmp)
+    #if x[0]["stats"]["group"]=="Merchant":
+    #    print()
+    #    print(x)
+    #    print()
     if CM.player.current_world in x[0]["world"]:
         if x[0]["name"]=="TBP" or x[0]["stats"]["status"]=="dead":
             tmp=wp.setEnemies(x[0]["customFields"])
@@ -281,14 +282,15 @@ def update_nonactive_npc(x, i, subtitle_font, prompt_font):
                 time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
                 x[0]["current_routine"], x[0]["world"], x[0]["portal"]=copy.deepcopy(assets.get_actions(day, time, x[0]["routine"]))
                 x=transfer_npc(x, x[0]["portal"])
+                x["name"]["portal"]=None
                 
         elif x[0]["stats"]["status"]!="dead" and x[0]["stats"]["status"]!="" and x[0]["name"]!="TBP":
-            x[0]["routine"] = assets.load_routine(x[0]["package"])
-            day=GM.game_date.current_date.weekday()
-            time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
-            x[0]["current_routine"], x[0]["world"], x[0]["portal"]=copy.deepcopy(assets.get_actions(day, time, x[0]["routine"]))
-            x=transfer_npc(x, x[0]["portal"])
-            
+            #x[0]["routine"] = assets.load_routine(x[0]["package"])
+            #day=GM.game_date.current_date.weekday()
+            #time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
+            #x[0]["current_routine"], x[0]["world"], x[0]["portal"]=copy.deepcopy(assets.get_actions(day, time, x[0]["routine"]))
+            x=transfer_npc(x, None)
+            x["name"]["portal"]=None
             if x["name"]["stats"]["status"]=="transfer":
                 x["name"]["stats"]["status"]="alive"
             
@@ -297,17 +299,9 @@ def update_nonactive_npc(x, i, subtitle_font, prompt_font):
 def update_npc(subtitle_font, prompt_font):
     for index, x in enumerate(GM.npc_list):
         if type(x) is tuple:
-            if x[0]["name"]=="Merchant":
-                print()
-                print(x)
-                print()
             x=update_nonactive_npc(x, index, subtitle_font, prompt_font)
             GM.npc_list[index]=x
         else:
-            if x["name"]["name"]=="Merchant":
-                print()
-                print(x)
-                print()
             x=update_active_npc(x, index, subtitle_font, prompt_font)
             GM.npc_list[index]=x
 
@@ -350,6 +344,7 @@ def transfer_npc(x, tmp):
                 "agroved": False,
                 "iid": x[3]
             }
+            
         else:
             images, rect=assets.load_enemy_sprites(f"./textures/npc/{x[0]["stats"]["image"]}/")
             rect.center=(portal["spawn_point"]["cx"]*16, portal["spawn_point"]["cy"]*16)
@@ -367,6 +362,7 @@ def transfer_npc(x, tmp):
                 CM.animation.load_anims(GM.npc_list[-1])
                    
             x["name"]["world"]=CM.player.current_world
+            x["name"]["portal"]=None
             
     except Exception as e:
         print()
@@ -504,14 +500,6 @@ def lenghten_active_npc(x, npc):
     x["agroved"]=npc["agroved"]
     x["name"]["stats"]["group"]=npc["name"]["stats"]["group"]
     x["rect"].center=npc["rect"]["center"]
-    x["rect"].width=npc["rect"]["width"]
-    x["rect"].height=npc["rect"]["height"]
-    x["rect"].left=npc["rect"]["left"]
-    x["rect"].top=npc["rect"]["top"]
-    x["rect"].bottom=npc["rect"]["bottom"]
-    x["rect"].right=npc["rect"]["right"]
-    x["rect"].centerx=npc["rect"]["centerx"]
-    x["rect"].centery=npc["rect"]["centery"]
     x["name"]["name"]=npc["name"]["name"]
     x["name"]["active"]=True
     x["name"]["portal"]=npc["name"]["portal"]

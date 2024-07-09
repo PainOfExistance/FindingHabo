@@ -116,9 +116,6 @@ class PathFinder:
         #    new_center_x, new_center_y = self.check_collision(dx, dy, npc["rect"])
         #else:
         new_center_x, new_center_y = npc["rect"]["centerx"]+dx, npc["rect"]["centery"]+dy
-            
-        npc["rect"]["centerx"] = new_center_x
-        npc["rect"]["centery"] = new_center_y
-        
+        npc["rect"]["center"] = (new_center_x, new_center_y)
         npc["name"]["movement_behavior"]["dirrection"]=copy.deepcopy(self.movement_vectors[(tdx, tdy)])
         return npc

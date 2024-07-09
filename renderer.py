@@ -337,13 +337,13 @@ def draw_objects(prompt_font):
             ):
                 if x["name"]["locked"]:
                     text = prompt_font.render(
-                        f"Key required) {x['name']['world_name']} ",
+                        f"Key required) {x['name']['world_name'].replace("_", " ")} ",
                         True,
                         Colors.chroma_blue
                     )
                 else:
                     text = prompt_font.render(
-                        f"E) {x['name']['world_name']} ", True, Colors.chroma_blue
+                        f"E) {x['name']['world_name'].replace("_", " ")} ", True, Colors.chroma_blue
                     )
                 text_rect = text.get_rect(
                     center=(

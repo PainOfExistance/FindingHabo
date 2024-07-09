@@ -38,7 +38,7 @@
 					"unlocked_by": "",
 					"locked": false,
 					"world_to_load": "worlds/simplified/Dream_City/data.json",
-					"world_name": "Dream City",
+					"world_name": "Dream_City",
 					"spawn_point": {
 						"cx": 8,
 						"cy": 8
