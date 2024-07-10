@@ -232,7 +232,6 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
                 GM.talk_to_name = x["name"]["name"]
                 GM.propmt_pos = (relative__left + x["rect"].width // 2, relative__top - 10)
                 GM.is_ready_to_talk = True
-                print("can talk")
 
             if (
                 GM.npc_list[index]["name"]["stats"]["health"] > 0
@@ -257,7 +256,6 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
         ):
             GM.is_ready_to_talk = False
             GM.talk_to_name = ""
-            print("cannot talk")
     return x
 
 def update_nonactive_npc(x, i, subtitle_font, prompt_font):
