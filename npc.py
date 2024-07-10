@@ -135,8 +135,9 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
             x["name"]["to_face"]=0
             x["name"]["stats"]["status"]="transfer"
             x["name"]["world"]=object["name"]["world_name"]
-            GM.is_ready_to_talk = False
-            GM.talk_to_name = ""
+            if other_obj_rect.colliderect(GM.weapon_rect):
+                GM.is_ready_to_talk = False
+                GM.talk_to_name = ""
             #? fix this meow
             return (copy.deepcopy(x["name"]), object["name"]["world_name"], object["name"]["type"], x["iid"], x["rect"].center)
 
