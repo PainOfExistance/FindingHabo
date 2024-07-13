@@ -56,6 +56,7 @@ class Game:
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         self.top_layer=[]
         self.npc_top_layer=[]
+        self.drve_top=[]
         wp.get_global_npcs()
         wp.get_global_nav_tiles()
 
@@ -277,6 +278,9 @@ class Game:
         
         bg, _ =assets.load_background(os.path.join(directory, metadata["layers"][-2]))
         self.npc_top_layer=bg
+        
+        bg, _ =assets.load_background(os.path.join(directory, metadata["layers"][-3]))
+        self.drve_top=bg
         
         if type != "default":
             for i, _ in enumerate(portals):
@@ -1362,6 +1366,8 @@ class Game:
             CM.player.draw()
             GM.screen.blit(self.npc_top_layer, GM.bg_rect.topleft)
             N.update_npc(self.subtitle_font, self.prompt_font)
+            GM.screen.blit(self.drve_top, GM.bg_rect.topleft)
+            GM.screen.blit(self.npc_top_layer, GM.bg_rect.topleft)
             GM.screen.blit(self.top_layer, GM.bg_rect.topleft)
             
             CM.player.draw_hud()

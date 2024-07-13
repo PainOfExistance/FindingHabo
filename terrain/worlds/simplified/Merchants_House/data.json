@@ -38,7 +38,7 @@
 					"unlocked_by": "",
 					"locked": false,
 					"world_to_load": "worlds/simplified/Dream_City/data.json",
-					"world_name": "Dream_City",
+					"world_name": "Dream City",
 					"spawn_point": {
 						"cx": 8,
 						"cy": 8
@@ -78,7 +78,7 @@
 				"height": 16,
 				"color": 0,
 				"customFields": {
-					"name": "Merchants_House",
+					"name": "Merchants House",
 					"respawn_timer": 15,
 					"time_passed": 0,
 					"music": [
