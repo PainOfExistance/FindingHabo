@@ -21,7 +21,6 @@ def setEnemies(enemy):
         ):
             return x
 
-
 def setItems(item):
     if (
         item["name"][0] == "common"
@@ -41,7 +40,6 @@ def setItems(item):
         for x in items:
             if item["chance"][0] >= random.random() and item["name"][0] == x:
                 return x
-
 
 def setContainer(item):
     tmp = []
@@ -95,7 +93,6 @@ def setContainer(item):
 
     return tmp, num_of_items
 
-
 def setActivators(activators):
     if activators["quest"] != -1:
         return {"quest": activators["quest"], "type": "quest", "ref": activators["action_ref"]}
@@ -112,7 +109,6 @@ def setActivators(activators):
         return {"crafter": activators["type"], "type": "crafting", "ref": activators["action_ref"]}
     elif activators["type"]=="board":
         return {"type": "board", "ref": activators["action_ref"]}
-
 
 def setNavTiles(nav_tiles):
     if nav_tiles["path_ref"]==None:
@@ -345,7 +341,7 @@ def remove_uniques(original, modified):
 def get_global_npcs():
     data_list=assets.load_global_npc_state("terrain/meta_data", f"{CM.player.hash}_global_npc.json")
     if data_list != None:
-        GM.global_enemy_list=data_list
+        GM.npc_list=data_list
         return
 
     data_list=assets.load_all_world_data()
@@ -382,8 +378,8 @@ def get_global_npcs():
                     data[0]["name"]="TBP"
                     global_enemy_list.append((copy.deepcopy(data[0]), data[0]["world"], data[0]["portal"], x["iid"], (data[1], data[2])))
                     
-    GM.global_enemy_list.clear()
-    GM.global_enemy_list = copy.deepcopy(global_enemy_list)
+    GM.npc_list.clear()
+    GM.npc_list = copy.deepcopy(global_enemy_list)
 
 def get_global_nav_tiles():
     data_list=assets.load_all_world_data()

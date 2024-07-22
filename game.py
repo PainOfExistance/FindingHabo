@@ -56,6 +56,7 @@ class Game:
         CM.inventory.add_item(GM.items["Key to the Land of the Free"])
         self.top_layer=[]
         self.npc_top_layer=[]
+        self.drve_top=[]
         wp.get_global_npcs()
         wp.get_global_nav_tiles()
 
@@ -241,7 +242,6 @@ class Game:
 
     def setup(self, path="./terrain/worlds/simplified/Dream_World/data.json", type="default"):
         GM.world_objects.clear()
-        GM.npc_list.clear()
         CM.animation.enemy_anims.clear()
         GM.nav_tiles=[[]]
         
@@ -279,14 +279,14 @@ class Game:
         bg, _ =assets.load_background(os.path.join(directory, metadata["layers"][-2]))
         self.npc_top_layer=bg
         
+        bg, _ =assets.load_background(os.path.join(directory, metadata["layers"][-3]))
+        self.drve_top=bg
+        
         if type != "default":
             for i, _ in enumerate(portals):
                 if portals[i][0]["type"] == type:
                     spawn_point = (portals[i][0]["spawn_point"]["cx"]*16, portals[i][0]["spawn_point"]["cy"]*16)
         
-        N.manage_global_npc()     
-        N.transfer_npc("default")
-
         if spawn_point == (0, 0):
             spawn_point = (GM.relative_player_left, GM.relative_player_top)
 
@@ -304,7 +304,13 @@ class Game:
 
     def travel(self):
         self.loading()
-        CM.player.current_world = GM.world_to_travel_to["world_name"]
+        for i, x in enumerate(GM.npc_list):
+            if type(x) is not tuple:
+                x["name"]["world"]=CM.player.current_world
+                GM.npc_list[i]=(copy.deepcopy(x["name"]), CM.player.current_world, None, x["iid"], x["rect"].center)
+                #https://flashpointarchive.org/downloads/
+            
+        CM.player.current_world = GM.world_to_travel_to["world_name"].replace(" ", "_")
         GM.world_objects[GM.world_to_travel_to["index"]]["name"]["locked"] = False
         assets.world_save()
         self.setup(
@@ -313,7 +319,7 @@ class Game:
                 )
         GM.world_to_travel_to = None
         CM.player.quests.dialogue = CM.ai.strings
-
+        
     def run(self):
         while True:
             # Calculate delta time (time since last frame)
@@ -323,20 +329,30 @@ class Game:
             ) / 1000.0
             
             self.last_frame_time = current_time
-            GM.time_diff += GM.delta_time
-            GM.counter += GM.delta_time
+            if (
+                not CM.menu.visible
+                and not CM.player_menu.visible
+                and not GM.is_in_dialogue
+            ):
+                GM.time_diff += GM.delta_time
+                GM.counter += GM.delta_time
+                
             if GM.load:
                 GM.load = False
                 self.travel()
             
             if not GM.dead:
                 self.handle_input()
-            N.manage_global_npc()
             
             self.handle_events()
             self.draw()
-            GM.game_date.increment_seconds()
-            CM.player.check_experation(GM.delta_time)
+            if (
+                not CM.menu.visible
+                and not CM.player_menu.visible
+                and not GM.is_in_dialogue
+            ):
+                GM.game_date.increment_seconds()
+                CM.player.check_experation(GM.delta_time)
             
             #if (GM.game_date.current_date.minute == 0 or GM.game_date.current_date.minute == 30):
             #    N.set_npc()
@@ -423,19 +439,19 @@ class Game:
         
         keys = pygame.key.get_pressed()
 
-        if CM.player.player_rect.left <= 60:
+        if CM.player.player_rect.left <= 100:
             GM.bg_rect.move_ip(movement, 0)
             CM.player.player_rect.move_ip(movement, 0)
 
-        if CM.player.player_rect.right >= GM.screen_width - 60:
+        if CM.player.player_rect.right >= GM.screen_width - 100:
             GM.bg_rect.move_ip(-movement, 0)
             CM.player.player_rect.move_ip(-movement, 0)
             
-        if CM.player.player_rect.top <= 60:
+        if CM.player.player_rect.top <= 100:
             GM.bg_rect.move_ip(0, movement)
             CM.player.player_rect.move_ip(0, movement)
             
-        if CM.player.player_rect.bottom >= GM.screen_height - 60:
+        if CM.player.player_rect.bottom >= GM.screen_height - 100:
             GM.bg_rect.move_ip(0, -movement)
             CM.player.player_rect.move_ip(0, -movement)
 
@@ -1350,6 +1366,8 @@ class Game:
             CM.player.draw()
             GM.screen.blit(self.npc_top_layer, GM.bg_rect.topleft)
             N.update_npc(self.subtitle_font, self.prompt_font)
+            GM.screen.blit(self.drve_top, GM.bg_rect.topleft)
+            GM.screen.blit(self.npc_top_layer, GM.bg_rect.topleft)
             GM.screen.blit(self.top_layer, GM.bg_rect.topleft)
             
             CM.player.draw_hud()

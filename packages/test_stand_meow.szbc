@@ -1,0 +1,15 @@
+{
+    "routines": [{
+        "Routine_1": {
+            "7.00": ["Idle_3"]
+        }
+    }],
+    "schedule": {
+        "Routine_1": [1, 2, 3, 4, 5, 6, 7]
+    },
+    "world":{
+        "7.00": "Dream_City"
+    },
+    "portals":{
+    }
+}

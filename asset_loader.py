@@ -182,7 +182,7 @@ def load(filename):
         return data
     
 def world_save(file_name="data_modified.world"):
-    world=GM.world_objects+GM.npc_list+GM.notes
+    world=GM.world_objects+GM.notes
     path = os.path.dirname(world[0]["name"]["background"])
     path = os.path.join(path, CM.player.hash)
     if not os.path.exists(path):
@@ -293,6 +293,7 @@ def get_actions(day, time, routines):
                 routine_actions = schedule.get(closest_time)
                 if routine_actions:
                     actions.extend(routine_actions)
+                    actions.append(closest_time)
                     world=routines["world"][closest_time]
                     portal=None
                     if closest_time in routines["portals"].keys():

@@ -23,13 +23,13 @@
         "Routine_2": [6, 7]
     },
     "world":{
-        "8.00": "Merchants House",
-        "9.00": "Merchants House||Dream City",
-        "15.00": "Dream City",
-        "16.00": "Dream City",
-        "18.00": "Dream City",
-        "20.00": "Dream City||Merchants House",
-        "22.00": "Merchants House"
+        "8.00": "Merchants_House",
+        "9.00": "Merchants_House||Dream_City",
+        "15.00": "Dream_City",
+        "16.00": "Dream_City",
+        "18.00": "Dream_City",
+        "20.00": "Dream_City||Merchants_House",
+        "22.00": "Merchants_House"
     },
     "portals":{
         "9.00": "dc_mhc_portal_01",

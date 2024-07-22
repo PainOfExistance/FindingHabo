@@ -61,8 +61,8 @@
 					"world_to_load": "worlds/simplified/Merchants_House/data.json",
 					"world_name": "Merchants House",
 					"spawn_point": {
-						"cx": 142,
-						"cy": 173
+						"cx": 141,
+						"cy": 177
 					}
 				}
 			}
@@ -509,10 +509,12 @@
 				"height": 16,
 				"color": 16766464,
 				"customFields": {
-					"group": [],
+					"group": [
+						"goblin"
+					],
 					"pause_time": 0,
 					"path_ref": null,
-					"action": "",
+					"action": "Idle_3",
 					"used": false
 				}
 			}

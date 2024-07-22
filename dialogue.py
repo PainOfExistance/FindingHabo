@@ -179,7 +179,7 @@ class Dialougue:
                 self.greeting_played = True
 
             text = self.subtitle_font.render(
-                f"{self.name}: {self.strings[self.name]['greeting']}", True, Colors.mid_black
+                f"{self.name}: {self.strings[self.name]['greeting']}", True, Colors.chroma_blue
             )
 
             text_rect = text.get_rect(
@@ -243,10 +243,10 @@ class Dialougue:
             for y, line in enumerate(lines):
                 if y == 0:
                     text = self.subtitle_font.render(
-                        f"{self.name}: {line}", True, Colors.mid_black
+                        f"{self.name}: {line}", True, Colors.chroma_blue
                     )
                 else:
-                    text = self.subtitle_font.render(f"{line}", True, Colors.mid_black)
+                    text = self.subtitle_font.render(f"{line}", True, Colors.chroma_blue)
 
                 text_rect = text.get_rect(
                     center=(
