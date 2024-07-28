@@ -35,5 +35,51 @@
 		"Top_layer_npc.png",
 		"Top_layer.png"
 	],
-	"entities" : {}
+	"entities": {
+		"Metadata": [
+			{
+				"id": "Metadata",
+				"iid": "9e44f4c0-4ce0-11ef-8683-752fb6ce58c8",
+				"layer": "LeveL_Data",
+				"x": 88,
+				"y": 72,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"name": "Kiavar",
+					"respawn_timer": 30,
+					"time_passed": 0,
+					"music": [
+						"../sounds/bgm/Sladka kot med.mp3"
+					],
+					"collision_set": "terrain/worlds/simplified/Kiavar/Collision-int.png",
+					"background": "terrain/worlds/simplified/Kiavar/_composite.png"
+				}
+			}
+		],
+		"Player_spawn": [
+			{
+				"id": "Player_spawn",
+				"iid": "21cf45c0-4ce0-11ef-8683-5f4d81486cfe",
+				"layer": "LeveL_Data",
+				"x": 4056,
+				"y": 4152,
+				"width": 16,
+				"height": 16,
+				"color": 0,
+				"customFields": {
+					"type": "default",
+					"unlocked_by": "",
+					"locked": false,
+					"world_to_load": "worlds/simplified/Kiavar/data.json",
+					"world_name": "Kiavar",
+					"spawn_point": {
+						"cx": 253,
+						"cy": 257
+					}
+				}
+			}
+		]
+	}
 }
