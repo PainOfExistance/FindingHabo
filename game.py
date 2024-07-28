@@ -67,6 +67,9 @@ class Game:
         self.last_frame_time = pygame.time.get_ticks()
         self.on_a_diagonal = False
         CM.map=Map()
+        self.subsurface_rect = pygame.Rect(
+            0, 0, GM.screen.get_width(), GM.screen.get_height()
+        )
 
         GM.weapon_rect = pygame.Rect(
             CM.player.player_rect.left + CM.player.player_rect.width // 4,
@@ -1394,10 +1397,7 @@ class Game:
         
         # https://www.youtube.com/watch?v=RXkeWnbJlOE&list=RD_u8CpQdZLMA&index=3
         #pygame.draw.rect(GM.screen, (0, 0, 0), CM.player.player_rect)
-        subsurface_rect = pygame.Rect(
-            0, 0, GM.screen.get_width(), GM.screen.get_height()
-        )
-        subsurface = GM.screen.subsurface(subsurface_rect)
+        subsurface = GM.screen.subsurface(self.subsurface_rect)
         streched = pygame.transform.scale(
             subsurface, (GM._scr.get_width(), GM._scr.get_height())
         )
