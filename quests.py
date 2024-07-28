@@ -68,7 +68,7 @@ class Quests:
     def draw_quest_info(self):
         if pygame.time.get_ticks() - self.tics <= 5000:
             for index, v in enumerate(self.text_to_draw):
-                item_render = self.quest_start_font.render(v, True, Colors.prompt_color)
+                item_render = self.quest_start_font.render(v, True, Colors.active_item)
                 item_rect = item_render.get_rect(
                     center=(GM.screen.get_width() // 2, 200 + index * 40)
                 )
