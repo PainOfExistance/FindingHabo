@@ -28,7 +28,7 @@ class Player:
         self.quests = Quests()
         self.name = f"Player"
         self.gold = 1000
-        self.current_world = f"Dream_City"
+        self.current_world = f"Kiavar"
         self.range = 5
         self.active_effects = []
         self.font = pygame.font.Font("./fonts/SovngardeBold.ttf", 18)

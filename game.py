@@ -331,6 +331,11 @@ class Game:
                 current_time - self.last_frame_time
             ) / 1000.0
             
+            try:
+                print(int(1/GM.delta_time))
+            except:
+                pass
+            
             self.last_frame_time = current_time
             if (
                 not CM.menu.visible

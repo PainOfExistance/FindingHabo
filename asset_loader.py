@@ -66,7 +66,7 @@ def load_level_data(path="./terrain/worlds/simplified/Dream_World/data.json"):
 
 def load_collision(path):
     image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    image = cv2.resize(image, (image.shape[0]*8, image.shape[1]*8), interpolation = cv2.INTER_AREA)
+    image = cv2.resize(image, (image.shape[0], image.shape[1]), interpolation = cv2.INTER_AREA)
     binary_image = 1 - (image // 255)
     print(binary_image)
     directory, _ = os.path.split(path)
@@ -77,7 +77,7 @@ def load_collision(path):
 
 def load_anim_tiles(path):
     image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    image = cv2.resize(image, (image.shape[0]*8, image.shape[1]*8), interpolation = cv2.INTER_AREA)
+    image = cv2.resize(image, (image.shape[0], image.shape[1]), interpolation = cv2.INTER_AREA)
     return image
 
 def set_anim_places(path):
