@@ -70,22 +70,6 @@
 		"Enemy_Random_Spawn": [
 			{
 				"id": "Enemy_Random_Spawn",
-				"iid": "c0e43e70-b0a0-11ee-b02a-6583af3deefd",
-				"layer": "LeveL_Data",
-				"x": 1248,
-				"y": 3200,
-				"width": 16,
-				"height": 16,
-				"color": 12470831,
-				"customFields": {
-					"chance": 0.8,
-					"enemy_Type": "wolf",
-					"rarity": "common",
-					"package": "test_stand_meow"
-				}
-			},
-			{
-				"id": "Enemy_Random_Spawn",
 				"iid": "a7a02530-b0a0-11ee-b847-0be54bd7a963",
 				"layer": "LeveL_Data",
 				"x": 3288,

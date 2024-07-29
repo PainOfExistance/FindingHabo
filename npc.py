@@ -28,6 +28,9 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
         x=(copy.deepcopy(x["name"]), x["name"]["world"], x["name"]["portal"], x["iid"], x["rect"].center)
         return x
     
+    x["name"]["movement_behavior"]["moving"] = False
+    agrov = False
+    counter = 0
     if (
         not CM.menu.visible
         and not CM.player_menu.visible
@@ -37,9 +40,6 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
                 
     relative__left = int(GM.bg_rect.left + x["rect"].left)
     relative__top = int(GM.bg_rect.top + x["rect"].top)
-    x["name"]["movement_behavior"]["moving"] = False
-    agrov = False
-    counter = 0
     for other in GM.npc_list:
         if other is not x and type(other) is not tuple:
             counter += 1
@@ -154,7 +154,6 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
         and not CM.player_menu.visible
         and not GM.is_in_dialogue):
             lenghten_active_npc(x, CM.ai.attack(shorten_active_npc(x)))
-            x["name"]["movement_behavior"]["moving"] = True
 
         if counter < len(GM.npc_list)-2:
             x["agroved"] = True
@@ -182,7 +181,6 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
         and not GM.is_in_dialogue
         and not GM.crafting
     ):
-        x["name"]["movement_behavior"]["moving"] = True
         GM.line = CM.ai.random_line(
             (
                 (x["rect"].centerx),
@@ -201,7 +199,7 @@ def update_active_npc(x, index, subtitle_font, prompt_font):
         and relative__top > -80
         and relative__top < GM.screen_height + 80
     ):
-        if x["name"]["name"] == "Slime":
+        if x["name"]["name"] == "Slime" or x["name"]["name"] == "Merchant":
             img, _ = CM.animation.animate_npc(x, index, agrov)
             GM.screen.blit(img, (relative__left, relative__top))
         else:
@@ -360,8 +358,8 @@ def transfer_npc(x, tmp):
             if x["name"]["name"].lower() not in CM.animation.enemy_anims:
                 CM.animation.load_anims(GM.npc_list[-1])
                    
-            x["name"]["world"]=CM.player.current_world
-            x["name"]["portal"]=None
+        x["name"]["world"]=CM.player.current_world
+        x["name"]["portal"]=None
             
     except Exception as e:
         print()
@@ -412,7 +410,9 @@ def shorten_active_npc(x):
                 "movement_behavior": {
                     "type": x["name"]["movement_behavior"]["type"],
                     "dirrection": x["name"]["movement_behavior"]["dirrection"],
-                    "movement_speed": x["name"]["movement_behavior"]["movement_speed"]
+                    "movement_speed": x["name"]["movement_behavior"]["movement_speed"],
+                    "moving": x["name"]["movement_behavior"]["moving"],
+                    "action": x["name"]["movement_behavior"].get("action", ""),
                 },
                 "target": x["name"]["target"],
                 "path": x["name"]["path"],
@@ -452,7 +452,8 @@ def shorten_tuple_npc(x):
                 "movement_behavior": {
                     "type": x["movement_behavior"]["type"],
                     "dirrection": x["movement_behavior"]["dirrection"],
-                    "movement_speed": x["movement_behavior"]["movement_speed"]
+                    "movement_speed": x["movement_behavior"]["movement_speed"],
+                    "action": x["movement_behavior"].get("action", ""),
                 },
                 "target": x["target"],
                 "path": x["path"],
@@ -487,6 +488,7 @@ def lenghten_active_npc(x, npc):
     x["name"]["movement_behavior"]["type"]=npc["name"]["movement_behavior"]["type"]
     x["name"]["movement_behavior"]["dirrection"]=npc["name"]["movement_behavior"]["dirrection"]
     x["name"]["movement_behavior"]["movement_speed"]=npc["name"]["movement_behavior"]["movement_speed"]
+    x["name"]["movement_behavior"]["moving"]=npc["name"]["movement_behavior"]["moving"]
     x["name"]["target"]=npc["name"]["target"]
     x["name"]["path"]=npc["name"]["path"]
     x["name"]["current_routine"]=npc["name"]["current_routine"]
@@ -503,6 +505,7 @@ def lenghten_active_npc(x, npc):
     x["name"]["active"]=True
     x["name"]["portal"]=npc["name"]["portal"]
     x["name"]["portal_to_be"]=npc.get("name").get("portal_to_be", "")
+    x["name"]["movement_behavior"]["action"]=npc["name"]["movement_behavior"].get("action", "")
 
 def lengthen_tuple_npc(x, npc):
     x=list(x)
@@ -524,5 +527,6 @@ def lengthen_tuple_npc(x, npc):
     x[0]["active"]=False
     x[0]["portal"]=npc["name"]["portal"]
     x[0]["portal_to_be"]=npc.get("name").get("portal_to_be", "")
+    x[0]["movement_behavior"]["action"]=npc["name"]["movement_behavior"].get("action", "")
     x=tuple(x)
     return x

@@ -19,20 +19,7 @@ from game_manager import GameManager as GM
 class PathFinder:
     def __init__(self):
         #self.finder = AStar(GM.collision_map)
-        self.movement_vectors = {
-         (0, -1): 1,
-         (-1, -1): 1,
-         (1, -1): 1,
-         (-1, 1):  2,
-         (0, 1):  2,
-         (1, 1):  2,
-         (1, 0):  3,
-         (1, 1):  3,
-         (1, -1):  3,
-         (-1, -1): 4,
-         (-1, 0): 4,
-         (-1, 1): 4,
-        }
+        pass
 
     def weird_division(self, n, d):
         return n / d if d else 0
@@ -95,13 +82,7 @@ class PathFinder:
         dy = target_y - y
         if abs(dx)>1000 or abs(dy)>1000:
             npc["rect"]["center"]=target
-            #print(abs(dx))
-            #print(abs(dy))
-            #print(npc["rect"]["center"])
             return npc
-        
-        tdx=int(self.weird_division(dx,abs(dx)))
-        tdy=int(self.weird_division(dy,abs(dy)))
         
         magnitude = math.sqrt(dx ** 2 + dy ** 2)
         if magnitude != 0:
@@ -111,11 +92,17 @@ class PathFinder:
         speed = npc["name"]["movement_behavior"]["movement_speed"] * GM.delta_time
         dx *= speed
         dy *= speed
-
-        #if npc["active"]:
-        #    new_center_x, new_center_y = self.check_collision(dx, dy, npc["rect"])
-        #else:
         new_center_x, new_center_y = npc["rect"]["centerx"]+dx, npc["rect"]["centery"]+dy
+
+        if abs(dx) > abs(dy):
+            ten = 2 if dx > 0 else 4
+        else:
+            ten = 3 if dy > 0 else 1
+            
+        #if npc["active"]:
+        #    new_center_x, new_center_y = self.check_collision(tdx, tdy, npc["rect"])
+        #else:
         npc["rect"]["center"] = (new_center_x, new_center_y)
-        npc["name"]["movement_behavior"]["dirrection"]=copy.deepcopy(self.movement_vectors[(tdx, tdy)])
+        npc["name"]["movement_behavior"]["dirrection"]=ten
+        
         return npc

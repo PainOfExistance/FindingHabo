@@ -51,21 +51,19 @@ class Animation:
             action="idle"
         if agrov:
             action="attack"
+            
         match data["name"]["movement_behavior"]["dirrection"]:
             case 1:
                 dirrection="up"
                 
-            case 4:
-                dirrection="left"
+            case 2:
+                dirrection="right"
 
             case 3:
                 dirrection="down"
-
-            case 2:
-                dirrection="right"
-                
-            case _:
-                dirrection="up"
+            
+            case 4:
+                dirrection="left"
                 
         if GM.npc_list[index]["name"]["movement_behavior"]["prev_action"]!=f"{name}_{action}_{dirrection}":
             GM.npc_list[index]["name"]["movement_behavior"]["counter"]=0

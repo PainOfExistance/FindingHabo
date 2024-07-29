@@ -119,57 +119,6 @@ class Game:
             GM.world_objects.append(
                 {"image": img, "rect": img_rect, "type": "container", "name": tmp, "pedistal": data[6], "iid": data[7]}
             )
-        
-        #N.transfer_npc(None)
-        #print()
-        #print(GM.transfer_list)
-        #print()
-        #for data in npcs:
-        #    if "inventory_type" in data[0]["stats"]:
-        #        inventory_type = data[0]["stats"]["inventory_type"].split("_")
-        #        inventory, item_list = CM.level_list.generate_inventory(inventory_type, int(inventory_type[-1]), inventory_type[0])
-        #
-        #        if len(data[0]["items"]) > 0:
-        #            item_list = []
-        #            for item in data[0]["items"]:
-        #                if item["type"] in inventory:
-        #                    item["quantity"] = inventory[item["type"]] + item["quantity"]
-        #                    inventory.pop(item["type"])
-        #            for item in inventory:
-        #                item_list.append({"type": item, "quantity": inventory[item]})
-        #
-        #        data[0]["items"] = item_list
-        #        
-        #    if "package" in data[0]:
-        #        data[0]["routine"] = assets.load_routine(data[0]["package"])
-        #
-        #    if "png" in data[0]["stats"]["image"]:
-        #        img, img_rect = assets.load_images(data[0]["stats"]["image"], (64, 64), (data[1], data[2]))
-        #        GM.npc_list.append({
-        #            "image": img,
-        #            "rect": img_rect,
-        #            "type": "npc",
-        #            "name": copy.deepcopy(data[0]),
-        #            "attack_diff": 0,
-        #            "agroved": False,
-        #            "iid": data[3]
-        #        })
-        #    else:
-        #        images, rect=assets.load_enemy_sprites(f"./textures/npc/{data[0]["stats"]["image"]}/")
-        #        rect.center=(data[1], data[2])
-        #        CM.animation.enemy_anims[data[0]["name"].lower()]={"images": images, "rect": rect, "prev_action": ""}
-        #        GM.npc_list.append({
-        #            "image": images[list(images.keys())[0]]["frames"][0],
-        #            "rect": rect,
-        #            "type": "npc",
-        #            "name": copy.deepcopy(data[0]),
-        #            "attack_diff": 0,
-        #            "agroved": False,
-        #            "iid": data[3]
-        #        })
-        #        if GM.npc_list[-1]["name"]["name"].lower() not in CM.animation.enemy_anims:
-        #            CM.animation.load_anims(GM.npc_list[-1])
-        #    GM.npc_list[-1]["name"]["world"]=CM.player.current_world
 
         for data in portals:
             if "unlocked_by" in data[0]:
@@ -271,7 +220,7 @@ class Game:
             self.setup_loaded(portals, npcs, final_items, containers, metadata, activators, nav_tiles, notes)
         
         GM.background, GM.bg_rect = assets.load_background(metadata["background"])
-        GM.collision_map, GM.anim_tiles = assets.load_collision(metadata["collision_set"])
+        GM.collision_map, GM.anim_tiles = assets.load_collision(metadata["collision_set"], GM.bg_rect.width)
         GM.map_height = GM.collision_map.shape[0]
         GM.map_width = GM.collision_map.shape[1]
         directory, _ = os.path.split(metadata["background"])
@@ -331,10 +280,10 @@ class Game:
                 current_time - self.last_frame_time
             ) / 1000.0
             
-            try:
-                print(int(1/GM.delta_time))
-            except:
-                pass
+            #try:
+            #    print(int(1/GM.delta_time))
+            #except:
+            #    pass
             
             self.last_frame_time = current_time
             if (

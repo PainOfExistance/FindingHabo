@@ -1,6 +1,7 @@
 import copy
 import math
 import random
+import re
 import sys
 from tkinter import N
 
@@ -38,6 +39,7 @@ class Ai:
                     npc["name"]["target"]=None
                     npc=self.update_state(npc)
                     return npc
+            npc["name"]["movement_behavior"]["moving"] = True
             return self.pathfinder.move(npc, npc["name"]["target"])
         else:
             return self.update_state(npc)
@@ -57,6 +59,7 @@ class Ai:
         day=GM.game_date.current_date.weekday()
         time=f"{GM.game_date.current_date.hour}.{GM.game_date.current_date.minute:02d}"
         actions, world, portal=assets.get_actions(day, time, npc["name"]["routine"])
+        
         if len(npc["name"]["current_routine"])==0 or npc["name"]["current_routine"][-1]!=actions[-1]:
             npc["name"]["to_face"]=0
             npc["name"]["current_routine"]=copy.deepcopy(actions)
@@ -64,12 +67,15 @@ class Ai:
             npc=self.__get_state_action(npc, world)
         
         elif len(npc["name"]["current_routine"])==1 and npc["name"]["to_face"]!=0 and len(npc["name"]["path"])==0:
-            npc["name"]["movement_behavior"]["dirrection"]=copy.deepcopy(npc["name"]["to_face"])
-            npc["name"]["to_face"]=0      
-            
-        elif npc["name"]["target"]==None and not len(npc["name"]["current_routine"])==1:
+            npc["name"]["movement_behavior"]["dirrection"]=copy.deepcopy(int(npc["name"]["to_face"]))
             npc["name"]["to_face"]=0
+            npc["name"]["movement_behavior"]["moving"]=npc["name"]["movement_behavior"]["action"]
+            
+        elif npc["name"]["target"]==None and not len(npc["name"]["current_routine"])==1: 
             npc["name"]["current_routine"].pop(0)
+            if len(npc["name"]["current_routine"])==1:
+                return npc
+            npc["name"]["to_face"]=0
             npc=self.__get_state_action(npc, world)
             
         return npc
@@ -173,6 +179,7 @@ class Ai:
             npc["name"]["index_points"]=[i for i in range(index1, index2+1)]
             npc["name"]["column_index"]=column_index
             npc["name"]["to_face"]=target[1]
+            npc["action"]=target[0].lower()
 
         return npc
                 

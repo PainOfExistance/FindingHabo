@@ -64,24 +64,26 @@ def load_level_data(path="./terrain/worlds/simplified/Dream_World/data.json"):
         level_data = json.load(ai_file)
     return level_data
 
-def load_collision(path):
+def load_collision(path, w):
     image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    image = cv2.resize(image, (image.shape[0], image.shape[1]), interpolation = cv2.INTER_AREA)
+    if image.shape[0]!=w:
+        image = cv2.resize(image, (image.shape[0]*8, image.shape[1]*8), interpolation = cv2.INTER_AREA)
     binary_image = 1 - (image // 255)
     print(binary_image)
     directory, _ = os.path.split(path)
     new_filepath = os.path.join(directory, "Animator_layer-int.png")
-    animation_tiles=set_anim_places(new_filepath)
+    animation_tiles=set_anim_places(new_filepath, w)
     # np.savetxt('map.txt', binary_image, fmt='%d')
     return binary_image, animation_tiles
 
-def load_anim_tiles(path):
+def load_anim_tiles(path, w):
     image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    image = cv2.resize(image, (image.shape[0], image.shape[1]), interpolation = cv2.INTER_AREA)
+    if image.shape[0]!=w:
+        image = cv2.resize(image, (image.shape[0]*16, image.shape[1]*16), interpolation = cv2.INTER_AREA)
     return image
 
-def set_anim_places(path):
-    array = load_anim_tiles(path)
+def set_anim_places(path, w):
+    array = load_anim_tiles(path, w)
     skip = 8
     smaller_array = array[::skip, ::skip]
     indices = np.where(smaller_array != 0)
