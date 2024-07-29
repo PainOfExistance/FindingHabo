@@ -38,6 +38,7 @@ class Menu:
         )
 
     def toggle_visibility(self):
+        CM.music_player.play_effect("open_close")
         self.visible = not self.visible
         saves = glob.glob(os.path.join("saves", "*.habo"))
         self.saves = [
@@ -55,6 +56,7 @@ class Menu:
 
         if self.visible and not self.selection_held:
             if keys[pygame.K_UP] and not self.selection_held:
+                CM.music_player.play_effect("hover")
                 if self.in_sub_menu == 0:
                     self.selected_item = (self.selected_item - 1) % len(self.menu_items)
                 elif self.in_sub_menu == 1 and len(self.saves) > 0:
@@ -62,6 +64,7 @@ class Menu:
                 self.selection_held = True
 
             elif keys[pygame.K_DOWN] and not self.selection_held:
+                CM.music_player.play_effect("hover")
                 if self.in_sub_menu == 0:
                     self.selected_item = (self.selected_item + 1) % len(self.menu_items)
                 elif self.in_sub_menu == 1 and len(self.saves) > 0:
@@ -69,22 +72,26 @@ class Menu:
                 self.selection_held = True
 
             elif keys[pygame.K_RETURN] and not self.selection_held:
+                CM.music_player.play_effect("select")
                 if self.in_sub_menu == 1:
                     self.action = "Save"
                 self.selection_held = True
                 self.select_option()
 
             elif keys[pygame.K_TAB] and not self.selection_held:
+                CM.music_player.play_effect("back")
                 self.action = ""
                 self.in_sub_menu = 0
                 self.selection_held = True
 
             elif keys[pygame.K_e] and not self.selection_held and self.in_sub_menu == 1:
+                CM.music_player.play_effect("select")                
                 self.action = "Load"
                 self.selection_held = True
                 self.select_option()
 
             elif keys[pygame.K_t] and not self.selection_held and self.in_sub_menu == 1:
+                CM.music_player.play_effect("select")
                 self.action = "Overwrite"
                 self.selection_held = True
                 self.select_option()

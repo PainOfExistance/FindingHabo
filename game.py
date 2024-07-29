@@ -871,18 +871,22 @@ class Game:
                     GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
                     CM.crafting.active_recepies
                     )
+                    CM.music_player.play_effect("hover")   
                 elif CM.crafting.type == "upgrade":
                     GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
                     CM.crafting.tmp_items
                     )
+                    CM.music_player.play_effect("hover")   
                 elif CM.crafting.type == "enchanting" and not CM.crafting.in_sub_menu:
                     GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
                     CM.crafting.tmp_items
                     )
+                    CM.music_player.play_effect("hover")   
                 elif CM.crafting.type == "enchanting" and CM.crafting.in_sub_menu:
                     GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
                     CM.crafting.active_recepies
                     )
+                    CM.music_player.play_effect("hover")   
                 GM.up_down_held = True
                 return
             
@@ -895,6 +899,7 @@ class Game:
                     GM.ai_package[GM.talk_to_name]["items"]
                 )
                 GM.selection_held = True
+                CM.music_player.play_effect("hover")   
                 return
 
             elif len(CM.inventory.items) and CM.ai.strings.bartering:
@@ -902,6 +907,7 @@ class Game:
                     CM.inventory.items
                 )
                 GM.selection_held = True
+                CM.music_player.play_effect("hover")   
                 return
 
             if (
@@ -913,12 +919,14 @@ class Game:
                     GM.world_objects[GM.container_hovered]["name"][0]
                 )
                 GM.selection_held = True
+                CM.music_player.play_effect("hover")   
 
             elif len(CM.inventory.items) and GM.container_open:
                 GM.selected_inventory_item = (GM.selected_inventory_item - 1) % len(
                     CM.inventory.items
                 )
                 GM.selection_held = True
+                CM.music_player.play_effect("hover")   
 
         elif (
             keys[pygame.K_DOWN]
@@ -934,18 +942,22 @@ class Game:
                     GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
                     CM.crafting.active_recepies
                     )
+                    CM.music_player.play_effect("hover")      
                 elif CM.crafting.type == "upgrade":
                     GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
                     CM.crafting.tmp_items
                     )
+                    CM.music_player.play_effect("hover")      
                 elif CM.crafting.type == "enchanting" and not CM.crafting.in_sub_menu:
                     GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
                     CM.crafting.tmp_items
                     )
+                    CM.music_player.play_effect("hover")      
                 elif CM.crafting.type == "enchanting" and CM.crafting.in_sub_menu:
                     GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
                     CM.crafting.active_recepies
                     )
+                    CM.music_player.play_effect("hover")      
                 GM.up_down_held = True
                 return
             
@@ -958,6 +970,7 @@ class Game:
                     GM.ai_package[GM.talk_to_name]["items"]
                 )
                 GM.selection_held = True
+                CM.music_player.play_effect("hover")
                 return
 
             elif len(CM.inventory.items) and CM.ai.strings.bartering:
@@ -965,6 +978,7 @@ class Game:
                     CM.inventory.items
                 )
                 GM.selection_held = True
+                CM.music_player.play_effect("hover")
                 return
 
             if GM.container_menu_selected and len(
@@ -974,11 +988,14 @@ class Game:
                     GM.world_objects[GM.container_hovered]["name"][0]
                 )
                 GM.selection_held = True
+                CM.music_player.play_effect("hover")
+                
             elif len(CM.inventory.items):
                 GM.selected_inventory_item = (GM.selected_inventory_item + 1) % len(
                     CM.inventory.items
                 )
                 GM.selection_held = True
+                CM.music_player.play_effect("hover")
 
         if (
             keys[pygame.K_LEFT]
@@ -996,7 +1013,8 @@ class Game:
                 GM.prev_index,
                 GM.selected_inventory_item,
             )
-
+            CM.music_player.play_effect("hover")
+            
         elif (
             keys[pygame.K_RIGHT]
             and not GM.selection_held
@@ -1013,6 +1031,7 @@ class Game:
                 GM.prev_index,
                 GM.selected_inventory_item,
             )
+            CM.music_player.play_effect("hover")
 
         elif (
             not keys[pygame.K_RETURN]
@@ -1031,6 +1050,8 @@ class Game:
             and not CM.crafting.held):
             CM.crafting.held=True
             CM.crafting.craft()
+            CM.music_player.play_effect("select")   
+            
         elif not keys[pygame.K_RETURN] and GM.crafting:
             CM.crafting.held=False
             

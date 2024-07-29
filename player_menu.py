@@ -48,6 +48,7 @@ class PlayerMenu:
         ]
 
     def toggle_visibility(self):
+        CM.music_player.play_effect("open_close")
         self.visible = not self.visible
 
     def handle_input(self):
@@ -58,6 +59,7 @@ class PlayerMenu:
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_TAB]:
+            CM.music_player.play_effect("back")
             if self.trait_selection != -1 and not self.tab_held:
                 self.trait_selection = -1
             elif not self.tab_held:
@@ -77,6 +79,7 @@ class PlayerMenu:
                 and not self.selection_held
                 and self.trait_selection == -1
             ):
+                CM.music_player.play_effect("hover")
                 if not self.sub_items:
                     self.selected_item = (self.selected_item - 1) % len(self.menu_items)
                 elif len(CM.inventory.items) > 0 and self.selected_item == 0:
@@ -105,6 +108,7 @@ class PlayerMenu:
                 and not self.selection_held
                 and self.trait_selection == -1
             ):
+                CM.music_player.play_effect("hover")
                 if not self.sub_items:
                     self.selected_item = (self.selected_item + 1) % len(self.menu_items)
                 elif len(CM.inventory.items) > 0 and self.selected_item == 0:
@@ -134,15 +138,18 @@ class PlayerMenu:
                 and self.trait_selection == -1
                 and not CM.player_menu.book_open    
             ):
+                CM.music_player.play_effect("open_close")
                 self.sub_items = True
                 self.selection_held = True
 
             elif keys[pygame.K_LEFT] and self.sub_items and self.trait_selection == -1 and not CM.player_menu.book_open:
+                CM.music_player.play_effect("back")
                 self.sub_items = False
                 self.selected_sub_item = 0
                 self.selection_held = True
 
             elif keys[pygame.K_RETURN] and self.sub_items:
+                CM.music_player.play_effect("select")
                 if self.selected_item == 0 and len(CM.inventory.items) > 0:
                     CM.player.use_item(self.selected_sub_item)
                     self.stats = [
@@ -175,6 +182,7 @@ class PlayerMenu:
                 self.selection_held = True
                 
             elif keys[pygame.K_ESCAPE] and self.sub_items:
+                CM.music_player.play_effect("back")
                 self.book_open = False
 
         elif (

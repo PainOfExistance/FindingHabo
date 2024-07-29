@@ -37,6 +37,7 @@ class MainMenu:
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_UP] and not self.selection_held:
+            CM.music_player.play_effect("hover")
             if self.in_sub_menu == 0:
                 self.selected_item = (self.selected_item - 1) % len(self.menu_items)
             elif self.in_sub_menu == 1:
@@ -44,6 +45,7 @@ class MainMenu:
             self.selection_held = True
 
         elif keys[pygame.K_DOWN] and not self.selection_held:
+            CM.music_player.play_effect("hover")
             if self.in_sub_menu == 0:
                 self.selected_item = (self.selected_item + 1) % len(self.menu_items)
             elif self.in_sub_menu == 1:
@@ -51,14 +53,17 @@ class MainMenu:
             self.selection_held = True
 
         elif keys[pygame.K_RETURN] and not self.selection_held:
+            CM.music_player.play_effect("select")
             self.select_option()
             self.selection_held = True
 
         elif keys[pygame.K_TAB] and not self.selection_held:
+            CM.music_player.play_effect("back")
             self.in_sub_menu = 0
             self.selection_held = True
         
         elif keys[pygame.K_r] and not self.selection_held and len(self.saves) > 0:
+            CM.music_player.play_effect("select")
             selected_option = self.saves[self.selected_item]
             os.remove(f"./saves/{selected_option}.habo")
             saves = glob.glob(os.path.join("./saves", "*.habo"))
