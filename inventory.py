@@ -75,7 +75,7 @@ class Inventory:
             GM.screen.blit(self.images[item_name]["img"], self.images[item_name]["rect"])
             index += 1
             
-            item_render = self.inventory_font.render(self.items[item_name]['description'], True, color)
-            item_rect = item_render.get_rect(topleft=(left+100, ofset + 20 + index * 40))
+            item_render = self.inventory_font.render(f"Description: {self.items[item_name]['description']}", True, color)
+            item_rect = item_render.get_rect(topleft=(left, ofset + 20 + index * 40))
             index += 1
             GM.screen.blit(item_render, item_rect)
