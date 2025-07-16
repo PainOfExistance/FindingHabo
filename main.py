@@ -11,10 +11,10 @@ pygame.init()
 display=pygame.display.get_desktop_sizes()
 
 pygame.display.set_icon(pygame.image.load("./textures/logo.png"))
-pygame.mouse.set_visible(False) 
+pygame.mouse.set_visible(False)
 pygame.event.set_grab(True)
 screen_width, screen_height = display[0][0], display[0][1]
-screen = pygame.display.set_mode((screen_width, screen_height), vsync=0, flags= pygame.SCALED | pygame.RESIZABLE | pygame.NOFRAME)
+screen = pygame.display.set_mode((1024, 576), vsync=0, flags= pygame.SCALED | pygame.RESIZABLE | pygame.NOFRAME)
 GM._scr=screen
 GM.screen=pygame.Surface((1024, 576))
 pygame.display.set_caption("Finding Habo")

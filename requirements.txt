@@ -3,3 +3,8 @@ pygame
 opencv-python
 pillow
 pathfinding
+# Additional dependencies for enhanced version
+threading
+queue
+json
+dataclasses
