@@ -1,0 +1,35 @@
+{
+	"identifier": "Kiavar_1x2",
+	"uniqueIdentifer": "494a8820-4ce0-11ef-99c9-5d554ef523c7",
+	"x": 5360,
+	"y": 15604,
+	"width": 5250,
+	"height": 5250,
+	"bgColor": "#696A79",
+	"neighbourLevels": [
+		{
+			"levelIid": "0e26dc70-4ce0-11ef-a169-f34adfefae06",
+			"dir": "w"
+		},
+		{
+			"levelIid": "470ed820-4ce0-11ef-814a-6f031df2cbe0",
+			"dir": "sw"
+		}
+	],
+	"customFields" : {},
+	"layers": [
+		"BG.png",
+		"Grass.png",
+		"Walls.png",
+		"RGP.png",
+		"Village.png",
+		"Castle.png",
+		"RRW.png",
+		"RAC.png",
+		"Drve.png",
+		"Drve_top.png",
+		"Top_layer_npc.png",
+		"Top_layer.png"
+	],
+	"entities" : {}
+}

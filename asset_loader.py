@@ -163,6 +163,7 @@ def rename_index_worlds(save_name):
             
 def save():
     world_save()
+    save_global_npc_state("terrain/metadata", CM.player.hash)
     save_name =f"{CM.player.name}_{GM.game_date.print_date()}".replace(" ", "_").replace(",", "")
     rename_index_worlds(save_name)
     data=CM.player.to_dict()
@@ -327,4 +328,6 @@ def save_global_npc_state(path, data, filename="npc_state.json"):
     with open(full_path, "w") as file:
         json_data=json.dumps(data, indent=2)
         file.write(json_data)
+        
+#todo fix saving and time reseting
 # https://www.youtube.com/watch?v=vOn0z0IRVN8&list=PLI2unizewPmmLdFX9kTGPSnXJJCiasCw5&index=64&ab_channel=Nazareth-Topic

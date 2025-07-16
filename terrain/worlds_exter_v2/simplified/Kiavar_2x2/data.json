@@ -1,0 +1,26 @@
+{
+	"identifier": "Kiavar_2x2",
+	"uniqueIdentifer": "08da9bc0-4ce0-11ef-b18d-f57c29c53ae4",
+	"x": 10612,
+	"y": 15602,
+	"width": 5250,
+	"height": 5250,
+	"bgColor": "#696A79",
+	"neighbourLevels": [],
+	"customFields" : {},
+	"layers": [
+		"BG.png",
+		"Grass.png",
+		"Walls.png",
+		"RGP.png",
+		"Village.png",
+		"Castle.png",
+		"RRW.png",
+		"RAC.png",
+		"Drve.png",
+		"Drve_top.png",
+		"Top_layer_npc.png",
+		"Top_layer.png"
+	],
+	"entities" : {}
+}
