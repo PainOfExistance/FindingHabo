@@ -20,33 +20,18 @@ from stats import Stats
 
 
 class Player:
-    def __init__(self):
-        self.stats = Stats()
-        CM.inventory = Inventory()
-        self.level = LevelingSystem()
-        self.effects = Effects()
-        self.quests = Quests()
+    def __init__(self, world: str):
         self.name = f"Player"
-        self.gold = 1000
-        self.current_world = f"Kiavar"
+        self.current_world = world
         self.range = 5
         self.active_effects = []
-        self.font = pygame.font.Font("./fonts/SovngardeBold.ttf", 18)
-        self.title_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 30)
-        self.book_font = pygame.font.Font("./fonts/SovngardeBold.ttf", 26)
-        CM.animation = Animation()
-        self.movement_speed = 117
-        GM.game_date = GameDate()
         self.hash = "".join(
             random.choices(
                 string.ascii_uppercase + string.digits + string.ascii_lowercase, k=32
             )
         )
-        self.been_dead = False
 
-        self.player = CM.animation.init_player()
-        self.player_rect = pygame.Rect(600, 500, 14, 18)
-
+        """
         self.depleted_rect = pygame.Rect(
             GM.screen_width // 2 - 150 // 2,
             GM.screen_height - 19,
@@ -91,6 +76,7 @@ class Player:
         )
         self.depleted_rect3.center = (80, GM.screen_height - 14)
         self.border_rect3.center = (80, GM.screen_height - 14)
+        """
 
         self.equipped_items = {
             "hand": None,
@@ -100,11 +86,6 @@ class Player:
             "gloves": None,
             "legs": None,
         }
-
-        self.words = []
-        self.title = ""
-        self.current_line=0
-        self.scrolling = False
 
     def update_health(self, health):
         self.stats.update_health(health)
@@ -165,102 +146,6 @@ class Player:
         elif stat == "weapon_damage":
             self.effects.effects[stat]["amount"] += amount
             self.stats.update_weapon_damage(amount)
-
-    def add_item(self, item):
-        if "script" in item and item["script"]["time"] == "on_pickup":
-            CM.script_loader.run_script(
-                item["script"]["script_name"],
-                item["script"]["function"],
-                item["script"]["args"],
-            )
-            CM.inventory.items[item["name"]]["script"]["used"] = True
-
-        if "quest" in item:
-            self.quests.quests[item["quest"][0]]["stages"][item["quest"][1]][
-                "objectives"
-            ]["inventory"] = True
-
-        if "starts_quest" in item:
-            self.quests.start_quest(item["starts_quest"])
-
-        if item["name"] == "Gold":
-            self.gold += 1
-        elif item["name"] == "Gold Sack":
-            self.gold += 10
-        else:
-            CM.inventory.add_item(item)
-
-    def remove_item(self, key):
-        if (
-            "script" in CM.inventory.items[key]
-            and CM.inventory.items[key]["script"]["time"] == "on_drop"
-        ):
-            CM.script_loader.run_script(
-                CM.inventory.items[key]["script"]["script_name"],
-                CM.inventory.items[key]["script"]["function"],
-                CM.inventory.items[key]["script"]["args"],
-            )
-            CM.inventory.items[key]["script"]["used"] = True
-
-        if key in CM.inventory.items and CM.inventory.items[key]["dropable"]:
-            CM.inventory.remove_item(key)
-            return True
-        return False
-
-    def use_item(self, index):
-        keys = list(CM.inventory.items.keys())
-        item = CM.inventory.items[keys[index]]
-
-        if (
-            "script" in CM.inventory.items[keys[index]]
-            and CM.inventory.items[keys[index]]["script"]["time"] == "on_use"
-        ):
-            CM.script_loader.run_script(
-                CM.inventory.items[keys[index]]["script"]["script_name"],
-                CM.inventory.items[keys[index]]["script"]["function"],
-                CM.inventory.items[keys[index]]["script"]["args"],
-            )
-            CM.inventory.items[keys[index]]["script"]["used"] = True
-
-        if "stats" in item and "effect" in item:
-            if (
-                item["name"]
-                == self.equipped_items[
-                    CM.inventory.items[item["name"]]["stats"]["slot"]
-                ]
-            ):
-                self.unequip_item(keys[index])
-            else:
-                self.unequip_item(
-                    self.equipped_items[
-                        CM.inventory.items[item["name"]]["stats"]["slot"]
-                    ]
-                )
-                self.equip_item(keys[index])
-
-        elif "effect" in item:
-            CM.inventory.remove_item(keys[index])
-            if item["effect"]["duration"] > 0:
-                self.active_effects.append(item["effect"])
-            self.update_stats(item["effect"]["stat"], item["effect"]["value"])
-
-        elif item["type"] == "book":
-            CM.player_menu.book_open = True
-            self.title = item["text"]["title"]
-            self.words = assets.load_text(item["text"]["content"]).split()
-
-    def check_experation(self, dt):
-        indexes = []
-        for index in range(len(self.active_effects)):
-            self.active_effects[index]["duration"] -= dt
-            if self.active_effects[index]["duration"] <= 0:
-                indexes.append(index)
-
-        for i in indexes:
-            self.update_stats(
-                self.active_effects[i]["stat"], -self.active_effects[i]["value"]
-            )
-            self.active_effects.remove(self.active_effects[i])
 
     def equip_item(self, item):
         slot = CM.inventory.items[item]["stats"]["slot"]
@@ -349,103 +234,3 @@ class Player:
         self.title = data["title"]
         self.current_line = data["current_line"]
         self.scrolling = data["scrolling"]
-    
-    def handle_input(self):
-        keys = pygame.key.get_pressed()
-
-        # Calculate the maximum number of lines that can fit on the screen
-        max_lines_on_screen = (GM.screen.get_height() * 3 // 4) // self.book_font.size("J")[1]
-        max_line_width = (GM.screen.get_width() // 4) * 3
-        lines = []
-        current_line = ""
-        
-        for word in self.words:
-            max_chars_per_line = max_line_width // self.book_font.size("J")[0]
-            if len(current_line) + len(word) <= max_chars_per_line:
-                current_line += word + " "
-            else:
-                lines.append(current_line)
-                current_line = word + " "
-
-        if current_line:
-            lines.append(current_line)
-
-        # Scroll up
-        if keys[pygame.K_UP] and not self.scrolling:
-            if self.current_line > 0:
-                self.current_line -= max_lines_on_screen
-                self.current_line = max(0, self.current_line)
-                self.scrolling = True
-
-        # Scroll down
-        elif keys[pygame.K_DOWN] and not self.scrolling:
-            total_lines = len(self.words)
-            max_displayable_lines = total_lines - (total_lines % max_lines_on_screen or max_lines_on_screen)
-            if self.current_line < max_displayable_lines:
-                self.current_line += max_lines_on_screen
-                self.current_line = min(self.current_line, max_displayable_lines)
-                self.scrolling = True
-        
-        if len(lines[self.current_line:self.current_line + max_lines_on_screen])<=0:
-            if self.current_line > 0:
-                self.current_line -= max_lines_on_screen
-                self.current_line = max(0, self.current_line)
-
-        # Reset scrolling flag if no keys are pressed
-        if not keys[pygame.K_UP] and not keys[pygame.K_DOWN]:
-            self.scrolling = False
-        
-        return lines
-    
-    def draw(self):
-        if not GM.dead:
-            self.player, new_rect = CM.animation.player_anim(
-                self.equipped_items["hand"], self.movement_speed
-            )
-            new_rect.center = self.player_rect.center
-            new_rect.bottom = self.player_rect.bottom + 7
-
-            GM.screen.blit(self.player, new_rect.topleft)
-        elif GM.dead and not self.been_dead:
-            self.been_dead = True
-            GM.anim_tiles.append({'row': GM.relative_player_top, 'col': GM.relative_player_left, 'value': 1991, "special": "hold", "counter": 0})
-    
-    def draw_hud(self):
-        pygame.draw.rect(
-            GM.screen, Colors.dark_black, self.border_rect, border_radius=10
-        )
-        pygame.draw.rect(
-            GM.screen, Colors.very_red, self.depleted_rect, border_radius=10
-        )     
-        
-        pygame.draw.rect(
-            GM.screen, Colors.dark_black, self.border_rect2, border_radius=10
-        )
-        pygame.draw.rect(
-            GM.screen, Colors.green, self.depleted_rect2, border_radius=10
-        )
-        
-        pygame.draw.rect(
-            GM.screen, Colors.dark_black, self.border_rect3, border_radius=10
-        )
-        pygame.draw.rect(
-            GM.screen, Colors.blue, self.depleted_rect3, border_radius=10
-        )
-        
-    def draw_book(self):
-        lines=self.handle_input()
-        left = (GM.screen.get_width() + GM.screen.get_width() // 4) / 2
-
-        # Calculate the maximum number of lines that can fit on the screen
-        max_lines_on_screen = (GM.screen.get_height() * 3 // 4) // self.book_font.size("J")[1]
-
-        # Render the title
-        text = self.title_font.render(f"{self.title}", True, Colors.active_item)
-        text_rect = text.get_rect(center=(int((GM.screen.get_width() // 3) * 1.9), 50))
-        GM.screen.blit(text, text_rect)
-
-        # Render only the visible lines
-        for y, line in enumerate(lines[self.current_line:self.current_line + max_lines_on_screen]):
-            text = self.book_font.render(f"{line}", True, Colors.active_item)
-            text_rect = text.get_rect(centerx=left, y=80 + y * 30)
-            GM.screen.blit(text, text_rect)
